@@ -36,10 +36,10 @@ class StdOutListener(tweepy.StreamListener):
         #fetch original tweet
         decoded = json.loads(data)
         if("retweeted_status" in decoded):
-                retweeted_status = decoded['retweeted_status']
-                output_data = retweeted_status
+                output_data = decoded['retweeted_status']
+                print "sending with screen name: "+output_data['user']['screen_name']
         else:
-                output_data = data
+                output_data = decoded
         
         try:
                 self.wsHandle.write_message(json.dumps(output_data))
