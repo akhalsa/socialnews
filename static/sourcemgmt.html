@@ -1,0 +1,161 @@
+<html>
+    <head>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                //set up asychronous button submission 
+                $('form[name=category_add]').submit(function(e){
+                    e.preventDefault();
+                    var serializedData = $(this).serialize();
+                    alert("sending: "+serializedData);
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        url: '/category',
+                        data: serializedData, 
+                        success: function(msg) {
+                            populateDropDown();
+                        }
+                    });
+                });
+                
+                $('form[name=source_add]').submit(function(e){
+                    e.preventDefault();
+                    var serializedData = $(this).serialize();
+                    selected_categories = document.getElementById('categories_to_send');
+                    var childElements = selected_categories.getElementsByTagName('li');
+                    for( i=0; i< childElements.length; i++ )
+                    {
+                        var childLi = childElements[i];
+                        serializedData+="&cat"+i+"="+$(childLi).text();
+                      
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        url: '/source',
+                        data: serializedData, 
+                        success: function(msg) {
+                            alert("finished sending");
+                        }
+                    });
+                    
+                    
+                });
+                
+                //populate the drop down to select parent categories
+                populateDropDown();
+                //make all elements draggable
+                $("#categories_to_send").droppable({
+                    drop: function( event, ui ) {
+                        var dropped = ui.draggable;
+                        var droppedOn = $(this);
+                        $(dropped).detach().css({top: 0,left: 0}).appendTo(droppedOn);
+                    }
+                });
+                $("#categories_to_drag").droppable({
+                    drop: function( event, ui ) {
+                        var dropped = ui.draggable;
+                        var droppedOn = $(this);
+                        $(dropped).detach().css({top: 0,left: 0}).appendTo(droppedOn);
+                    }
+                });
+                
+                
+                
+                
+            });
+            
+            function populateDropDown(){
+                $.ajax({
+                    type: 'GET',
+                    cache: false,
+                    url: '/category',
+                    dataType:'json',
+                    success: function(msg){
+                        possible_categories = document.getElementById('categories_to_drag');
+                        selected_categories = document.getElementById('categories_to_send');
+                        
+                        possible_categories.innerHTML = "";
+                        selected_categories.innerHTML = "";
+                        
+                        var options = "<option value=\"None\">None</option>\n";
+                        
+                        for (var i = 0; i < msg.length; i++) {
+                            options += "<option value=\""+msg[i].Name+"\">"+msg[i].Name+"</option>\n";
+                            //Do something
+                            var para = document.createElement("li");
+                            var t = document.createTextNode(msg[i].Name);
+                            para.appendChild(t);
+                            $(para).draggable();
+                            possible_categories.appendChild(para);
+                            
+                        }
+                        document.getElementById('parent_field').innerHTML = options;
+                        
+                    }
+                });
+                
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+            <div style="height: 50px; vertical-align: bottom; display: table-cell;">
+                <label>Add A Category</label>
+            </div>
+            <form  name="category_add">
+                <div>
+                    <label for="Title">Title</label>
+                    <input type="text" name="Title" id="Title"/>
+                </div>
+                <div>
+                    <label for="parent_field">Parent Category</label>
+                    <select id="parent_field" name="parent">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="fiat">Fiat</option>
+                        <option value="audi">Audi</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+        <div style="height: 50px; vertical-align: bottom; display: table-cell;">
+            <label>Add Twitter Handle</label>
+        </div>
+        <div>
+            <form name="source_add">
+                    <div>
+                        <label for="Handle">Handle</label>
+                        <input type="text" name="Handle" id="Handle"/>
+                    </div>
+                    <div>
+                        Categories:
+                    </div>
+                    <div style="width:250px; height:250px;">
+                        <div id="categories_to_drag" style="float:left; background-color:gray; width:100px; height: 250px;">
+                            <p id="first">
+                                First Item
+                            </p>
+                            <p id="second">
+                                Second Item
+                            </p>
+                        </div>
+                        <div id="categories_to_send" style="float: right; background-color:gray; width:100px; height: 250px;">
+                            <p id="empty">
+                                empty
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="submit" value="Submit">
+                    </div>
+            </form>
+        </div>
+    <body>
+</html>
