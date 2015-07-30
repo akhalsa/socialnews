@@ -44,6 +44,8 @@
                 if (tweet_list_item.innerHTML == new_string) {
                     tweet_list.removeChild(tweet_list_item);
                     console.log("removing duplicate: "+new_string)
+                }else{
+                    console.log("mismatch: "+tweet_list_item.innerHTML+" AND "+new_string );
                 }
             }
             tweet_list.appendChild(newTweetListItem);
