@@ -32,11 +32,14 @@
         ws.onmessage = function (evt) {
             var received_msg = evt.data;
             var json_tweet = JSON.parse(received_msg);
-            console.log(json_tweet);
+            //console.log(json_tweet);
             tweet_list = document.getElementById("tweet_list");
             var newTweetListItem = document.createElement("li");
             var TweetListValue = document.createTextNode(json_tweet.user.screen_name+": \""+json_tweet.text+"\"");
             newTweetListItem.appendChild(TweetListValue);
+            for (tweet_list_item in tweet_list_item.children){
+                console.log(tweet_list_item.firstChild.nodeValue);
+            }
             tweet_list.appendChild(newTweetListItem);
         }
         ws.onclose = function() {
