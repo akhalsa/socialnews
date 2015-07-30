@@ -37,10 +37,12 @@ class StdOutListener(tweepy.StreamListener):
         decoded = json.loads(data)
         if("retweeted_status" in decoded):
                 output_data = decoded['retweeted_status']
-                print "sending with screen name: "+output_data['user']['screen_name']
+                
         else:
+                
                 output_data = decoded
-        
+                
+        print "sending with screen name: "+output_data['user']['screen_name']
         try:
                 self.wsHandle.write_message(json.dumps(output_data))
         except tornado.websocket.WebSocketClosedError:
