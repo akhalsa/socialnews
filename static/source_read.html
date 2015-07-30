@@ -48,7 +48,7 @@
                     console.log("mismatch: "+tweet_list_item.innerHTML+" AND "+newTweetListItem.innerHTML );
                 }
             }
-            tweet_list.appendChild(newTweetListItem);
+            tweet_list.insertBefore(newTweetListItem,tweet_list.firstChild);
         }
         ws.onclose = function() {
             console.log("connection is closed");
