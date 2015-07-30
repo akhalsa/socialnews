@@ -41,11 +41,11 @@
             for ( i =0; i< tweet_list.childNodes.length; i++){
                 var tweet_list_item = tweet_list.childNodes[i];
                 
-                if (tweet_list_item.innerHTML == new_string) {
+                if (tweet_list_item.innerHTML == newTweetListItem.innerHTML) {
                     tweet_list.removeChild(tweet_list_item);
                     console.log("removing duplicate: "+new_string)
                 }else{
-                    console.log("mismatch: "+tweet_list_item.innerHTML+" AND "+new_string );
+                    console.log("mismatch: "+tweet_list_item.innerHTML+" AND "+newTweetListItem.innerHTML );
                 }
             }
             tweet_list.appendChild(newTweetListItem);
