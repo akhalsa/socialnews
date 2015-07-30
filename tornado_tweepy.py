@@ -35,8 +35,8 @@ class StdOutListener(tweepy.StreamListener):
         print "transmitting data"
         #fetch original tweet
         decoded = json.loads(data)
-        retweeted_status = decoded['retweeted_status']
-        if(retweeted_status is not "null"):
+        if("retweeted_status" in decoded):
+                retweeted_status = decoded['retweeted_status']
                 output_data = retweeted_status
         else:
                 output_data = data
