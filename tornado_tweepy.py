@@ -42,7 +42,7 @@ class StdOutListener(tweepy.StreamListener):
                 output_data = data
         
         try:
-                self.wsHandle.write_message(output_data)
+                self.wsHandle.write_message(json.dumps(output_data))
         except tornado.websocket.WebSocketClosedError:
             print "web socket closed"
             return False
