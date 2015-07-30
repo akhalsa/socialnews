@@ -37,7 +37,7 @@
             var newTweetListItem = document.createElement("li");
             var TweetListValue = document.createTextNode(json_tweet.user.screen_name+": \""+json_tweet.text+"\"");
             newTweetListItem.appendChild(TweetListValue);
-            for (tweet_list_item in tweet_list.children){
+            for (tweet_list_item in tweet_list.childNodes){
                 console.log(tweet_list_item.childNodes[0].nodeValue);
             }
             tweet_list.appendChild(newTweetListItem);
