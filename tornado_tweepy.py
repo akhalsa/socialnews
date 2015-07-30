@@ -33,13 +33,11 @@ class StdOutListener(tweepy.StreamListener):
         #print '@%s: %s' % (decoded['user']['screen_name'], decoded['text'].encode('ascii', 'ignore'))
         #print ''
         print "transmitting data"
-        try:
-            self.wsHandle.write_message(data)
-        except KeyboardInterrupt:
-            raise
-        except:
-            print "web socket closed"
-            return False
+        #try:
+        self.wsHandle.write_message(data)
+        #except WebSocketClosed:
+        #    print "web socket closed"
+        #    return False
         return True
 
     def on_error(self, status):
