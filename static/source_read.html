@@ -35,11 +35,16 @@
             //console.log(json_tweet);
             tweet_list = document.getElementById("tweet_list");
             var newTweetListItem = document.createElement("li");
-            var TweetListValue = document.createTextNode(json_tweet.user.screen_name+": \""+json_tweet.text+"\"");
+            var new_string = json_tweet.user.screen_name+": \""+json_tweet.text+"\"";
+            var TweetListValue = document.createTextNode(new_string);
             newTweetListItem.appendChild(TweetListValue);
             for ( i =0; i< tweet_list.childNodes.length; i++){
                 var tweet_list_item = tweet_list.childNodes[i];
-                console.log(tweet_list_item.innerHTML);
+                
+                if (tweet_list_item.innerHTML == new_string) {
+                    tweet_list.removeChild(tweet_list_item);
+                    console.log("removing duplicate: "+new_string)
+                }
             }
             tweet_list.appendChild(newTweetListItem);
         }
