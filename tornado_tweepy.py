@@ -176,6 +176,10 @@ class Category(tornado.web.RequestHandler):
         cursor.close()
         self.finish()
         
+    def get(self, id):
+        print "running get with id: "+str(id)
+        self.finish()
+        
     def get(self, ):
         cur = db.cursor()
         cur.execute("SELECT * FROM Category")
