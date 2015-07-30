@@ -33,11 +33,20 @@ class StdOutListener(tweepy.StreamListener):
         #print '@%s: %s' % (decoded['user']['screen_name'], decoded['text'].encode('ascii', 'ignore'))
         #print ''
         print "transmitting data"
+        #fetch original tweet
+        decoded = json.loads(data)
+        retweeted_status = decoded['retweeted_status']
+        if(retweeted_status is not "null"):
+                output_data = retweeted_status
+        else:
+                output_data = data
+        
         try:
-                self.wsHandle.write_message(data)
+                self.wsHandle.write_message(output_data)
         except tornado.websocket.WebSocketClosedError:
             print "web socket closed"
             return False
+        
         return True
 
     def on_error(self, status):
