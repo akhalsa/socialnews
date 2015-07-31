@@ -45,7 +45,7 @@
                 var added = false;
                 for (var i =0 ; i< tweet_list.length; i++) {
                     //insert into i first time tweet_map[key] < tweet_list[i]
-                    if (tweet_map[key] < tweet_map[tweet_list[i]]) {
+                    if (tweet_map[key] > tweet_map[tweet_list[i]]) {
                         tweet_list.splice(i, 0, key);
                         added = true;
                         break;
