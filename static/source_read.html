@@ -41,7 +41,7 @@
             }
             var tweet_list = [];
             for (key in tweet_map) {
-                console.log("processing tweet: "+key+" with count: "+tweet_map[key]);
+                //console.log("processing tweet: "+key+" with count: "+tweet_map[key]);
                 var added = false;
                 for (var i =0 ; i< tweet_list.length; i++) {
                     //insert into i first time tweet_map[key] < tweet_list[i]
@@ -64,9 +64,9 @@
             //console.log(json_tweet);
             tweet_list_element = document.getElementById("tweet_list");
             tweet_list_element.innerHTML = "";
-            console.log("tweet list length is: "+tweet_list.length);
+            //console.log("tweet list length is: "+tweet_list.length);
             for (i=0; i<tweet_list.length; i++) {
-                console.log("adding: "+tweet_list[i]);
+                //console.log("adding: "+tweet_list[i]);
                 tweet_list_element.innerHTML += "<li>"+tweet_list[i]+"</li>\n";
                 
             }
