@@ -4,6 +4,7 @@
         <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
         <script type="text/javascript">
+        var tweet_map = {};
         function getSearchParameters() {
             var prmstr = window.location.search.substr(1);
             return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
@@ -32,10 +33,33 @@
         ws.onmessage = function (evt) {
             var received_msg = evt.data;
             var json_tweet = JSON.parse(received_msg);
+            var new_string = json_tweet.user.screen_name+": \""+json_tweet.text+"\"";
+            if (new_string in tweet_map) {
+                tweet_map[new_string] = tweet_map[new_string] + 1;
+            }else{
+                tweet_map[new_string] = 1;
+            }
+            var tweet_list = [];
+            for (key in tweet_map) {
+                console.log("processing tweet: "+key+" with count: "+tweet_map[key]);
+                for (var i =0 ; i< tweet_list.length; i++) {
+                    //insert into i first time tweet_map[key] < tweet_list[i]
+                    if (tweet_map[key] < tweet_map[tweet_list[i]]) {
+                        tweet_list.splice(i, 0, tweet_map[key]);
+                        break;
+                    }
+                    if (i == 9) {
+                        break;
+                    }
+                }
+            }
+            console.log("done processing************************");
+            
+            
             //console.log(json_tweet);
             tweet_list = document.getElementById("tweet_list");
             var newTweetListItem = document.createElement("li");
-            var new_string = json_tweet.user.screen_name+": \""+json_tweet.text+"\"";
+            
             var TweetListValue = document.createTextNode(new_string);
             newTweetListItem.appendChild(TweetListValue);
             for ( i =0; i< tweet_list.childNodes.length; i++){
