@@ -68,7 +68,9 @@
             for (i=0; i<tweet_list.length; i++) {
                 //console.log("adding: "+tweet_list[i]);
                 tweet_list_element.innerHTML += "<li>"+tweet_list[i]+"</li>\n";
-                
+                if (i==9) {
+                    break;
+                }
             }
             
         }
