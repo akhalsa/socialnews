@@ -42,15 +42,20 @@
             var tweet_list = [];
             for (key in tweet_map) {
                 console.log("processing tweet: "+key+" with count: "+tweet_map[key]);
+                var added = false;
                 for (var i =0 ; i< tweet_list.length; i++) {
                     //insert into i first time tweet_map[key] < tweet_list[i]
                     if (tweet_map[key] < tweet_map[tweet_list[i]]) {
                         tweet_list.splice(i, 0, tweet_map[key]);
+                        added = true;
                         break;
-                    }
+                    } 
                     if (i == 9) {
                         break;
                     }
+                }
+                if ((tweet_list.length < 10) &&(added == false)) {
+                    tweet_list.push(tweet_map[key]);
                 }
             }
             console.log("done processing************************");
