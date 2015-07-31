@@ -57,23 +57,13 @@
             
             
             //console.log(json_tweet);
-            tweet_list = document.getElementById("tweet_list");
-            var newTweetListItem = document.createElement("li");
-            
-            var TweetListValue = document.createTextNode(new_string);
-            newTweetListItem.appendChild(TweetListValue);
-            for ( i =0; i< tweet_list.childNodes.length; i++){
-                var tweet_list_item = tweet_list.childNodes[i];
-                
-                if ((tweet_list_item.innerHTML == newTweetListItem.innerHTML) || (i > 10)){
-                    tweet_list.removeChild(tweet_list_item);
-                    console.log("removing duplicate: "+new_string)
-                }else{
-                    console.log("mismatch: "+tweet_list_item.innerHTML+" AND "+newTweetListItem.innerHTML );
-                }
+            tweet_list_element = document.getElementById("tweet_list");
+            tweet_list_element.innerHTML = "";
+            for (i=0; i<tweet_list.length; i++) {
+                tweet_list_element.innerHTML += "<li>"+tweet_list[i]+"</li>\n";
                 
             }
-            tweet_list.insertBefore(newTweetListItem,tweet_list.firstChild);
+            
         }
         ws.onclose = function() {
             console.log("connection is closed");
