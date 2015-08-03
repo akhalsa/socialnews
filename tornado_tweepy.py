@@ -73,6 +73,7 @@ class HandleListener(tweepy.StreamListener):
                 
         def on_data(self, data):
                 decoded = json.loads(data)
+                print "recevied: "+str(decoded)
                 if("retweeted_status" in decoded):
                         output_data = decoded['retweeted_status']
                         
