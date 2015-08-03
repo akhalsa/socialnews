@@ -70,7 +70,7 @@ def getCategoriesWithSourceId(source_id):
         sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
         cursor.execute(sql)
         return_list = []
-        for row in cursor.fetchAll():
+        for row in cursor.fetchall():
                 return_list.append(row[0])
         cursor.close()
         return return_list
