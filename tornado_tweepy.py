@@ -54,6 +54,28 @@ class StdOutListener(tweepy.StreamListener):
     def on_error(self, status):
         print status
         
+        
+class HandleListener(tweepy.StreamListener):
+        def __init__(self, source_id):
+                self.source_id = source_id
+                self.categories = getCategoriesWithSourceId(self.source_id)
+                print "loaded categories: "+str(self.categories)+" for handle ID: "+str(source_id)
+                
+                #determine all categories and create a list of category id's
+                
+
+
+def getCategoriesWithSourceId(source_id):
+        cursor = db.cursor()
+        sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+source_id+";"
+        cursor.execute(sql)
+        return_list = []
+        for row in cursor.fetchAll():
+                return_list.append(row[0])
+        cursor.close()
+        return return_list
+        
+
 def findCategoryIdWithName(cat_name):
     cursor = db.cursor()
     sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
@@ -88,6 +110,9 @@ def setup_socket_handler(arg, web_socket):
     print "got a new message"
     print arg
     print "this is a category id of: "+str(findCategoryIdWithName(arg))
+    #one filter per category?
+    #one filter per handle with category entries -> lower bandwidth
+    
     category_id = findCategoryIdWithName(arg)
     print "this yields handles of: "
     print getListOfHandlesForCategoryId(category_id)
@@ -97,6 +122,13 @@ def setup_socket_handler(arg, web_socket):
     auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
     stream = tweepy.Stream(auth, l)
     stream.filter(follow=getListOfHandlesForCategoryId(category_id))
+    
+def setup_socket_handler(handle):
+        #this is a handle for a single handle
+        #first determine the category Id's for the handle
+        
+        pass
+
 
 class Source(tornado.web.RequestHandler):
 
@@ -228,5 +260,6 @@ app = tornado.web.Application([
 
 if __name__ == '__main__':
     parse_command_line()
+    handle = HandleListener(54)
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
