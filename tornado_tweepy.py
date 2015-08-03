@@ -286,5 +286,9 @@ app = tornado.web.Application([
 if __name__ == '__main__':
     parse_command_line()
     handle = HandleListener(39)
+    handle = HandleListener(38)
+    handle = HandleListener(37)
+    handle = HandleListener(36)
+    handle = HandleListener(35)
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
