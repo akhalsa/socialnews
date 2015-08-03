@@ -290,5 +290,6 @@ if __name__ == '__main__':
     handle = HandleListener(37)
     handle = HandleListener(36)
     handle = HandleListener(35)
+    print "done loading handles"
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
