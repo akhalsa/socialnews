@@ -61,15 +61,15 @@ class HandleListener(tweepy.StreamListener):
                 self.categories = getCategoriesWithSourceId(self.source_id)
                 self.twitter_id = getTwitterIdForLocalId(self.source_id)
                 print "loaded categories: "+str(self.categories)+" for handle ID: "+str(source_id)
-                #spawn listener for seperate thread
-                thread = Thread(target = self.setupSocket())
-                thread.start()
+                self.setupSocket()
+                print "done with socket async setup"
+
                 
         def setupSocket(self, ):
                 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
                 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
                 stream = tweepy.Stream(auth, self)
-                stream.filter(follow=self.twitter_id)
+                stream.filter(follow=self.twitter_id, async=True)
                 
         def on_data(self, data):
                 decoded = json.loads(data)
