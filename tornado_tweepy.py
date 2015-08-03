@@ -67,7 +67,7 @@ class HandleListener(tweepy.StreamListener):
 
 def getCategoriesWithSourceId(source_id):
         cursor = db.cursor()
-        sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+source_id+";"
+        sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
         cursor.execute(sql)
         return_list = []
         for row in cursor.fetchAll():
