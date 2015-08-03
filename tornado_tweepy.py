@@ -62,8 +62,8 @@ class HandleListener(tweepy.StreamListener):
                 self.twitter_id = getTwitterIdForLocalId(self.source_id)
                 print "loaded categories: "+str(self.categories)+" for handle ID: "+str(source_id)
                 #spawn listener for seperate thread
-                self.thread = Thread(target = self.setupSocket())
-                self.thread.start()
+                thread = Thread(target = self.setupSocket())
+                thread.start()
                 
         def setupSocket(self, ):
                 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
