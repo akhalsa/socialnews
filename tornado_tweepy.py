@@ -59,11 +59,32 @@ class HandleListener(tweepy.StreamListener):
         def __init__(self, source_id):
                 self.source_id = source_id
                 self.categories = getCategoriesWithSourceId(self.source_id)
+                self.twitter_id = getTwitterIdForLocalId(self.source_id)
                 print "loaded categories: "+str(self.categories)+" for handle ID: "+str(source_id)
+                #spawn listener for seperate thread
+                self.thread = Thread(target = self.setupSocket())
+                self.thread.start()
                 
-                #determine all categories and create a list of category id's
+        def setupSocket(self, ):
+                auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
+                auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
+                stream = tweepy.Stream(auth, self)
+                stream.filter(follow=self.twitter_id)
                 
+        def on_data(self, data):
+                decoded = json.loads(data)
+                if("retweeted_status" in decoded):
+                        output_data = decoded['retweeted_status']
+                        
+                else:
+                        
+                        output_data = decoded
+                print "found message with screen name: "+output_data['user']['screen_name']
+                print "this should map to: "+str(self.source_id)
+                print "would save to categories: "+str(self.categories)
 
+        def on_error(self, status):
+                print status
 
 def getCategoriesWithSourceId(source_id):
         cursor = db.cursor()
@@ -75,6 +96,15 @@ def getCategoriesWithSourceId(source_id):
         cursor.close()
         return return_list
         
+def getTwitterIdForLocalId(local_id):
+        cursor = db.cursor()
+        sql = "SELECT twitter_id FROM TwitterSource WHERE ID like "+str(local_id)+";"
+        cursor.execute(sql)
+        return_id = 0
+        for row in cursor.fetchall() :
+                return_id = row[0]
+        cursor.close()    
+        return return_id
 
 def findCategoryIdWithName(cat_name):
     cursor = db.cursor()
@@ -122,12 +152,7 @@ def setup_socket_handler(arg, web_socket):
     auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
     stream = tweepy.Stream(auth, l)
     stream.filter(follow=getListOfHandlesForCategoryId(category_id))
-    
-def setup_socket_handler(handle):
-        #this is a handle for a single handle
-        #first determine the category Id's for the handle
-        
-        pass
+
 
 
 class Source(tornado.web.RequestHandler):
