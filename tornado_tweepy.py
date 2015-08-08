@@ -114,7 +114,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
         
 def addOccurance(tweet_id):
         cursor = db.cursor()
-        sql = "INSERT INTO TweetOccurrance(twitter_id) VALUES ('"+str(tweet_id)+"');"
+        sql = "INSERT INTO TweetOccurrence(twitter_id) VALUES ('"+str(tweet_id)+"');"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
