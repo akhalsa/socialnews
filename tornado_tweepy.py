@@ -65,12 +65,14 @@ class HandleListener(tweepy.StreamListener):
                 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
                 stream = tweepy.Stream(auth, self)
                 stream.filter(follow=getAllTwitterIds())
-                #stream.filter(track="python")
                 
         def on_data(self, data):
                 print data
                 decoded = json.loads(data)
-                print "recevied: "+str(decoded)
+                #print "recevied: "+str(decoded)
+                #check if user for tweet
+                print "recevied tweet from: "+str(decoded['id'])+" with text: "+decoded['text']
+                
                 if("retweeted_status" in decoded):
                         output_data = decoded['retweeted_status']
                         
@@ -78,7 +80,7 @@ class HandleListener(tweepy.StreamListener):
                         output_data = decoded
                 
                 
-                #print "found message with screen name: "+output_data['user']['screen_name']
+                print "found message with screen name: "+output_data['user']['screen_name']
                 return True
 
         def on_error(self, status):
