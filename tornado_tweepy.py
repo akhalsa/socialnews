@@ -69,7 +69,7 @@ class HandleListener(tweepy.StreamListener):
                 
         def on_data(self, data):
                 decoded = json.loads(data)
-                #print "recevied: "+str(decoded)+" for handle with twitter id: "+self.twitter_id
+                print "recevied: "+str(decoded)
                 if("retweeted_status" in decoded):
                         output_data = decoded['retweeted_status']
                         
@@ -77,7 +77,7 @@ class HandleListener(tweepy.StreamListener):
                         output_data = decoded
                 
                 
-                print "found message with screen name: "+output_data['user']['screen_name']
+                #print "found message with screen name: "+output_data['user']['screen_name']
 
         def on_error(self, status):
                 print status
