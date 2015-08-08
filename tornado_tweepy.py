@@ -132,7 +132,7 @@ def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
         cursor.execute(sql)
         return_id = 0
         for row in cursor.fetchall():
-                return_id.append(row[0])
+                return_id = row[0]
         cursor.close()
         return return_id 
 def getAllTwitterIds():
