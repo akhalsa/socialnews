@@ -56,36 +56,40 @@ class StdOutListener(tweepy.StreamListener):
         
         
 class HandleListener(tweepy.StreamListener):
-        def __init__(self, source_id):
-                self.source_id = source_id
-                self.categories = getCategoriesWithSourceId(self.source_id)
-                self.twitter_id = getTwitterIdForLocalId(self.source_id)
-                print "loaded categories: "+str(self.categories)+" for handle ID: "+str(source_id)
+        def __init__(self):
                 self.setupSocket()
-                print "done with socket async setup"
 
                 
         def setupSocket(self, ):
                 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
                 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
                 stream = tweepy.Stream(auth, self)
-                stream.filter(follow=self.twitter_id, async=True)
+                stream.filter(follow=",".join(getAllTwitterIds() ), async=True)
                 
         def on_data(self, data):
                 decoded = json.loads(data)
-                print "recevied: "+str(decoded)+" for handle with twitter id: "+self.twitter_id
+                #print "recevied: "+str(decoded)+" for handle with twitter id: "+self.twitter_id
                 if("retweeted_status" in decoded):
                         output_data = decoded['retweeted_status']
                         
                 else:
-                        
                         output_data = decoded
+                
+                
                 print "found message with screen name: "+output_data['user']['screen_name']
-                print "this should map to: "+str(self.source_id)
-                print "would save to categories: "+str(self.categories)
 
         def on_error(self, status):
                 print status
+
+def getAllTwitterIds():
+        cursor = db.cursor()
+        sql = "SELECT twitter_id FROM TwitterSource;"
+        cursor.execute(sql)
+        return_list = []
+        for row in cursor.fetchall():
+                return_list.append(row[0])
+        cursor.close()
+        return return_list
 
 def getCategoriesWithSourceId(source_id):
         cursor = db.cursor()
@@ -286,11 +290,15 @@ app = tornado.web.Application([
 
 if __name__ == '__main__':
     parse_command_line()
-    handle = HandleListener(39)
-    handle = HandleListener(38)
-    handle = HandleListener(37)
-    handle = HandleListener(36)
-    handle = HandleListener(35)
+    handle = HandleListener()
+    ##############################
+    # Note: this approach does not work. you need to set up a single stream for ALL handles we care about
+    # Then for each incoming tweet, we want to look at the text, and determine categories by looking for a known handle in the id OR retweeted id
+    # This can be done using a hash lookup for big O of 1 instead of N as this operation will be done very frequently
+    # This approach will require a system reboot each time new handles get added
+    # this is probably not the end of the world for now
+    ##############################
+    
     print "done loading handles"
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
