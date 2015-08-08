@@ -119,6 +119,17 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
         cursor = db.cursor()
         for cat in categories:
                 print "should insert category relationship to cat_id: "+str(cat)
+                sql = "INSERT INTO TweetCategoryRelationship(twitter_id, category_id) VALUES ('"+str(twitter_tweet_id)+"',"+str(cat)+");"
+                try:
+                        # Execute the SQL command
+                        cursor.execute(sql)
+                        # Commit your changes in the database
+                        db.commit()
+                except Exception,e:
+                        # Rollback in case there is any error
+                        print "error on TweetCat update"
+                        print str(e)
+                        db.rollback()
         
         cursor.close()
         
