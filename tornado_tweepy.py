@@ -78,6 +78,7 @@ class HandleListener(tweepy.StreamListener):
                 
                 
                 #print "found message with screen name: "+output_data['user']['screen_name']
+                return True
 
         def on_error(self, status):
                 print status
