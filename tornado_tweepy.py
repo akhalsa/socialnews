@@ -114,6 +114,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
                 print str(e)
                 db.rollback()
         cursor.close()
+        print "get categories with id: "+str(source_id)
         categories = getCategoriesWithSourceId(source_id)
         cursor = db.cursor()
         for cat in categories:
