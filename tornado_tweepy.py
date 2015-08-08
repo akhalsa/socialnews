@@ -75,7 +75,9 @@ class HandleListener(tweepy.StreamListener):
                         print "recevied tweet from: "+str(decoded['id'])+" with text: "+decoded['text']
                 elif("retweeted_status" in decoded):
                         decoded = decoded['retweeted_status']
-                        print "recevied retweet for: "+str(decoded['id'])+" with text: "+decoded['text']
+                        source_id = findTableIdWithTwitterId(str(decoded['id']))
+                        if(source_id != 0):
+                                print "recevied retweet for: "+getHandleForLocalId(str(decoded['id']))+" with text: "+decoded['text']
                 else:
                         print "this wasn't a retweet AND wasn't from a trusted source!?!"
 
@@ -114,6 +116,26 @@ def getTwitterIdForLocalId(local_id):
         cursor.close()    
         return return_id
 
+def findTableIdWithTwitterId(twitter_id):
+        cursor = db.cursor()
+        sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
+        cursor.execute(sql)
+        return_id = 0
+        for row in cursor.fetchall() :
+            return_id = row[0]
+        cursor.close()    
+        return return_id
+
+def getHandleForLocalId(local_id):
+        cursor = db.cursor()
+        sql = "SELECT handle FROM TwitterSource WHERE ID like '"+local_id+"';"
+        cursor.execute(sql)
+        return_id = 0
+        for row in cursor.fetchall() :
+            return_id = row[0]
+        cursor.close()    
+        return return_id
+
 def findCategoryIdWithName(cat_name):
     cursor = db.cursor()
     sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
@@ -124,15 +146,7 @@ def findCategoryIdWithName(cat_name):
     cursor.close()    
     return return_id
 
-def findTableIdWithTwitterId(twitter_id):
-    cursor = db.cursor()
-    sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
-    cursor.execute(sql)
-    return_id = 0
-    for row in cursor.fetchall() :
-        return_id = row[0]
-    cursor.close()    
-    return return_id
+
 
 def getListOfHandlesForCategoryId(cat_id):
     cursor = db.cursor()
