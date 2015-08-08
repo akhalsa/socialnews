@@ -87,6 +87,7 @@ class HandleListener(tweepy.StreamListener):
                         if(local_tweet_id == 0):
                                 print "creating new entry for: "+decoded['text']
                                 insertTweet( source_id, decoded['text'], decoded['id'])
+                                
                         print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'])
                 else:
@@ -97,6 +98,7 @@ class HandleListener(tweepy.StreamListener):
 
         def on_error(self, status):
                 print status
+
 
 def insertTweet(source_id, text_string, twitter_tweet_id):
         cursor = db.cursor()
@@ -112,6 +114,13 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
                 print str(e)
                 db.rollback()
         cursor.close()
+        categories = getCategoriesWithSourceId(source_id)
+        cursor = db.cursor()
+        for cat in categories:
+                print "should insert category relationship to cat_id: "+str(cat)
+        
+        cursor.close()
+        
         
         
 def addOccurance(tweet_id):
