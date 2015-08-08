@@ -65,7 +65,7 @@ class HandleListener(tweepy.StreamListener):
                 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
                 stream = tweepy.Stream(auth, self)
                 print ",".join(getAllTwitterIds())
-                stream.filter(follow=",".join(getAllTwitterIds() ), async=True)
+                stream.filter(follow=",".join(getAllTwitterIds() ))
                 
         def on_data(self, data):
                 decoded = json.loads(data)
