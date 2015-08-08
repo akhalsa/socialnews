@@ -70,11 +70,13 @@ class HandleListener(tweepy.StreamListener):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
-                print "recevied tweet from: "+str(decoded['id'])+" with text: "+decoded['text']
+                
                 if(findTableIdWithTwitterId(str(decoded['id'])) != 0):
                         print "recevied tweet from: "+str(decoded['id'])+" with text: "+decoded['text']
-                else:
-                        print "recevied retweet from: "+str(decoded['id'])+" with text: "+decoded['text']
+                elif("retweeted_status" in decoded):
+                        decoded = decoded['retweeted_status']
+                        print "recevied retweet for: "+str(decoded['id'])+" with text: "+decoded['text']
+
                 return True
 
         def on_error(self, status):
