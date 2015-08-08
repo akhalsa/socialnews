@@ -68,7 +68,7 @@ class HandleListener(tweepy.StreamListener):
                 
         def on_data(self, data):
                 decoded = json.loads(data)
-                #print "recevied: "+str(decoded)
+                print "recevied: "+str(decoded)
                 #check if user for tweet
                 
                 if(findTableIdWithTwitterId(str(decoded['id'])) != 0):
