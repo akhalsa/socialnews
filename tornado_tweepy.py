@@ -17,7 +17,7 @@ db = MySQLdb.connect(
         user="akhalsa",
         passwd="sophiesChoice1",
         db="newsdb",
-        charset='utf8'
+        charset='utf8',
         port=3306)
 
 
