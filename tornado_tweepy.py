@@ -105,9 +105,10 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
                 cursor.execute(sql)
                 # Commit your changes in the database
                 db.commit()
-        except:
+        except Exception,e:
                 # Rollback in case there is any error
-                print "error on insertion"
+                print "error on Tweet insertion"
+                print str(e)
                 db.rollback()
         cursor.close()
         
@@ -120,9 +121,10 @@ def addOccurance(tweet_id):
                 cursor.execute(sql)
                 # Commit your changes in the database
                 db.commit()
-        except:
+        except Exception,e:
                 # Rollback in case there is any error
-                print "error on insertion"
+                print "error on insertion of occurrence"
+                print str(e)
                 db.rollback()
         cursor.close()
 
