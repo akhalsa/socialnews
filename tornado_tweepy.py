@@ -71,13 +71,13 @@ class HandleListener(tweepy.StreamListener):
                 print "recevied: "+str(decoded)
                 #check if user for tweet
                 
-                if(findTableIdWithTwitterId(str(decoded['id'])) != 0):
-                        print "recevied tweet from: "+str(decoded['id'])+" with text: "+decoded['text']
+                if(findTableIdWithTwitterId(str(decoded['user']['id'])) != 0):
+                        print "recevied tweet from: "+str(decoded['user']['id'])+" with text: "+decoded['text']
                 elif("retweeted_status" in decoded):
                         print "original id is: "+str(decoded['id'])
                         decoded = decoded['retweeted_status']
-                        print "we now have a source id of: "+str(decoded['id'])
-                        source_id = findTableIdWithTwitterId(str(decoded['id']))
+                        print "we now have a source id of: "+str(decoded['user']['id'])
+                        source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                         if(source_id != 0):
                                 print "recevied retweet for: "+getHandleForLocalId(str(source_id))+" with text: "+decoded['text']
                         else:
