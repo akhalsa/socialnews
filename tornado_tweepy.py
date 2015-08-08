@@ -77,7 +77,7 @@ class HandleListener(tweepy.StreamListener):
                         decoded = decoded['retweeted_status']
                         source_id = findTableIdWithTwitterId(str(decoded['id']))
                         if(source_id != 0):
-                                print "recevied retweet for: "+getHandleForLocalId(str(decoded['id']))+" with text: "+decoded['text']
+                                print "recevied retweet for: "+getHandleForLocalId(str(source_id))+" with text: "+decoded['text']
                         else:
                                 print "this was a retweet, but wasnt a trusted source?!?!"
                 else:
