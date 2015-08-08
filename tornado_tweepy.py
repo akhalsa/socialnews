@@ -67,20 +67,14 @@ class HandleListener(tweepy.StreamListener):
                 stream.filter(follow=getAllTwitterIds())
                 
         def on_data(self, data):
-                print data
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
                 print "recevied tweet from: "+str(decoded['id'])+" with text: "+decoded['text']
-                
-                if("retweeted_status" in decoded):
-                        output_data = decoded['retweeted_status']
-                        
+                if(findTableIdWithTwitterId(str(decoded['id'])) != 0):
+                        print "recevied tweet from: "+str(decoded['id'])+" with text: "+decoded['text']
                 else:
-                        output_data = decoded
-                
-                
-                print "found message with screen name: "+output_data['user']['screen_name']
+                        print "recevied retweet from: "+str(decoded['id'])+" with text: "+decoded['text']
                 return True
 
         def on_error(self, status):
