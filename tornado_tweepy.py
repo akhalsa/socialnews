@@ -76,6 +76,8 @@ class HandleListener(tweepy.StreamListener):
                 elif("retweeted_status" in decoded):
                         decoded = decoded['retweeted_status']
                         print "recevied retweet for: "+str(decoded['id'])+" with text: "+decoded['text']
+                else:
+                        print "this wasn't a retweet AND wasn't from a trusted source!?!"
 
                 return True
 
