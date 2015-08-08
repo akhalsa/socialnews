@@ -99,7 +99,7 @@ class HandleListener(tweepy.StreamListener):
 
 def insertTweet(source_id, text_string, twitter_tweet_id):
         cursor = db.cursor()
-        sql = "INSERT INTO Tweet(source_id, text, twitter_id) VALUES ("+source_id+",'"+text_string+"', '"+twitter_tweet_id+"');"
+        sql = "INSERT INTO Tweet(source_id, text, twitter_id) VALUES ("+str(source_id)+",'"+text_string+"', '"+str(twitter_tweet_id)+"');"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
@@ -114,7 +114,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
         
 def addOccurance(tweet_id):
         cursor = db.cursor()
-        sql = "INSERT INTO TweetOccurance(tweet_id) VALUES ("+twitter_tweet_id+");"
+        sql = "INSERT INTO TweetOccurance(tweet_id) VALUES ("+str(twitter_tweet_id)+");"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
