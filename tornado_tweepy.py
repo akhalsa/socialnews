@@ -70,24 +70,71 @@ class HandleListener(tweepy.StreamListener):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
-                
-                if(findTableIdWithTwitterId(str(decoded['user']['id'])) != 0):
-                        print "recevied tweet from: "+str(decoded['user']['id'])+" with text: "+decoded['text']
-                elif("retweeted_status" in decoded):
+                source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
+                if(source_id == 0) and ("retweeted_status" in decoded):
                         decoded = decoded['retweeted_status']
                         source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
-                        if(source_id != 0):
-                                print "recevied retweet for: "+getHandleForLocalId(str(source_id))+" with text: "+decoded['text']
-                        else:
-                                print "this was a retweet, but wasnt a trusted source?!?!"
-                else:
+                elif (source_id == 0):
                         print "this wasn't a retweet AND wasn't from a trusted source!?!"
-
+                
+                
+                if(source_id != 0):
+                        #ok, we have a valid source_id corresponding to the local table_id and decoded holds the right tweet
+                        #we need to insert this tweet into the db
+                        #first lets check if we already have the tweet
+                        local_tweet_id = getLocalTweetIdForTwitterTweetID(decoded['id'])
+                        if(local_tweet_id == 0):
+                                print "creating new entry for: "+decoded['text']
+                                insertTweet( source_id, decoded['text'], decoded['id'])
+                        print "adding occurance for: "+decoded['text']
+                        addOccurance(decoded['id'])
+                else:
+                        print "source id was still 0 ... so trusted source to be found"
+                
+                
                 return True
 
         def on_error(self, status):
                 print status
 
+def insertTweet(source_id, text_string, twitter_tweet_id):
+        cursor = db.cursor()
+        sql = "INSERT INTO Tweet(source_id, text, twitter_id) VALUES ("+source_id+",'"+text_string+"', '"+twitter_tweet_id+"');"
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                db.commit()
+        except:
+                # Rollback in case there is any error
+                print "error on insertion"
+                db.rollback()
+        cursor.close()
+        
+        
+def addOccurance(tweet_id):
+        cursor = db.cursor()
+        sql = "INSERT INTO TweetOccurance(tweet_id) VALUES ("+twitter_tweet_id+");"
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                db.commit()
+        except:
+                # Rollback in case there is any error
+                print "error on insertion"
+                db.rollback()
+        cursor.close()
+
+def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
+        cursor = db.cursor()
+        sql = "SELECT ID FROM Tweet WHERE twitter_id like "+str(twitter_tweet_id)+";"
+        cursor.execute(sql)
+        return_id = 0
+        for row in cursor.fetchall():
+                return_id.append(row[0])
+        cursor.close()
+        return return_id 
 def getAllTwitterIds():
         cursor = db.cursor()
         sql = "SELECT twitter_id FROM TwitterSource;"
