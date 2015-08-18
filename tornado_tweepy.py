@@ -194,7 +194,7 @@ def getTweetOccurances():
         twitter_ids = []
         for row in cursor.fetchall():
                 twitter_ids.append(row[0])
-                results[row[0]] = (row[1], )
+                results[row[0]] = {"tweet_count":row[1] }
         cursor.close()
         #add text
         cursor = db.cursor()
@@ -211,7 +211,7 @@ def getTweetOccurances():
         sql += ");"
         cursor.execute(sql)
         for row in cursor.fetchall():
-                results[row[0]].append(row[1])
+                results[row[0]]["text"] = row[1]
         cursor.close()
         print "got results: "
         print results
