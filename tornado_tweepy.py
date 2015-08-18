@@ -294,7 +294,7 @@ class Reader(tornado.web.RequestHandler):
         def get(self, time_frame_seconds):
                 cur = db.cursor()
                 print "loaded with time: "+time_frame_seconds
-                self.finish("loaded with time: "+time_frame_seconds)
+                self.finish("loaded with time: "+str(time_frame_seconds))
                 
         
 
@@ -302,7 +302,7 @@ app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category", Category),
     (r"/source", Source),
-    (r'/reader', Reader),
+    (r'/reader/(.*)', Reader),
 ])
 
 if __name__ == '__main__':
