@@ -199,8 +199,15 @@ def getTweetOccurances():
         #add text
         cursor = db.cursor()
         sql = "SELECT twitter_id, text From Tweet WHERE twitter_id in ("
+        first_fin = False
         for t_id in twitter_ids:
-               sql += t_id+","
+                if(first_fin == False):
+                        first_fin = True
+                else:
+                        sql +=  ","
+                        
+                sql += t_id
+                
         sql += ");"
         print "will get text with sql: "+sql
         cursor.execute(sql)
