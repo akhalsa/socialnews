@@ -4,80 +4,12 @@
         <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
         <script type="text/javascript">
-        var tweet_map = {};
-        function getSearchParameters() {
-            var prmstr = window.location.search.substr(1);
-            return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
-        }
-        
-        function transformToAssocArray( prmstr ) {
-            var params = {};
-            var prmarr = prmstr.split("&");
-            for ( var i = 0; i < prmarr.length; i++) {
-                var tmparr = prmarr[i].split("=");
-                params[tmparr[0]] = tmparr[1];
-            }
-            return params;
-        }
-        
-        var params = getSearchParameters();
-        //alert("found category label: "+unescape(params.cat));
-        //must connect to a web socket now
-        var ws = new WebSocket('ws://' + window.location.host+'/ws');
-        //ws.binaryType = "arraybuffer"; // We are talking binary
-        //messageContainer.innerHTML = "Message starting";
-        ws.onopen = function() {
-            console.log("sending!");
-            ws.send(unescape(params.cat));
-        };
-        ws.onmessage = function (evt) {
-            var received_msg = evt.data;
-            var json_tweet = JSON.parse(received_msg);
-            var new_string = json_tweet.user.screen_name+": \""+json_tweet.text+"\"";
-            if (new_string in tweet_map) {
-                tweet_map[new_string] = tweet_map[new_string] + 1;
-            }else{
-                tweet_map[new_string] = 1;
-            }
-            var tweet_list = [];
-            for (key in tweet_map) {
-                //console.log("processing tweet: "+key+" with count: "+tweet_map[key]);
-                var added = false;
-                for (var i =0 ; i< tweet_list.length; i++) {
-                    //insert into i first time tweet_map[key] < tweet_list[i]
-                    if (tweet_map[key] > tweet_map[tweet_list[i]]) {
-                        tweet_list.splice(i, 0, key);
-                        added = true;
-                        break;
-                    } 
-                    if (i == 9) {
-                        break;
-                    }
-                }
-                if ((tweet_list.length < 10) &&(added == false)) {
-                    tweet_list.push(key);
-                }
-            }
-            console.log("done processing************************");
-            
-            
-            //console.log(json_tweet);
-            tweet_list_element = document.getElementById("tweet_list");
-            tweet_list_element.innerHTML = "";
-            //console.log("tweet list length is: "+tweet_list.length);
-            for (i=0; i<tweet_list.length; i++) {
-                //console.log("adding: "+tweet_list[i]);
-                tweet_list_element.innerHTML += "<li>"+tweet_list[i]+": "+tweet_map[tweet_list[i]]+"</li>\n";
-                if (i==9) {
-                    break;
-                }
-            }
-            
-        }
-        ws.onclose = function() {
-            console.log("connection is closed");
-            //messageContainer.innerHTML = "Connection is closed...";
-        };
+            console.log("using url: "+window.location.host+'/reader/hi');
+        $.getJSON(window.location.host+'/reader/hi', function(result){
+            $.each(result, function(i, field){
+                console.log("found i: "+i+", and field: "+field);
+            });
+        });   
         
 
         </script>
