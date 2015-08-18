@@ -27,37 +27,7 @@ auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UN
 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
 api = tweepy.API(auth)
 
-class StdOutListener(tweepy.StreamListener):
-    def on_data(self, data):
-        # Twitter returns data in JSON format - we need to decode it first
-        #decoded = json.loads(data)
-
-        # Also, we convert UTF-8 to ASCII ignoring all bad characters sent by users
-        #print '@%s: %s' % (decoded['user']['screen_name'], decoded['text'].encode('ascii', 'ignore'))
-        #print ''
-        print "transmitting data"
-        #fetch original tweet
-        decoded = json.loads(data)
-        if("retweeted_status" in decoded):
-                output_data = decoded['retweeted_status']
                 
-        else:
-                
-                output_data = decoded
-                
-        print "sending with screen name: "+output_data['user']['screen_name']
-        try:
-                self.wsHandle.write_message(json.dumps(output_data))
-        except tornado.websocket.WebSocketClosedError:
-            print "web socket closed"
-            return False
-        
-        return True
-
-    def on_error(self, status):
-        print status
-        
-        
 class HandleListener(tweepy.StreamListener):
         def __init__(self):
                 thread.start_new_thread( self.setupSocket, ( ) )
@@ -182,15 +152,6 @@ def getCategoriesWithSourceId(source_id):
         cursor.close()
         return return_list
         
-def getTwitterIdForLocalId(local_id):
-        cursor = db.cursor()
-        sql = "SELECT twitter_id FROM TwitterSource WHERE ID like "+str(local_id)+";"
-        cursor.execute(sql)
-        return_id = 0
-        for row in cursor.fetchall() :
-                return_id = row[0]
-        cursor.close()    
-        return return_id
 
 def findTableIdWithTwitterId(twitter_id):
         cursor = db.cursor()
@@ -202,15 +163,6 @@ def findTableIdWithTwitterId(twitter_id):
         cursor.close()    
         return return_id
 
-def getHandleForLocalId(local_id):
-        cursor = db.cursor()
-        sql = "SELECT handle FROM TwitterSource WHERE ID like '"+local_id+"';"
-        cursor.execute(sql)
-        return_id = 0
-        for row in cursor.fetchall() :
-            return_id = row[0]
-        cursor.close()    
-        return return_id
 
 def findCategoryIdWithName(cat_name):
     cursor = db.cursor()
@@ -233,25 +185,6 @@ def getListOfHandlesForCategoryId(cat_id):
         return_list.append(str(row[0]))
     cursor.close()
     return return_list
-
-def setup_socket_handler(arg, web_socket):
-    print "got a new message"
-    print arg
-    print "this is a category id of: "+str(findCategoryIdWithName(arg))
-    #one filter per category?
-    #one filter per handle with category entries -> lower bandwidth
-    
-    category_id = findCategoryIdWithName(arg)
-    print "this yields handles of: "
-    print getListOfHandlesForCategoryId(category_id)
-    l = StdOutListener()
-    l.wsHandle = web_socket
-    auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
-    auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
-    stream = tweepy.Stream(auth, l)
-    stream.filter(follow=getListOfHandlesForCategoryId(category_id))
-
-
 
 class Source(tornado.web.RequestHandler):
 
@@ -357,21 +290,6 @@ class Category(tornado.web.RequestHandler):
         cur.close()
         self.finish(json.dumps(output_array))
     
-class WebSocketHandler(tornado.websocket.WebSocketHandler):
-    #self.write_message(data, True)
-    
-    def open(self, *args):
-        print 'new connection'
-
-    def on_message(self, message):
-        thread = Thread(target = setup_socket_handler, args = (message, self))
-        thread.start()
-        print "on_meesage closed"
-        
-
-    def on_close(self):
-        print "closing"
-
 
 
 app = tornado.web.Application([
