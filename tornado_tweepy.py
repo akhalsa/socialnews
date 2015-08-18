@@ -292,8 +292,8 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, time_frame_seconds):
-                cur = db.cursor()
-                print "loaded with time: "+time_frame_seconds
+                cat_id = findCategoryIdWithName(time_frame_seconds)
+                print "loaded category id: "+time_frame_seconds
                 self.finish("loaded with time: "+str(time_frame_seconds))
                 
         
