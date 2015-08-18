@@ -7,6 +7,8 @@ import sys  #for exit
 import json
 import MySQLdb
 import tweepy
+import thread
+
 from tornado.options import define, options, parse_command_line
 from threading import Thread
 
