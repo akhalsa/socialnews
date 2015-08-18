@@ -290,13 +290,18 @@ class Category(tornado.web.RequestHandler):
         cur.close()
         self.finish(json.dumps(output_array))
     
-
+class Reader(tornado.web.RequestHandler):
+        def get(self, time_frame_seconds):
+                cur = db.cursor()
+                self.finish("loaded with time: "+time_frame_seconds)
+                
+        
 
 app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category", Category),
     (r"/source", Source),
-    (r'/ws', WebSocketHandler),
+    (r'/reader', Reader),
 ])
 
 if __name__ == '__main__':
