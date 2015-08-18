@@ -293,7 +293,7 @@ class Category(tornado.web.RequestHandler):
 class Reader(tornado.web.RequestHandler):
         def get(self, time_frame_seconds):
                 cat_id = findCategoryIdWithName(time_frame_seconds)
-                print "loaded category id: "+cat_id
+                print "loaded category id: "+str(cat_id)
                 self.finish("loaded with time: "+str(time_frame_seconds))
                 
         
