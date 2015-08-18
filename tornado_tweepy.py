@@ -59,7 +59,7 @@ class HandleListener(tweepy.StreamListener):
                         local_tweet_id = getLocalTweetIdForTwitterTweetID(decoded['id'])
                         if(local_tweet_id == 0):
                                 print "creating new entry for: "+decoded['text']
-                                insertTweet( source_id, MySQLdb.escape_string(decoded['text']), decoded['id'])
+                                insertTweet( source_id, decoded['text'], decoded['id'])
                                 
                         print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'])
@@ -75,8 +75,8 @@ class HandleListener(tweepy.StreamListener):
 
 def insertTweet(source_id, text_string, twitter_tweet_id):
         cursor = db.cursor()
-        sql = "INSERT INTO Tweet(source_id, text, twitter_id) VALUES ("+str(source_id)+",'"+text_string+"', '"+str(twitter_tweet_id)+"');"
         try:
+                sql = "INSERT INTO Tweet(source_id, text, twitter_id) VALUES ("+str(source_id)+",'"+MySQLdb.escape_string(text_string)+"', '"+str(twitter_tweet_id)+"');"
                 # Execute the SQL command
                 cursor.execute(sql)
                 # Commit your changes in the database
