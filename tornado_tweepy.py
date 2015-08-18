@@ -59,7 +59,7 @@ class HandleListener(tweepy.StreamListener):
                         local_tweet_id = getLocalTweetIdForTwitterTweetID(decoded['id'])
                         if(local_tweet_id == 0):
                                 print "creating new entry for: "+decoded['text']
-                                insertTweet( source_id, decoded['text'], decoded['id'])
+                                insertTweet( source_id, MySQLdb.escape_string(decoded['text']), decoded['id'])
                                 
                         print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'])
