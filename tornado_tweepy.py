@@ -188,12 +188,18 @@ def getListOfHandlesForCategoryId(cat_id):
 
 def getTweetOccurances():
         cursor = db.cursor()
-        sql = "SELECT twitter_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
+        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
         cursor.execute(sql)
-        return_list = []
+        results = {}
+        twitter_ids = []
         for row in cursor.fetchall():
-                return_list.append((row[0], row[1]))
+                twitter_ids.append(row[0])
+                results[row[0]] = (row[1], )
         cursor.close()
+        #add text
+        cursor = db.cursor()
+        sql = "SELECT twitter_id, text From Tweet WHERE twitter_id in ("+str(twitter_ids)+")"
+        print "will get text with sql: "+sql
         return return_list
 
 class Source(tornado.web.RequestHandler):
