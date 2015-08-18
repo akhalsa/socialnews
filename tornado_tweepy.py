@@ -186,6 +186,16 @@ def getListOfHandlesForCategoryId(cat_id):
     cursor.close()
     return return_list
 
+def getTweetOccurances():
+        cursor = db.cursor()
+        sql = "SELECT twitter_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
+        cursor.execute(sql)
+        return_list = []
+        for row in cursor.fetchall():
+                return_list.append((row[0], row[1]))
+        cursor.close()
+        return return_list
+
 class Source(tornado.web.RequestHandler):
 
     def post(self):
@@ -292,8 +302,9 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, time_frame_seconds):
-                cat_id = findCategoryIdWithName(time_frame_seconds)
-                print "loaded category id: "+str(cat_id)
+                lookup = getTweetOccurances()
+                print "found results"
+                print lookup
                 self.finish("loaded with time: "+str(time_frame_seconds))
                 
         
