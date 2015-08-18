@@ -5,7 +5,7 @@
 
         <script type="text/javascript">
             console.log("using url: "+window.location.host+'/reader/hi');
-        $.getJSON(window.location.host+'/reader/hi', function(result){
+        $.getJSON('/reader/hi', function(result){
             $.each(result, function(i, field){
                 console.log("found i: "+i+", and field: "+field);
             });
