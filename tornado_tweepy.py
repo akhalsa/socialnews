@@ -198,9 +198,12 @@ def getTweetOccurances():
         cursor.close()
         #add text
         cursor = db.cursor()
-        sql = "SELECT twitter_id, text From Tweet WHERE twitter_id in ("+str(twitter_ids)+")"
+        sql = "SELECT twitter_id, text From Tweet WHERE twitter_id in ("
+        for t_id in twitter_ids:
+               sql += t_id+","
+        sql += ");"
         print "will get text with sql: "+sql
-        return return_list
+        return results
 
 class Source(tornado.web.RequestHandler):
 
