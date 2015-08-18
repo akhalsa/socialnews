@@ -4,12 +4,10 @@
         <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
         <script type="text/javascript">
-            console.log("using url: "+window.location.host+'/reader/hi');
-        $.getJSON('/reader/hi', function(result){
-            $.each(result, function(i, field){
-                console.log("found i: "+i+", and field: "+field);
-            });
-        });   
+            $.getJSON('/reader/hi', function(result){
+                var tweets = JSON.parse(result);
+                console.log("got tweets: "+tweets);
+            });   
         
 
         </script>
