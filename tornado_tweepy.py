@@ -203,6 +203,10 @@ def getTweetOccurances():
                sql += t_id+","
         sql += ");"
         print "will get text with sql: "+sql
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+                print row
+        cursor.close()
         return results
 
 class Source(tornado.web.RequestHandler):
