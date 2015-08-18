@@ -293,6 +293,7 @@ class Category(tornado.web.RequestHandler):
 class Reader(tornado.web.RequestHandler):
         def get(self, time_frame_seconds):
                 cur = db.cursor()
+                print "loaded with time: "+time_frame_seconds
                 self.finish("loaded with time: "+time_frame_seconds)
                 
         
