@@ -213,7 +213,6 @@ def getTweetOccurances():
         for row in cursor.fetchall():
                 results[row[0]]["text"] = row[1]
         cursor.close()
-        results["test"] = "test entry"
         print results
         return results
 
