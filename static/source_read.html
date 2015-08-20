@@ -6,7 +6,7 @@
         <script type="text/javascript">
             $.getJSON('/reader/hi', function(result){
                 $.each(result, function(i, field){
-                    console.log("found key: "+i);
+                    console.log("found key: "+i+" with field: "+field);
                 });
                 
             });   
