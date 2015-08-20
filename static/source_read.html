@@ -8,7 +8,7 @@
                 var tweets = [];
                 
                 $.each(result, function(i, field){
-                    console.log("processing count: "+field.tweet_count+" and text: "+field.text);
+                    
                     var finished = false;
                     
                     for	(index = 0; index < tweets.length; index++) {
@@ -23,7 +23,7 @@
                     }
                     
                     if (!finished) {
-                        tweets[0] = field;
+                        tweets.append(field);
                     }
                 });
                 
