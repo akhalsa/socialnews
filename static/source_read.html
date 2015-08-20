@@ -24,11 +24,17 @@
                     }
                 });
                 
-                for(index =0; index < tweets.length; index++){
-                    console.log("found count: "+tweets[index].tweet_count+" and text: "+tweets[index].text);
+                tweet_list_element = document.getElementById("tweet_list");
+                tweet_list_element.innerHTML = "";
+                //console.log("tweet list length is: "+tweet_list.length);
+                for (i=0; i<tweets.length; i++) {
+                    //console.log("adding: "+tweet_list[i]);
+                    tweet_list_element.innerHTML += "<li>"+tweets[i].text+": "+tweets[i].tweet_count+"</li>\n";
                 }
-                
-            });   
+
+            });
+            
+            
         
 
         </script>
