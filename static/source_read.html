@@ -13,7 +13,10 @@
                     
                     for	(index = 0; index < tweets.length; index++) {
                         if (field.tweet_count > tweets[index].tweet_count) {
+                            console.log("adding because: "+field.tweet_count+" is bigger than: "+tweets[index].tweet_count);
                             tweets.splice(index, 0, field);
+                        }else{
+                            console.log("moving on because: "+field.tweet_count+" is NOT bigger than: "+tweets[index].tweet_count);
                         }
                     }
                     
