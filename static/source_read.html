@@ -5,9 +5,26 @@
 
         <script type="text/javascript">
             $.getJSON('/reader/hi', function(result){
+                var tweets = [];
+                
                 $.each(result, function(i, field){
-                    console.log("found key: "+i+" with count: "+field.tweet_count+" and text: "+field.text);
+                    
+                    var finished = false;
+                    
+                    for	(index = 0; index < tweets.length; index++) {
+                        if (field.tweet_count > tweets[index]) {
+                            tweets.splice(index, 0, field);
+                        }
+                    }
+                    
+                    if (!finished) {
+                        tweets[0] = field;
+                    }
                 });
+                
+                for(index =0; index < tweets.length; index++){
+                    console.log("found count: "+tweets[index].tweet_count+" and text: "+tweets[index].text);
+                }
                 
             });   
         
