@@ -5,7 +5,9 @@
 
         <script type="text/javascript">
             $.getJSON('/reader/hi', function(result){
-                console.log("pre parse we got: "+result.keys());
+                var tweets = JSON.parse(result)
+                
+                console.log("pre parse we got: "+tweets.keys());
                 
             });   
         
