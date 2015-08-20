@@ -109,6 +109,10 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
         
         
 def addOccurance(tweet_id):
+        local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
+        if(local_id == 0):
+                return
+        
         cursor = db.cursor()
         sql = "INSERT INTO TweetOccurrence(twitter_id) VALUES ('"+str(tweet_id)+"');"
         try:
