@@ -341,7 +341,7 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, time_frame_seconds):
-                lookup = getTweetOccurances("1200")
+                lookup = getTweetOccurances("3600")
                 self.finish(json.dumps(lookup))
                 
         
