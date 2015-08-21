@@ -205,9 +205,9 @@ def getListOfHandlesForCategoryId(cat_id):
     cursor.close()
     return return_list
 
-def getTweetOccurances():
+def getTweetOccurances(seconds):
         cursor = db.cursor()
-        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
+        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10 WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) ;"
         cursor.execute(sql)
         results = {}
         twitter_ids = []
@@ -341,7 +341,7 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, time_frame_seconds):
-                lookup = getTweetOccurances()
+                lookup = getTweetOccurances(120)
                 self.finish(json.dumps(lookup))
                 
         
