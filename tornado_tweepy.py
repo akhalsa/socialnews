@@ -31,7 +31,7 @@ api = tweepy.API(auth)
 class HandleListener(tweepy.StreamListener):
         def __init__(self):
                 thread.start_new_thread( self.setupSocket, ( ) )
-
+                
                 
         def setupSocket(self, ):
                 print "starting to set up socket listen on new thread"
@@ -116,6 +116,20 @@ def addOccurance(tweet_id):
         
         cursor = db.cursor()
         sql = "INSERT INTO TweetOccurrence(twitter_id) VALUES ('"+str(tweet_id)+"');"
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on insertion of occurrence"
+                print str(e)
+                db.rollback()
+        cursor.close()
+        
+        cursor = db.cursor()
+        sql = "DELETE FROM TweetOccurrence WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
