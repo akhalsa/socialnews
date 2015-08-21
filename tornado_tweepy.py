@@ -64,7 +64,7 @@ class HandleListener(tweepy.StreamListener):
                         print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'])
                 else:
-                        print "source id was still 0 ... so trusted source to be found"
+                        print decoded['text']+ " still had source id that was 0"
                 
                 
                 return True
