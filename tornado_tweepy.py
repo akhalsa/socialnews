@@ -207,7 +207,7 @@ def getListOfHandlesForCategoryId(cat_id):
 
 def getTweetOccurances(seconds):
         cursor = db.cursor()
-        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10 WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) ;"
+        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10 ;"
         cursor.execute(sql)
         results = {}
         twitter_ids = []
