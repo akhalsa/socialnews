@@ -1,4 +1,5 @@
 function proxifyUrl(url) {
+    console.log("runing proxy on: "+url);
     return "/page_load/" + encodeURIComponent(url);
 }
 
