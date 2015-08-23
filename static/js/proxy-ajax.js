@@ -8,7 +8,14 @@ function proxifyUrl(url) {
 }
 
 function unproxifyUrl(url) {
-    return decodeURIComponent(url.split("/page_load/")[1]);
+    console.log("unproxy method - "+url);
+    if (/^page_load/i.test(url)) {
+        console.log("running unproxy - "+url);
+        return decodeURIComponent(url.split("/page_load/")[1]);
+    }
+    else
+        return url;
+    
 }
 
 var jqAjax = $.ajax;
