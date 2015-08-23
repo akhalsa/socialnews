@@ -348,13 +348,17 @@ class Reader(tornado.web.RequestHandler):
                 lookup = getTweetOccurances("3600", "1")
                 self.finish(json.dumps(lookup))
                 
-        
+class PageLoad(tornado.web.RequestHandler):
+        def get(self, url):
+                print "using url: "+url
+                
 
 app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category", Category),
     (r"/source", Source),
     (r'/reader/(.*)', Reader),
+    (r'/page_load/(.*)',  PageLoad),
 ])
 
 if __name__ == '__main__':
