@@ -37,6 +37,10 @@
                     //console.log("adding: "+tweet_list[i]);
                     var list_item = document.createElement('li');
                     list_item.setAttribute("id", "list_item_"+i);
+                    var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
+                    if(tweets[i].text.match(urlRegEx)){
+                        console.log("for tweet: "+ tweets[i].text+" we found link: "+tweets[i].text.match(urlRegEx)[0]);
+                    }
                     list_item.appendChild(document.createTextNode(tweets[i].text+": "+tweets[i].tweet_count));
                     var div_item = document.createElement('div');
                     div_item.setAttribute("id", "div_item_"+i);
