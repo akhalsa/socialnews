@@ -1,9 +1,9 @@
 function proxifyUrl(url) {
-    return "proxy.php?url=" + encodeURIComponent(url);
+    return "/page_load/" + encodeURIComponent(url);
 }
 
 function unproxifyUrl(url) {
-    return decodeURIComponent(url.split("proxy.php?url=")[1]);
+    return decodeURIComponent(url.split("/page_load/")[1]);
 }
 
 var jqAjax = $.ajax;
