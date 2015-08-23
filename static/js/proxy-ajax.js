@@ -11,10 +11,13 @@ function unproxifyUrl(url) {
     console.log("unproxy method - "+url);
     if (/^page_load/i.test(url)) {
         console.log("running unproxy - "+url);
-        return decodeURIComponent(url.split("/page_load/")[1]);
-    }
-    else
+        var output = decodeURIComponent(url.split("/page_load/")[1]);
+        console.log("unproxy converted to: "+output);
+        return output;
+    } else {
+        console.log("unproxy did nothing");
         return url;
+    }
     
 }
 
