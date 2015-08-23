@@ -1,5 +1,7 @@
 function proxifyUrl(url) {
+    console.log("proxyfing url: "+url);
     if (!/^(f|ht)tps?:\/\//i.test(url)) {
+        console.log("adding page load to: "+url);
         url = "/page_load/" + encodeURIComponent(url);
     }
     return url;
