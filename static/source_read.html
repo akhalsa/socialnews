@@ -3,6 +3,7 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="js/bootstrap-linkpreview.js"></script>
+        <script type="text/javascript" src="js/proxy-ajax.js"></script>
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="css/responsive.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -43,7 +44,7 @@
                     tweet_list_element.appendChild(list_item);
                     jQuery(list_item).linkpreview({
                         previewContainer: "#div_item_"+i,
-                        url : "/page_load/http://www.cnn.com/2015/08/23/europe/england-air-show-plane-crash/index.html",
+                        url : "http://www.cnn.com/2015/08/23/europe/england-air-show-plane-crash/index.html",
                         preProcess: function() {
                             console.log("preProcess");
                         },
