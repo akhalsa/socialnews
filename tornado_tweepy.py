@@ -8,6 +8,7 @@ import json
 import MySQLdb
 import tweepy
 import thread
+import urllib2
 
 from tornado.options import define, options, parse_command_line
 from threading import Thread
@@ -351,6 +352,7 @@ class Reader(tornado.web.RequestHandler):
 class PageLoad(tornado.web.RequestHandler):
         def get(self, url):
                 print "using url: "+url
+                urllib2.urlopen(url).read(1000)
                 
 
 app = tornado.web.Application([
