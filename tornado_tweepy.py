@@ -351,7 +351,6 @@ class Reader(tornado.web.RequestHandler):
                 
 class PageLoad(tornado.web.RequestHandler):
         def get(self, url):
-                print "using url: "+url
                 self.finish(urllib2.urlopen(url).read(200000))
                 
 
