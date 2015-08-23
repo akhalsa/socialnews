@@ -41,7 +41,7 @@
                     div_item.setAttribute("id", "div_item_"+i);
                     list_item.appendChild(div_item)
                     tweet_list_element.appendChild(list_item);
-                    list_item.linkpreview({
+                    jQuery(list_item).linkpreview({
                         previewContainer: "#div_item_"+i,
                         url : "http://www.cnn.com/2015/08/23/europe/england-air-show-plane-crash/index.html"
                     });
