@@ -9,7 +9,7 @@ function proxifyUrl(url) {
 
 function unproxifyUrl(url) {
     console.log("unproxy method - "+url);
-    if (/^page_load/i.test(url)) {
+    if (/^\/page_load/i.test(url)) {
         console.log("running unproxy - "+url);
         var output = decodeURIComponent(url.split("/page_load/")[1]);
         console.log("unproxy converted to: "+output);
