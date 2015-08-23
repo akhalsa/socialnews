@@ -1,6 +1,8 @@
 function proxifyUrl(url) {
-    console.log("runing proxy on: "+url);
-    return "/page_load/" + encodeURIComponent(url);
+    if (!/^(f|ht)tps?:\/\//i.test(url)) {
+        url = "/page_load/" + encodeURIComponent(url);
+    }
+    return url;
 }
 
 function unproxifyUrl(url) {
