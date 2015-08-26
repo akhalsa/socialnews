@@ -32,10 +32,8 @@
                 } 
                   return query_string;
             }();
-            console.log(QueryString.cat);
-            console.log(QueryString.time);
-            
-            $.getJSON('/reader/hi', function(result){
+
+            $.getJSON("/reader/"+QueryString.cat+"/"+QueryString.time, function(result){
                 var tweets = [];
                 
                 $.each(result, function(i, field){
