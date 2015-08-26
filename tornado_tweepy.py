@@ -345,7 +345,9 @@ class Category(tornado.web.RequestHandler):
         self.finish(json.dumps(output_array))
     
 class Reader(tornado.web.RequestHandler):
-        def get(self, time_frame_seconds):
+        def get(self, cat, time_frame_seconds):
+                print "cat: "+cat
+                print "seconds: "+time_frame_seconds
                 lookup = getTweetOccurances("3600", "1")
                 self.finish(json.dumps(lookup))
                 
@@ -359,7 +361,7 @@ app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category", Category),
     (r"/source", Source),
-    (r'/reader/(.*)', Reader),
+    (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/(.*)',  PageLoad),
 ])
 
