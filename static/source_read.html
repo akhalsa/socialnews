@@ -33,7 +33,7 @@
                   return query_string;
             }();
 
-            $.getJSON("/reader/"+QueryString.cat+"/"+QueryString.time, function(result){
+            $.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
                 var tweets = [];
                 
                 $.each(result, function(i, field){
