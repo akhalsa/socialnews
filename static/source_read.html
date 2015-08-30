@@ -16,7 +16,7 @@
 
                 //window.location.href = "http://www.google.com";
             }
-            document.getElementById('seconds').defaultValue = QueryString.time;
+            
             var QueryString = function () {
                 // This function is anonymous, is executed immediately and 
                 // the return value is assigned to QueryString!
@@ -39,7 +39,7 @@
                 } 
                   return query_string;
             }();
-
+            document.getElementById('seconds').defaultValue = QueryString.time;
             $.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
                 var tweets = [];
                 
