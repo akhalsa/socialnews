@@ -388,3 +388,8 @@ if __name__ == '__main__':
     print "done loading handles"
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
+    
+    ####################
+    #FIX SQL going away bug
+    #http://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb
+    #####################
