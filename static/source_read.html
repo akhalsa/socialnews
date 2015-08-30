@@ -12,10 +12,11 @@
         <script type="text/javascript">
             function refresh(){
                 console.log("refreshed!");
-                console.log("will load: "+window.location.href.split('?')[0]+"?cat="+QueryString.cat+"&time=3600");
+                console.log("will load: "+window.location.href.split('?')[0]+"?cat="+QueryString.cat+"&time="+document.getElementById('seconds').value);
 
                 //window.location.href = "http://www.google.com";
             }
+            document.getElementById('seconds').defaultValue = QueryString.time;
             var QueryString = function () {
                 // This function is anonymous, is executed immediately and 
                 // the return value is assigned to QueryString!
