@@ -295,6 +295,10 @@ class Source(tornado.web.RequestHandler):
         else :
             print "no user id found"
         self.finish()
+class CategoryChildren(tornado.web.RequestHandler):
+    def get(self, cat_label):
+        print "running get with id: "+cat_label
+        self.finish()
         
 class Category(tornado.web.RequestHandler):
     def post(self):
@@ -327,9 +331,7 @@ class Category(tornado.web.RequestHandler):
         cursor.close()
         self.finish()
         
-    def get(self, cat_label):
-        print "running get with id: "+cat_label
-        self.finish()
+
         
     def get(self, ):
         cur = db.cursor()
@@ -360,7 +362,8 @@ class PageLoad(tornado.web.RequestHandler):
 
 app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
-    (r"/category/(.*)", Category),
+    (r"/category", Category),
+    (r"/category/(.*)", CategoryChildren),
     (r"/source", Source),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/(.*)',  PageLoad),
