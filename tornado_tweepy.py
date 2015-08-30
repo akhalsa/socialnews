@@ -183,6 +183,15 @@ def findTableIdWithTwitterId(twitter_id):
         cursor.close()    
         return return_id
 
+def findCategoryChildrenForId(cat_id):
+        cursor = db.cursor()
+        sql = "SELECT Name From Category WHERE Parent LIKE "+cat_id
+        cursor.execute(sql)
+        return_list = []
+        for row in cursor.fetchall() :
+                return_list.append(str(row[0]))
+        cursor.close()
+        return return_list
 
 def findCategoryIdWithName(cat_name):
     cursor = db.cursor()
@@ -297,8 +306,9 @@ class Source(tornado.web.RequestHandler):
         self.finish()
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
-        print "running get with id: "+cat_label
-        self.finish()
+        cat_id = findCategoryIdWithName(cat_label)
+        children = findCategoryChildrenForId(str(cat_id))
+        self.finish(json.dumps(children))
         
 class Category(tornado.web.RequestHandler):
     def post(self):
