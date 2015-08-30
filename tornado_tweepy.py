@@ -222,6 +222,7 @@ def getTweetOccurances(seconds, cat_id):
         ####
         base_string = " AND twitter_id IN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+cat_id+")"
         sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND)"+base_string+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10 ;"
+        print "loading with sql: "+sql
         cursor.execute(sql)
         results = {}
         twitter_ids = []
@@ -383,13 +384,6 @@ app = tornado.web.Application([
 if __name__ == '__main__':
     parse_command_line()
     handle = HandleListener()
-    ##############################
-    # Note: this approach does not work. you need to set up a single stream for ALL handles we care about
-    # Then for each incoming tweet, we want to look at the text, and determine categories by looking for a known handle in the id OR retweeted id
-    # This can be done using a hash lookup for big O of 1 instead of N as this operation will be done very frequently
-    # This approach will require a system reboot each time new handles get added
-    # this is probably not the end of the world for now
-    ##############################
     
     print "done loading handles"
     app.listen(options.port)

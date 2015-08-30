@@ -44,7 +44,7 @@
             }();
             $.getJSON("/category/"+QueryString.cat, function (result){
                 children = result.children
-                console.log("got first child: "+children[0]);
+                console.log("got children: "+children);
                 var children_div = document.getElementById('children');
                 $.each(children, function(i, child){
                     var aTag = document.createElement('a');
