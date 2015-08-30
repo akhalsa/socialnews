@@ -43,9 +43,8 @@
                   return query_string;
             }();
             $.getJSON("/category/"+QueryString.cat, function (result){
-                console.log("got response");
                 children = result.children
-                console.log("got children: "+children);
+                console.log("got first child: "+children[0]);
             });
             $.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
                 var tweets = [];
