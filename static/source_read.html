@@ -42,7 +42,10 @@
                 } 
                   return query_string;
             }();
-            
+            $.getJSON("category/"+QueryString.cat, function (result){
+                children = result.children
+                console.log("got children: "+children);
+            });
             $.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
                 var tweets = [];
                 
