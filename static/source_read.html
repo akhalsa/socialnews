@@ -46,7 +46,7 @@
                 children = result.children
                 console.log("got first child: "+children[0]);
                 var children_div = document.getElementById('children');
-                $.each(children, function(child){
+                $.each(children, function(i, child){
                     var aTag = document.createElement('a');
                     aTag.setAttribute('href',window.location.href.split('?')[0]+"?cat="+child+"&time="+document.getElementById('seconds').value);
                     aTag.innerHTML = child;
