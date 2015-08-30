@@ -12,6 +12,9 @@
         <script type="text/javascript">
             function refresh(){
                 console.log("refreshed!");
+                console.log("will load: "+window.location.href.split('?')[0]);
+                console.log("param 1 is: "+window.location.href.split('?')[1]);
+                //window.location.href = "http://www.google.com";
             }
             var QueryString = function () {
                 // This function is anonymous, is executed immediately and 
