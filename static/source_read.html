@@ -42,7 +42,8 @@
                 } 
                   return query_string;
             }();
-            $.getJSON("category/"+QueryString.cat, function (result){
+            $.getJSON("/category/"+QueryString.cat, function (result){
+                console.log("got response");
                 children = result.children
                 console.log("got children: "+children);
             });
