@@ -308,7 +308,8 @@ class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
         cat_id = findCategoryIdWithName(cat_label)
         children = findCategoryChildrenForId(str(cat_id))
-        self.finish(json.dumps(children))
+        return_dictionary = {"children":children}
+        self.finish(json.dumps(return_dictionary))
         
 class Category(tornado.web.RequestHandler):
     def post(self):
