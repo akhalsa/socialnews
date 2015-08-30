@@ -327,8 +327,8 @@ class Category(tornado.web.RequestHandler):
         cursor.close()
         self.finish()
         
-    def get(self, id):
-        print "running get with id: "+str(id)
+    def get(self, cat_label):
+        print "running get with id: "+cat_label
         self.finish()
         
     def get(self, ):
@@ -361,6 +361,7 @@ class PageLoad(tornado.web.RequestHandler):
 app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category", Category),
+    (r"/category/(.*)", Category),
     (r"/source", Source),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/(.*)',  PageLoad),
