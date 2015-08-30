@@ -360,7 +360,6 @@ class PageLoad(tornado.web.RequestHandler):
 
 app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
-    (r"/category", Category),
     (r"/category/(.*)", Category),
     (r"/source", Source),
     (r'/reader/(.*)/time/(.*)', Reader),
