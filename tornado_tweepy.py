@@ -349,8 +349,7 @@ class Reader(tornado.web.RequestHandler):
                 print "cat: "+cat
                 print "seconds: "+time_frame_seconds
                 cat_id = findCategoryIdWithName(cat)
-                print "cat id:" + str(cat_id)
-                lookup = getTweetOccurances(time_frame_seconds, "1")
+                lookup = getTweetOccurances(time_frame_seconds, str(cat_id))
                 self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):

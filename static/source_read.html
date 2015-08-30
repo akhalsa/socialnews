@@ -10,6 +10,9 @@
         <link rel="stylesheet" type="text/css" href="css/bootstrap-linkpreview.css">
         
         <script type="text/javascript">
+            function refresh(){
+                console.log("refreshed!");
+            }
             var QueryString = function () {
                 // This function is anonymous, is executed immediately and 
                 // the return value is assigned to QueryString!
@@ -102,7 +105,7 @@
         <div>
             <span for="seconds">Time Frame (seconds)</span>
             <input type="text" id="seconds" >
-            <button type="button" id="refresh">Refresh</button>
+            <button type="button" id="refresh" onclick="refresh()" >Refresh</button>
         </div>
         <ul id="tweet_list">
         </ul>
