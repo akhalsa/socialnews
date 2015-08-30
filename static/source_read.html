@@ -12,8 +12,8 @@
         <script type="text/javascript">
             function refresh(){
                 console.log("refreshed!");
-                console.log("will load: "+window.location.href.split('?')[0]);
-                console.log("param 1 is: "+window.location.href.split('?')[1]);
+                console.log("will load: "+window.location.href.split('?')[0]+"?cat="+QueryString.cat+"&time=3600");
+
                 //window.location.href = "http://www.google.com";
             }
             var QueryString = function () {
