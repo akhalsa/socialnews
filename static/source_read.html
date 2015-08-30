@@ -45,6 +45,13 @@
             $.getJSON("/category/"+QueryString.cat, function (result){
                 children = result.children
                 console.log("got first child: "+children[0]);
+                var children_div = document.getElementById('children');
+                $.each(children, function(child){
+                    var aTag = document.createElement('a');
+                    aTag.setAttribute('href',window.location.href.split('?')[0]+"?cat="+child+"&time="+document.getElementById('seconds').value);
+                    aTag.innerHTML = child;
+                    children_div.appendChild(aTag);
+                });
             });
             $.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
                 var tweets = [];
@@ -116,6 +123,9 @@
             <span for="seconds">Time Frame (seconds)</span>
             <input type="text" id="seconds" >
             <button type="button" id="refresh" onclick="refresh()" >Refresh</button>
+        </div>
+        <div id="children">
+            
         </div>
         <ul id="tweet_list">
         </ul>
