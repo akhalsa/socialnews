@@ -14,7 +14,7 @@
                 console.log("refreshed!");
                 console.log("will load: "+window.location.href.split('?')[0]+"?cat="+QueryString.cat+"&time="+document.getElementById('seconds').value);
 
-                //window.location.href = "http://www.google.com";
+                window.location.href = window.location.href.split('?')[0]+"?cat="+QueryString.cat+"&time="+document.getElementById('seconds').value;
             }
             window.onload = function (){
                 console.log("running onload");
