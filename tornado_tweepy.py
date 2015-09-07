@@ -383,6 +383,7 @@ app = tornado.web.Application([
 
 if __name__ == '__main__':
     parse_command_line()
+    db.query('SET GLOBAL wait_timeout=28800')
     handle = HandleListener()
     
     print "done loading handles"
