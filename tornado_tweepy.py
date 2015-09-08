@@ -226,19 +226,16 @@ def getTweetOccurances(seconds, cat_id):
         sql = "SELECT A.twitter_id, COUNT(A.twitter_id) as tweet_occurrence_count FROM TweetOccurrence A "
         sql += "LEFT JOIN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+str(cat_id)+") B "
         sql += "ON A.twitter_id=B.twitter_id "
-        sql += "WHERE A.timestamp > (NOW() -  INTERVAL "+str(seconds)+" SECOND) GROUP BY A.twitter_id ORDER BY tweet_occurrence_count DESC "
+        sql += "WHERE A.timestamp > (NOW() -  INTERVAL "+str(seconds)+" SECOND) GROUP BY A.twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10"
 
         print "loading with sql: "+sql
         cursor.execute(sql)
         results = {}
         twitter_ids = []
-        count = 0
         for row in cursor.fetchall():
                 twitter_ids.append(row[0])
                 results[row[0]] = {"tweet_count":row[1] }
-                count = count + 1
-                if(count > 9):
-                        break
+
                 
         cursor.close()
         #add text
