@@ -221,8 +221,13 @@ def getTweetOccurances(seconds, cat_id):
         ## first get tweet occurances filtered for the category we care about
         ####
         #base_string = " AND twitter_id IN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+cat_id+")"
-        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC;"
-        
+        #inner_join = " LEFT JOIN TweetCategoryRelationship On TweetOccurrence.twitter_id=TweetCategoryRelationship.twitter_id"
+        #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC "+inner_join
+        sql = "SELECT A.twitter_id, COUNT(A.twitter_id) as tweet_occurrence_count FROM TweetOccurrence A "
+        sql += "LEFT JOIN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+str(cat_id)+") B "
+        sql += "ON A.twitter_id=B.twitter_id "
+        sql += "WHERE A.timestamp > (NOW() -  INTERVAL "+str(seconds)+" SECOND) GROUP BY A.twitter_id ORDER BY tweet_occurrence_count DESC "
+
         print "loading with sql: "+sql
         cursor.execute(sql)
         results = {}
