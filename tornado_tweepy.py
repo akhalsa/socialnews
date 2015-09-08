@@ -227,9 +227,14 @@ def getTweetOccurances(seconds, cat_id):
         cursor.execute(sql)
         results = {}
         twitter_ids = []
+        count = 0
         for row in cursor.fetchall():
                 twitter_ids.append(row[0])
                 results[row[0]] = {"tweet_count":row[1] }
+                count = count + 1
+                if(count > 9):
+                        break
+                
         cursor.close()
         #add text
         cursor = db.cursor()
