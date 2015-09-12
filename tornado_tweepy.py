@@ -62,7 +62,7 @@ class HandleListener(tweepy.StreamListener):
                 
                 
                 
-                if(source_id != 0):
+                if((source_id != 0) and ('text' in decoded) and ('id' in decoded)):
                         #ok, we have a valid source_id corresponding to the local table_id and decoded holds the right tweet
                         #we need to insert this tweet into the db
                         #first lets check if we already have the tweet
