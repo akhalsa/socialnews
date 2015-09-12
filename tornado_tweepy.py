@@ -67,7 +67,7 @@ class HandleListener(tweepy.StreamListener):
                 else:
                         print decoded['text']+ " still had source id that was 0"
                 
-                
+                print "finished with: "+decoded['text']
                 return True
 
         def on_error(self, status):
