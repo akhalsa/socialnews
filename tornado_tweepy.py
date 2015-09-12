@@ -377,13 +377,20 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
+                local_db  = MySQLdb.connect(
+                                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
                 print "cat: "+cat
                 print "seconds: "+time_frame_seconds
-                cat_id = findCategoryIdWithName(cat, db_reader)
+                cat_id = findCategoryIdWithName(cat, local_db)
                 if(cat_id == 0):
                         self.finish("Category Error, Try Again")
                         
-                lookup = getTweetOccurances(time_frame_seconds, str(cat_id), db_reader)
+                lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db)
                 self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
