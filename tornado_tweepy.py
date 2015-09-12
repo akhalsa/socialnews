@@ -131,7 +131,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id, data_base):
         
         
 def addOccurance(tweet_id, data_base):
-        local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
+        local_id = getLocalTweetIdForTwitterTweetID(tweet_id, data_base)
         if(local_id == 0):
                 return
         
