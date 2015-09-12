@@ -186,6 +186,7 @@ def getCategoriesWithSourceId(source_id):
         
 
 def findTableIdWithTwitterId(twitter_id):
+        print "running findTableIdWithTwitterId: "+twitter_id
         cursor = db.cursor()
         sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
         cursor.execute(sql)
