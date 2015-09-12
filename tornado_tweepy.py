@@ -45,10 +45,14 @@ class HandleListener(tweepy.StreamListener):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
+                print "search tweet user"
                 source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
+                print "done with search tweet user"
                 if(source_id == 0) and ("retweeted_status" in decoded):
                         decoded = decoded['retweeted_status']
+                        print "search retweet user"
                         source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
+                        print "done with search retweet user"
                 elif (source_id == 0):
                         print "this wasn't a retweet AND wasn't from a trusted source!?!"
                 
