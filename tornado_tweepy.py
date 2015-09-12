@@ -380,6 +380,9 @@ class Reader(tornado.web.RequestHandler):
                 print "cat: "+cat
                 print "seconds: "+time_frame_seconds
                 cat_id = findCategoryIdWithName(cat)
+                if(cat_id == 0):
+                        self.finish("Category Error, Try Again")
+                        
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id))
                 self.finish(json.dumps(lookup))
                 
