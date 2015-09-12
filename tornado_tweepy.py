@@ -110,7 +110,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id, data_base):
                 data_base.rollback()
         cursor.close()
         print "get categories with id: "+str(source_id)
-        categories = getCategoriesWithSourceId(source_id)
+        categories = getCategoriesWithSourceId(source_id, data_base)
         cursor = data_base.cursor()
         for cat in categories:
                 print "should insert category relationship to cat_id: "+str(cat)
