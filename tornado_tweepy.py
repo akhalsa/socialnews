@@ -73,12 +73,13 @@ class HandleListener(tweepy.StreamListener):
                                 
                         print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'])
+                        print "finished with: "+decoded['text']
                 elif ('text' in decoded):
                         print decoded['text']+ " still had source id that was 0"
                 else:
                         print "we had nothing here?"
                 
-                print "finished with: "+decoded['text']
+                
                 return True
 
         def on_error(self, status):
