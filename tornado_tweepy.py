@@ -23,6 +23,14 @@ db = MySQLdb.connect(
         charset='utf8',
         port=3306)
 
+db_reader = MySQLdb.connect(
+        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+        user="akhalsa",
+        passwd="sophiesChoice1",
+        db="newsdb",
+        charset='utf8',
+        port=3306)
+
 
 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
@@ -39,7 +47,7 @@ class HandleListener(tweepy.StreamListener):
                 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
                 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
                 stream = tweepy.Stream(auth, self)
-                stream.filter(follow=getAllTwitterIds())
+                stream.filter(follow=getAllTwitterIds(db))
                 
         def on_data(self, data):
                 decoded = json.loads(data)
@@ -47,12 +55,12 @@ class HandleListener(tweepy.StreamListener):
                 #check if user for tweet
                 print "search tweet user"
                 try:
-                        source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
+                        source_id = findTableIdWithTwitterId(str(decoded['user']['id']), db)
                         print "done with search tweet user"
                         if(source_id == 0) and ("retweeted_status" in decoded):
                                 decoded = decoded['retweeted_status']
                                 print "search retweet user"
-                                source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
+                                source_id = findTableIdWithTwitterId(str(decoded['user']['id']), db)
                                 print "done with search retweet user"
                         elif (source_id == 0):
                                 print "this wasn't a retweet AND wasn't from a trusted source!?!"
@@ -66,13 +74,13 @@ class HandleListener(tweepy.StreamListener):
                         #ok, we have a valid source_id corresponding to the local table_id and decoded holds the right tweet
                         #we need to insert this tweet into the db
                         #first lets check if we already have the tweet
-                        local_tweet_id = getLocalTweetIdForTwitterTweetID(decoded['id'])
+                        local_tweet_id = getLocalTweetIdForTwitterTweetID(decoded['id'], db)
                         if(local_tweet_id == 0):
                                 print "creating new entry for: "+decoded['text']
-                                insertTweet( source_id, decoded['text'], decoded['id'])
+                                insertTweet( source_id, decoded['text'], decoded['id'], db)
                                 
                         print "adding occurance for: "+decoded['text']
-                        addOccurance(decoded['id'])
+                        addOccurance(decoded['id'], db)
                         print "finished with: "+decoded['text']
                 elif ('text' in decoded):
                         print decoded['text']+ " still had source id that was 0"
@@ -86,24 +94,24 @@ class HandleListener(tweepy.StreamListener):
                 print status
 
 
-def insertTweet(source_id, text_string, twitter_tweet_id):
-        cursor = db.cursor()
+def insertTweet(source_id, text_string, twitter_tweet_id, data_base):
+        cursor = data_base.cursor()
         try:
                 text_string = text_string.encode('utf-8')
                 sql = "INSERT INTO Tweet(source_id, text, twitter_id) VALUES ("+str(source_id)+",'"+MySQLdb.escape_string(text_string)+"', '"+str(twitter_tweet_id)+"');"
                 # Execute the SQL command
                 cursor.execute(sql)
                 # Commit your changes in the database
-                db.commit()
+                data_base.commit()
         except Exception,e:
                 # Rollback in case there is any error
                 print "error on Tweet insertion"
                 print str(e)
-                db.rollback()
+                data_base.rollback()
         cursor.close()
         print "get categories with id: "+str(source_id)
         categories = getCategoriesWithSourceId(source_id)
-        cursor = db.cursor()
+        cursor = data_base.cursor()
         for cat in categories:
                 print "should insert category relationship to cat_id: "+str(cat)
                 sql = "INSERT INTO TweetCategoryRelationship(twitter_id, category_id) VALUES ('"+str(twitter_tweet_id)+"',"+str(cat)+");"
@@ -111,52 +119,52 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
                         # Execute the SQL command
                         cursor.execute(sql)
                         # Commit your changes in the database
-                        db.commit()
+                        data_base.commit()
                 except Exception,e:
                         # Rollback in case there is any error
                         print "error on TweetCat update"
                         print str(e)
-                        db.rollback()
+                        data_base.rollback()
         
         cursor.close()
         
         
         
-def addOccurance(tweet_id):
+def addOccurance(tweet_id, data_base):
         local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
         if(local_id == 0):
                 return
         
-        cursor = db.cursor()
+        cursor = data_base.cursor()
         sql = "INSERT INTO TweetOccurrence(twitter_id) VALUES ('"+str(tweet_id)+"');"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
                 # Commit your changes in the database
-                db.commit()
+                data_base.commit()
         except Exception,e:
                 # Rollback in case there is any error
                 print "error on insertion of occurrence"
                 print str(e)
-                db.rollback()
+                data_base.rollback()
         cursor.close()
         
-        cursor = db.cursor()
+        cursor = data_base.cursor()
         sql = "DELETE FROM TweetOccurrence WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
                 # Commit your changes in the database
-                db.commit()
+                data_base.commit()
         except Exception,e:
                 # Rollback in case there is any error
                 print "error on insertion of occurrence"
                 print str(e)
-                db.rollback()
+                data_base.rollback()
         cursor.close()
 
-def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
-        cursor = db.cursor()
+def getLocalTweetIdForTwitterTweetID(twitter_tweet_id, data_base):
+        cursor = data_base.cursor()
         sql = "SELECT ID FROM Tweet WHERE twitter_id like "+str(twitter_tweet_id)+";"
         cursor.execute(sql)
         return_id = 0
@@ -164,8 +172,8 @@ def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
                 return_id = row[0]
         cursor.close()
         return return_id 
-def getAllTwitterIds():
-        cursor = db.cursor()
+def getAllTwitterIds(data_base):
+        cursor = data_base.cursor()
         sql = "SELECT twitter_id FROM TwitterSource;"
         cursor.execute(sql)
         return_list = []
@@ -174,8 +182,8 @@ def getAllTwitterIds():
         cursor.close()
         return return_list
 
-def getCategoriesWithSourceId(source_id):
-        cursor = db.cursor()
+def getCategoriesWithSourceId(source_id, data_base):
+        cursor = data_base.cursor()
         sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
         cursor.execute(sql)
         return_list = []
@@ -185,9 +193,9 @@ def getCategoriesWithSourceId(source_id):
         return return_list
         
 
-def findTableIdWithTwitterId(twitter_id):
+def findTableIdWithTwitterId(twitter_id, data_base):
         print "running findTableIdWithTwitterId: "+twitter_id
-        cursor = db.cursor()
+        cursor = data_base.cursor()
         sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
         cursor.execute(sql)
         return_id = 0
@@ -196,8 +204,8 @@ def findTableIdWithTwitterId(twitter_id):
         cursor.close()    
         return return_id
 
-def findCategoryChildrenForId(cat_id):
-        cursor = db.cursor()
+def findCategoryChildrenForId(cat_id, data_base):
+        cursor = data_base.cursor()
         sql = "SELECT Name From Category WHERE Parent LIKE "+cat_id
         cursor.execute(sql)
         return_list = []
@@ -206,8 +214,8 @@ def findCategoryChildrenForId(cat_id):
         cursor.close()
         return return_list
 
-def findCategoryIdWithName(cat_name):
-    cursor = db.cursor()
+def findCategoryIdWithName(cat_name, data_base):
+    cursor = data_base.cursor()
     sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
     cursor.execute(sql)
     return_id = 0
@@ -216,20 +224,8 @@ def findCategoryIdWithName(cat_name):
     cursor.close()    
     return return_id
 
-
-
-def getListOfHandlesForCategoryId(cat_id):
-    cursor = db.cursor()
-    return_list = []
-    sql = "SELECT twitter_id From TwitterSource WHERE ID in (SELECT source_id From SourceCategoryRelationship WHERE category_id="+str(cat_id)+");"
-    cursor.execute(sql)
-    for row in cursor.fetchall() :
-        return_list.append(str(row[0]))
-    cursor.close()
-    return return_list
-
-def getTweetOccurances(seconds, cat_id):
-        cursor = db.cursor()
+def getTweetOccurances(seconds, cat_id, data_base):
+        cursor = data_base.cursor()
         ###
         ## first get tweet occurances filtered for the category we care about
         ####
@@ -286,37 +282,37 @@ class Source(tornado.web.RequestHandler):
                 print "user_id: "+user_id+" and name: "+username
                
         if(user_id is not False):
-            cursor = db.cursor()
+            cursor = db_reader.cursor()
             #create user entry
             sql = "INSERT INTO TwitterSource(Name, handle, twitter_id) VALUES ('"+username+"','"+self.request.arguments[key][0]+"', '"+user_id+"')"
             try:
                 # Execute the SQL command
                 cursor.execute(sql)
                 # Commit your changes in the database
-                db.commit()
+                db_reader.commit()
             except:
                 # Rollback in case there is any error
                 print "error on insertion"
-                db.rollback()
+                db_reader.rollback()
             cursor.close()
             
             #create relationships to categories
             for key in self.request.arguments:
                 if("cat" in key):
                     
-                    cat_id = findCategoryIdWithName(self.request.arguments[key][0])
-                    user_db_id = findTableIdWithTwitterId(user_id)
+                    cat_id = findCategoryIdWithName(self.request.arguments[key][0], db_reader)
+                    user_db_id = findTableIdWithTwitterId(user_id, db_reader)
                     sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(user_db_id)+", "+str(cat_id)+");"
-                    cursor = db.cursor()
+                    cursor = db_reader.cursor()
                     try:
                         # Execute the SQL command
                         cursor.execute(sql)
                         # Commit your changes in the database
-                        db.commit()
+                        db_reader.commit()
                     except:
                         # Rollback in case there is any error
                         print "error on insertion"
-                        db.rollback()
+                        db_reader.rollback()
                     cursor.close()
                     
                 else:
@@ -328,8 +324,8 @@ class Source(tornado.web.RequestHandler):
         self.finish()
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
-        cat_id = findCategoryIdWithName(cat_label)
-        children = findCategoryChildrenForId(str(cat_id))
+        cat_id = findCategoryIdWithName(cat_label, db_reader)
+        children = findCategoryChildrenForId(str(cat_id), db_reader)
         return_dictionary = {"children":children}
         self.finish(json.dumps(return_dictionary))
         
@@ -337,7 +333,7 @@ class Category(tornado.web.RequestHandler):
     def post(self):
         title = self.get_argument('Title', '')
         parent_cat = self.get_argument('parent', '')
-        cursor = db.cursor()
+        cursor = db_reader.cursor()
         #first locate the ID if there is one of the parent Category
         sql = """SELECT ID From Category WHERE Name Like '"""+parent_cat+"""';""";
         cursor.execute(sql)
@@ -355,11 +351,11 @@ class Category(tornado.web.RequestHandler):
             # Execute the SQL command
             cursor.execute(sql)
             # Commit your changes in the database
-            db.commit()
+            db_reader.commit()
         except:
             # Rollback in case there is any error
             print "error on insertion"
-            db.rollback()
+            db_reader.rollback()
             
         cursor.close()
         self.finish()
@@ -367,7 +363,7 @@ class Category(tornado.web.RequestHandler):
 
         
     def get(self, ):
-        cur = db.cursor()
+        cur = db_reader.cursor()
         cur.execute("SELECT * FROM Category")
         
         output_array = []
@@ -383,11 +379,11 @@ class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
                 print "cat: "+cat
                 print "seconds: "+time_frame_seconds
-                cat_id = findCategoryIdWithName(cat)
+                cat_id = findCategoryIdWithName(cat, db_reader)
                 if(cat_id == 0):
                         self.finish("Category Error, Try Again")
                         
-                lookup = getTweetOccurances(time_frame_seconds, str(cat_id))
+                lookup = getTweetOccurances(time_frame_seconds, str(cat_id), db_reader)
                 self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
