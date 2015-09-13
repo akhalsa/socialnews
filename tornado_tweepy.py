@@ -9,6 +9,7 @@ import MySQLdb
 import tweepy
 import thread
 import urllib2
+import threading
 
 from tornado.options import define, options, parse_command_line
 from threading import Thread
@@ -23,7 +24,7 @@ db = MySQLdb.connect(
         charset='utf8',
         port=3306)
 
-lock = Lock()
+lock = threading.Lock()
 
 
 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
