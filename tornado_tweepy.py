@@ -88,7 +88,9 @@ class HandleListener(tweepy.StreamListener):
 
 
 def insertTweet(source_id, text_string, twitter_tweet_id):
+        print "attempting to acquire lock at insertTweet92"
         lock.acquire()
+        print "successfully to acquired lock at insertTweet92"
         cursor = db.cursor()
         try:
                 text_string = text_string.encode('utf-8')
@@ -107,7 +109,9 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
         print "get categories with id: "+str(source_id)
         categories = getCategoriesWithSourceId(source_id)
         cursor = db.cursor()
+        print "attempting to acquire lock at 113"
         lock.acquire()
+        print "successfully acquired lock at 113"
         for cat in categories:
                 print "should insert category relationship to cat_id: "+str(cat)
                 sql = "INSERT INTO TweetCategoryRelationship(twitter_id, category_id) VALUES ('"+str(twitter_tweet_id)+"',"+str(cat)+");"
@@ -130,7 +134,9 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
 def addOccurance(tweet_id):
         
         local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
+        print "attempting to acquire lock at addOccurance 138"
         lock.acquire()
+        print "successfully acquired lock at addOccurance 138"
         if(local_id == 0):
                 return
         
@@ -164,7 +170,9 @@ def addOccurance(tweet_id):
         lock.release()
 
 def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
+        print "attempting to acquire lock at getLocalTweetIdblahlbah 174"
         lock.acquire()
+        print "successfully acquired lock at getLocalTweetIdblahlbah 174"
         cursor = db.cursor()
         sql = "SELECT ID FROM Tweet WHERE twitter_id like "+str(twitter_tweet_id)+";"
         cursor.execute(sql)
@@ -175,7 +183,9 @@ def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
         lock.release()
         return return_id 
 def getAllTwitterIds():
+        print "attempting to acquire lock at getAll187"
         lock.acquire()
+        print "successfully acquired lock at 187"
         cursor = db.cursor()
         sql = "SELECT twitter_id FROM TwitterSource;"
         cursor.execute(sql)
@@ -187,7 +197,9 @@ def getAllTwitterIds():
         return return_list
 
 def getCategoriesWithSourceId(source_id):
+        print "attempting to acquire lock at getCategoriesWithId 201"
         lock.acquire()
+        print "successfully acquired lock at getCategoriesWithId 201"
         cursor = db.cursor()
         sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
         cursor.execute(sql)
@@ -200,7 +212,9 @@ def getCategoriesWithSourceId(source_id):
         
 
 def findTableIdWithTwitterId(twitter_id):
+        print "attempting to acquire lock at findTableIdWithTwitterId 216"
         lock.acquire()
+        print "successfully acquired lock at findTableIdWithTwitterId 216"
         print "running findTableIdWithTwitterId: "+twitter_id
         cursor = db.cursor()
         sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
@@ -213,7 +227,9 @@ def findTableIdWithTwitterId(twitter_id):
         return return_id
 
 def findCategoryChildrenForId(cat_id):
+        print "attempting to acquire lock at findCategoryChildrenForId 231"
         lock.acquire()
+        print "successfully acquired lock at findCategoryChildrenForId 231"
         cursor = db.cursor()
         sql = "SELECT Name From Category WHERE Parent LIKE "+cat_id
         cursor.execute(sql)
@@ -225,7 +241,9 @@ def findCategoryChildrenForId(cat_id):
         return return_list
 
 def findCategoryIdWithName(cat_name):
+        print "attempting to acquire lock at findCategoryIdWithName 245"
         lock.acquire()
+        print "successfully acquired lock at findCategoryIdWithName 245"
         cursor = db.cursor()
         sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
         cursor.execute(sql)
@@ -294,7 +312,9 @@ def getTweetOccurances(seconds, cat_id):
 class Source(tornado.web.RequestHandler):
 
     def post(self):
+        print "attempting to acquire lock at post 316"
         lock.acquire()
+        print "successfully acquired lock at post 316"
         user_id = False
         username = ""
         for key in self.request.arguments:
@@ -349,7 +369,9 @@ class Source(tornado.web.RequestHandler):
         self.finish()
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
+        print "attempting to acquire lock at get 373"
         lock.acquire()
+        print "successfully acquired lock at get 373"
         cat_id = findCategoryIdWithName(cat_label)
         children = findCategoryChildrenForId(str(cat_id))
         return_dictionary = {"children":children}
@@ -358,7 +380,9 @@ class CategoryChildren(tornado.web.RequestHandler):
         
 class Category(tornado.web.RequestHandler):
     def post(self):
+        print "attempting to acquire lock at post 384"
         lock.acquire()
+        print "successfully acquired lock at post 384"
         title = self.get_argument('Title', '')
         parent_cat = self.get_argument('parent', '')
         cursor = db.cursor()
@@ -392,7 +416,9 @@ class Category(tornado.web.RequestHandler):
 
         
     def get(self, ):
+        print "attempting to acquire lock at get 420"
         lock.acquire()
+        print "successfully acquired lock at get 420"
         cur = db.cursor()
         cur.execute("SELECT * FROM Category")
         
@@ -408,7 +434,9 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
+                print "attempting to acquire lock at get 437"
                 lock.acquire()
+                print "successfully acquired lock at get 437"
                 print "cat: "+cat
                 print "seconds: "+time_frame_seconds
                 cat_id = findCategoryIdWithName(cat)
