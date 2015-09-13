@@ -430,9 +430,6 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
-                print "attempting to acquire lock at get 437"
-                lock.acquire()
-                print "successfully acquired lock at get 437"
                 print "cat: "+cat
                 print "seconds: "+time_frame_seconds
                 cat_id = findCategoryIdWithName(cat)
@@ -440,7 +437,6 @@ class Reader(tornado.web.RequestHandler):
                         self.finish("Category Error, Try Again")
                         
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id))
-                lock.release() # release lock, no matter what
                 self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
