@@ -23,6 +23,8 @@ db = MySQLdb.connect(
         charset='utf8',
         port=3306)
 
+lock = Lock()
+
 
 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
@@ -46,6 +48,7 @@ class HandleListener(tweepy.StreamListener):
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
                 print "search tweet user"
+                lock.acquire()
                 try:
                         source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                         print "done with search tweet user"
@@ -59,8 +62,6 @@ class HandleListener(tweepy.StreamListener):
                 except KeyError, e:
                         print "we got a key error so we're just dropping out"
                         source_id = 0
-                
-                
                 
                 if((source_id != 0) and ('text' in decoded) and ('id' in decoded)):
                         #ok, we have a valid source_id corresponding to the local table_id and decoded holds the right tweet
@@ -78,7 +79,8 @@ class HandleListener(tweepy.StreamListener):
                         print decoded['text']+ " still had source id that was 0"
                 else:
                         print "we had nothing here?"
-                
+                        
+                lock.release() # release lock, no matter what
                 
                 return True
 
@@ -381,6 +383,7 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
+                lock.acquire()
                 print "cat: "+cat
                 print "seconds: "+time_frame_seconds
                 cat_id = findCategoryIdWithName(cat)
@@ -388,6 +391,7 @@ class Reader(tornado.web.RequestHandler):
                         self.finish("Category Error, Try Again")
                         
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id))
+                lock.release() # release lock, no matter what
                 self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
