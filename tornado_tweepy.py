@@ -49,7 +49,6 @@ class HandleListener(tweepy.StreamListener):
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
                 print "search tweet user"
-                lock.acquire()
                 try:
                         source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                         print "done with search tweet user"
@@ -80,8 +79,7 @@ class HandleListener(tweepy.StreamListener):
                         print decoded['text']+ " still had source id that was 0"
                 else:
                         print "we had nothing here?"
-                        
-                lock.release() # release lock, no matter what
+
                 
                 return True
 
@@ -90,6 +88,7 @@ class HandleListener(tweepy.StreamListener):
 
 
 def insertTweet(source_id, text_string, twitter_tweet_id):
+        lock.acquire()
         cursor = db.cursor()
         try:
                 text_string = text_string.encode('utf-8')
@@ -122,11 +121,14 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
                         db.rollback()
         
         cursor.close()
+        lock.release()
         
         
         
 def addOccurance(tweet_id):
+        
         local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
+        lock.acquire()
         if(local_id == 0):
                 return
         
@@ -157,6 +159,7 @@ def addOccurance(tweet_id):
                 print str(e)
                 db.rollback()
         cursor.close()
+        lock.release()
 
 def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
         lock.acquire()
