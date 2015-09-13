@@ -223,6 +223,7 @@ def findTableIdWithTwitterId(twitter_id):
         for row in cursor.fetchall() :
             return_id = row[0]
         cursor.close()
+        print "lock released at 227"
         lock.release()
         return return_id
 
