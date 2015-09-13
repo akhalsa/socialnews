@@ -369,13 +369,9 @@ class Source(tornado.web.RequestHandler):
         self.finish()
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
-        print "attempting to acquire lock at get 373"
-        lock.acquire()
-        print "successfully acquired lock at get 373"
         cat_id = findCategoryIdWithName(cat_label)
         children = findCategoryChildrenForId(str(cat_id))
         return_dictionary = {"children":children}
-        lock.release()
         self.finish(json.dumps(return_dictionary))
         
 class Category(tornado.web.RequestHandler):
