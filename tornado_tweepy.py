@@ -159,6 +159,7 @@ def addOccurance(tweet_id):
         cursor.close()
 
 def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
+        lock.acquire()
         cursor = db.cursor()
         sql = "SELECT ID FROM Tweet WHERE twitter_id like "+str(twitter_tweet_id)+";"
         cursor.execute(sql)
@@ -166,8 +167,10 @@ def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
         for row in cursor.fetchall():
                 return_id = row[0]
         cursor.close()
+        lock.release()
         return return_id 
 def getAllTwitterIds():
+        lock.acquire()
         cursor = db.cursor()
         sql = "SELECT twitter_id FROM TwitterSource;"
         cursor.execute(sql)
@@ -175,9 +178,11 @@ def getAllTwitterIds():
         for row in cursor.fetchall():
                 return_list.append(row[0])
         cursor.close()
+        lock.release()
         return return_list
 
 def getCategoriesWithSourceId(source_id):
+        lock.acquire()
         cursor = db.cursor()
         sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
         cursor.execute(sql)
@@ -185,10 +190,12 @@ def getCategoriesWithSourceId(source_id):
         for row in cursor.fetchall():
                 return_list.append(row[0])
         cursor.close()
+        lock.release()
         return return_list
         
 
 def findTableIdWithTwitterId(twitter_id):
+        lock.acquire()
         print "running findTableIdWithTwitterId: "+twitter_id
         cursor = db.cursor()
         sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
@@ -196,10 +203,12 @@ def findTableIdWithTwitterId(twitter_id):
         return_id = 0
         for row in cursor.fetchall() :
             return_id = row[0]
-        cursor.close()    
+        cursor.close()
+        lock.release()
         return return_id
 
 def findCategoryChildrenForId(cat_id):
+        lock.acquire()
         cursor = db.cursor()
         sql = "SELECT Name From Category WHERE Parent LIKE "+cat_id
         cursor.execute(sql)
@@ -207,17 +216,20 @@ def findCategoryChildrenForId(cat_id):
         for row in cursor.fetchall() :
                 return_list.append(str(row[0]))
         cursor.close()
+        lock.release()
         return return_list
 
 def findCategoryIdWithName(cat_name):
-    cursor = db.cursor()
-    sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
-    cursor.execute(sql)
-    return_id = 0
-    for row in cursor.fetchall() :
-        return_id = row[0]
-    cursor.close()    
-    return return_id
+        lock.acquire()
+        cursor = db.cursor()
+        sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
+        cursor.execute(sql)
+        return_id = 0
+        for row in cursor.fetchall() :
+            return_id = row[0]
+        cursor.close()
+        lock.release()
+        return return_id
 
 
 
@@ -277,7 +289,7 @@ def getTweetOccurances(seconds, cat_id):
 class Source(tornado.web.RequestHandler):
 
     def post(self):
-        
+        lock.acquire()
         user_id = False
         username = ""
         for key in self.request.arguments:
@@ -328,16 +340,20 @@ class Source(tornado.web.RequestHandler):
             
         else :
             print "no user id found"
+        lock.release()
         self.finish()
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
+        lock.acquire()
         cat_id = findCategoryIdWithName(cat_label)
         children = findCategoryChildrenForId(str(cat_id))
         return_dictionary = {"children":children}
+        lock.release()
         self.finish(json.dumps(return_dictionary))
         
 class Category(tornado.web.RequestHandler):
     def post(self):
+        lock.acquire()
         title = self.get_argument('Title', '')
         parent_cat = self.get_argument('parent', '')
         cursor = db.cursor()
@@ -365,11 +381,13 @@ class Category(tornado.web.RequestHandler):
             db.rollback()
             
         cursor.close()
+        lock.release()
         self.finish()
         
 
         
     def get(self, ):
+        lock.acquire()
         cur = db.cursor()
         cur.execute("SELECT * FROM Category")
         
@@ -380,6 +398,7 @@ class Category(tornado.web.RequestHandler):
             output_map["Name"] = row[1]
             output_array.append(output_map)
         cur.close()
+        lock.release()
         self.finish(json.dumps(output_array))
     
 class Reader(tornado.web.RequestHandler):
