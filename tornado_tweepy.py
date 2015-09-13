@@ -103,9 +103,11 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
                 print str(e)
                 db.rollback()
         cursor.close()
+        lock.release()
         print "get categories with id: "+str(source_id)
         categories = getCategoriesWithSourceId(source_id)
         cursor = db.cursor()
+        lock.acquire()
         for cat in categories:
                 print "should insert category relationship to cat_id: "+str(cat)
                 sql = "INSERT INTO TweetCategoryRelationship(twitter_id, category_id) VALUES ('"+str(twitter_tweet_id)+"',"+str(cat)+");"
