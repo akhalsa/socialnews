@@ -1,5 +1,5 @@
 import pycurl
-
+from StringIO import StringIO
 #load test
 
 #/reader/Sports/time/900
