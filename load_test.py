@@ -10,7 +10,7 @@ import time
 def hitReader():
     buffer = StringIO()
     c = pycurl.Curl()
-    c.setopt(c.URL, 'filtra.io:8888/reader/Sports/time/900')
+    c.setopt(c.URL, 'filtra.io:8888/reader/Sports/time/9000')
     c.setopt(c.WRITEDATA, buffer)
     c.perform()
     c.close()
