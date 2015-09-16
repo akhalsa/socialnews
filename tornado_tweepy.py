@@ -258,16 +258,23 @@ def findCategoryIdWithName(cat_name):
 
 
 def getListOfHandlesForCategoryId(cat_id):
-    cursor = db.cursor()
-    return_list = []
-    sql = "SELECT twitter_id From TwitterSource WHERE ID in (SELECT source_id From SourceCategoryRelationship WHERE category_id="+str(cat_id)+");"
-    cursor.execute(sql)
-    for row in cursor.fetchall() :
-        return_list.append(str(row[0]))
-    cursor.close()
-    return return_list
+        print "attempting to acquire lock at getTweetOccurances 262"
+        lock.acquire()
+        print "successfully acquired lock at getTweetOccurances 262"
+        cursor = db.cursor()
+        return_list = []
+        sql = "SELECT twitter_id From TwitterSource WHERE ID in (SELECT source_id From SourceCategoryRelationship WHERE category_id="+str(cat_id)+");"
+        cursor.execute(sql)
+        for row in cursor.fetchall() :
+            return_list.append(str(row[0]))
+        cursor.close()
+        lock.release()
+        return return_list
 
 def getTweetOccurances(seconds, cat_id):
+        print "attempting to acquire lock at getTweetOccurances 276"
+        lock.acquire()
+        print "successfully acquired lock at getTweetOccurances 276"
         cursor = db.cursor()
         ###
         ## first get tweet occurances filtered for the category we care about
@@ -307,6 +314,7 @@ def getTweetOccurances(seconds, cat_id):
         for row in cursor.fetchall():
                 results[row[0]]["text"] = row[1]
         cursor.close()
+        lock.release()
         print results
         return results
 
