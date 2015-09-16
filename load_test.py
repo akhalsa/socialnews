@@ -4,14 +4,20 @@ from StringIO import StringIO
 
 #/reader/Sports/time/900
 
-buffer = StringIO()
-c = pycurl.Curl()
-c.setopt(c.URL, 'filtra.io:8888/reader/Sports/time/900')
-c.setopt(c.WRITEDATA, buffer)
-c.perform()
-c.close()
 
-body = buffer.getvalue()
-# Body is a string in some encoding.
-# In Python 2, we can print it without knowing what the encoding is.
-print(body)
+def hitReader():
+    buffer = StringIO()
+    c = pycurl.Curl()
+    c.setopt(c.URL, 'filtra.io:8888/reader/Sports/time/900')
+    c.setopt(c.WRITEDATA, buffer)
+    c.perform()
+    c.close()
+    
+    body = buffer.getvalue()
+    # Body is a string in some encoding.
+    # In Python 2, we can print it without knowing what the encoding is.
+    print(body)
+    
+    
+
+hitReader()
