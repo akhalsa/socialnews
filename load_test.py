@@ -1,6 +1,7 @@
 import pycurl
 from StringIO import StringIO
 import thread
+import time
 #load test
 
 #/reader/Sports/time/900
@@ -22,3 +23,4 @@ def hitReader():
     
 
 thread.start_new_thread( hitReader, ())
+time.sleep(5)
