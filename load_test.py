@@ -6,7 +6,7 @@ from StringIO import StringIO
 
 buffer = StringIO()
 c = pycurl.Curl()
-c.setopt(c.URL, 'www.cnn.com')
+c.setopt(c.URL, 'filtra.io:8888/reader/Sports/time/900')
 c.setopt(c.WRITEDATA, buffer)
 c.perform()
 c.close()
