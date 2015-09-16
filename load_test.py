@@ -23,4 +23,10 @@ def hitReader():
     
 
 thread.start_new_thread( hitReader, ())
+thread.start_new_thread( hitReader, ())
+thread.start_new_thread( hitReader, ())
+thread.start_new_thread( hitReader, ())
+thread.start_new_thread( hitReader, ())
+thread.start_new_thread( hitReader, ())
+thread.start_new_thread( hitReader, ())
 time.sleep(5)
