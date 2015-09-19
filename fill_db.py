@@ -28,4 +28,6 @@ def getAllTwitterIds():
         cursor.close()
         return return_list
 
-print getAllTwitterIds()
+for twitter_id in getAllTwitterIds():
+        print twitter_id
+        print "\n"
