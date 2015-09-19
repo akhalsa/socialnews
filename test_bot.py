@@ -2,11 +2,11 @@
 
 import tweepy
 
-key = "48jw2ouXpj6AjwLb6BraCZ9cV"
-secret = "vtRB7iNur213gIW5qol6A79vZFUAuhDcL34SmnYFuBRkATweco"
+key = "1mxHCmJv9pQqFsFO9emtgjrSB"
+secret = "CcrfJ3WTLqaAigBj0yOhnpAa8bzB6FRG9iIOCVgNktnTgkuHNb"
 
-access_token = "24662514-75fs4ijhWnt2Ss9AkJKsZLQUSd0lRWyfDsVGYKgxc"
-token_secret = "P6KajgWHX0eNkEYnI4bGevrroWW9uHuzohl5Gl5uLv6UT"
+access_token = "3618709285-bccgXE7SINoljfJbslsWvP8gP5j9AyQV2FELgIx"
+token_secret = "GledD6R46Ghy4dIgtEQBhvW4KfI0n2dN6IUGbWFU2qac2"
 
 
 auth = tweepy.OAuthHandler(key, secret)
