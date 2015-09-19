@@ -81,7 +81,7 @@
                     var list_item = document.createElement('li');
                     list_item.setAttribute("id", "list_item_"+i);
                     
-                    list_item.appendChild(document.createTextNode(tweets[i].text+": "+tweets[i].tweet_count));
+                    list_item.appendChild(document.createTextNode(tweets[i].name+": "+ tweets[i].text+": "+tweets[i].tweet_count));
                     var div_item = document.createElement('div');
                     div_item.setAttribute("id", "div_item_"+i);
                     list_item.appendChild(div_item)
