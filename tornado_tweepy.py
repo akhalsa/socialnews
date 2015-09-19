@@ -354,6 +354,7 @@ class Source(tornado.web.RequestHandler):
             
             #create relationships to categories
             for key in self.request.arguments:
+                print "checking: "+key
                 if("cat" in key):
                     
                     cat_id = findCategoryIdWithName(self.request.arguments[key][0])
