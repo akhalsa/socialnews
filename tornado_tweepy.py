@@ -298,10 +298,11 @@ def getTweetOccurances(seconds, cat_id):
         cursor.close()
         #add text
         cursor = db.cursor()
-        sql = "SELECT twitter_id, text, source_id From Tweet A "
-        sql += "INNER JOIN (SELECT Name, profile_image, ID FROM TwitterSource B) "
-        sql += "ON B.ID = A.source_id "
-        sql += "WHERE A.twitter_id in ("
+        #sql = "SELECT twitter_id, text, source_id From Tweet A "
+        #sql += "INNER JOIN (SELECT Name, profile_image, ID FROM TwitterSource) B "
+        #sql += "ON A.source = A.source_id "
+        #sql += "WHERE A.twitter_id in ("
+        sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image From Tweet Inner Join TwitterSource ON TwitterSource.ID = Tweet.source_id WHERE Tweet.twitter_id in ("
         first_fin = False
         for t_id in twitter_ids:
                 if(first_fin == False):
@@ -312,11 +313,12 @@ def getTweetOccurances(seconds, cat_id):
                 sql += t_id
                 
         sql += ");"
-        print "joining w sql: "
-        print sql
-        #cursor.execute(sql)
-        #for row in cursor.fetchall():
-        #        results[row[0]]["text"] = row[1]
+
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+                results[row[0]]["text"] = row[1]
+                results[row[0]]["name"] = row[2]
+                results[row[0]]["pic"] = row[3]
         cursor.close()
         lock.release()
         #print results
