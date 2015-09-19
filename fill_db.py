@@ -29,5 +29,8 @@ def getAllTwitterIds():
         return return_list
 
 for twitter_id in getAllTwitterIds():
-        print twitter_id
-        print "\n"
+        user = api.get_user(user_id = twitter_id)
+        print user.__dict__
+        #user_id = str(user.id)
+        #username = user.name
+        #print "user_id: "+user_id+" and name: "+username
