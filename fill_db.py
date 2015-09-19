@@ -28,9 +28,25 @@ def getAllTwitterIds():
         cursor.close()
         return return_list
 
+def updateIdWithLinkString(twitter_id, profile_link):
+        cursor = db.cursor()
+        #create user entry
+        sql = "Update TwitterSource SET profile_image = '"+profile_link+"' WHERE ID like "+str(twitter_id)+";"
+        try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            db.commit()
+        except:
+            # Rollback in case there is any error
+            print "error on insertion"
+            db.rollback()
+        cursor.close()
+
 for twitter_id in getAllTwitterIds():
         user = api.get_user(user_id = twitter_id)
-        print "User: "+ user.screen_name+" with link "+user.profile_image_url
+        updateIdWithLinkString(twitter_id, user.profile_image_url)
+        #print "User: "+ user.screen_name+" with link "+user.profile_image_url
         #user_id = str(user.id)
         #username = user.name
         #print "user_id: "+user_id+" and name: "+username
