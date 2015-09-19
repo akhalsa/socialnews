@@ -12,4 +12,4 @@ token_secret = "P6KajgWHX0eNkEYnI4bGevrroWW9uHuzohl5Gl5uLv6UT"
 auth = tweepy.OAuthHandler(key, secret)
 auth.set_access_token(access_token, token_secret)
 api = tweepy.API(auth)
-api.update_status('hello from tweepy library!')
+api.update_status(status = 'hello from tweepy library!')
