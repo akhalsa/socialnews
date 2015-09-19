@@ -321,7 +321,7 @@ def getTweetOccurances(seconds, cat_id):
                 results[row[0]]["pic"] = row[3]
         cursor.close()
         lock.release()
-        #print results
+        print results
         return results
 
 class Source(tornado.web.RequestHandler):
