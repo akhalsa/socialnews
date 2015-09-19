@@ -350,6 +350,8 @@ class Source(tornado.web.RequestHandler):
                 print "error on insertion"
                 db.rollback()
             cursor.close()
+            print "done with insertion moving on to cats: "
+            print self.request.arguments
             
             #create relationships to categories
             for key in self.request.arguments:
@@ -376,6 +378,7 @@ class Source(tornado.web.RequestHandler):
             
         else :
             print "no user id found"
+        print "releasing lock"
         lock.release()
         self.finish()
 class CategoryChildren(tornado.web.RequestHandler):
