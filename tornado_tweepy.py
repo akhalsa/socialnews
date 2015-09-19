@@ -295,11 +295,13 @@ def getTweetOccurances(seconds, cat_id):
                 twitter_ids.append(row[0])
                 results[row[0]] = {"tweet_count":row[1] }
 
-                
         cursor.close()
         #add text
         cursor = db.cursor()
-        sql = "SELECT twitter_id, text From Tweet WHERE twitter_id in ("
+        sql = "SELECT twitter_id, text, source_id From Tweet A "
+        sql += "INNER JOIN (SELECT Name, profile_image, ID FROM TwitterSource B) "
+        sql += "ON B.ID = A.source_id "
+        sql += "WHERE A.twitter_id in ("
         first_fin = False
         for t_id in twitter_ids:
                 if(first_fin == False):
@@ -310,12 +312,14 @@ def getTweetOccurances(seconds, cat_id):
                 sql += t_id
                 
         sql += ");"
-        cursor.execute(sql)
-        for row in cursor.fetchall():
-                results[row[0]]["text"] = row[1]
+        print "joining w sql: "
+        print sql
+        #cursor.execute(sql)
+        #for row in cursor.fetchall():
+        #        results[row[0]]["text"] = row[1]
         cursor.close()
         lock.release()
-        print results
+        #print results
         return results
 
 class Source(tornado.web.RequestHandler):
