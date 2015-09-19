@@ -340,11 +340,15 @@ class Source(tornado.web.RequestHandler):
             cursor = db.cursor()
             #create user entry
             sql = "INSERT INTO TwitterSource(Name, handle, twitter_id, profile_image) VALUES ('"+username+"','"+self.request.arguments[key][0]+"', '"+user_id+"', '"+profile_link+"')"
+            print "running sql: "+sql
             try:
                 # Execute the SQL command
                 cursor.execute(sql)
+                print "done executing"
                 # Commit your changes in the database
                 db.commit()
+                print "done committing"
+                
             except:
                 # Rollback in case there is any error
                 print "error on insertion"
