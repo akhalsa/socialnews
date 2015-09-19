@@ -30,7 +30,7 @@ def getAllTwitterIds():
 
 for twitter_id in getAllTwitterIds():
         user = api.get_user(user_id = twitter_id)
-        print user.__dict__
+        print "User: "+ user.screen_name+" with link "+user.profile_image_url
         #user_id = str(user.id)
         #username = user.name
         #print "user_id: "+user_id+" and name: "+username
