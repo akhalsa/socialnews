@@ -321,9 +321,6 @@ def getTweetOccurances(seconds, cat_id):
 class Source(tornado.web.RequestHandler):
 
     def post(self):
-        print "attempting to acquire lock at post 316"
-        lock.acquire()
-        print "successfully acquired lock at post 316"
         user_id = False
         username = ""
         profile_link = ""
@@ -337,6 +334,7 @@ class Source(tornado.web.RequestHandler):
                 print "user_id: "+user_id+" and name: "+username
                
         if(user_id is not False):
+            lock.acquire()
             cursor = db.cursor()
             #create user entry
             sql = "INSERT INTO TwitterSource(Name, handle, twitter_id, profile_image) VALUES ('"+username+"','"+self.request.arguments[key][0]+"', '"+user_id+"', '"+profile_link+"')"
@@ -351,7 +349,7 @@ class Source(tornado.web.RequestHandler):
                 print "error on insertion"
                 db.rollback()
             cursor.close()
-            
+            lock.release()
             #create relationships to categories
             for key in self.request.arguments:
                 print "checking: "+key
@@ -359,6 +357,7 @@ class Source(tornado.web.RequestHandler):
                     
                     cat_id = findCategoryIdWithName(self.request.arguments[key][0])
                     user_db_id = findTableIdWithTwitterId(user_id)
+                    lock.acquire()
                     sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(user_db_id)+", "+str(cat_id)+");"
                     print "inserting category relationships with sql: "+sql
                     cursor = db.cursor()
@@ -372,6 +371,7 @@ class Source(tornado.web.RequestHandler):
                         print "error on insertion"
                         db.rollback()
                     cursor.close()
+                    lock.release()
                     
                 else:
                     print "dropping key: "+key
@@ -379,8 +379,6 @@ class Source(tornado.web.RequestHandler):
             
         else :
             print "no user id found"
-        print "releasing lock"
-        lock.release()
         self.finish()
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
