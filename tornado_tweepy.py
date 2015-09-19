@@ -340,22 +340,17 @@ class Source(tornado.web.RequestHandler):
             cursor = db.cursor()
             #create user entry
             sql = "INSERT INTO TwitterSource(Name, handle, twitter_id, profile_image) VALUES ('"+username+"','"+self.request.arguments[key][0]+"', '"+user_id+"', '"+profile_link+"')"
-            print "running sql: "+sql
             try:
                 # Execute the SQL command
                 cursor.execute(sql)
-                print "done executing"
                 # Commit your changes in the database
                 db.commit()
-                print "done committing"
                 
             except:
                 # Rollback in case there is any error
                 print "error on insertion"
                 db.rollback()
             cursor.close()
-            print "done with insertion moving on to cats: "
-            print self.request.arguments
             
             #create relationships to categories
             for key in self.request.arguments:
@@ -364,6 +359,7 @@ class Source(tornado.web.RequestHandler):
                     cat_id = findCategoryIdWithName(self.request.arguments[key][0])
                     user_db_id = findTableIdWithTwitterId(user_id)
                     sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(user_db_id)+", "+str(cat_id)+");"
+                    print "inserting category relationships with sql: "+sql
                     cursor = db.cursor()
                     try:
                         # Execute the SQL command
