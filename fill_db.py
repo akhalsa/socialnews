@@ -18,7 +18,6 @@ db = MySQLdb.connect(
 
 def getAllTwitterIds():
         print "attempting to acquire lock at getAll187"
-        lock.acquire()
         print "successfully acquired lock at 187"
         cursor = db.cursor()
         sql = "SELECT twitter_id FROM TwitterSource;"
@@ -27,7 +26,6 @@ def getAllTwitterIds():
         for row in cursor.fetchall():
                 return_list.append(row[0])
         cursor.close()
-        lock.release()
         return return_list
 
 print getAllTwitterIds()
