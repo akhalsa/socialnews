@@ -178,6 +178,7 @@ def addOccurance(tweet_id):
                         print "************** RETWEET************"
                         print row
                         print "****************END RETWEET ******"
+                        api_bot.retweet(tweet_id)
                         
                 #api.update_status(status = 'hello from tweepy library!')
                 cursor.close()
