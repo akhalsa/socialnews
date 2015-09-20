@@ -63,7 +63,9 @@ class HandleListener(tweepy.StreamListener):
                 #        self.setupSocket()
                 
         def on_data(self, data):
+                time_start = datetime.datetime.now()
                 self.db_queue.put(data)
+                print "insertion took: "+str((datetime.datetime.now() - time_start).total_seconds())
                 return True
 
         def on_error(self, status):
