@@ -199,29 +199,26 @@ def addOccurance(tweet_id):
         
         
         cursor = db.cursor()
-        sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
-
+        sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
         cursor.execute(sql)
-        occurrence_count = cursor.rowcount
+        for row in cursor.fetchall():
+                delta_time = datetime.datetime.now() - row[4]
         cursor.close()
-         
-        if(occurrence_count == 150):
+        
+        
+        if(delta_time.total_seconds() < 30):
+                #this is a brand new tweet, lets check the count
                 cursor = db.cursor()
-                sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
+                sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
                 cursor.execute(sql)
-                for row in cursor.fetchall():
-                        #return_id = row[0]
-                        print "************** RETWEET************"
-                        print row
-                        print "****************END RETWEET ******"
-                        print "time since start"
-                        delta_time = datetime.datetime.now() - row[4]
-                        #print "delta_time seconds: "+ str(delta_time.total_seconds())
-                        if(delta_time.total_seconds() < 30):
-                                api_bot.retweet(tweet_id)
-                        
-                #api.update_status(status = 'hello from tweepy library!')
+                occurrence_count = cursor.rowcount
                 cursor.close()
+                if(occurrence_count == 150):
+                        api_bot.retweet(tweet_id)
+                
+        
+        
+        
         print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
         lock.release()
 
