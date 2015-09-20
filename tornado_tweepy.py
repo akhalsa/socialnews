@@ -41,8 +41,13 @@ api_bot = tweepy.API(auth_bot)
 
                 
 class HandleListener(tweepy.StreamListener):
+        
         def __init__(self):
                 thread.start_new_thread( self.setupSocket, ( ) )
+                db_queue = Queue.Queue()
+                worker = Thread(target=handleData, args=())
+                worker.setDaemon(True)
+                worker.start()
                 
                 
         def setupSocket(self, ):
@@ -57,6 +62,20 @@ class HandleListener(tweepy.StreamListener):
                         self.setupSocket()
                 
         def on_data(self, data):
+                db_queue.put(data)
+                return True
+
+        def on_error(self, status):
+                print status
+                
+        def handleData():
+                while True:
+                        data_structure = db_queue.get()
+                        processData(data_structure)
+                        db_queue.task_done()
+                        
+
+        def processData(data):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
@@ -93,11 +112,6 @@ class HandleListener(tweepy.StreamListener):
                         print "we had nothing here?"
 
                 
-                return True
-
-        def on_error(self, status):
-                print status
-
 
 def insertTweet(source_id, text_string, twitter_tweet_id):
         print "attempting to acquire lock at insertTweet92"
