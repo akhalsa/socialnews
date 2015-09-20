@@ -45,7 +45,7 @@ class HandleListener(tweepy.StreamListener):
         
         def __init__(self):
                 thread.start_new_thread( self.setupSocket, ( ) )
-                db_queue = Queue()
+                self.db_queue = Queue()
                 worker = Thread(target=self.handleData, args=())
                 worker.setDaemon(True)
                 worker.start()
@@ -63,7 +63,7 @@ class HandleListener(tweepy.StreamListener):
                         self.setupSocket()
                 
         def on_data(self, data):
-                db_queue.put(data)
+                self.db_queue.put(data)
                 return True
 
         def on_error(self, status):
@@ -71,9 +71,9 @@ class HandleListener(tweepy.StreamListener):
                 
         def handleData():
                 while True:
-                        data_structure = db_queue.get()
+                        data_structure = self.db_queue.get()
                         processData(data_structure)
-                        db_queue.task_done()
+                        self.db_queue.task_done()
                         
 
         def processData(data):
