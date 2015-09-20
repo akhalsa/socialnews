@@ -181,7 +181,9 @@ def addOccurance(tweet_id):
                         print row
                         print "****************END RETWEET ******"
                         print "time since start"
-                        print datetime.datetime.now() - row[4]
+                        delta_time = datetime.datetime.now() - row[4]
+                        print "delta_time hours: "+delta_time.hours
+                        print "delta time minutes: "+delta_time.minutes
                         api_bot.retweet(tweet_id)
                         
                 #api.update_status(status = 'hello from tweepy library!')
