@@ -56,11 +56,11 @@ class HandleListener(tweepy.StreamListener):
                 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
                 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
                 stream = tweepy.Stream(auth, self)
-                try:
-                        stream.filter(follow=getAllTwitterIds())
-                except requests.packages.urllib3.exceptions.ProtocolError, e:
-                        print "Handling protocol exception"
-                        self.setupSocket()
+                #try:
+                stream.filter(follow=getAllTwitterIds())
+                #except requests.packages.urllib3.exceptions.ProtocolError, e:
+                #        print "Handling protocol exception"
+                #        self.setupSocket()
                 
         def on_data(self, data):
                 self.db_queue.put(data)
