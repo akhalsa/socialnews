@@ -182,33 +182,33 @@ def addOccurance(tweet_id):
         cursor.close()
         
         
-        cursor = db.cursor()
-        sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"';"
-        cursor.execute(sql)
-        occurrence_count = cursor.rowcount
-        cursor.close()
+        #cursor = db.cursor()
+        #sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"';"
+        #cursor.execute(sql)
+        #occurrence_count = cursor.rowcount
+        #cursor.close()
         
         
         
-        if(occurrence_count == 200):
-                cursor = db.cursor()
-                sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
-                cursor.execute(sql)
-                for row in cursor.fetchall():
-                        #return_id = row[0]
-                        print "************** RETWEET************"
-                        print row
-                        print "****************END RETWEET ******"
-                        print "time since start"
-                        delta_time = datetime.datetime.now() - row[4]
-                        #print "delta_time seconds: "+ str(delta_time.total_seconds())
-                        if(delta_time.total_seconds() < 30):
-                                api_bot.retweet(tweet_id)
-                        
-                #api.update_status(status = 'hello from tweepy library!')
-                cursor.close()
-        
-        
+        # if(occurrence_count == 200):
+        #         cursor = db.cursor()
+        #         sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
+        #         cursor.execute(sql)
+        #         for row in cursor.fetchall():
+        #                 #return_id = row[0]
+        #                 print "************** RETWEET************"
+        #                 print row
+        #                 print "****************END RETWEET ******"
+        #                 print "time since start"
+        #                 delta_time = datetime.datetime.now() - row[4]
+        #                 #print "delta_time seconds: "+ str(delta_time.total_seconds())
+        #                 if(delta_time.total_seconds() < 30):
+        #                         api_bot.retweet(tweet_id)
+        #                 
+        #         #api.update_status(status = 'hello from tweepy library!')
+        #         cursor.close()
+        # 
+        # 
         
         cursor = db.cursor()
         sql = "DELETE FROM TweetOccurrence WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
