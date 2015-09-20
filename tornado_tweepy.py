@@ -64,9 +64,7 @@ class HandleListener(tweepy.StreamListener):
                 #        self.setupSocket()
                 
         def on_data(self, data):
-                time_start = datetime.datetime.now()
                 self.db_queue.put(data)
-                print "insertion took: "+str((datetime.datetime.now() - time_start).total_seconds())
                 return True
 
         def on_error(self, status):
@@ -83,7 +81,7 @@ class HandleListener(tweepy.StreamListener):
                                 print "starting to clear entries"
                                 clearOldEntries()
                                 self.lastClear = datetime.datetime.now()
-                        print "insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
+                        print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
                         self.db_queue.task_done()
                         
 
@@ -141,9 +139,7 @@ def clearOldEntries():
         cursor.close()
         lock.release()
 def insertTweet(source_id, text_string, twitter_tweet_id):
-        print "attempting to acquire lock at insertTweet92"
         lock.acquire()
-        print "successfully to acquired lock at insertTweet92"
         cursor = db.cursor()
         try:
                 text_string = text_string.encode('utf-8')
@@ -162,9 +158,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
         print "get categories with id: "+str(source_id)
         categories = getCategoriesWithSourceId(source_id)
         cursor = db.cursor()
-        print "attempting to acquire lock at 113"
         lock.acquire()
-        print "successfully acquired lock at 113"
         for cat in categories:
                 print "should insert category relationship to cat_id: "+str(cat)
                 sql = "INSERT INTO TweetCategoryRelationship(twitter_id, category_id) VALUES ('"+str(twitter_tweet_id)+"',"+str(cat)+");"
@@ -187,9 +181,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
 def addOccurance(tweet_id):
         
         local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
-        print "attempting to acquire lock at addOccurance 138"
         lock.acquire()
-        print "successfully acquired lock at addOccurance 138"
         if(local_id == 0):
                 return
         
@@ -236,9 +228,7 @@ def addOccurance(tweet_id):
 
 
 def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
-        print "attempting to acquire lock at getLocalTweetIdblahlbah 174"
         lock.acquire()
-        print "successfully acquired lock at getLocalTweetIdblahlbah 174"
         cursor = db.cursor()
         sql = "SELECT ID FROM Tweet WHERE twitter_id like "+str(twitter_tweet_id)+";"
         cursor.execute(sql)
@@ -249,9 +239,7 @@ def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
         lock.release()
         return return_id 
 def getAllTwitterIds():
-        print "attempting to acquire lock at getAll187"
         lock.acquire()
-        print "successfully acquired lock at 187"
         cursor = db.cursor()
         sql = "SELECT twitter_id FROM TwitterSource;"
         cursor.execute(sql)
@@ -278,9 +266,7 @@ def getCategoriesWithSourceId(source_id):
         
 
 def findTableIdWithTwitterId(twitter_id):
-        print "attempting to acquire lock at findTableIdWithTwitterId 216"
         lock.acquire()
-        print "successfully acquired lock at findTableIdWithTwitterId 216"
         print "running findTableIdWithTwitterId: "+twitter_id
         cursor = db.cursor()
         sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
@@ -294,9 +280,7 @@ def findTableIdWithTwitterId(twitter_id):
         return return_id
 
 def findCategoryChildrenForId(cat_id):
-        print "attempting to acquire lock at findCategoryChildrenForId 231"
         lock.acquire()
-        print "successfully acquired lock at findCategoryChildrenForId 231"
         cursor = db.cursor()
         sql = "SELECT Name From Category WHERE Parent LIKE "+cat_id
         cursor.execute(sql)
@@ -308,9 +292,7 @@ def findCategoryChildrenForId(cat_id):
         return return_list
 
 def findCategoryIdWithName(cat_name):
-        print "attempting to acquire lock at findCategoryIdWithName 245"
         lock.acquire()
-        print "successfully acquired lock at findCategoryIdWithName 245"
         cursor = db.cursor()
         sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
         cursor.execute(sql)
@@ -324,9 +306,7 @@ def findCategoryIdWithName(cat_name):
 
 
 def getListOfHandlesForCategoryId(cat_id):
-        print "attempting to acquire lock at getTweetOccurances 262"
         lock.acquire()
-        print "successfully acquired lock at getTweetOccurances 262"
         cursor = db.cursor()
         return_list = []
         sql = "SELECT twitter_id From TwitterSource WHERE ID in (SELECT source_id From SourceCategoryRelationship WHERE category_id="+str(cat_id)+");"
@@ -338,9 +318,7 @@ def getListOfHandlesForCategoryId(cat_id):
         return return_list
 
 def getTweetOccurances(seconds, cat_id):
-        print "attempting to acquire lock at getTweetOccurances 276"
         lock.acquire()
-        print "successfully acquired lock at getTweetOccurances 276"
         cursor = db.cursor()
         ###
         ## first get tweet occurances filtered for the category we care about
