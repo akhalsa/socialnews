@@ -76,11 +76,14 @@ class HandleListener(tweepy.StreamListener):
                 while True:
                         data_structure = self.db_queue.get()
                         print "queue size after get: "+str(self.db_queue.qsize())
+                        insertion_start = datetime.datetime.now()
                         self.processData(data_structure)
+                        
                         if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
+                                print "starting to clear entries"
                                 clearOldEntries()
                                 self.lastClear = datetime.datetime.now()
-                                
+                        print "insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
                         self.db_queue.task_done()
                         
 
