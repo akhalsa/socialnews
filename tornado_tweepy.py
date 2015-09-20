@@ -46,7 +46,7 @@ class HandleListener(tweepy.StreamListener):
         def __init__(self):
                 thread.start_new_thread( self.setupSocket, ( ) )
                 db_queue = Queue()
-                worker = Thread(target=handleData, args=())
+                worker = Thread(target=self.handleData, args=())
                 worker.setDaemon(True)
                 worker.start()
                 
