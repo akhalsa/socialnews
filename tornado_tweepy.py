@@ -52,7 +52,7 @@ class HandleListener(tweepy.StreamListener):
                 stream = tweepy.Stream(auth, self)
                 try:
                         stream.filter(follow=getAllTwitterIds())
-                except IncompleteRead, e:
+                except requests.packages.urllib3.exceptions.ProtocolError, e:
                         print "Handling protocol exception"
                         self.setupSocket()
                 
