@@ -49,6 +49,7 @@ class HandleListener(tweepy.StreamListener):
                 worker = Thread(target=self.handleData, args=())
                 worker.setDaemon(True)
                 worker.start()
+                self.lastClear = datetime.datetime.now()
                 
                 
         def setupSocket(self, ):
@@ -76,6 +77,10 @@ class HandleListener(tweepy.StreamListener):
                         data_structure = self.db_queue.get()
                         print "queue size after get: "+str(self.db_queue.qsize())
                         self.processData(data_structure)
+                        if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
+                                clearOldEntries()
+                                self.lastClear = datetime.datetime.now()
+                                
                         self.db_queue.task_done()
                         
 
@@ -115,8 +120,23 @@ class HandleListener(tweepy.StreamListener):
                 else:
                         print "we had nothing here?"
 
-                
 
+def clearOldEntries():
+        lock.acquire()
+        cursor = db.cursor()
+        sql = "DELETE FROM TweetOccurrence WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on insertion of occurrence"
+                print str(e)
+                db.rollback()
+        cursor.close()
+        lock.release()
 def insertTweet(source_id, text_string, twitter_tweet_id):
         print "attempting to acquire lock at insertTweet92"
         lock.acquire()
@@ -185,48 +205,32 @@ def addOccurance(tweet_id):
         cursor.close()
         
         
-        #cursor = db.cursor()
-        #sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"';"
-        #cursor.execute(sql)
-        #occurrence_count = cursor.rowcount
-        #cursor.close()
-        
-        
-        
-        # if(occurrence_count == 200):
-        #         cursor = db.cursor()
-        #         sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
-        #         cursor.execute(sql)
-        #         for row in cursor.fetchall():
-        #                 #return_id = row[0]
-        #                 print "************** RETWEET************"
-        #                 print row
-        #                 print "****************END RETWEET ******"
-        #                 print "time since start"
-        #                 delta_time = datetime.datetime.now() - row[4]
-        #                 #print "delta_time seconds: "+ str(delta_time.total_seconds())
-        #                 if(delta_time.total_seconds() < 30):
-        #                         api_bot.retweet(tweet_id)
-        #                 
-        #         #api.update_status(status = 'hello from tweepy library!')
-        #         cursor.close()
-        # 
-        # 
-        
         cursor = db.cursor()
-        sql = "DELETE FROM TweetOccurrence WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
-        try:
-                # Execute the SQL command
-                cursor.execute(sql)
-                # Commit your changes in the database
-                db.commit()
-        except Exception,e:
-                # Rollback in case there is any error
-                print "error on insertion of occurrence"
-                print str(e)
-                db.rollback()
+        sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"';"
+        cursor.execute(sql)
+        occurrence_count = cursor.rowcount
         cursor.close()
+        
+        if(occurrence_count == 200):
+                cursor = db.cursor()
+                sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
+                cursor.execute(sql)
+                for row in cursor.fetchall():
+                        #return_id = row[0]
+                        print "************** RETWEET************"
+                        print row
+                        print "****************END RETWEET ******"
+                        print "time since start"
+                        delta_time = datetime.datetime.now() - row[4]
+                        #print "delta_time seconds: "+ str(delta_time.total_seconds())
+                        if(delta_time.total_seconds() < 30):
+                                api_bot.retweet(tweet_id)
+                        
+                #api.update_status(status = 'hello from tweepy library!')
+                cursor.close()
+        
         lock.release()
+
 
 def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
         print "attempting to acquire lock at getLocalTweetIdblahlbah 174"
