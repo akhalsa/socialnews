@@ -183,7 +183,7 @@ def addOccurance(tweet_id):
                         print "time since start"
                         delta_time = datetime.datetime.now() - row[4]
                         #print "delta_time seconds: "+ str(delta_time.total_seconds())
-                        if(delta_time.total_seconds() < 30):
+                        if(delta_time.total_seconds() < 15):
                                 api_bot.retweet(tweet_id)
                         
                 #api.update_status(status = 'hello from tweepy library!')
