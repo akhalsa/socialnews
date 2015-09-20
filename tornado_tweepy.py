@@ -211,7 +211,7 @@ def addOccurance(tweet_id):
         occurrence_count = cursor.rowcount
         cursor.close()
         
-        if(occurrence_count == 100):
+        if(occurrence_count == 150):
                 cursor = db.cursor()
                 sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
                 cursor.execute(sql)
