@@ -169,7 +169,7 @@ def addOccurance(tweet_id):
         
         
         
-        if(occurrence_count == 300):
+        if(occurrence_count == 100):
                 cursor = db.cursor()
                 sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
                 cursor.execute(sql)
@@ -178,6 +178,7 @@ def addOccurance(tweet_id):
                         print "************** RETWEET************"
                         print row
                         print "****************END RETWEET ******"
+                        #
                         api_bot.retweet(tweet_id)
                         
                 #api.update_status(status = 'hello from tweepy library!')
