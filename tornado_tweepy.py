@@ -69,14 +69,14 @@ class HandleListener(tweepy.StreamListener):
         def on_error(self, status):
                 print status
                 
-        def handleData():
+        def handleData(self,):
                 while True:
                         data_structure = self.db_queue.get()
                         processData(data_structure)
                         self.db_queue.task_done()
                         
 
-        def processData(data):
+        def processData(self, data):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
