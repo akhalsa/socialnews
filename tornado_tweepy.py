@@ -57,11 +57,7 @@ class HandleListener(tweepy.StreamListener):
                 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
                 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
                 stream = tweepy.Stream(auth, self)
-                #try:
                 stream.filter(follow=getAllTwitterIds())
-                #except requests.packages.urllib3.exceptions.ProtocolError, e:
-                #        print "Handling protocol exception"
-                #        self.setupSocket()
                 
         def on_data(self, data):
                 self.db_queue.put(data)
@@ -139,6 +135,7 @@ def clearOldEntries():
         cursor.close()
         lock.release()
 def insertTweet(source_id, text_string, twitter_tweet_id):
+        insert_tweet_start = datetime.datetime.now()
         lock.acquire()
         cursor = db.cursor()
         try:
@@ -175,11 +172,12 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
         
         cursor.close()
         lock.release()
+        print "insert tweet took: "+str((datetime.datetime.now() - insert_tweet_start).total_seconds())+" seconds" 
         
         
         
 def addOccurance(tweet_id):
-        
+        addOccurance_start = datetime.datetime.now()
         local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
         lock.acquire()
         if(local_id == 0):
@@ -223,7 +221,7 @@ def addOccurance(tweet_id):
                         
                 #api.update_status(status = 'hello from tweepy library!')
                 cursor.close()
-        
+        print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
         lock.release()
 
 
