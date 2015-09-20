@@ -72,7 +72,7 @@ class HandleListener(tweepy.StreamListener):
         def handleData(self,):
                 while True:
                         data_structure = self.db_queue.get()
-                        processData(data_structure)
+                        self.processData(data_structure)
                         self.db_queue.task_done()
                         
 
