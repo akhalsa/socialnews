@@ -15,6 +15,7 @@ import requests
 
 from tornado.options import define, options, parse_command_line
 from threading import Thread
+from Queue import Queue
 
 define("port", default=8888, help="run on the given port", type=int)
 
