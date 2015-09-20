@@ -10,6 +10,8 @@ import tweepy
 import thread
 import urllib2
 import threading
+import datetime
+
 
 from tornado.options import define, options, parse_command_line
 from threading import Thread
@@ -178,7 +180,8 @@ def addOccurance(tweet_id):
                         print "************** RETWEET************"
                         print row
                         print "****************END RETWEET ******"
-                        #
+                        print "time since start"
+                        print datetime.datetime.now() - row[4]
                         api_bot.retweet(tweet_id)
                         
                 #api.update_status(status = 'hello from tweepy library!')
