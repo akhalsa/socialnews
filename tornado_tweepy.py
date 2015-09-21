@@ -86,21 +86,17 @@ class HandleListener(tweepy.StreamListener):
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
                 #print "scanning: "+str(decoded)
-                if("entities" in decoded):
-                        if("media" in decoded["entities"]):
-                                for media_element in decoded["entities"]["media"]:
-                                        print "FOUND MEDIA IN TWEET:   ****** ******"
-                                        print "media type is: "+str(media_element["type"]) 
+                if("text" in decoded):
+                        if("video" in decoded["text"].lower()):
+                                print "link held in: "+str(decoded)
                 try:
                         source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                         print "done with search tweet user"
                         if(source_id == 0) and ("retweeted_status" in decoded):
                                 decoded = decoded['retweeted_status']
-                                if("entities" in decoded):
-                                        if("media" in decoded["entities"]):
-                                                for media_element in decoded["entities"]["media"]:
-                                                        print "FOUND MEDIA IN RETWEET:   ****** ******"
-                                                        print "media info is: "+str(media_element["type"]) 
+                                if("text" in decoded):
+                                        if("video" in decoded["text"].lower()):
+                                                print "link held in: "+str(decoded)
                                 print "search retweet user"
                                 source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                                 print "done with search retweet user"
