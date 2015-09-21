@@ -85,7 +85,7 @@ class HandleListener(tweepy.StreamListener):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
-                print "scanning: "+str(decoded)
+                #print "scanning: "+str(decoded)
                 if("entities" in decoded):
                         if("media" in decoded["entities"]):
                                 print "FOUND MEDIA IN TWEET:   ****** ******"
