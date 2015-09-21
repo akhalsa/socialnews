@@ -85,7 +85,7 @@ class HandleListener(tweepy.StreamListener):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
-                print "search tweet user"
+                print "scanning: "+str(decoded)
                 try:
                         source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                         print "done with search tweet user"
