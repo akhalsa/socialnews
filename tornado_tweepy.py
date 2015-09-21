@@ -90,7 +90,7 @@ class HandleListener(tweepy.StreamListener):
                         if("media" in decoded["entities"]):
                                 for media_element in decoded["entities"]["media"]:
                                         print "FOUND MEDIA IN TWEET:   ****** ******"
-                                        print "media info is: "+str(media_element) 
+                                        print "media type is: "+str(media_element["type"]) 
                 try:
                         source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                         print "done with search tweet user"
@@ -100,7 +100,7 @@ class HandleListener(tweepy.StreamListener):
                                         if("media" in decoded["entities"]):
                                                 for media_element in decoded["entities"]["media"]:
                                                         print "FOUND MEDIA IN RETWEET:   ****** ******"
-                                                        print "media info is: "+str(media_element) 
+                                                        print "media info is: "+str(media_element["type"]) 
                                 print "search retweet user"
                                 source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                                 print "done with search retweet user"
