@@ -140,7 +140,7 @@ class HandleListener(tweepy.StreamListener):
         def checkForSurge(self, twitter_id):
                 lock.acquire()
                 cursor = db.cursor()
-                sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
+                sql = "SELECT * From Tweet where twitter_id like '"+str(twitter_id)+"';"
                 cursor.execute(sql)
                 for row in cursor.fetchall():
                         delta_time = datetime.datetime.now() - row[4]
@@ -150,7 +150,7 @@ class HandleListener(tweepy.StreamListener):
                 if(delta_time.total_seconds() < 30):
                         #this is a brand new tweet, lets check the count
                         cursor = db.cursor()
-                        sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
+                        sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(twitter_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
                         cursor.execute(sql)
                         occurrence_count = cursor.rowcount
                         cursor.close()
