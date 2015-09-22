@@ -165,9 +165,9 @@ class HandleListener(tweepy.StreamListener):
                         cursor.close()
                         lock.release()
                         if(occurrence_count == 150):
-                                api_bot.retweet(tweet_id)
+                                api_bot.retweet(twitter_id)
                                 self.lastPost = datetime.datetime.now()
-                                insertIntoRetweet(tweet_id)
+                                insertIntoRetweet(twitter_id)
                                 
                 
 def checkIfTweeted(tweet_id):
