@@ -173,7 +173,7 @@ class HandleListener(tweepy.StreamListener):
 def checkIfTweeted(tweet_id):
         lock.acquire()
         cursor = db.cursor()
-        sql = "SELECT * From Retweet WHERE twitter_id like '"+str(tweet_id)+"';"
+        sql = "SELECT * From Retweets WHERE twitter_id like '"+str(tweet_id)+"';"
         cursor.execute(sql)
         if(cursor.rowcount > 0):
                 return True
@@ -182,7 +182,7 @@ def checkIfTweeted(tweet_id):
 def insertIntoRetweet(tweet_id):
         lock.acquire()
         cursor = db.cursor()
-        sql = "INSERT INTO Retweet (twitter_id) VALUES ('"+str(tweet_id)+"');"
+        sql = "INSERT INTO Retweets (twitter_id) VALUES ('"+str(tweet_id)+"');"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
