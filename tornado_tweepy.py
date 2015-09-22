@@ -127,7 +127,7 @@ class HandleListener(tweepy.StreamListener):
                                 
                                 for tweet_id in tweet_ids:
                                         if(not checkIfTweeted(tweet_id)):
-                                                insertIntoRetweet(max_tweet_id)
+                                                insertIntoRetweet(tweet_id)
                                                 api_bot.retweet(tweet_id)
                                                 self.lastPost = datetime.datetime.now()
                                                 break
