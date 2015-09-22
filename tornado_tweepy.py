@@ -121,20 +121,18 @@ class HandleListener(tweepy.StreamListener):
                         self.checkForSurge(decoded['id'])
                         
                         
-                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 30):
+                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 90):
                                 #make sure we are posting at least once an hour
-                                tweets = getTweetOccurances(30, 1)
-                                max_tweet = None
-                                max_tweet_id = None
-                                for tweet_id in tweets:
-                                        if((max_tweet == None) or (tweets[tweet_id]["tweet_count"] > max_tweet["tweet_count"])):
-                                                max_tweet = tweets[tweet_id]
-                                                max_tweet_id = tweet_id
-                                if(not checkIfTweeted(max_tweet_id)):
-                                        insertIntoRetweet(max_tweet_id)
-                                        api_bot.retweet(tweet_id)
-                                        self.lastPost = datetime.datetime.now()
-                        
+                                (tweet_dict, tweet_ids) = getTweetOccurances(90, 1)
+                                
+                                for tweet_id in tweet_ids:
+                                        if(not checkIfTweeted(tweet_id)):
+                                                insertIntoRetweet(max_tweet_id)
+                                                api_bot.retweet(tweet_id)
+                                                self.lastPost = datetime.datetime.now()
+                                                break
+                                        else:
+                                                print "would retweet, but we already did"
                         
                         print "finished with: "+decoded['text']
                         
@@ -420,7 +418,7 @@ def getTweetOccurances(seconds, cat_id):
         cursor.close()
         lock.release()
         print results
-        return results
+        return (results, twitter_ids)
 
 class Source(tornado.web.RequestHandler):
 
@@ -554,7 +552,7 @@ class Reader(tornado.web.RequestHandler):
                         self.finish("Category Error, Try Again")
                         
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id))
-                self.finish(json.dumps(lookup))
+                self.finish(json.dumps(lookup[0]))
                 
 class PageLoad(tornado.web.RequestHandler):
         def get(self, url):
