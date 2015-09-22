@@ -124,7 +124,7 @@ class HandleListener(tweepy.StreamListener):
                         if((datetime.datetime.now() - self.lastPost).total_seconds() > 30):
                                 #make sure we are posting at least once an hour
                                 tweets = getTweetOccurances(3600, 1)
-                                
+                                print tweets
                                 self.lastPost = datetime.datetime.now()
                         
                         
