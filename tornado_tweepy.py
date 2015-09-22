@@ -124,10 +124,12 @@ class HandleListener(tweepy.StreamListener):
                         if((datetime.datetime.now() - self.lastPost).total_seconds() > 30):
                                 #make sure we are posting at least once an hour
                                 tweets = getTweetOccurances(3600, 1)
-                                print "****************** tweeting counts ************"
+                                max_tweet = None
                                 for tweet_id in tweets:
-                                        print tweets[tweet_id]["text"] +" has count: "+ str(tweets[tweet_id]["tweet_count"])
-                                        
+                                        if((max_tweet == None) or (tweets[tweet_id]["tweet_count"] > max_tweet["tweet_count"])):
+                                                max_tweet = tweets[tweet_id]
+                                
+                                print "********** SHOULD TWEET:   ********"+ str(max_tweet)        
                                 self.lastPost = datetime.datetime.now()
                         
                         
