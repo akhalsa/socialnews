@@ -129,10 +129,11 @@ class HandleListener(tweepy.StreamListener):
                                         if(not checkIfTweeted(tweet_id)):
                                                 insertIntoRetweet(tweet_id)
                                                 api_bot.retweet(tweet_id)
-                                                self.lastPost = datetime.datetime.now()
+                                                
                                                 break
                                         else:
                                                 print "would retweet, but we already did"
+                                self.lastPost = datetime.datetime.now()
                         
                         print "finished with: "+decoded['text']
                         
