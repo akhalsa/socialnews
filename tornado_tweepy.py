@@ -50,7 +50,7 @@ class HandleListener(tweepy.StreamListener):
                 worker.setDaemon(True)
                 worker.start()
                 self.lastClear = datetime.datetime.now()
-                
+                self.lastPost = datetime.datetime.now()
                 
         def setupSocket(self, ):
                 print "starting to set up socket listen on new thread"
@@ -73,6 +73,7 @@ class HandleListener(tweepy.StreamListener):
                         insertion_start = datetime.datetime.now()
                         self.processData(data_structure)
                         
+                        
                         if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
                                 print "starting to clear entries"
                                 clearOldEntries()
@@ -80,7 +81,6 @@ class HandleListener(tweepy.StreamListener):
                         print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
                         self.db_queue.task_done()
                         
-
         def processData(self, data):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
@@ -117,11 +117,62 @@ class HandleListener(tweepy.StreamListener):
                                 
                         print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'])
+                        
+                        self.checkForSurge(decoded['id'])
+                        
+                        
+                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 30):
+                                #make sure we are posting at least once an hour
+                                tweets = getTweetOccurances(3600, 1)
+                                
+                                self.lastPost = datetime.datetime.now()
+                        
+                        
                         print "finished with: "+decoded['text']
+                        
+                        
                 elif ('text' in decoded):
                         print decoded['text']+ " still had source id that was 0"
                 else:
                         print "we had nothing here?"
+                        
+                        
+        def checkForSurge(self, twitter_id):
+                lock.acquire()
+                cursor = db.cursor()
+                sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
+                cursor.execute(sql)
+                for row in cursor.fetchall():
+                        delta_time = datetime.datetime.now() - row[4]
+                cursor.close()
+                
+                
+                if(delta_time.total_seconds() < 30):
+                        #this is a brand new tweet, lets check the count
+                        cursor = db.cursor()
+                        sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
+                        cursor.execute(sql)
+                        occurrence_count = cursor.rowcount
+                        cursor.close()
+                        if(occurrence_count == 150):
+                                api_bot.retweet(tweet_id)
+                                self.lastPost = datetime.datetime.now()
+                                cursor = db.cursor()
+                                sql = "INSERT INTO Retweet (twitter_id) VALUES ('"+str(tweet_id)+"');"
+                                try:
+                                        # Execute the SQL command
+                                        cursor.execute(sql)
+                                        # Commit your changes in the database
+                                        db.commit()
+                                except Exception,e:
+                                        # Rollback in case there is any error
+                                        print "error on insertion of occurrence"
+                                        print str(e)
+                                        db.rollback()
+                                cursor.close()
+                                
+                lock.release()
+                
 
 
 def clearOldEntries():
@@ -202,29 +253,6 @@ def addOccurance(tweet_id):
                 print str(e)
                 db.rollback()
         cursor.close()
-        
-        
-        cursor = db.cursor()
-        sql = "SELECT * From Tweet where twitter_id like '"+str(tweet_id)+"';"
-        cursor.execute(sql)
-        for row in cursor.fetchall():
-                delta_time = datetime.datetime.now() - row[4]
-        cursor.close()
-        
-        
-        if(delta_time.total_seconds() < 30):
-                #this is a brand new tweet, lets check the count
-                cursor = db.cursor()
-                sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(tweet_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
-                cursor.execute(sql)
-                occurrence_count = cursor.rowcount
-                cursor.close()
-                if(occurrence_count == 150):
-                        api_bot.retweet(tweet_id)
-                
-        
-        
-        
         print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
         lock.release()
 
