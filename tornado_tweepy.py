@@ -175,7 +175,7 @@ def checkIfTweeted(tweet_id):
         cursor = db.cursor()
         sql = "SELECT * From Retweets WHERE twitter_id like '"+str(tweet_id)+"';"
         cursor.execute(sql)
-        retweet_count - cursor.rowcount
+        retweet_count = cursor.rowcount
         cursor.close()
         lock.release()
         if(cursor.rowcount > 0):
