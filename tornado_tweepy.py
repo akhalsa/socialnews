@@ -123,14 +123,17 @@ class HandleListener(tweepy.StreamListener):
                         
                         if((datetime.datetime.now() - self.lastPost).total_seconds() > 30):
                                 #make sure we are posting at least once an hour
-                                tweets = getTweetOccurances(3600, 1)
+                                tweets = getTweetOccurances(30, 1)
                                 max_tweet = None
+                                max_tweet_id = None
                                 for tweet_id in tweets:
                                         if((max_tweet == None) or (tweets[tweet_id]["tweet_count"] > max_tweet["tweet_count"])):
                                                 max_tweet = tweets[tweet_id]
-                                
-                                print "********** SHOULD TWEET:   ********"+ str(max_tweet)        
-                                self.lastPost = datetime.datetime.now()
+                                                max_tweet_id = tweet_id
+                                if(not checkIfTweeted(max_tweet_id)):
+                                        insertIntoRetweet(max_tweet_id)
+                                        api_bot.retweet(tweet_id)
+                                        self.lastPost = datetime.datetime.now()
                         
                         
                         print "finished with: "+decoded['text']
@@ -151,34 +154,47 @@ class HandleListener(tweepy.StreamListener):
                         delta_time = datetime.datetime.now() - row[4]
                 cursor.close()
                 
-                
+                lock.release()
                 if(delta_time.total_seconds() < 30):
                         #this is a brand new tweet, lets check the count
+                        lock.acquire()
                         cursor = db.cursor()
                         sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(twitter_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
                         cursor.execute(sql)
                         occurrence_count = cursor.rowcount
                         cursor.close()
+                        lock.release()
                         if(occurrence_count == 150):
                                 api_bot.retweet(tweet_id)
                                 self.lastPost = datetime.datetime.now()
-                                cursor = db.cursor()
-                                sql = "INSERT INTO Retweet (twitter_id) VALUES ('"+str(tweet_id)+"');"
-                                try:
-                                        # Execute the SQL command
-                                        cursor.execute(sql)
-                                        # Commit your changes in the database
-                                        db.commit()
-                                except Exception,e:
-                                        # Rollback in case there is any error
-                                        print "error on insertion of occurrence"
-                                        print str(e)
-                                        db.rollback()
-                                cursor.close()
+                                insertIntoRetweet(tweet_id)
                                 
-                lock.release()
                 
-
+def checkIfTweeted(tweet_id):
+        lock.acquire()
+        cursor = db.cursor()
+        sql = "SELECT * From Retweet WHERE twitter_id like '"+str(tweet_id)+"';"
+        cursor.execute(sql)
+        if(cursor.rowcount > 0):
+                return True
+        else:
+                return False
+def insertIntoRetweet(tweet_id):
+        lock.acquire()
+        cursor = db.cursor()
+        sql = "INSERT INTO Retweet (twitter_id) VALUES ('"+str(tweet_id)+"');"
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on insertion of occurrence"
+                print str(e)
+                db.rollback()
+        cursor.close()
+        lock.release()
 
 def clearOldEntries():
         lock.acquire()
