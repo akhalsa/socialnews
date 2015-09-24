@@ -118,18 +118,18 @@ class HandleListener(tweepy.StreamListener):
                         print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'])
                         
-                        self.checkForSurge(decoded['id'])
+                        self.checkForSurge(decoded['id'], decoded['text'])
                         
                         
-                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
+                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 90):
                                 #make sure we are posting at least once an hour
-                                (tweet_dict, tweet_ids) = getTweetOccurances(3600, 1)
+                                (tweet_dict, tweet_ids) = getTweetOccurances(90, 1)
                                 
                                 for tweet_id in tweet_ids:
                                         if(not checkIfTweeted(tweet_id)):
                                                 insertIntoRetweet(tweet_id)
-                                                api_bot.retweet(tweet_id)
-                                                
+                                                #api_bot.retweet(tweet_id)
+                                                postTweet(decoded['text'])
                                                 break
                                         else:
                                                 print "would retweet, but we already did"
@@ -144,7 +144,7 @@ class HandleListener(tweepy.StreamListener):
                         print "we had nothing here?"
                         
                         
-        def checkForSurge(self, twitter_id):
+        def checkForSurge(self, twitter_id, tweet_text):
                 lock.acquire()
                 cursor = db.cursor()
                 sql = "SELECT * From Tweet where twitter_id like '"+str(twitter_id)+"';"
@@ -164,11 +164,14 @@ class HandleListener(tweepy.StreamListener):
                         cursor.close()
                         lock.release()
                         if(occurrence_count == 150):
-                                api_bot.retweet(twitter_id)
+                                #api_bot.retweet(twitter_id)
+                                postTweet(tweet_text)
                                 self.lastPost = datetime.datetime.now()
                                 insertIntoRetweet(twitter_id)
                                 
-                
+def postTweet(text):
+        api_bot.update_status(text)
+        
 def checkIfTweeted(tweet_id):
         lock.acquire()
         cursor = db.cursor()
