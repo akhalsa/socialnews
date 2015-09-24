@@ -12,6 +12,7 @@ import urllib2
 import threading
 import datetime
 import requests
+import re
 
 from tornado.options import define, options, parse_command_line
 from threading import Thread
@@ -129,7 +130,7 @@ class HandleListener(tweepy.StreamListener):
                                         if(not checkIfTweeted(tweet_id)):
                                                 insertIntoRetweet(tweet_id)
                                                 #api_bot.retweet(tweet_id)
-                                                postTweet(decoded['text'])
+                                                postTweet(decoded['text'], tweet_id)
                                                 break
                                         else:
                                                 print "would retweet, but we already did"
@@ -165,12 +166,16 @@ class HandleListener(tweepy.StreamListener):
                         lock.release()
                         if(occurrence_count == 150):
                                 #api_bot.retweet(twitter_id)
-                                postTweet(tweet_text)
+                                postTweet(tweet_text, twitter_id)
                                 self.lastPost = datetime.datetime.now()
                                 insertIntoRetweet(twitter_id)
                                 
-def postTweet(text):
+def postTweet(text, tweet_id):
+        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
+        print urls
+        sys.exit()
         api_bot.update_status(status=text)
+        
         
 def checkIfTweeted(tweet_id):
         lock.acquire()
