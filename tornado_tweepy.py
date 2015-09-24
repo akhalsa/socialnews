@@ -170,7 +170,7 @@ class HandleListener(tweepy.StreamListener):
                                 insertIntoRetweet(twitter_id)
                                 
 def postTweet(text):
-        api_bot.update_status(text)
+        api_bot.update_status(status=text)
         
 def checkIfTweeted(tweet_id):
         lock.acquire()
