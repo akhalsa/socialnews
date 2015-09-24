@@ -13,6 +13,7 @@ import threading
 import datetime
 import requests
 import re
+import urllib2
 
 from tornado.options import define, options, parse_command_line
 from threading import Thread
@@ -175,7 +176,11 @@ def postTweet(text, tweet_id):
         if(len(urls) == 0):
                 api_bot.retweet(tweet_id)
         else:
-              api_bot.update_status(status=text)  
+                fp = urllib2.urlopen(urls[0])
+                if("twitter" in fp.geturl()):
+                        api_bot.retweet(tweet_id)
+                else:
+                        api_bot.update_status(status=text)  
         
         
         
