@@ -172,9 +172,11 @@ class HandleListener(tweepy.StreamListener):
                                 
 def postTweet(text, tweet_id):
         urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
-        print urls
-        sys.exit()
-        api_bot.update_status(status=text)
+        if(len(urls) == 0):
+                api_bot.retweet(tweet_id)
+        else:
+              api_bot.update_status(status=text)  
+        
         
         
 def checkIfTweeted(tweet_id):
