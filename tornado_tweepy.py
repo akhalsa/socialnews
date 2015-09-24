@@ -123,9 +123,9 @@ class HandleListener(tweepy.StreamListener):
                         self.checkForSurge(decoded['id'], decoded['text'])
                         
                         
-                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 900):
+                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
                                 #make sure we are posting at least once an hour
-                                (tweet_dict, tweet_ids) = getTweetOccurances(900, 1)
+                                (tweet_dict, tweet_ids) = getTweetOccurances(3600, 1)
                                 
                                 for tweet_id in tweet_ids:
                                         if(not checkIfTweeted(tweet_id)):
