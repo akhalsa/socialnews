@@ -180,6 +180,7 @@ def postTweet(text, tweet_id):
         
         
 def checkIfTweeted(tweet_id):
+        print "checking if: "+str(tweet_id)+" has been sent out"
         lock.acquire()
         cursor = db.cursor()
         sql = "SELECT * From Retweets WHERE twitter_id like '"+str(tweet_id)+"';"
