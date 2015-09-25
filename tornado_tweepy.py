@@ -177,7 +177,7 @@ def postTweet(text, tweet_id):
                 api_bot.retweet(tweet_id)
         else:
                 fp = urllib2.urlopen(urls[0])
-                if("twitter" in fp.geturl()):
+                if(str(fp.geturl()).startswith("https://twitter.com") or (fp.geturl()).startswith("http://twitter.com")):
                         api_bot.retweet(tweet_id)
                 else:
                         api_bot.update_status(status=text)  
