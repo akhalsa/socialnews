@@ -121,9 +121,9 @@ class HandleListener(tweepy.StreamListener):
                         self.checkForSurge(decoded['id'], decoded['text'])
                         
                         
-                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 900):
+                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 90):
                                 #make sure we are posting at least once an hour
-                                (tweet_dict, tweet_ids) = getTweetOccurances(900, 1)
+                                (tweet_dict, tweet_ids) = getTweetOccurances(90, 1)
                                 print "got tweet_dict: "+str(tweet_dict)
                                 print "and got tweet array: "+str(tweet_ids)
                                 
