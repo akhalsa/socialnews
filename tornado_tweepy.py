@@ -123,7 +123,7 @@ class HandleListener(tweepy.StreamListener):
                         
                         if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
                                 #make sure we are posting at least once an hour
-                                (tweet_dict, tweet_ids) = getTweetOccurances(3600, 1)
+                                (tweet_dict, tweet_ids) = getTweetOccurances(21600, 1)
                                 print "got tweet_dict: "+str(tweet_dict)
                                 print "and got tweet array: "+str(tweet_ids)
                                 
