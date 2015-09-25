@@ -71,7 +71,7 @@ class HandleListener(tweepy.StreamListener):
         def handleData(self,):
                 while True:
                         data_structure = self.db_queue.get()
-                        print "queue size after get: "+str(self.db_queue.qsize())
+                        #print "queue size after get: "+str(self.db_queue.qsize())
                         insertion_start = datetime.datetime.now()
                         self.processData(data_structure)
                         
@@ -94,14 +94,14 @@ class HandleListener(tweepy.StreamListener):
                         #print "done with search tweet user"
                         if(source_id == 0) and ("retweeted_status" in decoded):
                                 decoded = decoded['retweeted_status']
-                                if("text" in decoded):
-                                        if("video" in decoded["text"].lower()):
-                                                print "link held in: "+str(decoded)
+                                
                                 #print "search retweet user"
                                 source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
                                 #print "done with search retweet user"
                         elif (source_id == 0):
-                                print "this wasn't a retweet AND wasn't from a trusted source!?!"
+                                #print "this wasn't a retweet AND wasn't from a trusted source!?!"
+                                pass
+                        
                 except KeyError, e:
                         print "we got a key error so we're just dropping out"
                         source_id = 0
