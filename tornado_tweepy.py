@@ -88,20 +88,18 @@ class HandleListener(tweepy.StreamListener):
                 #print "recevied: "+str(decoded)
                 #check if user for tweet
                 #print "scanning: "+str(decoded)
-                if("text" in decoded):
-                        if("video" in decoded["text"].lower()):
-                                print "link held in: "+str(decoded)
+
                 try:
                         source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
-                        print "done with search tweet user"
+                        #print "done with search tweet user"
                         if(source_id == 0) and ("retweeted_status" in decoded):
                                 decoded = decoded['retweeted_status']
                                 if("text" in decoded):
                                         if("video" in decoded["text"].lower()):
                                                 print "link held in: "+str(decoded)
-                                print "search retweet user"
+                                #print "search retweet user"
                                 source_id = findTableIdWithTwitterId(str(decoded['user']['id']))
-                                print "done with search retweet user"
+                                #print "done with search retweet user"
                         elif (source_id == 0):
                                 print "this wasn't a retweet AND wasn't from a trusted source!?!"
                 except KeyError, e:
@@ -114,10 +112,10 @@ class HandleListener(tweepy.StreamListener):
                         #first lets check if we already have the tweet
                         local_tweet_id = getLocalTweetIdForTwitterTweetID(decoded['id'])
                         if(local_tweet_id == 0):
-                                print "creating new entry for: "+decoded['text']
+                                #print "creating new entry for: "+decoded['text']
                                 insertTweet( source_id, decoded['text'], decoded['id'])
                                 
-                        print "adding occurance for: "+decoded['text']
+                        #print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'])
                         
                         self.checkForSurge(decoded['id'], decoded['text'])
@@ -126,6 +124,8 @@ class HandleListener(tweepy.StreamListener):
                         if((datetime.datetime.now() - self.lastPost).total_seconds() > 90):
                                 #make sure we are posting at least once an hour
                                 (tweet_dict, tweet_ids) = getTweetOccurances(90, 1)
+                                print "got tweet_dict: "+str(tweet_dict)
+                                print "and got tweet array: "+str(tweet_ids)
                                 
                                 for tweet_id in tweet_ids:
                                         if(not checkIfTweeted(tweet_id)):
