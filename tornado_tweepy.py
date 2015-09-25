@@ -80,7 +80,7 @@ class HandleListener(tweepy.StreamListener):
                                 print "starting to clear entries"
                                 clearOldEntries()
                                 self.lastClear = datetime.datetime.now()
-                        print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
+                        #print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
                         self.db_queue.task_done()
                         
         def processData(self, data):
@@ -137,7 +137,7 @@ class HandleListener(tweepy.StreamListener):
                                                 print "would retweet, but we already did"
                                 self.lastPost = datetime.datetime.now()
                         
-                        print "finished with: "+decoded['text']
+                        #print "finished with: "+decoded['text']
                         
                         
                 elif ('text' in decoded):
@@ -292,7 +292,7 @@ def addOccurance(tweet_id):
                 print str(e)
                 db.rollback()
         cursor.close()
-        print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
+        #print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
         lock.release()
 
 
@@ -336,7 +336,7 @@ def getCategoriesWithSourceId(source_id):
 
 def findTableIdWithTwitterId(twitter_id):
         lock.acquire()
-        print "running findTableIdWithTwitterId: "+twitter_id
+        #print "running findTableIdWithTwitterId: "+twitter_id
         cursor = db.cursor()
         sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
         cursor.execute(sql)
@@ -344,7 +344,7 @@ def findTableIdWithTwitterId(twitter_id):
         for row in cursor.fetchall() :
             return_id = row[0]
         cursor.close()
-        print "lock released at 227"
+        #print "lock released at 227"
         lock.release()
         return return_id
 
