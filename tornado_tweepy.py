@@ -130,7 +130,7 @@ class HandleListener(tweepy.StreamListener):
                                 for tweet_id in tweet_ids:
                                         if(not checkIfTweeted(tweet_id)):
                                                 print "posting: "+str(tweet_id)
-                                                postTweet(decoded['text'], tweet_id)
+                                                postTweet(tweet_dict[tweet_id], tweet_id)
                                                 insertIntoRetweet(tweet_id)
                                                 #api_bot.retweet(tweet_id)
                                                 break
