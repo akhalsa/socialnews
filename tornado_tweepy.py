@@ -131,7 +131,7 @@ class HandleListener(tweepy.StreamListener):
                                         if(not checkIfTweeted(tweet_id)):
                                                 print "posting: "+str(tweet_id)
                                                 postTweet(tweet_dict[tweet_id]["text"], tweet_id)
-                                                insertIntoRetweet(tweet_id)
+                                                insertIntoRetweet(tweet_id, False)
                                                 #api_bot.retweet(tweet_id)
                                                 break
                                         else:
@@ -170,7 +170,7 @@ class HandleListener(tweepy.StreamListener):
                                 #api_bot.retweet(twitter_id)
                                 postTweet(tweet_text, twitter_id)
                                 self.lastPost = datetime.datetime.now()
-                                insertIntoRetweet(twitter_id)
+                                insertIntoRetweet(twitter_id, True)
                                 
 def postTweet(text, tweet_id):
         urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
@@ -198,10 +198,10 @@ def checkIfTweeted(tweet_id):
                 return True
         else:
                 return False
-def insertIntoRetweet(tweet_id):
+def insertIntoRetweet(tweet_id, isSurge):
         lock.acquire()
         cursor = db.cursor()
-        sql = "INSERT INTO Retweets (twitter_id) VALUES ('"+str(tweet_id)+"');"
+        sql = "INSERT INTO Retweets (twitter_id, surge) VALUES ('"+str(tweet_id)+"', "+isSurge+");"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
