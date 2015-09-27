@@ -201,7 +201,10 @@ def checkIfTweeted(tweet_id):
 def insertIntoRetweet(tweet_id, isSurge):
         lock.acquire()
         cursor = db.cursor()
-        sql = "INSERT INTO Retweets (twitter_id, surge) VALUES ('"+str(tweet_id)+"', "+isSurge+");"
+        isSurgeString = "TRUE" if isSurge else "FALSE"
+        
+        
+        sql = "INSERT INTO Retweets (twitter_id, surge) VALUES ('"+str(tweet_id)+"', "+isSurgeString+");"
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
