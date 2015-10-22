@@ -51,8 +51,8 @@ class HandleListener(tweepy.StreamListener):
                 worker = Thread(target=self.handleData, args=())
                 worker.setDaemon(True)
                 worker.start()
-                self.lastClear = datetime.datetime.now()
-                self.lastPost = datetime.datetime.now()
+                self.lastClear = datetime.datetime.now() - datetime.timedelta(hours = 1)
+                self.lastPost = datetime.datetime.now() - datetime.timedelta(hours = 1)
                 
         def setupSocket(self, ):
                 print "starting to set up socket listen on new thread"
