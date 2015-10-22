@@ -309,6 +309,21 @@ def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
         for row in cursor.fetchall():
                 return_id = row[0]
         cursor.close()
+        if(return_id is not 0):
+                cursor = db.cursor()
+                #we have a valid tweet
+                sql = "UPDATE Tweet SET timestamp=NOW() WHERE ID like "+str(twitter_tweet_id)+";"
+                try:
+                        # Execute the SQL command
+                        cursor.execute(sql)
+                        # Commit your changes in the database
+                        db.commit()
+                except Exception,e:
+                        # Rollback in case there is any error
+                        print "error on insertion of occurrence"
+                        print str(e)
+                        db.rollback()
+        cursor.close()
         lock.release()
         return return_id 
 def getAllTwitterIds():
