@@ -233,6 +233,19 @@ def clearOldEntries():
                 print str(e)
                 db.rollback()
         cursor.close()
+        cursor = db.cursor()
+        sql = "DELETE FROM Tweet WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on removing uniques of occurrence"
+                print str(e)
+                db.rollback()
+        cursor.close()
         lock.release()
 def insertTweet(source_id, text_string, twitter_tweet_id):
         insert_tweet_start = datetime.datetime.now()
