@@ -52,7 +52,7 @@ class HandleListener(tweepy.StreamListener):
                 worker.setDaemon(True)
                 worker.start()
                 self.lastClear = datetime.datetime.now() - datetime.timedelta(hours = 1)
-                self.lastPost = datetime.datetime.now() - datetime.timedelta(hours = 1)
+                self.lastPost = datetime.datetime.now()
                 
         def setupSocket(self, ):
                 print "starting to set up socket listen on new thread"
