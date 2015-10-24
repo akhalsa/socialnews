@@ -115,7 +115,7 @@ class HandleListener(tweepy.StreamListener):
                                 #print "creating new entry for: "+decoded['text']
                                 insertTweet( source_id, decoded['text'], decoded['id'])
                                 
-                        #print "adding occurance for: "+decoded['text']
+                        print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'], source_id)
                         
                         self.checkForSurge(decoded['id'], decoded['text'])
@@ -248,6 +248,7 @@ def clearOldEntries():
         cursor.close()
         lock.release()
 def insertTweet(source_id, text_string, twitter_tweet_id):
+        print "inserting tweet: "+text_string
         insert_tweet_start = datetime.datetime.now()
         lock.acquire()
         cursor = db.cursor()
