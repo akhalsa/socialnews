@@ -287,7 +287,7 @@ def addOccurance(tweet_id, source_id):
         for cat in categories:
             insert_list.append( "('"+str(tweet_id)+"', "+str(cat)+")")
         sql += ",".join(insert_list)
-        print "inserting into occurrence with sql: "+sql
+        
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
@@ -417,11 +417,13 @@ def getTweetOccurances(seconds, cat_id):
         #base_string = " AND twitter_id IN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+cat_id+")"
         #inner_join = " LEFT JOIN TweetCategoryRelationship On TweetOccurrence.twitter_id=TweetCategoryRelationship.twitter_id"
         #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC "+inner_join
-        sql = "SELECT A.twitter_id, COUNT(A.twitter_id) as tweet_occurrence_count FROM TweetOccurrence A "
-        sql += "INNER JOIN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+str(cat_id)+") B "
-        sql += "ON A.twitter_id=B.twitter_id "
-        sql += "WHERE A.timestamp > (NOW() -  INTERVAL "+str(seconds)+" SECOND) GROUP BY A.twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10"
+        #sql = "SELECT A.twitter_id, COUNT(A.twitter_id) as tweet_occurrence_count FROM TweetOccurrence A "
+        #sql += "INNER JOIN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+str(cat_id)+") B "
+        #sql += "ON A.twitter_id=B.twitter_id "
+        #sql += "WHERE A.timestamp > (NOW() -  INTERVAL "+str(seconds)+" SECOND) GROUP BY A.twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10"
 
+        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC;"
+        
         print "loading with sql: "+sql
         cursor.execute(sql)
         results = {}
