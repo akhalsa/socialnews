@@ -116,7 +116,7 @@ class HandleListener(tweepy.StreamListener):
                                 insertTweet( source_id, decoded['text'], decoded['id'])
                                 
                         #print "adding occurance for: "+decoded['text']
-                        addOccurance(decoded['id'])
+                        addOccurance(decoded['id'], source_id)
                         
                         self.checkForSurge(decoded['id'], decoded['text'])
                         
@@ -265,39 +265,29 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
                 db.rollback()
         cursor.close()
         lock.release()
-        print "get categories with id: "+str(source_id)
-        categories = getCategoriesWithSourceId(source_id)
-        cursor = db.cursor()
-        lock.acquire()
-        for cat in categories:
-                print "should insert category relationship to cat_id: "+str(cat)
-                sql = "INSERT INTO TweetCategoryRelationship(twitter_id, category_id) VALUES ('"+str(twitter_tweet_id)+"',"+str(cat)+");"
-                try:
-                        # Execute the SQL command
-                        cursor.execute(sql)
-                        # Commit your changes in the database
-                        db.commit()
-                except Exception,e:
-                        # Rollback in case there is any error
-                        print "error on TweetCat update"
-                        print str(e)
-                        db.rollback()
         
-        cursor.close()
-        lock.release()
         print "insert tweet took: "+str((datetime.datetime.now() - insert_tweet_start).total_seconds())+" seconds" 
         
         
         
-def addOccurance(tweet_id):
+def addOccurance(tweet_id, source_id):
         addOccurance_start = datetime.datetime.now()
         local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
-        lock.acquire()
         if(local_id == 0):
                 return
         
+        print "get categories with id: "+str(source_id)
+        categories = getCategoriesWithSourceId(source_id)
+        
+        
+        lock.acquire()
         cursor = db.cursor()
-        sql = "INSERT INTO TweetOccurrence(twitter_id) VALUES ('"+str(tweet_id)+"');"
+        sql = "INSERT INTO TweetOccurrence(twitter_id, category_id) VALUES "
+        insert_list = []
+        for cat in categories:
+            insert_list.append( "('"+str(tweet_id)+"', "+cat+")")
+        sql += ",".join(insert_list)
+        print "inserting into occurrence with sql: "+sql
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
