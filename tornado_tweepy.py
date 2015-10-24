@@ -422,7 +422,7 @@ def getTweetOccurances(seconds, cat_id):
         #sql += "ON A.twitter_id=B.twitter_id "
         #sql += "WHERE A.timestamp > (NOW() -  INTERVAL "+str(seconds)+" SECOND) GROUP BY A.twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10"
 
-        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC;"
+        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
         
         print "loading with sql: "+sql
         cursor.execute(sql)
