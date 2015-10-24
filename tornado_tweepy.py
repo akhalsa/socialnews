@@ -342,9 +342,7 @@ def getAllTwitterIds():
         return return_list
 
 def getCategoriesWithSourceId(source_id):
-        print "attempting to acquire lock at getCategoriesWithId 201"
         lock.acquire()
-        print "successfully acquired lock at getCategoriesWithId 201"
         cursor = db.cursor()
         sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
         cursor.execute(sql)
