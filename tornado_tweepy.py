@@ -285,7 +285,7 @@ def addOccurance(tweet_id, source_id):
         sql = "INSERT INTO TweetOccurrence(twitter_id, category_id) VALUES "
         insert_list = []
         for cat in categories:
-            insert_list.append( "('"+str(tweet_id)+"', "+cat+")")
+            insert_list.append( "('"+str(tweet_id)+"', "+str(cat)+")")
         sql += ",".join(insert_list)
         print "inserting into occurrence with sql: "+sql
         try:
