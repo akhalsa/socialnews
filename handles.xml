@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<categories>
+<root>
     <category name="Sports">
         <handle>@billbarnwell</handle>
         <handle>@jimrome</handle>
@@ -142,6 +142,6 @@
             
         </category>
     </category>
-</categories>
+</root>
 
                 
