@@ -1,2 +1,3 @@
-def test_method(test):
-    print "test string: "+test
+class CategoryModel:
+    def __init__(self):
+        print "initializing a catgory model"
