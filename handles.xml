@@ -1,0 +1,144 @@
+<categories>
+    <category name="Sports">
+        <handle>@billbarnwell</handle>
+        <handle>@jimrome</handle>
+        <handle>@darrenrovell</handle>
+        <handle>@RealMikeWilbon</handle>
+        <handle>@bleacherreport</handle>
+        <handle>@sbnation</handle>
+        <handle>@espn</handle>
+        <handle>@SInow</handle>
+        <handle>@YahooSports</handle>
+        <handle>@FOXSports</handle>
+        <handle>@SportsCenter</handle>
+        <category name="NFL">
+            <handle>@AdamSchefter</handle>
+            <handle>@MatthewBerryTMR</handle>
+            <handle>@richeisen</handle>
+            <handle>@mortreport</handle>
+            <handle>@wingoz</handle>
+            <handle>@claytonespn</handle>
+            <handle>@Rotoworld_FB</handle>
+            <handle>@SI_PeterKing</handle>
+            <handle>@MikePereira</handle>
+            <handle>@ProFootballTalk</handle>
+            <handle>@MelKiperESPN</handle>
+            <handle>@JasonLaCanfora</handle>
+            <handle>@scottzolak</handle>
+            <handle>@AlbertBreer</handle>
+            <handle>@FieldYates</handle>
+            <handle>@GregABedard</handle>
+            <handle>@BR_NFL</handle>
+            <category name="Patriots">
+                <handle>@jeffphowe</handle>
+                <handle>@BenVolin</handle>
+                <handle>@mikereiss</handle>
+                <handle>@kguregian</handle>
+                <handle>@shalisemyoung</handle>
+                <handle>@cpriceNFL</handle>
+                <handle>@JumboHart</handle>
+                <handle>@pfwpaul</handle>
+                <handle>@GFarley_ent</handle>
+                <handle>@jeffphowe</handle>
+                <handle>@_BLowe</handle>
+                <handle>@Patriots</handle>
+                <handle>@tomecurran</handle>
+            </category>
+            <category name="Jets">
+                <handle>@BrianCoz</handle>
+                <handle>@eallenjets</handle>
+                <handle>@MMehtaNYDN</handle>
+                <handle>@RichCimini</handle>
+                <handle>@nyjets</handle>
+                <handle>@GangGreenNation</handle>
+            </category>
+            <category name="Bills">
+                <handle>@ChrisBrownBills</handle>
+                <handle>@mikerodak</handle>
+                <handle>@JoeBuscaglia</handle>
+                <handle>@viccarucci</handle>
+                <handle>@buffalobills</handle>
+            </category>
+            <category name="Dolphins">
+                <handle>@AbramsonPBP</handle>
+                <handle>@gunnerhal</handle>
+                <handle>@OmarKelly</handle>
+                <handle>@thephinsider</handle>
+                <handle>@chrisperk</handle>
+                <handle>@ArmandoSalguero</handle>
+                <handle>@MiamiDolphins</handle>
+                <handle>@ACohenFins</handle>
+            </category>
+            <category name="Ravens">
+                <handle>@Ravens</handle>
+                <handle>@ryanmink</handle>
+                <handle>@jeffzrebiecsun</handle>
+                <handle>@RavensInsider</handle>
+                <handle>@jamisonhensley</handle>
+                <handle>@MikePrestonSun</handle>
+                <handle>@gdowning14</handle>
+            </category>
+            <category name="Bengals">
+                <handle>@ColeyHarvey</handle>
+                <handle>@pauldehnerjr</handle>
+                <handle>@JayMorrisonCMG</handle>
+                <handle>@GeoffHobsonCin</handle>
+                <handle>@Bengals</handle>
+                <handle>@CincyJungle</handle>
+                <handle>@bengalsbuzztap</handle>
+            </category>
+            <category name="Browns">
+                <handle>@NateUlrichABJ</handle>
+                <handle>@TonyGrossi</handle>
+                <handle>@MaryKayCabot</handle>
+                <handle>@ScottPetrak</handle>
+                <handle>@PatMcManamon</handle>
+                <handle>@Browns</handle>
+            </category>
+            <category name="Stealers">
+                <handle>@MarkKaboly_Trib</handle>
+                <handle>@EdBouchette</handle>
+                <handle>@dlolleyor</handle>
+                <handle>@C_AdamskiTrib</handle>
+                <handle>@rayfitt1</handle>
+                <handle>@BobLabriola</handle>
+                <handle>@btsteelcurtain</handle>
+                <handle>@Steelersdepot</handle>
+                <handle>@steelers</handle>
+            </category>
+            <category name="Texans">
+                <handle>@taniaganguli</handle>
+                <handle>@HoustonTexans</handle>
+                <handle>@AaronWilson_NFL</handle>
+                <handle>@jharrisfootball</handle>
+            </category>
+            <category name="Jaguars">
+                <handle>@JohnOehser</handle>
+                <handle>@ryanohalloran</handle>
+                <handle>@ESPNdirocco</handle>
+                <handle>@HaysCarlyon</handle>
+                <handle>@Jaguars</handle>
+            </category>
+            <category name="Colts">
+                <handle>@HolderStephen</handle>
+                <handle>@mchappell51</handle>
+                <handle>@KBowenColts</handle>
+                <handle>@MikeWellsNFL</handle>
+                <handle>@zkeefer</handle>
+                <handle>@Colts</handle>
+                <handle>@JoshWilsonSB</handle>
+                <handle>@bkravitz</handle>
+            </category>
+            <category name="Titans">
+                <handle>@terrymc13</handle>
+                <handle>@jwyattsports</handle>
+                <handle>@PaulKuharskyNFL</handle>
+                <handle>@glennonsports</handle>
+                <handle>@JasonWolf</handle>
+                <handle>@Titans</handle>
+            </category>
+        </category>
+    </category>
+</categories>
+
+                
