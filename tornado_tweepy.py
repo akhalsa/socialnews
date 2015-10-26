@@ -18,6 +18,7 @@ import urllib2
 from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
+import src
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -40,8 +41,6 @@ api = tweepy.API(auth)
 auth_bot = tweepy.OAuthHandler("1mxHCmJv9pQqFsFO9emtgjrSB", "CcrfJ3WTLqaAigBj0yOhnpAa8bzB6FRG9iIOCVgNktnTgkuHNb")
 auth_bot.set_access_token("3618709285-bccgXE7SINoljfJbslsWvP8gP5j9AyQV2FELgIx", "GledD6R46Ghy4dIgtEQBhvW4KfI0n2dN6IUGbWFU2qac2")
 api_bot = tweepy.API(auth_bot)
-
-
                 
 class HandleListener(tweepy.StreamListener):
         
@@ -613,6 +612,7 @@ app = tornado.web.Application([
 ])
 
 if __name__ == '__main__':
+    src.test_method("Test Of Category Model")
     parse_command_line()
     #db.query('SET GLOBAL wait_timeout=28800')
     handle = HandleListener()
