@@ -5,5 +5,5 @@ class CategoryModel:
     def __init__(self):
         print os.getcwd()
         obj = untangle.parse('handles.xml')
-        print obj
+        print obj.root
         print "initializing a catgory model"
