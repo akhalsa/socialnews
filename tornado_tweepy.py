@@ -18,7 +18,7 @@ import urllib2
 from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
-import src
+import src.CategoryModel
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -612,7 +612,7 @@ app = tornado.web.Application([
 ])
 
 if __name__ == '__main__':
-    src.CategoryModule.test_method("Test Of Category Model")
+    CategoryModel.test_method("Test Of Category Model")
     parse_command_line()
     #db.query('SET GLOBAL wait_timeout=28800')
     handle = HandleListener()
