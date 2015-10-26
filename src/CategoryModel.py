@@ -10,5 +10,5 @@ class CategoryModel:
             print cat['name']
             
         for h in obj.root.category.handle:
-            print h
+            print h.value
         print "initializing a catgory model"
