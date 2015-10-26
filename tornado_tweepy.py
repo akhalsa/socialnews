@@ -612,7 +612,7 @@ app = tornado.web.Application([
 ])
 
 if __name__ == '__main__':
-    CategoryModel.test_method("Test Of Category Model")
+    src.CategoryModel.test_method("Test Of Category Model")
     parse_command_line()
     #db.query('SET GLOBAL wait_timeout=28800')
     handle = HandleListener()
