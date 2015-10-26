@@ -8,4 +8,7 @@ class CategoryModel:
         
         for cat in obj.root.category.category.category:
             print cat['name']
+            
+        for h in obj.root.category.handle:
+            print h
         print "initializing a catgory model"
