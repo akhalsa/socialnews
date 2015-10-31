@@ -50,6 +50,7 @@ class CategoryModel:
         #1 create new category entry for this category
         sql = "INSERT INTO Category (name) values ("+category['name']+");"
         lastRow = str(self.executeSql(self.db, sql))
+        print "successful insert"
         
         #2.create a parent child relationship with the parent if there is one
         if (parent_id != self.top_level):
