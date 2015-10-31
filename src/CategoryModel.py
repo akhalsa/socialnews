@@ -1,7 +1,7 @@
 import untangle
 import MySQLdb
 import os
-
+import tweepy
 
 class CategoryModel:
     top_level = -1
@@ -22,18 +22,25 @@ class CategoryModel:
         cursor.close()
         return lastRow
     
-    def __init__(self, db):
+    def __init__(self, db, api):
         
         self.db = db
+        self.api = api
 
         # Execute the SQL command
         sql = "DELETE FROM CategoryParentRelationship;"
         self.executeSql(db,sql)
         sql = "ALTER TABLE CategoryParentRelationship AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
+        
         sql = "DELETE FROM Category;"
         self.executeSql(db, sql)
         sql = "ALTER TABLE Category AUTO_INCREMENT = 1"
+        self.executeSql(db, sql)
+        
+        sql = "DELETE FROM TwitterSource;"
+        self.executeSql(db, sql)
+        sql = "ALTER TABLE TwitterSource AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
         
         print os.getcwd()
@@ -56,6 +63,14 @@ class CategoryModel:
                 self.executeSql(self.db, sql)
         
         #insert all twitter handles into the db
+        try:
+            for one_handle in category.handle:
+                user = api.get_user(screen_name = one_handle.cdata)
+                print "found user: "
+                print user
+        except IndexError, e:
+            print "category: "+category['name']+" has no  handles"
+            
         
         
         
