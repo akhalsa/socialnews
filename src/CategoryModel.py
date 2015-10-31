@@ -70,7 +70,7 @@ class CategoryModel:
                 username = user.name
                 profile_link = user.profile_image_url
                 if(user_id is not False):
-                    sql = "INSERT INTO TwitterSource(Name, handle, twitter_id, profile_image) VALUES ('"+username+"','"+one_handle.cdata+"', '"+user_id+"', '"+profile_link+"');"
+                    sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+username+"','"+one_handle.cdata+"', '"+user_id+"', '"+profile_link+"');"
                     self.executeSql(self.db, sql)
             
         except IndexError, e:
