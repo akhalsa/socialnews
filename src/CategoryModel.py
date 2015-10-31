@@ -65,7 +65,7 @@ class CategoryModel:
         #insert all twitter handles into the db
         try:
             for one_handle in category.handle:
-                user = api.get_user(screen_name = one_handle.cdata)
+                user = self.api.get_user(screen_name = one_handle.cdata)
                 print "found user: "
                 print user
         except IndexError, e:
