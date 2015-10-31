@@ -58,11 +58,16 @@ class CategoryModel:
                 self.executeSql(self.db, sql)
         
         #3. call insertCategory for all child categories passing in the id of the current category object.
-        if(category.category):
-            for cat in category.category:
-                print "running for cat: "
-                print cat['name']
-                self.insertCategory(cat, lastRow)
+        hasChild = None
+        try:
+            children = category.category
+        except IndexError, e:
+            print "category: "+category['name']+" has no children so were done"
+            
+        for cat in children:
+            print "running for cat: "
+            print cat['name']
+            self.insertCategory(cat, lastRow)
         
         
         
