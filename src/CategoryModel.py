@@ -60,7 +60,7 @@ class CategoryModel:
         #3. call insertCategory for all child categories passing in the id of the current category object.
         for cat in category.category:
             print "running for cat: "
-            print cat
+            print cat['name']
             if(cat != None):
                 self.insertCategory(cat, lastRow)
         
