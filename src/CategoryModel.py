@@ -37,7 +37,7 @@ class CategoryModel:
         #table naming scheme
         #GenCat0
         for cat in obj.root.category:
-            self.insertCategory(cat, top_level)
+            self.insertCategory(cat, self.top_level)
             
 
         
