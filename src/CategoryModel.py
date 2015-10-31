@@ -1,4 +1,5 @@
 import untangle
+import MySQLdb
 import os
 
 class CategoryModel:
@@ -10,5 +11,3 @@ class CategoryModel:
             print cat['name']
             for h in cat.handle:
                 print h.cdata
-
-        print "initializing a catgory model"
