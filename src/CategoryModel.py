@@ -66,8 +66,10 @@ class CategoryModel:
         try:
             for one_handle in category.handle:
                 user = self.api.get_user(screen_name = one_handle.cdata)
-                print "found user: "
-                print user
+                user_id = str(user.id)
+                username = user.name
+                profile_link = user.profile_image_url
+                print "user_id: "+user_id+" and name: "+username
         except IndexError, e:
             print "category: "+category['name']+" has no  handles"
             
