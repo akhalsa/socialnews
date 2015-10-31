@@ -3,8 +3,6 @@ import MySQLdb
 import os
 
 
-define("port", default=8888, help="run on the given port", type=int)
-
 db = MySQLdb.connect(
         host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
         user="akhalsa",
