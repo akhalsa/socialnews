@@ -58,7 +58,7 @@ class CategoryModel:
                 self.executeSql(self.db, sql)
         
         #3. call insertCategory for all child categories passing in the id of the current category object.
-        hasChild = None
+        children = None
         try:
             children = category.category
         except IndexError, e:
