@@ -28,8 +28,12 @@ class CategoryModel:
 
         # Execute the SQL command
         sql = "DELETE FROM CategoryParentRelationship;"
-        self.executeSql(db,sql)        
+        self.executeSql(db,sql)
+        sql = "ALTER TABLE CategoryParentRelationship AUTO_INCREMENT = 1"
+        self.executeSql(db, sql)
         sql = "DELETE FROM Category;"
+        self.executeSql(db, sql)
+        sql = "ALTER TABLE Category AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
         
         print os.getcwd()
@@ -51,11 +55,13 @@ class CategoryModel:
                 sql = "INSERT INTO CategoryParentRelationship (parent_category_id, child_category_id) values ("+parent_id+", "+lastRow+");"
                 self.executeSql(self.db, sql)
         
+        #insert all twitter handles into the db
+        
+        
+        
         #3. call insertCategory for all child categories passing in the id of the current category object.
         try:
             for cat in category.category:
-                print "running for cat: "
-                print cat['name']
                 self.insertCategory(cat, lastRow)
         except IndexError, e:
             print "category: "+category['name']+" has no children so were done"
