@@ -3,17 +3,9 @@ import MySQLdb
 import os
 
 
-db = MySQLdb.connect(
-        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
-        user="akhalsa",
-        passwd="sophiesChoice1",
-        db="newsdb",
-        charset='utf8',
-        port=3306)
-
-
-
 class CategoryModel:
+    top_level = -1
+    
     def __init__(self, db):
         cursor = db.cursor()
         try:
@@ -35,8 +27,21 @@ class CategoryModel:
         obj = untangle.parse('handles.xml')
         #table naming scheme
         #GenCat0
+        for cat in obj.root.category:
+            insertCategory(cat, top_level)
+            
+
         
-        for cat in obj.root.category.category.category:
-            print cat['name']
-            for h in cat.handle:
-                print h.cdata
+        #for cat in obj.root.category.category.category:
+        #    print cat['name']
+        #    for h in cat.handle:
+        #        print h.cdata
+                
+    def insertCategory(self, category, parent_id):
+        #1 create new category entry for this category
+        #2.create a parent child relationship with the parent if there is one
+        #3. call insertCategory for all child categories passing in the id of the current category object.
+        
+        
+        
+        return
