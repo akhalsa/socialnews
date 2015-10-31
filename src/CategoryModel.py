@@ -40,12 +40,6 @@ class CategoryModel:
             self.insertCategory(cat, self.top_level)
             
 
-        
-        #for cat in obj.root.category.category.category:
-        #    print cat['name']
-        #    for h in cat.handle:
-        #        print h.cdata
-                
     def insertCategory(self, category, parent_id):
         #1 create new category entry for this category
         sql = "INSERT INTO Category (name) values ('"+category['name']+"');"
@@ -65,10 +59,3 @@ class CategoryModel:
                 self.insertCategory(cat, lastRow)
         except IndexError, e:
             print "category: "+category['name']+" has no children so were done"
-
-        
-        
-        
-        
-        
-        return
