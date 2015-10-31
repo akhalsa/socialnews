@@ -28,9 +28,9 @@ class CategoryModel:
 
         # Execute the SQL command
         sql = "DELETE FROM CategoryParentRelationship;"
-        executeSql(db,sql)        
+        self.executeSql(db,sql)        
         sql = "DELETE FROM Category;"
-        executeSql(db, sql)
+        self.executeSql(db, sql)
         
         print os.getcwd()
         obj = untangle.parse('handles.xml')
