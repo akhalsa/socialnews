@@ -49,6 +49,7 @@ class CategoryModel:
     def insertCategory(self, category, parent_id):
         #1 create new category entry for this category
         sql = "INSERT INTO Category (name) values ("+category['name']+");"
+        print "sql is: "+sql
         lastRow = str(self.executeSql(self.db, sql))
         print "successful insert"
         
