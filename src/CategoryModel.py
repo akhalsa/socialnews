@@ -61,8 +61,8 @@ class CategoryModel:
         for cat in category.category:
             print "running for cat: "
             print cat['name']
-            if(cat != None):
-                self.insertCategory(cat, lastRow)
+            #if(cat != None):
+            self.insertCategory(cat, lastRow)
         
         
         
