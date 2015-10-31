@@ -615,7 +615,7 @@ if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel()
     parse_command_line()
     #db.query('SET GLOBAL wait_timeout=28800')
-    handle = HandleListener()
+    #handle = HandleListener()
     
     print "done loading handles"
     app.listen(options.port)
