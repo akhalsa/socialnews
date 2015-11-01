@@ -2,6 +2,7 @@ import untangle
 import MySQLdb
 import os
 import tweepy
+import re
 
 class CategoryModel:
     top_level = -1
@@ -73,8 +74,8 @@ class CategoryModel:
                     cursor.close()
                     print "we need to do some processing for: "+one_handle.cdata
                     user = self.api.get_user(screen_name = one_handle.cdata)
-                    user_id = str(user.id)
-                    username = user.name
+                    user_id = re.escape(str(user.id))
+                    username = re.escape(user.name)
                     profile_link = user.profile_image_url
                     print "inserting "+username+" with user_id: "+user_id
                     if(user_id is not False):
