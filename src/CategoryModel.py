@@ -53,7 +53,7 @@ class CategoryModel:
         cur.execute(sql)
         sql_to_run = cur.fetchone()
         cur.close()
-        print "sql: "+str(sql_to_run)
+        print "sql: "+str(sql_to_run[0])
         
         print os.getcwd()
         obj = untangle.parse('handles.xml')
