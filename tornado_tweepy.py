@@ -120,25 +120,25 @@ class HandleListener(tweepy.StreamListener):
                         self.checkForSurge(decoded['id'], decoded['text'], 1)
                         
                         
-                        # if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
-                        #         #make sure we are posting at least once an hour
-                        #         (tweet_dict, tweet_ids) = getTweetOccurances(21600, 1)
-                        #         print "got tweet_dict: "+str(tweet_dict)
-                        #         print "and got tweet array: "+str(tweet_ids)
-                        #         
-                        #         for tweet_id in tweet_ids:
-                        #                 if(not checkIfTweeted(tweet_id)):
-                        #                         print "posting: "+str(tweet_id)
-                        #                         postTweet(tweet_dict[tweet_id]["text"], tweet_id)
-                        #                         insertIntoRetweet(tweet_id, False)
-                        #                         #api_bot.retweet(tweet_id)
-                        #                         break
-                        #                 else:
-                        #                         print "would retweet, but we already did"
-                        #         self.lastPost = datetime.datetime.now()
+                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
+                                #make sure we are posting at least once an hour
+                                (tweet_dict, tweet_ids) = getTweetOccurances(21600, 1)
+                                print "got tweet_dict: "+str(tweet_dict)
+                                print "and got tweet array: "+str(tweet_ids)
+                                
+                                for tweet_id in tweet_ids:
+                                        if(not checkIfTweeted(tweet_id)):
+                                                print "posting: "+str(tweet_id)
+                                                postTweet(tweet_dict[tweet_id]["text"], tweet_id)
+                                                insertIntoRetweet(tweet_id, False)
+                                                #api_bot.retweet(tweet_id)
+                                                break
+                                        else:
+                                                print "would retweet, but we already did"
+                                self.lastPost = datetime.datetime.now()
                         
-                        #print "finished with: "+decoded['text']
-                        
+                        print "finished with: "+decoded['text']
+                                                                                          # 
                         
                 elif ('text' in decoded):
                         print decoded['text']+ " still had source id that was 0"
