@@ -79,7 +79,7 @@ class CategoryModel:
                 self.executeSql(self.db, sql)
                 
         #create occurrence table
-        sql = "CREATE TABLE Occurrence_"+lastRow+"  (ID INT AUTO_INCREMENT PRIMARY KEY,twitter_id varchar(255), timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);"
+        sql = "CREATE TABLE Occurrence_"+lastRow+"  (ID INT AUTO_INCREMENT PRIMARY KEY,twitter_id varchar(255), timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, INDEX(timestamp));"
         self.executeSql(self.db, sql)
         
         #insert all twitter handles into the db
