@@ -38,10 +38,10 @@ class CategoryModel:
         sql = "ALTER TABLE Category AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
         
-        sql = "DELETE FROM TwitterSource;"
-        self.executeSql(db, sql)
-        sql = "ALTER TABLE TwitterSource AUTO_INCREMENT = 1"
-        self.executeSql(db, sql)
+        # sql = "DELETE FROM TwitterSource;"
+        # self.executeSql(db, sql)
+        # sql = "ALTER TABLE TwitterSource AUTO_INCREMENT = 1"
+        # self.executeSql(db, sql)
         
         print os.getcwd()
         obj = untangle.parse('handles.xml')
@@ -65,13 +65,19 @@ class CategoryModel:
         #insert all twitter handles into the db
         try:
             for one_handle in category.handle:
-                user = self.api.get_user(screen_name = one_handle.cdata)
-                user_id = str(user.id)
-                username = user.name
-                profile_link = user.profile_image_url
-                if(user_id is not False):
-                    sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+username+"','"+one_handle.cdata+"', '"+user_id+"', '"+profile_link+"');"
-                    self.executeSql(self.db, sql)
+                sql = "SELECT * From TwitterSource WHERE twitter_handle like '"+one_handle+"';"
+                cursor = self.db.cursor()
+                cursor.execute(sql)
+                row = cur.fetchone()
+                print "for "+one_handle+" found: "+row
+                
+                # user = self.api.get_user(screen_name = one_handle.cdata)
+                # user_id = str(user.id)
+                # username = user.name
+                # profile_link = user.profile_image_url
+                # if(user_id is not False):
+                #     sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+username+"','"+one_handle.cdata+"', '"+user_id+"', '"+profile_link+"');"
+                #     self.executeSql(self.db, sql)
             
         except IndexError, e:
             print "category: "+category['name']+" has no  handles"
