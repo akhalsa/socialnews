@@ -76,6 +76,7 @@ class CategoryModel:
                     user_id = str(user.id)
                     username = user.name
                     profile_link = user.profile_image_url
+                    print "inserting "+username+" with user_id: "+user_id
                     if(user_id is not False):
                         sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+username+"','"+one_handle.cdata+"', '"+user_id+"', '"+profile_link+"');"
                         self.executeSql(self.db, sql)

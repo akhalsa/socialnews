@@ -12,7 +12,6 @@
         <handle>@YahooSports</handle>
         <handle>@FOXSports</handle>
         <handle>@SportsCenter</handle>
-        <handle>@test_handle</handle>
         <category name="NFL">
             <handle>@AdamSchefter</handle>
             <handle>@MatthewBerryTMR</handle>
