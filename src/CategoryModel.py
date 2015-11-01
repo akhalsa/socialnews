@@ -82,7 +82,7 @@ class CategoryModel:
                 #     self.executeSql(self.db, sql)
             
         except IndexError, e:
-            print "got exception: "+e
+            print "got exception: "+str(e)
             print "category: "+category['name']+" has no  handles"
             
         
