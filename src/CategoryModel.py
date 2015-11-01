@@ -70,7 +70,7 @@ class CategoryModel:
                 sql = "SELECT * From TwitterSource WHERE twitter_handle like '"+str(one_handle)+"';"
                 cursor = self.db.cursor()
                 cursor.execute(sql)
-                row = cur.fetchone()
+                row = cursor.fetchone()
                 print "for "+str(one_handle)+" found: "+str(row)
                 
                 # user = self.api.get_user(screen_name = one_handle.cdata)
