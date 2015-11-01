@@ -60,7 +60,8 @@ class CategoryModel:
         sql = "INSERT INTO Category (name) values ('"+category['name']+"');"
         lastRow = str(self.executeSql(self.db, sql))
         category_chain = [lastRow]+parent_id_list
-        print "successful insert"
+        print "successful insert of: "+category['name']
+        print "category chain: "+str(category_chain)
         
         #2.create a parent child relationship with the parent if there is one
         if (len(parent_id_list) > 1):
