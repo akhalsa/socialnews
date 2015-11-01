@@ -371,10 +371,19 @@ def findTableIdWithTwitterId(twitter_id):
 def findCategoryChildrenForId(cat_id):
         lock.acquire()
         cursor = db.cursor()
-        sql = "SELECT Name From Category WHERE Parent LIKE "+cat_id
+        sql = "SELECT child_category_id From CategoryParentRelationship WHERE parent_category_id LIKE "+cat_id
         cursor.execute(sql)
-        return_list = []
+        child_id_list = []
         for row in cursor.fetchall() :
+                child_id_list.append(str(row[0]))
+        cursor.close()
+        
+        cursor = db.cursor()
+        return_list = []
+        for id in child_id_list:
+                sql = "SELECT Name From Category WHERE ID like "+id
+                cursor.execute(sql)
+                row = cursor.fetchone()
                 return_list.append(str(row[0]))
         cursor.close()
         lock.release()
