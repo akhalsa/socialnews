@@ -69,7 +69,9 @@ class CategoryModel:
                 cursor = self.db.cursor()
                 cursor.execute(sql)
                 row = cursor.fetchone()
-                print "for "+one_handle.cdata+" found: "+str(row)
+                if(row == None):
+                    print "we need to do some processing for: "+one_handle.cdata
+                
                 
                 # user = self.api.get_user(screen_name = one_handle.cdata)
                 # user_id = str(user.id)
