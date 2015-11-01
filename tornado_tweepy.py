@@ -462,68 +462,7 @@ def getTweetOccurances(seconds, cat_id):
         print results
         return (results, twitter_ids)
 
-class Source(tornado.web.RequestHandler):
 
-    def post(self):
-        user_id = False
-        username = ""
-        profile_link = ""
-        for key in self.request.arguments:
-            #find the handle
-            if(key == "Handle"):
-                user = api.get_user(screen_name = self.request.arguments[key][0])
-                user_id = str(user.id)
-                username = user.name
-                profile_link = user.profile_image_url
-                print "user_id: "+user_id+" and name: "+username
-               
-        if(user_id is not False):
-            lock.acquire()
-            cursor = db.cursor()
-            #create user entry
-            sql = "INSERT INTO TwitterSource(Name, handle, twitter_id, profile_image) VALUES ('"+username+"','"+self.request.arguments[key][0]+"', '"+user_id+"', '"+profile_link+"')"
-            try:
-                # Execute the SQL command
-                cursor.execute(sql)
-                # Commit your changes in the database
-                db.commit()
-                
-            except:
-                # Rollback in case there is any error
-                print "error on insertion"
-                db.rollback()
-            cursor.close()
-            lock.release()
-            #create relationships to categories
-            for key in self.request.arguments:
-                print "checking: "+key
-                if("cat" in key):
-                    
-                    cat_id = findCategoryIdWithName(self.request.arguments[key][0])
-                    user_db_id = findTableIdWithTwitterId(user_id)
-                    lock.acquire()
-                    sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(user_db_id)+", "+str(cat_id)+");"
-                    print "inserting category relationships with sql: "+sql
-                    cursor = db.cursor()
-                    try:
-                        # Execute the SQL command
-                        cursor.execute(sql)
-                        # Commit your changes in the database
-                        db.commit()
-                    except:
-                        # Rollback in case there is any error
-                        print "error on insertion"
-                        db.rollback()
-                    cursor.close()
-                    lock.release()
-                    
-                else:
-                    print "dropping key: "+key
-            
-            
-        else :
-            print "no user id found"
-        self.finish()
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
         cat_id = findCategoryIdWithName(cat_label)
@@ -531,43 +470,7 @@ class CategoryChildren(tornado.web.RequestHandler):
         return_dictionary = {"children":children}
         self.finish(json.dumps(return_dictionary))
         
-class Category(tornado.web.RequestHandler):
-    def post(self):
-        print "attempting to acquire lock at post 384"
-        lock.acquire()
-        print "successfully acquired lock at post 384"
-        title = self.get_argument('Title', '')
-        parent_cat = self.get_argument('parent', '')
-        cursor = db.cursor()
-        #first locate the ID if there is one of the parent Category
-        sql = """SELECT ID From Category WHERE Name Like '"""+parent_cat+"""';""";
-        cursor.execute(sql)
-        
-        new_id = "NULL"
-        for row in cursor.fetchall() :
-            new_id = row[0]
-        
-        
-        
-        sql = "INSERT INTO Category(Name, Parent) VALUES ('"+title+"', "+str(new_id)+")"
-        print "inserting with: "+sql
-        
-        try:
-            # Execute the SQL command
-            cursor.execute(sql)
-            # Commit your changes in the database
-            db.commit()
-        except:
-            # Rollback in case there is any error
-            print "error on insertion"
-            db.rollback()
-            
-        cursor.close()
-        lock.release()
-        self.finish()
-        
-
-        
+class Category(tornado.web.RequestHandler):    
     def get(self, ):
         print "attempting to acquire lock at get 420"
         lock.acquire()
@@ -615,7 +518,7 @@ if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
     parse_command_line()
     #db.query('SET GLOBAL wait_timeout=28800')
-    #handle = HandleListener()
+    handle = HandleListener()
     
     print "done loading handles"
     app.listen(options.port)

@@ -96,11 +96,7 @@ class CategoryModel:
                 for cat in category_chain:
                     sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(row[0])+", "+cat+");"
                     self.executeSql(self.db, sql)
-                print "should insert "+one_handle.cdata+" for cats: "+str(category_chain)
-            
-            
-            
-            
+
         except IndexError, e:
             print "got exception: "+str(e)
             print "category: "+category['name']+" has no  handles"
