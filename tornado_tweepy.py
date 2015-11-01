@@ -75,7 +75,7 @@ class HandleListener(tweepy.StreamListener):
                         self.processData(data_structure)
                         
                         
-                        if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
+                        if((datetime.datetime.now() - self.lastClear).total_seconds() > 30):
                                 print "starting to clear entries"
                                 clearOldEntries()
                                 self.lastClear = datetime.datetime.now()
@@ -220,18 +220,28 @@ def insertIntoRetweet(tweet_id, isSurge):
 def clearOldEntries():
         lock.acquire()
         cursor = db.cursor()
-        sql = "DELETE FROM TweetOccurrence WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
-        try:
-                # Execute the SQL command
-                cursor.execute(sql)
-                # Commit your changes in the database
-                db.commit()
-        except Exception,e:
-                # Rollback in case there is any error
-                print "error on insertion of occurrence"
-                print str(e)
-                db.rollback()
+        sql = "SELECT ID From Category"
+        cursor.execute(sql)
+        cats = []
+        for row in cursor.fetchall():
+                cats.append(row[0])
         cursor.close()
+        
+        for cat in cats:
+                cursor = db.cursor()
+                sql = "DELETE From Occurrence_"+str(cat)+" WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
+                print "Deleting with sql"+sql
+                try:
+                        # Execute the SQL command
+                        cursor.execute(sql)
+                        # Commit your changes in the database
+                        db.commit()
+                except Exception,e:
+                        # Rollback in case there is any error
+                        print "error on insertion of occurrence"
+                        print str(e)
+                        db.rollback()
+                cursor.close()
         cursor = db.cursor()
         sql = "DELETE FROM Tweet WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
         try:
@@ -398,37 +408,10 @@ def findCategoryIdWithName(cat_name):
         lock.release()
         return return_id
 
-
-
-def getListOfHandlesForCategoryId(cat_id):
-        lock.acquire()
-        cursor = db.cursor()
-        return_list = []
-        sql = "SELECT twitter_id From TwitterSource WHERE ID in (SELECT source_id From SourceCategoryRelationship WHERE category_id="+str(cat_id)+");"
-        cursor.execute(sql)
-        for row in cursor.fetchall() :
-            return_list.append(str(row[0]))
-        cursor.close()
-        lock.release()
-        return return_list
-
 def getTweetOccurances(seconds, cat_id):
         lock.acquire()
         cursor = db.cursor()
-        ###
-        ## first get tweet occurances filtered for the category we care about
-        ####
-        #base_string = " AND twitter_id IN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+cat_id+")"
-        #inner_join = " LEFT JOIN TweetCategoryRelationship On TweetOccurrence.twitter_id=TweetCategoryRelationship.twitter_id"
-        #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ seconds+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC "+inner_join
-        #sql = "SELECT A.twitter_id, COUNT(A.twitter_id) as tweet_occurrence_count FROM TweetOccurrence A "
-        #sql += "INNER JOIN (SELECT twitter_id FROM TweetCategoryRelationship WHERE category_id LIKE "+str(cat_id)+") B "
-        #sql += "ON A.twitter_id=B.twitter_id "
-        #sql += "WHERE A.timestamp > (NOW() -  INTERVAL "+str(seconds)+" SECOND) GROUP BY A.twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10"
 
-        print "cat_id: "
-        print cat_id
-        
         #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
         sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
         print "loading with sql: "+sql
