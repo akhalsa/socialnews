@@ -509,7 +509,6 @@ app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category", Category),
     (r"/category/(.*)", CategoryChildren),
-    (r"/source", Source),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/(.*)',  PageLoad),
 ])
