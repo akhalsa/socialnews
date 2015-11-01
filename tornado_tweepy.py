@@ -282,22 +282,19 @@ def addOccurance(tweet_id, source_id):
         
         lock.acquire()
         cursor = db.cursor()
-        sql = "INSERT INTO TweetOccurrence(twitter_id, category_id) VALUES "
-        insert_list = []
         for cat in categories:
-            insert_list.append( "('"+str(tweet_id)+"', "+str(cat)+")")
-        sql += ",".join(insert_list)
-        
-        try:
-                # Execute the SQL command
-                cursor.execute(sql)
-                # Commit your changes in the database
-                db.commit()
-        except Exception,e:
-                # Rollback in case there is any error
-                print "error on insertion of occurrence"
-                print str(e)
-                db.rollback()
+                sql = "INSERT INTO Occurrence_"+cat+" (twitter_id) VALUES ('"+str(tweet_id)+"');"
+                try:
+                        # Execute the SQL command
+                        cursor.execute(sql)
+                        # Commit your changes in the database
+                        db.commit()
+                except Exception,e:
+                        # Rollback in case there is any error
+                        print "error on insertion of occurrence"
+                        print str(e)
+                        db.rollback()
+                
         cursor.close()
         #print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
         lock.release()
