@@ -62,7 +62,7 @@ class CategoryModel:
         category_chain = [lastRow]+parent_id_list
         
         #2.create a parent child relationship with the parent if there is one
-        if (len(parent_id_list) > 1):
+        if (len(category_chain) > 1):
                 sql = "INSERT INTO CategoryParentRelationship (parent_category_id, child_category_id) values ("+category_chain[1]+", "+lastRow+");"
                 self.executeSql(self.db, sql)
         
