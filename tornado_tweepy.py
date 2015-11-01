@@ -120,22 +120,22 @@ class HandleListener(tweepy.StreamListener):
                         #self.checkForSurge(decoded['id'], decoded['text'])
                         
                         
-                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
-                                #make sure we are posting at least once an hour
-                                (tweet_dict, tweet_ids) = getTweetOccurances(21600, 1)
-                                print "got tweet_dict: "+str(tweet_dict)
-                                print "and got tweet array: "+str(tweet_ids)
-                                
-                                for tweet_id in tweet_ids:
-                                        if(not checkIfTweeted(tweet_id)):
-                                                print "posting: "+str(tweet_id)
-                                                postTweet(tweet_dict[tweet_id]["text"], tweet_id)
-                                                insertIntoRetweet(tweet_id, False)
-                                                #api_bot.retweet(tweet_id)
-                                                break
-                                        else:
-                                                print "would retweet, but we already did"
-                                self.lastPost = datetime.datetime.now()
+                        # if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
+                        #         #make sure we are posting at least once an hour
+                        #         (tweet_dict, tweet_ids) = getTweetOccurances(21600, 1)
+                        #         print "got tweet_dict: "+str(tweet_dict)
+                        #         print "and got tweet array: "+str(tweet_ids)
+                        #         
+                        #         for tweet_id in tweet_ids:
+                        #                 if(not checkIfTweeted(tweet_id)):
+                        #                         print "posting: "+str(tweet_id)
+                        #                         postTweet(tweet_dict[tweet_id]["text"], tweet_id)
+                        #                         insertIntoRetweet(tweet_id, False)
+                        #                         #api_bot.retweet(tweet_id)
+                        #                         break
+                        #                 else:
+                        #                         print "would retweet, but we already did"
+                        #         self.lastPost = datetime.datetime.now()
                         
                         #print "finished with: "+decoded['text']
                         
@@ -429,8 +429,8 @@ def getTweetOccurances(seconds, cat_id):
         print "cat_id: "
         print cat_id
         
-        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
-        
+        #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
+        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
         print "loading with sql: "+sql
         cursor.execute(sql)
         results = {}
