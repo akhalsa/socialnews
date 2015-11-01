@@ -65,11 +65,14 @@ class CategoryModel:
         sql = "INSERT INTO Category (name) values ('"+category['name']+"');"
         lastRow = str(self.executeSql(self.db, sql))
         category_chain = [lastRow]+parent_id_list
-        
         #2.create a parent child relationship with the parent if there is one
         if (len(category_chain) > 1):
                 sql = "INSERT INTO CategoryParentRelationship (parent_category_id, child_category_id) values ("+category_chain[1]+", "+lastRow+");"
                 self.executeSql(self.db, sql)
+                
+        #create occurrence table
+        sql = "CREATE TABLE Occurrence_"+lastRow+"  (ID INT AUTO_INCREMENT PRIMARY KEY,twitter_id varchar(255), timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);"
+        self.executeSql(self.db, sql)
         
         #insert all twitter handles into the db
         try:
@@ -96,6 +99,8 @@ class CategoryModel:
                 for cat in category_chain:
                     sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(row[0])+", "+cat+");"
                     self.executeSql(self.db, sql)
+                    
+                
 
         except IndexError, e:
             print "got exception: "+str(e)
