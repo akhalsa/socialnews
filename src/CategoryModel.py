@@ -43,6 +43,11 @@ class CategoryModel:
         # sql = "ALTER TABLE TwitterSource AUTO_INCREMENT = 1"
         # self.executeSql(db, sql)
         
+        sql = "DELETE FROM SourceCategoryRelationship;"
+        self.executeSql(db, sql)
+        sql = "ALTER TABLE SourceCategoryRelationship AUTO_INCREMENT = 1"
+        self.executeSql(db, sql)
+        
         print os.getcwd()
         obj = untangle.parse('handles.xml')
         #table naming scheme
@@ -88,7 +93,9 @@ class CategoryModel:
                     cursor.close()
                 
                 #insert source category mappings
-                #for cat in category_chain:
+                for cat in category_chain:
+                    sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+row[0]+", "+cat+");"
+                    self.executeSql(self.db, sql)
                 print "should insert "+one_handle.cdata+" for cats: "+str(category_chain)
             
             
