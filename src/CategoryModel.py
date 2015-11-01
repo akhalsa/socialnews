@@ -64,7 +64,7 @@ class CategoryModel:
         
         #insert all twitter handles into the db
         try:
-            print "trying to loop in cat: "+category
+            print "trying to loop in cat: "+str(category)
             for one_handle in category.handle:
                 print "using handle: "+one_handle
                 sql = "SELECT * From TwitterSource WHERE twitter_handle like '"+one_handle+"';"
