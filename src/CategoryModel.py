@@ -48,6 +48,11 @@ class CategoryModel:
         sql = "ALTER TABLE SourceCategoryRelationship AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
         
+        sql = "DELETE FROM Tweet;"
+        self.executeSql(db, sql)
+        sql = "ALTER TABLE Tweet AUTO_INCREMENT = 1"
+        self.executeSql(db, sql)
+        
         sql = "SELECT CONCAT( 'DROP TABLE ', GROUP_CONCAT(table_name) , ';' )  AS statement FROM information_schema.tables  WHERE table_name LIKE 'Occurrence_%';"
         cur = db.cursor()
         cur.execute(sql)
