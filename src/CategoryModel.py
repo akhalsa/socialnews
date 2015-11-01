@@ -65,11 +65,12 @@ class CategoryModel:
         #insert all twitter handles into the db
         try:
             for one_handle in category.handle:
-                sql = "SELECT * From TwitterSource WHERE twitter_handle like '"+str(one_handle)+"';"
+                sql = "SELECT * From TwitterSource WHERE twitter_handle like '"+one_handle.cdata+"';"
+                s
                 cursor = self.db.cursor()
                 cursor.execute(sql)
                 row = cursor.fetchone()
-                print "for "+str(one_handle)+" found: "+str(row)
+                print "for "+one_handle.cdata+" found: "+str(row)
                 
                 # user = self.api.get_user(screen_name = one_handle.cdata)
                 # user_id = str(user.id)
