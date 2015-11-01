@@ -94,7 +94,7 @@ class CategoryModel:
                 
                 #insert source category mappings
                 for cat in category_chain:
-                    sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+row[0]+", "+cat+");"
+                    sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(row[0])+", "+cat+");"
                     self.executeSql(self.db, sql)
                 print "should insert "+one_handle.cdata+" for cats: "+str(category_chain)
             
