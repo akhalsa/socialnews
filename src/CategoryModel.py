@@ -51,9 +51,9 @@ class CategoryModel:
         sql = "SELECT CONCAT( 'DROP TABLE ', GROUP_CONCAT(table_name) , ';' )  AS statement FROM information_schema.tables  WHERE table_name LIKE 'Occurrence_%';"
         cur = db.cursor()
         cur.execute(sql)
-        for row in cur.fetchall():
-            print "should execute: "+str(row)
+        sql_to_run = cur.fetchone()
         cur.close()
+        print "sql: "+str(sql_to_run)
         
         print os.getcwd()
         obj = untangle.parse('handles.xml')
