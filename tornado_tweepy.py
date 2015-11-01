@@ -283,7 +283,7 @@ def addOccurance(tweet_id, source_id):
         lock.acquire()
         cursor = db.cursor()
         for cat in categories:
-                sql = "INSERT INTO Occurrence_"+cat+" (twitter_id) VALUES ('"+str(tweet_id)+"');"
+                sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id) VALUES ('"+str(tweet_id)+"');"
                 try:
                         # Execute the SQL command
                         cursor.execute(sql)
