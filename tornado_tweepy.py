@@ -75,7 +75,7 @@ class HandleListener(tweepy.StreamListener):
                         self.processData(data_structure)
                         
                         
-                        if((datetime.datetime.now() - self.lastClear).total_seconds() > 30):
+                        if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
                                 print "starting to clear entries"
                                 clearOldEntries()
                                 self.lastClear = datetime.datetime.now()
@@ -117,7 +117,7 @@ class HandleListener(tweepy.StreamListener):
                         print "adding occurance for: "+decoded['text']
                         addOccurance(decoded['id'], source_id)
                         
-                        #self.checkForSurge(decoded['id'], decoded['text'])
+                        self.checkForSurge(decoded['id'], decoded['text'], 1)
                         
                         
                         # if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
@@ -146,30 +146,30 @@ class HandleListener(tweepy.StreamListener):
                         print "we had nothing here?"
                         
                         
-        # def checkForSurge(self, twitter_id, tweet_text):
-        #         lock.acquire()
-        #         cursor = db.cursor()
-        #         sql = "SELECT * From Tweet where twitter_id like '"+str(twitter_id)+"';"
-        #         cursor.execute(sql)
-        #         for row in cursor.fetchall():
-        #                 delta_time = datetime.datetime.now() - row[4]
-        #         cursor.close()
-        #         
-        #         lock.release()
-        #         if(delta_time.total_seconds() < 30):
-        #                 #this is a brand new tweet, lets check the count
-        #                 lock.acquire()
-        #                 cursor = db.cursor()
-        #                 sql = "SELECT * from TweetOccurrence WHERE twitter_id LIKE '"+str(twitter_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
-        #                 cursor.execute(sql)
-        #                 occurrence_count = cursor.rowcount
-        #                 cursor.close()
-        #                 lock.release()
-        #                 if(occurrence_count == 150):
-        #                         #api_bot.retweet(twitter_id)
-        #                         postTweet(tweet_text, twitter_id)
-        #                         self.lastPost = datetime.datetime.now()
-        #                         insertIntoRetweet(twitter_id, True)
+        def checkForSurge(self, twitter_id, tweet_text, cat_id):
+                lock.acquire()
+                cursor = db.cursor()
+                sql = "SELECT * From Tweet where twitter_id like '"+str(twitter_id)+"';"
+                cursor.execute(sql)
+                for row in cursor.fetchall():
+                        delta_time = datetime.datetime.now() - row[4]
+                cursor.close()
+                
+                lock.release()
+                if(delta_time.total_seconds() < 30):
+                        #this is a brand new tweet, lets check the count
+                        lock.acquire()
+                        cursor = db.cursor()
+                        sql = "SELECT * from Occurrence_"+str(cat_id)+" WHERE twitter_id LIKE '"+str(twitter_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
+                        cursor.execute(sql)
+                        occurrence_count = cursor.rowcount
+                        cursor.close()
+                        lock.release()
+                        if(occurrence_count == 150):
+                                #api_bot.retweet(twitter_id)
+                                postTweet(tweet_text, twitter_id)
+                                self.lastPost = datetime.datetime.now()
+                                insertIntoRetweet(twitter_id, True)
                                 
 def postTweet(text, tweet_id):
         urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
