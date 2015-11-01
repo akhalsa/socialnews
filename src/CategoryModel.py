@@ -70,16 +70,19 @@ class CategoryModel:
                 cursor.execute(sql)
                 row = cursor.fetchone()
                 if(row == None):
+                    cursor.close()
                     print "we need to do some processing for: "+one_handle.cdata
+                    user = self.api.get_user(screen_name = one_handle.cdata)
+                    user_id = str(user.id)
+                    username = user.name
+                    profile_link = user.profile_image_url
+                    if(user_id is not False):
+                        sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+username+"','"+one_handle.cdata+"', '"+user_id+"', '"+profile_link+"');"
+                        self.executeSql(self.db, sql)
+                else:
+                    cursor.close()
                 
-                
-                # user = self.api.get_user(screen_name = one_handle.cdata)
-                # user_id = str(user.id)
-                # username = user.name
-                # profile_link = user.profile_image_url
-                # if(user_id is not False):
-                #     sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+username+"','"+one_handle.cdata+"', '"+user_id+"', '"+profile_link+"');"
-                #     self.executeSql(self.db, sql)
+            
             
         except IndexError, e:
             print "got exception: "+str(e)
