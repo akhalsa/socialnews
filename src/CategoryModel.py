@@ -48,6 +48,9 @@ class CategoryModel:
         sql = "ALTER TABLE SourceCategoryRelationship AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
         
+        sql = "SELECT CONCAT( 'DROP TABLE ', GROUP_CONCAT(table_name) , ';' )  AS statement FROM information_schema.tables  WHERE table_name LIKE 'Occurrence_%';"
+        self.executeSql(db, sql)
+        
         print os.getcwd()
         obj = untangle.parse('handles.xml')
         #table naming scheme
@@ -72,7 +75,7 @@ class CategoryModel:
                 
         #create occurrence table
         sql = "CREATE TABLE Occurrence_"+lastRow+"  (ID INT AUTO_INCREMENT PRIMARY KEY,twitter_id varchar(255), timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);"
-        self.executeSql(self.db, sql)
+        #self.executeSql(self.db, sql)
         
         #insert all twitter handles into the db
         try:
