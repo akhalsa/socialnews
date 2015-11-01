@@ -53,6 +53,8 @@ class CategoryModel:
         cur.execute(sql)
         for row in cur.fetchall():
             print "should execute: "+str(row)
+        cur.close()
+        
         print os.getcwd()
         obj = untangle.parse('handles.xml')
         #table naming scheme
