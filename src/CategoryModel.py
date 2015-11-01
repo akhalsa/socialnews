@@ -66,7 +66,6 @@ class CategoryModel:
         try:
             for one_handle in category.handle:
                 sql = "SELECT * From TwitterSource WHERE twitter_handle like '"+one_handle.cdata+"';"
-                s
                 cursor = self.db.cursor()
                 cursor.execute(sql)
                 row = cursor.fetchone()
