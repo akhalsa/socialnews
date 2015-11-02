@@ -138,8 +138,61 @@
                 <handle>@JasonWolf</handle>
                 <handle>@Titans</handle>
             </category>
-            
-            
+        </category>
+    </category>
+    <category name="Local News">
+        <category name="Texas">
+            <category name="Austin">
+                <handle>@statesman</handle>
+                <handle>@KVUE</handle>
+                <handle>@MarkM_KVUE</handle>
+                <handle>@TravisCountyES</handle>
+                <handle>@MichaelPerchick</handle>
+                <handle>@TWCNewsAustin</handle>
+                <handle>@AustinChronicle</handle>
+                <handle>@austin360</handle>
+                <handle>@MyABJ</handle>
+                <handle>@fox7austin</handle>
+                <handle>@austintexasgov</handle>
+                <handle>@Austin_Police</handle>
+                <handle>@Do512</handle>
+                <handle>@KUT</handle>
+                <handle>@sxsw</handle>
+                <handle>@aclfestival</handle>
+                <handle>@365ThingsAustin</handle>
+                <handle>@Austin</handle>
+                <handle>@AustinChamber</handle>
+                <handle>@keyetv</handle>
+                <handle>@CultureMapATX</handle>
+                <handle>@austinfiredept</handle>
+                <handle>@AUStinAirport</handle>
+                <handle>@AustinHSEM</handle>
+                <handle>@funfunfunfest</handle>
+                <handle>@thedailytexan</handle>
+                <handle>@klru</handle>
+                <handle>@EaterAustin</handle>
+                <handle>@austinpetsalive</handle>
+                <handle>@golocalaustin</handle>
+                <handle>@austinenergy</handle>
+                <handle>@SocialNAustin</handle>
+            </category>
+            <category name="San Antonio">
+                <handle>@News4SA</handle>
+                <handle>@COSAGOV</handle>
+                <handle>@NWSSanAntonio</handle>
+                <handle>@VisitSanAntonio</handle>
+                <handle>@sachamber</handle>
+                <handle>@SanAntonioMag</handle>
+                <handle>@AllofSA</handle>
+                <handle>@KENS5</handle>
+                <handle>@SpeakerStraus</handle>
+                <handle>@SATairport</handle>
+                <handle>@SocInSA</handle>
+                <handle>@NISD</handle>
+                <handle>@TxDOTSanAntonio</handle>
+                <handle>@SABizJournal</handle>
+                <handle>@SABJtech</handle>
+            </category>
         </category>
     </category>
 </root>
