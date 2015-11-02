@@ -192,6 +192,45 @@
                 <handle>@SABizJournal</handle>
                 <handle>@SABJtech</handle>
             </category>
+            <category name="Dallas">
+                <handle>@1500Marilla</handle>
+                <handle>@dallasnews</handle>
+                <handle>@DallasPD</handle>
+                <handle>@Dallas_Observer</handle>
+                <handle>@DallasSocials</handle>
+                <handle>@NDCC</handle>
+                <handle>@dfrincidents</handle>
+                <handle>@DallasOEM</handle>
+                <handle>@dallasnews</handle>
+                <handle>@wfaachannel8</handle>
+                <handle>@NBCDFW</handle>
+                <handle>@dallasnewsnow</handle>
+                <handle>@FOX4</handle>
+                <handle>@dallasschools</handle>
+                <handle>@disdpolice</handle>
+                <handle>@LakeDallasISD</handle>
+                <handle>@DallasBizNews</handle>
+            </category>
+            <category name="Houston">
+                <handle>@houstontxdotgov</handle>
+                <handle>@HoustonChron</handle>
+                <handle>@HoustonOEM</handle>
+                <handle>@AlertHouston</handle>
+                <handle>@NWSHouston</handle>
+                <handle>@abc13houston</handle>
+                <handle>@HoustonPress</handle>
+                <handle>@KPRC2</handle>
+                <handle>@KHOU</handle>
+                <handle>@Fox26Houston</handle>
+                <handle>@culturemap</handle>
+                <handle>@DowntownHouston</handle>
+                <handle>@HPStreet</handle>
+                <handle>@houstonpolice</handle>
+                <handle>@FBIHouston</handle>
+                <handle>@HoustonISD</handle>
+                <handle>@cohoustonfire</handle>
+                <handle>@HOUBizJournal</handle>
+            </category>
         </category>
     </category>
 </root>
