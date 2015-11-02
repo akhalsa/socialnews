@@ -98,6 +98,7 @@ class CategoryModel:
                 source_id = 0
                 if(row == None):
                     cursor.close()
+                    print "fetching data for: "+one_handle.cdata
                     user = self.api.get_user(screen_name = one_handle.cdata)
                     user_id = re.escape(str(user.id))
                     username = re.escape(user.name)
@@ -110,11 +111,11 @@ class CategoryModel:
                     source_id = row[0]
                     cursor.close()
                     
-                
-                #insert source category mappings
-                for cat in category_chain:
-                    sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(source_id)+", "+cat+");"
-                    self.executeSql(self.db, sql)
+                if(source_id != 0):
+                    #insert source category mappings
+                    for cat in category_chain:
+                        sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(source_id)+", "+cat+");"
+                        self.executeSql(self.db, sql)
                     
                 
 
