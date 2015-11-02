@@ -95,6 +95,7 @@ class CategoryModel:
                 cursor = self.db.cursor()
                 cursor.execute(sql)
                 row = cursor.fetchone()
+                source_id = 0
                 if(row == None):
                     cursor.close()
                     user = self.api.get_user(screen_name = one_handle.cdata)
@@ -104,13 +105,15 @@ class CategoryModel:
                     if(user_id is not False):
                         sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+username+"','"+one_handle.cdata+"', '"+user_id+"', '"+profile_link+"');"
                         print "will insert with: "+sql
-                        self.executeSql(self.db, sql)
+                        source_id = self.executeSql(self.db, sql)
                 else:
+                    source_id = row[0]
                     cursor.close()
+                    
                 
                 #insert source category mappings
                 for cat in category_chain:
-                    sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(row[0])+", "+cat+");"
+                    sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(source_id)+", "+cat+");"
                     self.executeSql(self.db, sql)
                     
                 
