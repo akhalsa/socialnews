@@ -141,7 +141,39 @@
         </category>
     </category>
     <category name="Local News">
+        <category name="North East">
+            <category name="New York">
+                <handle>@nycgov</handle>
+                <handle>@NBCNewYork</handle>
+                <handle>@CBSNewYork</handle>
+                <handle>@HuffPostNY</handle>
+                <handle>@WSJNY</handle>
+                <handle>@SNYtv</handle>
+                <handle>@USCG_NYC</handle>
+                <handle>@nypmetro</handle>
+                <handle>@NYCityAlerts</handle>
+                <handle>@NYPDnews</handle>
+                <handle>@FDNY</handle>
+                <handle>@theBravest</handle>
+                <handle>@BilldeBlasio</handle>
+                <handle>@deBlasioNYC</handle>
+                <handle>@ABC7NY</handle>
+                <handle>@NY1</handle>
+                <handle>@NYTMetro</handle>
+                <handle>@NYCSchools</handle>
+                <handle>@TWC_NYNJ</handle>
+                <handle>@politicony</handle>
+                <handle>@NewYorkcom</handle>
+                <handle>@NY_NJairports</handle>
+                <handle>@PANYNJ</handle>
+                <handle>@Newsday</handle>
+                <handle>@News12LI</handle>
+                <handle>@fox5ny</handle>
+            </category>
+            
+        </category>
         <category name="Texas">
+            <handle>@texasgov</handle>
             <category name="Austin">
                 <handle>@statesman</handle>
                 <handle>@KVUE</handle>
@@ -210,6 +242,7 @@
                 <handle>@disdpolice</handle>
                 <handle>@LakeDallasISD</handle>
                 <handle>@DallasBizNews</handle>
+                <handle>@SportsDayDFW</handle>
             </category>
             <category name="Houston">
                 <handle>@houstontxdotgov</handle>
