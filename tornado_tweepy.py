@@ -156,16 +156,16 @@ class HandleListener(tweepy.StreamListener):
                 cursor.close()
                 
                 lock.release()
-                if(delta_time.total_seconds() < 30):
+                if(delta_time.total_seconds() < 300):
                         #this is a brand new tweet, lets check the count
                         lock.acquire()
                         cursor = db.cursor()
-                        sql = "SELECT * from Occurrence_"+str(cat_id)+" WHERE twitter_id LIKE '"+str(twitter_id)+"' AND timestamp > (NOW() - INTERVAL 30 SECOND);"
+                        sql = "SELECT * from Occurrence_"+str(cat_id)+" WHERE twitter_id LIKE '"+str(twitter_id)+"' AND timestamp > (NOW() - INTERVAL 300 SECOND);"
                         cursor.execute(sql)
                         occurrence_count = cursor.rowcount
                         cursor.close()
                         lock.release()
-                        if(occurrence_count == 150):
+                        if(occurrence_count ==800):
                                 #api_bot.retweet(twitter_id)
                                 postTweet(tweet_text, twitter_id)
                                 self.lastPost = datetime.datetime.now()
