@@ -401,21 +401,18 @@ def findCategoryChildrenForId(cat_id):
         lock.release()
         return return_list
 
-def findCategoryIdWithName(cat_name):
-        lock.acquire()
-        cursor = db.cursor()
+def findCategoryIdWithName(cat_name, local_db):
+        cursor = local_db.cursor()
         sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
         cursor.execute(sql)
         return_id = 0
         for row in cursor.fetchall() :
             return_id = row[0]
         cursor.close()
-        lock.release()
         return return_id
 
-def getTweetOccurances(seconds, cat_id):
-        lock.acquire()
-        cursor = db.cursor()
+def getTweetOccurances(seconds, cat_id, local_db):
+        cursor = local_db.cursor()
 
         #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
         sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
@@ -455,14 +452,20 @@ def getTweetOccurances(seconds, cat_id):
                 results[row[0]]["name"] = row[2]
                 results[row[0]]["pic"] = row[3]
         cursor.close()
-        lock.release()
         print results
         return (results, twitter_ids)
 
 
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
-        cat_id = findCategoryIdWithName(cat_label)
+        local_db = MySQLdb.connect(
+                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                user="akhalsa",
+                passwd="sophiesChoice1",
+                db="newsdb",
+                charset='utf8',
+                port=3306)
+        cat_id = findCategoryIdWithName(cat_label, local_db)
         children = findCategoryChildrenForId(str(cat_id))
         return_dictionary = {"children":children}
         self.finish(json.dumps(return_dictionary))
@@ -487,13 +490,20 @@ class Category(tornado.web.RequestHandler):
     
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
+                local_db = MySQLdb.connect(
+                        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
                 print "cat: "+cat
                 print "seconds: "+time_frame_seconds
-                cat_id = findCategoryIdWithName(cat)
+                cat_id = findCategoryIdWithName(cat, local_db)
                 if(cat_id == 0):
                         self.finish("Category Error, Try Again")
                 print "found category id: "+str(cat_id)        
-                lookup = getTweetOccurances(time_frame_seconds, str(cat_id))
+                lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db)
                 self.finish(json.dumps(lookup[0]))
                 
 class PageLoad(tornado.web.RequestHandler):
