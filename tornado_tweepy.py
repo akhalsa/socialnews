@@ -172,15 +172,20 @@ class HandleListener(tweepy.StreamListener):
                                 insertIntoRetweet(twitter_id, True)
                                 
 def postTweet(text, tweet_id):
-        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
-        if(len(urls) == 0):
-                api_bot.retweet(tweet_id)
-        else:
-                fp = urllib2.urlopen(urls[0])
-                if(str(fp.geturl()).startswith("https://twitter.com") or (fp.geturl()).startswith("http://twitter.com")):
+        try:
+                urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
+                if(len(urls) == 0):
                         api_bot.retweet(tweet_id)
                 else:
-                        api_bot.update_status(status=text)  
+                        fp = urllib2.urlopen(urls[0])
+                        if(str(fp.geturl()).startswith("https://twitter.com") or (fp.geturl()).startswith("http://twitter.com")):
+                                api_bot.retweet(tweet_id)
+                        else:
+                                api_bot.update_status(status=text)
+        except Exception, e:
+                print "retweet exception: "
+                print str(e)
+                
         
         
         
