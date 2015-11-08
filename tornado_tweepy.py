@@ -115,9 +115,6 @@ class CategoryChildren(tornado.web.RequestHandler):
         
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
-        print "attempting to acquire lock at get 420"
-        lock.acquire()
-        print "successfully acquired lock at get 420"
         cur = db.cursor()
         cur.execute("SELECT * FROM Category")
         
@@ -128,7 +125,6 @@ class Category(tornado.web.RequestHandler):
             output_map["Name"] = row[1]
             output_array.append(output_map)
         cur.close()
-        lock.release()
         self.finish(json.dumps(output_array))
     
 class Reader(tornado.web.RequestHandler):
