@@ -35,75 +35,7 @@ api = tweepy.API(auth)
 auth_bot = tweepy.OAuthHandler("1mxHCmJv9pQqFsFO9emtgjrSB", "CcrfJ3WTLqaAigBj0yOhnpAa8bzB6FRG9iIOCVgNktnTgkuHNb")
 auth_bot.set_access_token("3618709285-bccgXE7SINoljfJbslsWvP8gP5j9AyQV2FELgIx", "GledD6R46Ghy4dIgtEQBhvW4KfI0n2dN6IUGbWFU2qac2")
 api_bot = tweepy.API(auth_bot)
-                
-
-
-
-def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
-        lock.acquire()
-        cursor = db.cursor()
-        sql = "SELECT ID FROM Tweet WHERE twitter_id like "+str(twitter_tweet_id)+";"
-        cursor.execute(sql)
-        return_id = 0
-        for row in cursor.fetchall():
-                return_id = row[0]
-        cursor.close()
-        if(return_id is not 0):
-                cursor = db.cursor()
-                #we have a valid tweet
-                sql = "UPDATE Tweet SET timestamp=NOW() WHERE ID like "+str(twitter_tweet_id)+";"
-                try:
-                        # Execute the SQL command
-                        cursor.execute(sql)
-                        # Commit your changes in the database
-                        db.commit()
-                except Exception,e:
-                        # Rollback in case there is any error
-                        print "error on insertion of occurrence"
-                        print str(e)
-                        db.rollback()
-        cursor.close()
-        lock.release()
-        return return_id 
-def getAllTwitterIds():
-        lock.acquire()
-        cursor = db.cursor()
-        sql = "SELECT twitter_id FROM TwitterSource;"
-        cursor.execute(sql)
-        return_list = []
-        for row in cursor.fetchall():
-                return_list.append(row[0])
-        cursor.close()
-        lock.release()
-        return return_list
-
-def getCategoriesWithSourceId(source_id):
-        lock.acquire()
-        cursor = db.cursor()
-        sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
-        cursor.execute(sql)
-        return_list = []
-        for row in cursor.fetchall():
-                return_list.append(row[0])
-        cursor.close()
-        lock.release()
-        return return_list
         
-
-def findTableIdWithTwitterId(twitter_id):
-        lock.acquire()
-        #print "running findTableIdWithTwitterId: "+twitter_id
-        cursor = db.cursor()
-        sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
-        cursor.execute(sql)
-        return_id = 0
-        for row in cursor.fetchall() :
-            return_id = row[0]
-        cursor.close()
-        #print "lock released at 227"
-        lock.release()
-        return return_id
-
 def findCategoryChildrenForId(cat_id):
         lock.acquire()
         cursor = db.cursor()
