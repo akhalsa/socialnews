@@ -294,6 +294,18 @@ def addOccurance(tweet_id, source_id):
             
     cursor.close()
     #print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
+
+def findTableIdWithTwitterId(twitter_id):
+        #print "running findTableIdWithTwitterId: "+twitter_id
+        cursor = db.cursor()
+        sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
+        cursor.execute(sql)
+        return_id = 0
+        for row in cursor.fetchall() :
+            return_id = row[0]
+        cursor.close()
+        #print "lock released at 227"
+        return return_id
     
 if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
