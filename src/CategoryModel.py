@@ -82,9 +82,10 @@ class CategoryModel:
         for handle_id in ids:
             local_id = findTableIdWithTwitterId(handle_id, self.db)
             cats = getCategoriesWithSourceId(local_id, self.db)
-            print "for handle_id: "+str(handle_id)+" has categories: "+str(cats)
+            self.categories[handle_id] = cats
             
-
+        print "now have cats: "+str(cats)
+        
     def insertCategory(self, category, parent_id_list):
         #1 create new category entry for this category
         sql = "INSERT INTO Category (name) values ('"+category['name']+"');"
