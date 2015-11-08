@@ -3,8 +3,11 @@ import MySQLdb
 import os
 import tweepy
 import re
+from src.DBWrapper import *
 
 class CategoryModel:
+    
+    self.categories = {}
     
     def executeSql(self, db, sql):
         cursor = db.cursor()
@@ -71,6 +74,15 @@ class CategoryModel:
         #clear db of any handles which were not in the document
         ########         SHOULD WIPE OUT ANY HANDLES WHICH ARE NO LONGER IN XML
         ##############################
+        
+        ##############################
+        ##### build category mapping
+        ##############################
+        ids = getAllTwitterIds(self.db)
+        for handle_id in ids:
+            local_id = findTableIdWithTwitterId(handle_id, self.db)
+            cats = getCategoriesWithSourceId(local_id, self.db)
+            print "for handle_id: "+str(handle_id)+" has categories: "+str(cats)
             
 
     def insertCategory(self, category, parent_id_list):
