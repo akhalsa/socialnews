@@ -257,7 +257,17 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
     print "insert tweet took: "+str((datetime.datetime.now() - insert_tweet_start).total_seconds())+" seconds" 
     
         
-        
+def getAllTwitterIds():
+        cursor = db.cursor()
+        sql = "SELECT twitter_id FROM TwitterSource;"
+        cursor.execute(sql)
+        return_list = []
+        for row in cursor.fetchall():
+                return_list.append(row[0])
+        cursor.close()
+        return return_list
+    
+    
 def addOccurance(tweet_id, source_id):
     addOccurance_start = datetime.datetime.now()
     local_id = getLocalTweetIdForTwitterTweetID(tweet_id)
