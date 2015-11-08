@@ -331,6 +331,17 @@ def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
                         db.rollback()
         cursor.close()
         return return_id
+
+def getCategoriesWithSourceId(source_id):
+        cursor = db.cursor()
+        sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
+        cursor.execute(sql)
+        return_list = []
+        for row in cursor.fetchall():
+                return_list.append(row[0])
+        cursor.close()
+        return return_list
+    
     
 if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
