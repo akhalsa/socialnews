@@ -3,8 +3,6 @@ import thread
 import src.CategoryModel
 import datetime
 import MySQLdb
-import sys  #for exit
-import json
 
 from threading import Thread
 from Queue import Queue
@@ -40,8 +38,11 @@ class HandleListener(tweepy.StreamListener):
                 
         def setupSocket(self, ):
                 print "starting to set up socket listen on new thread"
-                self.stream = Stream(auth, self)
-                self.stream.filter(follow=getAllTwitterIds())
+                auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
+                auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
+                stream = tweepy.Stream(auth, self)
+                stream.filter(follow=getAllTwitterIds())
+
                 
         def on_data(self, data):
                 self.db_queue.put(data)
@@ -298,4 +299,6 @@ def addOccurance(tweet_id, source_id):
 if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
     handle = HandleListener()
+    while True:
+        pass
 
