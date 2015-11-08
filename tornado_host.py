@@ -12,8 +12,7 @@ import urllib2
 import threading
 import datetime
 import requests
-import re
-import urllib2
+
 
 from tornado.options import define, options, parse_command_line
 from threading import Thread

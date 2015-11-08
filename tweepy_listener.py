@@ -5,6 +5,7 @@ import src.CategoryModel
 import datetime
 import MySQLdb
 import json
+import re
 
 from threading import Thread
 from Queue import Queue
