@@ -19,83 +19,9 @@ from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
 import src.CategoryModel
+import src.DBWrapper
 
 define("port", default=8888, help="run on the given port", type=int)
-
-        
-def findCategoryChildrenForId(cat_id, local_db):
-        cursor = local_db.cursor()
-        sql = "SELECT child_category_id From CategoryParentRelationship WHERE parent_category_id LIKE "+cat_id
-        cursor.execute(sql)
-        child_id_list = []
-        for row in cursor.fetchall() :
-                child_id_list.append(str(row[0]))
-        cursor.close()
-        
-        cursor = local_db.cursor()
-        return_list = []
-        for id in child_id_list:
-                sql = "SELECT Name From Category WHERE ID like "+id
-                cursor.execute(sql)
-                row = cursor.fetchone()
-                return_list.append(str(row[0]))
-        cursor.close()
-        return return_list
-
-def findCategoryIdWithName(cat_name, local_db):
-        cursor = local_db.cursor()
-        sql = "SELECT ID FROM Category WHERE Name like '"+cat_name+"';"
-        cursor.execute(sql)
-        return_id = 0
-        for row in cursor.fetchall() :
-            return_id = row[0]
-        cursor.close()
-        return return_id
-
-def getTweetOccurances(seconds, cat_id, local_db):
-        cursor = local_db.cursor()
-
-        #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
-        sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
-        print "loading with sql: "+sql
-        cursor.execute(sql)
-        results = {}
-        twitter_ids = []
-        for row in cursor.fetchall():
-                twitter_ids.append(row[0])
-                results[row[0]] = {"tweet_count":row[1] }
-
-        cursor.close()
-        #add text
-        if(len(twitter_ids)==0):
-                return (results, twitter_ids)
-        
-        cursor = local_db.cursor()
-        #sql = "SELECT twitter_id, text, source_id From Tweet A "
-        #sql += "INNER JOIN (SELECT Name, profile_image, ID FROM TwitterSource) B "
-        #sql += "ON A.source = A.source_id "
-        #sql += "WHERE A.twitter_id in ("
-        sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image From Tweet Inner Join TwitterSource ON TwitterSource.ID = Tweet.source_id WHERE Tweet.twitter_id in ("
-        first_fin = False
-        for t_id in twitter_ids:
-                if(first_fin == False):
-                        first_fin = True
-                else:
-                        sql +=  ","
-                        
-                sql += t_id
-                
-        sql += ");"
-
-        cursor.execute(sql)
-        for row in cursor.fetchall():
-                results[row[0]]["text"] = row[1]
-                results[row[0]]["name"] = row[2]
-                results[row[0]]["pic"] = row[3]
-        cursor.close()
-        print results
-        return (results, twitter_ids)
-
 
 class CategoryChildren(tornado.web.RequestHandler):
     def get(self, cat_label):
