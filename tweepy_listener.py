@@ -40,8 +40,8 @@ class HandleListener(tweepy.StreamListener):
                 
         def setupSocket(self, ):
                 print "starting to set up socket listen on new thread"
-                stream = Stream(auth, self)
-                stream.filter(follow=getAllTwitterIds())
+                self.stream = Stream(auth, self)
+                self.stream.filter(follow=getAllTwitterIds())
                 
         def on_data(self, data):
                 self.db_queue.put(data)
