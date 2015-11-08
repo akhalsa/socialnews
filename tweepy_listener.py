@@ -2,6 +2,7 @@ import tweepy
 import thread
 import src.CategoryModel
 import datetime
+import MySQLdb
 
 from threading import Thread
 from Queue import Queue
@@ -170,19 +171,16 @@ def postTweet(text, tweet_id):
         
 def checkIfTweeted(tweet_id):
     print "checking if: "+str(tweet_id)+" has been sent out"
-    lock.acquire()
     cursor = db.cursor()
     sql = "SELECT * From Retweets WHERE twitter_id like '"+str(tweet_id)+"';"
     cursor.execute(sql)
     retweet_count = cursor.rowcount
     cursor.close()
-    lock.release()
     if(cursor.rowcount > 0):
             return True
     else:
             return False
 def insertIntoRetweet(tweet_id, isSurge):
-    lock.acquire()
     cursor = db.cursor()
     isSurgeString = "TRUE" if isSurge else "FALSE"
     
@@ -199,10 +197,8 @@ def insertIntoRetweet(tweet_id, isSurge):
             print str(e)
             db.rollback()
     cursor.close()
-    lock.release()
 
 def clearOldEntries():
-    lock.acquire()
     cursor = db.cursor()
     sql = "SELECT ID From Category"
     cursor.execute(sql)
@@ -239,11 +235,10 @@ def clearOldEntries():
             print str(e)
             db.rollback()
     cursor.close()
-    lock.release()
+    
 def insertTweet(source_id, text_string, twitter_tweet_id):
     print "inserting tweet: "+text_string
     insert_tweet_start = datetime.datetime.now()
-    lock.acquire()
     cursor = db.cursor()
     try:
             text_string = text_string.encode('utf-8')
@@ -258,7 +253,6 @@ def insertTweet(source_id, text_string, twitter_tweet_id):
             print str(e)
             db.rollback()
     cursor.close()
-    lock.release()
     
     print "insert tweet took: "+str((datetime.datetime.now() - insert_tweet_start).total_seconds())+" seconds" 
     
@@ -274,7 +268,6 @@ def addOccurance(tweet_id, source_id):
     categories = getCategoriesWithSourceId(source_id)
     
     
-    lock.acquire()
     cursor = db.cursor()
     for cat in categories:
             sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id) VALUES ('"+str(tweet_id)+"');"
@@ -291,7 +284,6 @@ def addOccurance(tweet_id, source_id):
             
     cursor.close()
     #print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
-    lock.release()
     
 if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
