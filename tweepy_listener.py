@@ -1,4 +1,4 @@
-
+import tweepy
 import thread
 import src.CategoryModel
 import datetime
@@ -38,7 +38,7 @@ class HandleListener(tweepy.StreamListener):
                 
         def setupSocket(self, ):
                 print "starting to set up socket listen on new thread"
-                stream = tweepy.Stream(auth, self)
+                stream = Stream(auth, self)
                 stream.filter(follow=getAllTwitterIds())
                 
         def on_data(self, data):
