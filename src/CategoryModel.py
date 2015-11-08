@@ -7,7 +7,7 @@ from src.DBWrapper import *
 
 class CategoryModel:
     
-    self.categories = {}
+    categories = {}
     
     def executeSql(self, db, sql):
         cursor = db.cursor()
