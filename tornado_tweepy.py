@@ -24,7 +24,6 @@ define("port", default=8888, help="run on the given port", type=int)
 
         
 def findCategoryChildrenForId(cat_id):
-        lock.acquire()
         cursor = db.cursor()
         sql = "SELECT child_category_id From CategoryParentRelationship WHERE parent_category_id LIKE "+cat_id
         cursor.execute(sql)
@@ -41,7 +40,6 @@ def findCategoryChildrenForId(cat_id):
                 row = cursor.fetchone()
                 return_list.append(str(row[0]))
         cursor.close()
-        lock.release()
         return return_list
 
 def findCategoryIdWithName(cat_name, local_db):
