@@ -86,7 +86,7 @@ class CategoryModel:
             
         print "now have cats: "+str(cats)
         
-    def getCategoriesForTwitterUserId(handle_id):
+    def getCategoriesForTwitterUserId(self, handle_id):
         if(handle_id in self.categories):
             return self.categories[handle_id]
         else:
