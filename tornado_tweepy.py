@@ -23,8 +23,8 @@ import src.CategoryModel
 define("port", default=8888, help="run on the given port", type=int)
 
         
-def findCategoryChildrenForId(cat_id):
-        cursor = db.cursor()
+def findCategoryChildrenForId(cat_id, local_db):
+        cursor = local_db.cursor()
         sql = "SELECT child_category_id From CategoryParentRelationship WHERE parent_category_id LIKE "+cat_id
         cursor.execute(sql)
         child_id_list = []
@@ -32,7 +32,7 @@ def findCategoryChildrenForId(cat_id):
                 child_id_list.append(str(row[0]))
         cursor.close()
         
-        cursor = db.cursor()
+        cursor = local_db.cursor()
         return_list = []
         for id in child_id_list:
                 sql = "SELECT Name From Category WHERE ID like "+id
@@ -107,7 +107,7 @@ class CategoryChildren(tornado.web.RequestHandler):
                 charset='utf8',
                 port=3306)
         cat_id = findCategoryIdWithName(cat_label, local_db)
-        children = findCategoryChildrenForId(str(cat_id))
+        children = findCategoryChildrenForId(str(cat_id), local_db)
         return_dictionary = {"children":children}
         self.finish(json.dumps(return_dictionary))
         
