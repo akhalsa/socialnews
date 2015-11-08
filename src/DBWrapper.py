@@ -1,4 +1,5 @@
 import MySQLdb
+import datetime
 
 def getTweetOccurances(seconds, cat_id, local_db):
     cursor = local_db.cursor()
