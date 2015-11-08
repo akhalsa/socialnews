@@ -79,10 +79,10 @@ class HandleListener(tweepy.StreamListener):
             
             for data in data_array:
                 decoded = json.loads(data)
-                attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
+                self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
                 if("retweeted_status" in decoded):
                     decoded = decoded['retweeted_status']
-                    attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
+                    self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
                 
             print "our batch insertion map looks like this: "
             print str(insertion_map)
@@ -90,7 +90,7 @@ class HandleListener(tweepy.StreamListener):
                     
                     
                     
-        def attemptToInsertIntoBatchDictionaty(batchDictionary, json_object):
+        def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object):
             try:
                 if(self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id'])) != None):
                     categories = self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id']))
