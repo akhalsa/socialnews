@@ -307,6 +307,31 @@ def findTableIdWithTwitterId(twitter_id):
         #print "lock released at 227"
         return return_id
     
+def getLocalTweetIdForTwitterTweetID(twitter_tweet_id):
+        cursor = db.cursor()
+        sql = "SELECT ID FROM Tweet WHERE twitter_id like "+str(twitter_tweet_id)+";"
+        cursor.execute(sql)
+        return_id = 0
+        for row in cursor.fetchall():
+                return_id = row[0]
+        cursor.close()
+        if(return_id is not 0):
+                cursor = db.cursor()
+                #we have a valid tweet
+                sql = "UPDATE Tweet SET timestamp=NOW() WHERE ID like "+str(twitter_tweet_id)+";"
+                try:
+                        # Execute the SQL command
+                        cursor.execute(sql)
+                        # Commit your changes in the database
+                        db.commit()
+                except Exception,e:
+                        # Rollback in case there is any error
+                        print "error on insertion of occurrence"
+                        print str(e)
+                        db.rollback()
+        cursor.close()
+        return return_id
+    
 if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
     handle = HandleListener()
