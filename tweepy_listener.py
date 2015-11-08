@@ -1,7 +1,11 @@
 import tweepy
 import thread
+import src.CategoryModel
+import datetime
+
 from threading import Thread
 from Queue import Queue
+
 
 
 
@@ -284,5 +288,6 @@ def addOccurance(tweet_id, source_id):
     lock.release()
     
 if __name__ == '__main__':
+    mdl = src.CategoryModel.CategoryModel(db, api)
     handle = HandleListener()
 
