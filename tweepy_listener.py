@@ -1,7 +1,7 @@
 import tweepy
 import thread
 import src.CategoryModel
-import src.DBWrapper
+
 import datetime
 import MySQLdb
 import json
@@ -9,7 +9,7 @@ import json
 from threading import Thread
 from Queue import Queue
 from tweepy import Stream
-
+from src.DBWrapper import *
 
 db = MySQLdb.connect(
         host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
