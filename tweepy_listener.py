@@ -1,4 +1,4 @@
-import tweepy
+
 import thread
 import src.CategoryModel
 import datetime
@@ -6,7 +6,7 @@ import MySQLdb
 
 from threading import Thread
 from Queue import Queue
-
+from tweepy import Stream
 
 db = MySQLdb.connect(
         host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
