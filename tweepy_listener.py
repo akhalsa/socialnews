@@ -56,7 +56,7 @@ class HandleListener(tweepy.StreamListener):
         def handleData(self,):
                 while True:
                         data_structure = self.db_queue.get()
-                        #print "queue size after get: "+str(self.db_queue.qsize())
+                        print "queue size after get: "+str(self.db_queue.qsize())
                         insertion_start = datetime.datetime.now()
                         self.processData(data_structure)
                         
