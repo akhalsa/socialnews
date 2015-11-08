@@ -31,7 +31,7 @@ api_bot = tweepy.API(auth_bot)
 
 class HandleListener(tweepy.StreamListener):
         
-        def __init__(self):
+        def __init__(self, mdl):
                 thread.start_new_thread( self.setupSocket, ( ) )
                 self.db_queue = Queue()
                 worker = Thread(target=self.handleData, args=())
@@ -39,6 +39,7 @@ class HandleListener(tweepy.StreamListener):
                 worker.start()
                 self.lastClear = datetime.datetime.now() - datetime.timedelta(hours = 1)
                 self.lastPost = datetime.datetime.now()
+                self.mdl = mdl
                 
         def setupSocket(self, ):
                 print "starting to set up socket listen on new thread"
@@ -55,10 +56,13 @@ class HandleListener(tweepy.StreamListener):
                 
         def handleData(self,):
                 while True:
-                        data_structure = self.db_queue.get()
+                        data_structure = []
+                        while(len(data_structure) < 10):
+                            data_structure.append(self.db_queue.get())
+                        
                         print "queue size after get: "+str(self.db_queue.qsize())
                         insertion_start = datetime.datetime.now()
-                        self.processData(data_structure)
+                        self.processBatchData(data_structure)
                         
                         
                         if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
@@ -67,7 +71,42 @@ class HandleListener(tweepy.StreamListener):
                                 self.lastClear = datetime.datetime.now()
                         #print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
                         self.db_queue.task_done()
-                        
+        
+        def processBatchData(self, data_array):
+            #must create a map that looks like this:
+            #{category_id: [tweet_id,...]}
+            insertion_map = {}
+            
+            for data in data_array:
+                decoded = json.loads(data)
+                attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
+                if("retweeted_status" in decoded):
+                    decoded = decoded['retweeted_status']
+                    attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
+                
+            print "our batch insertion map looks like this: "
+            print str(insertion_map)
+            
+                    
+                    
+                    
+        def attemptToInsertIntoBatchDictionaty(batchDictionary, json_object):
+            try:
+                if(self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id'])) != None):
+                    categories = self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id']))
+                    for cat in categories:
+                        if cat not in batchDictionary:
+                            batchDictionary[cat] = []
+                            
+                        batchDictionary[cat].append(json_object['id'])
+            except KeyError, e:
+                print "we got a key error so we're just dropping out"
+                source_id = 0
+                
+
+
+
+                            
         def processData(self, data):
                 decoded = json.loads(data)
                 #print "recevied: "+str(decoded)
@@ -174,7 +213,7 @@ def postTweet(text, tweet_id):
     
 if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
-    handle = HandleListener()
+    handle = HandleListener(mdl)
     while True:
         pass
 

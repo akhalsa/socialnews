@@ -86,6 +86,12 @@ class CategoryModel:
             
         print "now have cats: "+str(cats)
         
+    def getCategoriesForTwitterUserId(handle_id):
+        if(handle_id in self.categories):
+            return self.categories[handle_id]
+        else:
+            return None
+        
     def insertCategory(self, category, parent_id_list):
         #1 create new category entry for this category
         sql = "INSERT INTO Category (name) values ('"+category['name']+"');"
