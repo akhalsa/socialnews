@@ -18,8 +18,9 @@ import urllib2
 from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
+from src.DBWrapper import *
+
 import src.CategoryModel
-import src.DBWrapper
 
 define("port", default=8888, help="run on the given port", type=int)
 
