@@ -282,4 +282,7 @@ def addOccurance(tweet_id, source_id):
     cursor.close()
     #print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds" 
     lock.release()
+    
+if __name__ == '__main__':
+    handle = HandleListener()
 
