@@ -3,6 +3,8 @@ import thread
 import src.CategoryModel
 import datetime
 import MySQLdb
+import sys  #for exit
+import json
 
 from threading import Thread
 from Queue import Queue
