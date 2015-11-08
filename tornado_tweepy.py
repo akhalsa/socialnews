@@ -72,7 +72,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
         if(len(twitter_ids)==0):
                 return (results, twitter_ids)
         
-        cursor = db.cursor()
+        cursor = local_db.cursor()
         #sql = "SELECT twitter_id, text, source_id From Tweet A "
         #sql += "INNER JOIN (SELECT Name, profile_image, ID FROM TwitterSource) B "
         #sql += "ON A.source = A.source_id "
