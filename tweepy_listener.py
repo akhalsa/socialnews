@@ -57,7 +57,7 @@ class HandleListener(tweepy.StreamListener):
         def handleData(self,):
             while True:
                 data_structure = []
-                while(len(data_structure) < 30):
+                while(len(data_structure) < 10):
                     data_structure.append(self.db_queue.get())
                 
                 print "queue size after get: "+str(self.db_queue.qsize())
