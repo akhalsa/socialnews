@@ -178,11 +178,11 @@ def insertBatch(insertion_map, local_db):
     ##insertion_map = {category_id: [tweet_id,...]}
     full_sql = ""
     for cat in insertion_map:
-        sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id) VALUES ("
+        sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id) VALUES "
         for tweet_id in insertion_map[cat]:
-            sql += "'"+str(tweet_id)+"', "
+            sql += "('"+str(tweet_id)+"'), "
         sql = sql[:-2]
-        sql+="); "
+        sql+="; "
         full_sql += sql
     cursor = local_db.cursor()
     try:
