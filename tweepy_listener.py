@@ -91,6 +91,7 @@ class HandleListener(tweepy.StreamListener):
             ## tweets table is populated
             ## first run batch insert
             batchInsertTweet(unique_ids, db)
+            
             insertion_start = datetime.datetime.now()
             insertBatch(insertion_map, db)
             print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds for: "+str(len(unique_ids))+" records"    
