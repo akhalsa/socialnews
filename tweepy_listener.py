@@ -78,13 +78,14 @@ class HandleListener(tweepy.StreamListener):
             
             insertion_map = {}
             unique_ids = {}
+            insertion_start = datetime.datetime.now()
             for data in data_array:
                 decoded = json.loads(data)
                 self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded, unique_ids)
                 if("retweeted_status" in decoded):
                     decoded = decoded['retweeted_status']
                     self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded, unique_ids)
-            
+            print "spin up time took: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"
             ##ok by this point we have a category map that needs to be used to update entries in all categories
             ## we need to do that insertion into the categories and update the tweets table time stampts
             ## tweets table is populated
