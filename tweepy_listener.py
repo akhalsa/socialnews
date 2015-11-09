@@ -55,22 +55,22 @@ class HandleListener(tweepy.StreamListener):
                 print status
                 
         def handleData(self,):
-                while True:
-                        data_structure = []
-                        while(len(data_structure) < 10):
-                            data_structure.append(self.db_queue.get())
-                        
-                        print "queue size after get: "+str(self.db_queue.qsize())
-                        insertion_start = datetime.datetime.now()
-                        self.processBatchData(data_structure)
-                        
-                        
-                        if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
-                                print "starting to clear entries"
-                                clearOldEntries(db)
-                                self.lastClear = datetime.datetime.now()
-                        #print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
-                        self.db_queue.task_done()
+            while True:
+                data_structure = []
+                while(len(data_structure) < 10):
+                    data_structure.append(self.db_queue.get())
+                
+                print "queue size after get: "+str(self.db_queue.qsize())
+                insertion_start = datetime.datetime.now()
+                self.processBatchData(data_structure)
+                
+                
+                if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
+                        print "starting to clear entries"
+                        clearOldEntries(db)
+                        self.lastClear = datetime.datetime.now()
+                print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
+                self.db_queue.task_done()
         
         def processBatchData(self, data_array):
             #must create a map that looks like this:

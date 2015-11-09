@@ -143,7 +143,6 @@ def clearOldEntries(local_db):
     cursor.close()
 
 def insertTweet(source_id, text_string, twitter_tweet_id, local_db):
-    print "inserting tweet: "+text_string
     insert_tweet_start = datetime.datetime.now()
     cursor = local_db.cursor()
     try:
@@ -159,8 +158,6 @@ def insertTweet(source_id, text_string, twitter_tweet_id, local_db):
             print str(e)
             local_db.rollback()
     cursor.close()
-    
-    print "insert tweet took: "+str((datetime.datetime.now() - insert_tweet_start).total_seconds())+" seconds"
     
     
 def getAllTwitterIds(local_db):
