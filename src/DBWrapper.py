@@ -111,7 +111,6 @@ def getAlreadyRetweeted(tweet_id_list, local_db):
     if(len(tweet_id_list)>0):
         sql = sql[:-2]
     sql += ");"
-    print "sql was: "+sql
     cursor = local_db.cursor()
     cursor.execute(sql)
     for row in cursor.fetchall():
@@ -123,7 +122,6 @@ def getAlreadyRetweeted(tweet_id_list, local_db):
 def getTweetIdsSince(local_db, seconds_delta):
     cursor = local_db.cursor()
     sql = "SELECT twitter_id, text from Tweet WHERE insertion_timestamp > (NOW() - INTERVAL "+str(seconds_delta)+" SECOND);"
-    print "using sql: "+sql+" to select new tweets"
     cursor.execute(sql)
     return_twitter_ids = {}
     for row in cursor.fetchall():
