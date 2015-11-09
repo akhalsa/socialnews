@@ -184,6 +184,7 @@ def insertBatch(insertion_map, local_db):
         sql = sql[:-2]
         sql+="; "
         full_sql += sql
+    print "will run sql: "+full_sql
     cursor = local_db.cursor()
     try:
         # Execute the SQL command
