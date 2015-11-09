@@ -263,6 +263,10 @@ if __name__ == '__main__':
     worker.setDaemon(True)
     worker.start()
     
+    ######start periodic surge scanning
+    worker_two = Thread(target=periodicSurge, args=())
+    worker_two.setDaemon(True)
+    worker_two.start()
     
     handle = HandleListener(mdl)
     while True:
