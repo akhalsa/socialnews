@@ -74,17 +74,6 @@ def findCategoryChildrenForId(cat_id, local_db):
     cursor.close()
     return return_list
 
-def checkIfTweeted(tweet_id, local_db):
-    print "checking if: "+str(tweet_id)+" has been sent out"
-    cursor = local_db.cursor()
-    sql = "SELECT * From Retweets WHERE twitter_id like '"+str(tweet_id)+"';"
-    cursor.execute(sql)
-    retweet_count = cursor.rowcount
-    cursor.close()
-    if(cursor.rowcount > 0):
-        return True
-    else:
-        return False
     
 def insertIntoRetweet(tweet_id, isSurge, local_db):
     cursor = local_db.cursor()
@@ -319,30 +308,6 @@ def addOccurance(tweet_id, source_id, local_db):
     cursor.close()
     #print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds"
     
-def getLocalTweetIdForTwitterTweetID(twitter_tweet_id, local_db):
-    cursor = local_db.cursor()
-    sql = "SELECT ID FROM Tweet WHERE twitter_id like "+str(twitter_tweet_id)+";"
-    cursor.execute(sql)
-    return_id = 0
-    for row in cursor.fetchall():
-            return_id = row[0]
-    cursor.close()
-    if(return_id is not 0):
-            cursor = local_db.cursor()
-            #we have a valid tweet
-            sql = "UPDATE Tweet SET timestamp=NOW() WHERE ID like "+str(twitter_tweet_id)+";"
-            try:
-                    # Execute the SQL command
-                    cursor.execute(sql)
-                    # Commit your changes in the database
-                    local_db.commit()
-            except Exception,e:
-                    # Rollback in case there is any error
-                    print "error on insertion of occurrence"
-                    print str(e)
-                    local_db.rollback()
-    cursor.close()
-    return return_id
 
 def getCategoriesWithSourceId(source_id, local_db):
     cursor = local_db.cursor()
@@ -354,14 +319,4 @@ def getCategoriesWithSourceId(source_id, local_db):
     cursor.close()
     return return_list
 
-def findTableIdWithTwitterId(twitter_id, local_db):
-    cursor = local_db.cursor()
-    sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
-    cursor.execute(sql)
-    return_id = 0
-    for row in cursor.fetchall() :
-        return_id = row[0]
-    cursor.close()
-    #print "lock released at 227"
-    return return_id
 

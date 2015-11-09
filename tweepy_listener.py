@@ -2,7 +2,7 @@ import tweepy
 import thread
 import src.CategoryModel
 import time
-
+import urllib2
 import datetime
 import MySQLdb
 import json
@@ -130,91 +130,6 @@ class HandleListener(tweepy.StreamListener):
                 source_id = 0
                 return False
             return False
-                            
-        def processData(self, data):
-                decoded = json.loads(data)
-                #print "recevied: "+str(decoded)
-                #check if user for tweet
-                #print "scanning: "+str(decoded)
-
-                try:
-                        source_id = findTableIdWithTwitterId(str(decoded['user']['id']), db)
-                        #print "done with search tweet user"
-                        if(source_id == 0) and ("retweeted_status" in decoded):
-                                decoded = decoded['retweeted_status']
-                                
-                                #print "search retweet user"
-                                source_id = findTableIdWithTwitterId(str(decoded['user']['id']), db)
-                                #print "done with search retweet user"
-                        elif (source_id == 0):
-                                #print "this wasn't a retweet AND wasn't from a trusted source!?!"
-                                pass
-                        
-                except KeyError, e:
-                        print "we got a key error so we're just dropping out"
-                        source_id = 0
-                
-                if((source_id != 0) and ('text' in decoded) and ('id' in decoded)):
-                        #ok, we have a valid source_id corresponding to the local table_id and decoded holds the right tweet
-                        #we need to insert this tweet into the db
-                        #first lets check if we already have the tweet
-                        local_tweet_id = getLocalTweetIdForTwitterTweetID(decoded['id'], db)
-                        if(local_tweet_id == 0):
-                                #print "creating new entry for: "+decoded['text']
-                                insertTweet( source_id, decoded['text'], decoded['id'], db)
-                                
-                        print "adding occurance for: "+decoded['text']
-                        addOccurance(decoded['id'], source_id, db)
-                        
-                        self.checkForSurge(decoded['id'], decoded['text'], 1)
-                        
-                        
-                        if((datetime.datetime.now() - self.lastPost).total_seconds() > 3600):
-                                #make sure we are posting at least once an hour
-                                (tweet_dict, tweet_ids) = getTweetOccurances(21600, 1, db)
-                                print "got tweet_dict: "+str(tweet_dict)
-                                print "and got tweet array: "+str(tweet_ids)
-                                
-                                for tweet_id in tweet_ids:
-                                        if(not checkIfTweeted(tweet_id, db)):
-                                                print "posting: "+str(tweet_id)
-                                                postTweet(tweet_dict[tweet_id]["text"], tweet_id)
-                                                insertIntoRetweet(tweet_id, False, db)
-                                                #api_bot.retweet(tweet_id)
-                                                break
-                                        else:
-                                                print "would retweet, but we already did"
-                                self.lastPost = datetime.datetime.now()
-                        
-                        print "finished with: "+decoded['text']
-                                                                                          # 
-                        
-                elif ('text' in decoded):
-                        print decoded['text']+ " still had source id that was 0"
-                else:
-                        print "we had nothing here?"
-                        
-                        
-        def checkForSurge(self, twitter_id, tweet_text, cat_id):
-                cursor = db.cursor()
-                sql = "SELECT * From Tweet where twitter_id like '"+str(twitter_id)+"';"
-                cursor.execute(sql)
-                for row in cursor.fetchall():
-                        delta_time = datetime.datetime.now() - row[4]
-                cursor.close()
-                
-                if(delta_time.total_seconds() < 300):
-                        #this is a brand new tweet, lets check the count
-                        cursor = db.cursor()
-                        sql = "SELECT * from Occurrence_"+str(cat_id)+" WHERE twitter_id LIKE '"+str(twitter_id)+"' AND timestamp > (NOW() - INTERVAL 300 SECOND);"
-                        cursor.execute(sql)
-                        occurrence_count = cursor.rowcount
-                        cursor.close()
-                        if(occurrence_count ==800):
-                                #api_bot.retweet(twitter_id)
-                                postTweet(tweet_text, twitter_id)
-                                self.lastPost = datetime.datetime.now()
-                                insertIntoRetweet(twitter_id, True, db)
                                 
                                 
 def postTweet(text, tweet_id):
