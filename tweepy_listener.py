@@ -92,8 +92,9 @@ class HandleListener(tweepy.StreamListener):
             insertion_start = datetime.datetime.now()
             insertBatch(insertion_map, db)
             print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds for: "+str(len(unique_ids))+" records"    
-                
+            insertion_start = datetime.datetime.now()
             updateTweetTimeStamp(unique_ids, db)
+            print "updating time stamps took: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"
             
             
             
