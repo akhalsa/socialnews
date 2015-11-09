@@ -110,10 +110,10 @@ class HandleListener(tweepy.StreamListener):
                             
                         batchDictionary[cat].append(json_object['id'])
                         
-                    local_tweet_id = getLocalTweetIdForTwitterTweetID(json_object['id'], db)
-                    if(local_tweet_id == 0):
-                        print "creating new entry for: "+json_object['text']
-                        insertTweet( json_object['user']['id'], json_object['text'], json_object['id'], db)
+                    #local_tweet_id = getLocalTweetIdForTwitterTweetID(json_object['id'], db)
+                    #if(local_tweet_id == 0):
+                    print "creating new entry for: "+json_object['text']
+                    insertTweet( json_object['user']['id'], json_object['text'], json_object['id'], db)
                     unique_ids[json_object['id']] = True 
                 
             except KeyError, e:
@@ -266,14 +266,14 @@ if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
     
     #### start periodic cleaning #####
-    worker = Thread(target=periodicClean, args=())
-    worker.setDaemon(True)
-    worker.start()
+    # worker = Thread(target=periodicClean, args=())
+    # worker.setDaemon(True)
+    # worker.start()
     
     ######start periodic surge scanning
-    worker_two = Thread(target=periodicSurge, args=())
-    worker_two.setDaemon(True)
-    worker_two.start()
+    # worker_two = Thread(target=periodicSurge, args=())
+    # worker_two.setDaemon(True)
+    # worker_two.start()
     
     handle = HandleListener(mdl)
     while True:
