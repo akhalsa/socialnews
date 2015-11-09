@@ -90,7 +90,8 @@ class HandleListener(tweepy.StreamListener):
                 
                 if(inserted == False) and (retweet_insert == False):
                     print "we weren't able to use: "+str(decoded)
-                        
+            
+            print "we had: "+str(len(data_array))+" original rows, and used: "+str(len(unique_ids))+" rows"
             print "spin up time took: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"
             ##ok by this point we have a category map that needs to be used to update entries in all categories
             ## we need to do that insertion into the categories and update the tweets table time stampts
