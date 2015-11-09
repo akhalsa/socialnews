@@ -123,10 +123,12 @@ def getOccurrencesInCategory(local_db, seconds_delta, category_id, ids_to_check)
     
     sql = sql[:-2]
     sql += ");"
+    cursor = local_db.cursor()
     cursor.execute(sql)
     return_twitter_ids = []
     for row in cursor.fetchall():
         print "row: "+str(row)
+    cursor.close()
     
 
     
