@@ -270,14 +270,14 @@ if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
     
     #### start periodic cleaning #####
-    # worker = Thread(target=periodicClean, args=())
-    # worker.setDaemon(True)
-    # worker.start()
+    worker = Thread(target=periodicClean, args=())
+    worker.setDaemon(True)
+    worker.start()
     
     ######start periodic surge scanning
-    # worker_two = Thread(target=periodicSurge, args=())
-    # worker_two.setDaemon(True)
-    # worker_two.start()
+    worker_two = Thread(target=periodicSurge, args=())
+    worker_two.setDaemon(True)
+    worker_two.start()
     
     handle = HandleListener(mdl)
     while True:
