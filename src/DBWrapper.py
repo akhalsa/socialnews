@@ -250,7 +250,19 @@ def batchInsertTweet(tweets, local_db):
     if(len(tweets)>0):
         sql = sql[:-2]
     
-    print "will insert using sql: "+sql
+    cursor = local_db.cursor()
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of occurrence"
+        print str(e)
+        local_db.rollback()
+        
+    cursor.close()
     
 
     
