@@ -116,7 +116,7 @@ def getTweetIdsSince(local_db, seconds_delta):
     cursor.close()
     return return_twitter_ids
     
-def getOccurrencesInCategory(local_db, seconds_delta, category_id, ids_to_check):
+def getOccurrencesInCategory(local_db, seconds_delta, threshold, category_id, ids_to_check):
     sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(category_id)+" WHERE timestamp > (NOW() - INTERVAL "+str(seconds_delta)+" SECOND) "
     sql += "AND twitter_id IN ("
     
@@ -130,8 +130,10 @@ def getOccurrencesInCategory(local_db, seconds_delta, category_id, ids_to_check)
     cursor.execute(sql)
     return_twitter_ids = []
     for row in cursor.fetchall():
-        print "row: "+str(row)
+        if(row[1] > threshold):
+            return_twitter_ids.append(row[0])
     cursor.close()
+    return return_twitter_ids
     
 
     
