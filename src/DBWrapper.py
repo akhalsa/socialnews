@@ -138,7 +138,6 @@ def getOccurrencesInCategory(local_db, seconds_delta, threshold, category_id, id
     
     sql = sql[:-2]
     sql += ") GROUP BY twitter_id;"
-    print "will execute sql: "+sql
     cursor = local_db.cursor()
     cursor.execute(sql)
     return_twitter_ids = []
