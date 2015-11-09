@@ -228,17 +228,31 @@ def postTweet(text, tweet_id):
              
 def periodicClean():
     while True:
-        local_db = MySQLdb.connect(
+        local_db_clean = MySQLdb.connect(
                 host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
                 user="akhalsa",
                 passwd="sophiesChoice1",
                 db="newsdb",
                 charset='utf8',
                 port=3306)
-        clearOldEntries(local_db)
-        local_db.close()
-        time.sleep(30)
+        clearOldEntries(local_db_clean)
+        local_db_clean.close()
+        time.sleep(900)
         
+def periodicSurge():
+    while True:
+        time.sleep(60)
+        local_db_surge = MySQLdb.connect(
+                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                user="akhalsa",
+                passwd="sophiesChoice1",
+                db="newsdb",
+                charset='utf8',
+                port=3306)
+        new_tweets = getTweetIdsSince(local_db_surge, 300)
+        print "new tweets are: "+str(new_tweets)
+        getOccurrencesInCategory(local_db_surge, 300, 1, new_tweets)
+        local_db_surge.close()
 
     
 if __name__ == '__main__':

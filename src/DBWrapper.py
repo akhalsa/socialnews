@@ -104,6 +104,34 @@ def insertIntoRetweet(tweet_id, isSurge, local_db):
             local_db.rollback()
     cursor.close()
     
+    
+def getTweetIdsSince(local_db, seconds_delta):
+    cursor = local_db.cursor()
+    sql = "SELECT twitter_id from Tweet insertion_timestamp < (NOW() - INTERVAL "+str(seconds_delta)+" SECOND);"
+    cursor.execute(sql)
+    return_twitter_ids = []
+    for row in cursor.fetchall():
+        return_twitter_ids.append(row[0])
+    cursor.close()
+    return return_twitter_ids
+    
+def getOccurrencesInCategory(local_db, seconds_delta, category_id, ids_to_check):
+    sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE < (NOW() - INTERVAL "+str(seconds_delta)+" SECOND) "
+    sql += "AND twitter_id IN ("
+    for t_id in ids_to_check:
+        sql += "'"+str(t_id)+"', "
+    
+    sql = sql[:-2]
+    sql += ");"
+    cursor.execute(sql)
+    return_twitter_ids = []
+    for row in cursor.fetchall():
+        print "row: "+str(row)
+    
+
+    
+    
+
 def clearOldEntries(local_db):
     cursor = local_db.cursor()
     sql = "SELECT ID From Category"
