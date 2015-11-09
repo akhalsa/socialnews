@@ -176,26 +176,22 @@ def getAllTwitterIds(local_db):
 
 def insertBatch(insertion_map, local_db):
     ##insertion_map = {category_id: [tweet_id,...]}
-    full_sql = ""
-    for cat in insertion_map:
-        sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id) VALUES "
-        for tweet_id in insertion_map[cat]:
-            sql += "('"+str(tweet_id)+"'), "
-        sql = sql[:-2]
-        sql+="; "
-        full_sql += sql
-    print "will run sql: "+full_sql
     cursor = local_db.cursor()
     try:
-        # Execute the SQL command
-        cursor.execute(full_sql)
-        # Commit your changes in the database
+        for cat in insertion_map:
+            sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id) VALUES "
+            for tweet_id in insertion_map[cat]:
+                sql += "('"+str(tweet_id)+"'), "
+            sql = sql[:-2]
+            sql+="; "
+            cursor.execute(sql)
         local_db.commit()
     except Exception,e:
         # Rollback in case there is any error
         print "error on insertion of occurrence"
         print str(e)
         local_db.rollback()
+        sys.exit()
         
     cursor.close()
     
