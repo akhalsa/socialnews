@@ -90,7 +90,10 @@ class HandleListener(tweepy.StreamListener):
             ## we need to do that insertion into the categories and update the tweets table time stampts
             ## tweets table is populated
             ## first run batch insert
+            
+            insertion_start = datetime.datetime.now()
             batchInsertTweet(unique_ids, db)
+            print "tweet insertion time took: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"
             
             insertion_start = datetime.datetime.now()
             insertBatch(insertion_map, db)
