@@ -80,11 +80,17 @@ class HandleListener(tweepy.StreamListener):
             unique_ids = {}
             insertion_start = datetime.datetime.now()
             for data in data_array:
+                inserted = False
+                retweet_insert = False
                 decoded = json.loads(data)
-                self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded, unique_ids)
-                if("retweeted_status" in decoded):
-                    decoded = decoded['retweeted_status']
-                    self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded, unique_ids)
+                inserted = self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded, unique_ids)
+                if(("retweeted_status" in decoded) and (inserted == False)):
+                    re_decoded = decoded['retweeted_status']
+                    retweet_insert = self.attemptToInsertIntoBatchDictionaty(insertion_map, re_decoded, unique_ids)
+                
+                if(inserted == False) and (retweet_insert == False):
+                    print "we weren't able to use: "+decoded
+                        
             print "spin up time took: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"
             ##ok by this point we have a category map that needs to be used to update entries in all categories
             ## we need to do that insertion into the categories and update the tweets table time stampts
@@ -119,15 +125,13 @@ class HandleListener(tweepy.StreamListener):
                         batchDictionary[cat].append(json_object['id'])
                                             
                     unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
+                    return True
                 
             except KeyError, e:
                 print "we got a key error so we're just dropping out"
                 source_id = 0
-                
-                
-
-
-
+                return False
+            return False
                             
         def processData(self, data):
                 decoded = json.loads(data)
