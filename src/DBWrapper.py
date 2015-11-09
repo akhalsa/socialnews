@@ -241,6 +241,18 @@ def insertBatch(insertion_map, local_db):
         
     cursor.close()
     
+def batchInsertTweet(tweets, local_db):
+    sql ="INSERT INTO Tweet(source_twitter_id, text, twitter_id) VALUES "
+    for tweet in tweets:
+        sql += "('"+tweets[tweet]["twitter_user_id"]+"', '"+tweets[tweet]["text"]+"', '"+tweet+"'), "
+        
+    if(len(tweets)>0):
+        sql = sql[:-2]
+    
+    print "will insert using sql: "+sql
+    
+
+    
 
 def updateTweetTimeStamp(tweet_list, local_db):
     if (len(tweet_list) == 0):

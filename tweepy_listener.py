@@ -90,6 +90,7 @@ class HandleListener(tweepy.StreamListener):
             ## we need to do that insertion into the categories and update the tweets table time stampts
             ## tweets table is populated
             ## first run batch insert
+            batchInsertTweet(unique_ids, db)
             insertion_start = datetime.datetime.now()
             insertBatch(insertion_map, db)
             print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds for: "+str(len(unique_ids))+" records"    
@@ -112,12 +113,8 @@ class HandleListener(tweepy.StreamListener):
                             batchDictionary[cat] = []
                             
                         batchDictionary[cat].append(json_object['id'])
-                        
-                    #local_tweet_id = getLocalTweetIdForTwitterTweetID(json_object['id'], db)
-                    #if(local_tweet_id == 0):
-                    print "creating new entry for: "+json_object['text']
-                    insertTweet( json_object['user']['id'], json_object['text'], json_object['id'], db)
-                    unique_ids[json_object['id']] = True 
+                                            
+                    unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
                 
             except KeyError, e:
                 print "we got a key error so we're just dropping out"
