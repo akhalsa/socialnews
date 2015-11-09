@@ -104,15 +104,29 @@ def insertIntoRetweet(tweet_id, isSurge, local_db):
             local_db.rollback()
     cursor.close()
     
-    
+def getAlreadyRetweeted(tweet_id_list, local_db):
+    sql = "SELECT twitter_id From Retweets WHERE twitter_id IN ("
+    for t_id in tweet_id_list:
+        sql += "'"+str(t_id)+"', "
+    if(len(tweet_id_list)>0):
+        sql = sql[:-2]
+    sql += ");"
+    cursor = local_db.cursor()
+    cursor.execute(sql)
+    for row in cursor.fetchall():
+        if(row[0] in tweet_id_list):
+            tweet_id_list.remove(row[0])
+    return tweet_id_list
+
+
 def getTweetIdsSince(local_db, seconds_delta):
     cursor = local_db.cursor()
-    sql = "SELECT twitter_id from Tweet WHERE insertion_timestamp > (NOW() - INTERVAL "+str(seconds_delta)+" SECOND);"
+    sql = "SELECT twitter_id, text from Tweet WHERE insertion_timestamp > (NOW() - INTERVAL "+str(seconds_delta)+" SECOND);"
     print "using sql: "+sql+" to select new tweets"
     cursor.execute(sql)
-    return_twitter_ids = []
+    return_twitter_ids = {}
     for row in cursor.fetchall():
-        return_twitter_ids.append(row[0])
+        return_twitter_ids[row[0]] = row[1]
     cursor.close()
     return return_twitter_ids
     

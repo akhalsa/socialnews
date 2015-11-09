@@ -241,7 +241,7 @@ def periodicClean():
         
 def periodicSurge():
     while True:
-        time.sleep(20)
+        time.sleep(30)
         local_db_surge = MySQLdb.connect(
                 host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
                 user="akhalsa",
@@ -251,7 +251,14 @@ def periodicSurge():
                 port=3306)
         new_tweets = getTweetIdsSince(local_db_surge, 300)
         print "new tweets are: "+str(new_tweets)
-        getOccurrencesInCategory(local_db_surge, 300, 1, new_tweets)
+        retweet_targets = getOccurrencesInCategory(local_db_surge, 300, 50, 1, new_tweets)
+        retweet_targets = getAlreadyRetweeted(retweet_targets, local_db_surge)
+        for target in retweet_targets:
+            print "should retweet: "+str(target)+" with text: "+new_tweets[target]
+            postTweet(new_tweets[target], target)
+            insertIntoRetweet(target, True, local_db_surge)
+        
+        
         local_db_surge.close()
 
     
