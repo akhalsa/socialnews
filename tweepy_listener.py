@@ -89,7 +89,7 @@ class HandleListener(tweepy.StreamListener):
                     retweet_insert = self.attemptToInsertIntoBatchDictionaty(insertion_map, re_decoded, unique_ids)
                 
                 if(inserted == False) and (retweet_insert == False):
-                    print "we weren't able to use: "+decoded
+                    print "we weren't able to use: "+str(decoded)
                         
             print "spin up time took: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"
             ##ok by this point we have a category map that needs to be used to update entries in all categories
