@@ -114,7 +114,7 @@ class HandleListener(tweepy.StreamListener):
                     local_tweet_id = getLocalTweetIdForTwitterTweetID(json_object['id'], db)
                     if(local_tweet_id == 0):
                         #print "creating new entry for: "+decoded['text']
-                        insertTweet( source_id, json_object['text'], json_object['id'], db)
+                        insertTweet( json_object['user']['id'], json_object['text'], json_object['id'], db)
                     unique_ids[json_object['id']] = True 
                 
             except KeyError, e:

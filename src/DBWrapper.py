@@ -148,7 +148,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id, local_db):
     cursor = local_db.cursor()
     try:
             text_string = text_string.encode('utf-8')
-            sql = "INSERT INTO Tweet(source_id, text, twitter_id) VALUES ("+str(source_id)+",'"+MySQLdb.escape_string(text_string)+"', '"+str(twitter_tweet_id)+"');"
+            sql = "INSERT INTO Tweet(source_twitter_id, text, twitter_id) VALUES ("+str(source_id)+",'"+MySQLdb.escape_string(text_string)+"', '"+str(twitter_tweet_id)+"');"
             # Execute the SQL command
             cursor.execute(sql)
             # Commit your changes in the database
