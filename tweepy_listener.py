@@ -87,9 +87,6 @@ class HandleListener(tweepy.StreamListener):
                 if(("retweeted_status" in decoded) and (inserted == False)):
                     re_decoded = decoded['retweeted_status']
                     retweet_insert = self.attemptToInsertIntoBatchDictionaty(insertion_map, re_decoded, unique_ids)
-                
-                if(inserted == False) and (retweet_insert == False):
-                    print "we weren't able to use: "+str(decoded)
             
             print "we had: "+str(len(data_array))+" original rows, and used: "+str(len(unique_ids))+" rows"
             print "spin up time took: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"
