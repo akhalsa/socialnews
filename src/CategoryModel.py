@@ -84,7 +84,7 @@ class CategoryModel:
             cats = getCategoriesWithSourceId(local_id, self.db)
             self.categories[handle_id] = cats
             
-        print "now have cats: "+str(cats)
+        print "now have cats: "+str(self.categories)
         
     def getCategoriesForTwitterUserId(self, handle_id):
         if(handle_id in self.categories):
