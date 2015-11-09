@@ -69,7 +69,6 @@ class HandleListener(tweepy.StreamListener):
                         print "starting to clear entries"
                         clearOldEntries(db)
                         self.lastClear = datetime.datetime.now()
-                self.db_queue.task_done()
         
         def processBatchData(self, data_array):
             #must create a map that looks like this:
