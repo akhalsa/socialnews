@@ -75,7 +75,7 @@ class HandleListener(tweepy.StreamListener):
             # insertion_map = {category_id: [tweet_id,...]}
             # tweet_insertion_map{twitter_id, }
             
-            
+            process_start = datetime.datetime.now()
             insertion_map = {}
             unique_ids = {}
             insertion_start = datetime.datetime.now()
@@ -102,7 +102,7 @@ class HandleListener(tweepy.StreamListener):
             updateTweetTimeStamp(unique_ids, db)
             print "updating time stamps took: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"
             
-            
+            print "******** total batch process time: "+str((datetime.datetime.now() - process_start).total_seconds())+" seconds for: "+str(len(unique_ids))+" records" 
             
             
                     
