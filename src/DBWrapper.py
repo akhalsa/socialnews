@@ -319,4 +319,15 @@ def getCategoriesWithSourceId(source_id, local_db):
     cursor.close()
     return return_list
 
+def findTableIdWithTwitterId(twitter_id, local_db):
+    cursor = local_db.cursor()
+    sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
+    cursor.execute(sql)
+    return_id = 0
+    for row in cursor.fetchall() :
+        return_id = row[0]
+    cursor.close()
+    #print "lock released at 227"
+    return return_id
+
 
