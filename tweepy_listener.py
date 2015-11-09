@@ -241,7 +241,7 @@ def periodicClean():
         
 def periodicSurge():
     while True:
-        time.sleep(60)
+        time.sleep(20)
         local_db_surge = MySQLdb.connect(
                 host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
                 user="akhalsa",
