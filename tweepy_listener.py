@@ -74,7 +74,7 @@ class HandleListener(tweepy.StreamListener):
             #must create a map that looks like this:
             # insertion_map = {category_id: [tweet_id,...]}
             # tweet_insertion_map{twitter_id, }
-            insertion_start = datetime.datetime.now()
+            
             
             insertion_map = {}
             unique_ids = {}
@@ -89,6 +89,7 @@ class HandleListener(tweepy.StreamListener):
             ## we need to do that insertion into the categories and update the tweets table time stampts
             ## tweets table is populated
             ## first run batch insert
+            insertion_start = datetime.datetime.now()
             insertBatch(insertion_map, db)
             
             updateTweetTimeStamp(unique_ids, db)
