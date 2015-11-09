@@ -107,7 +107,7 @@ def insertIntoRetweet(tweet_id, isSurge, local_db):
     
 def getTweetIdsSince(local_db, seconds_delta):
     cursor = local_db.cursor()
-    sql = "SELECT twitter_id from Tweet insertion_timestamp < (NOW() - INTERVAL "+str(seconds_delta)+" SECOND);"
+    sql = "SELECT twitter_id from Tweet WHERE insertion_timestamp < (NOW() - INTERVAL "+str(seconds_delta)+" SECOND);"
     cursor.execute(sql)
     return_twitter_ids = []
     for row in cursor.fetchall():
