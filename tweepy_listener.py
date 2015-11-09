@@ -74,9 +74,11 @@ class HandleListener(tweepy.StreamListener):
         
         def processBatchData(self, data_array):
             #must create a map that looks like this:
-            #{category_id: [tweet_id,...]}
-            insertion_map = {}
+            # insertion_map = {category_id: [tweet_id,...]}
+            # tweet_insertion_map{twitter_id, }
             
+            
+            insertion_map = {}
             for data in data_array:
                 decoded = json.loads(data)
                 self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
@@ -84,8 +86,7 @@ class HandleListener(tweepy.StreamListener):
                     decoded = decoded['retweeted_status']
                     self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
                 
-            print "our batch insertion map looks like this: "
-            print str(insertion_map)
+            
             
                     
                     
@@ -99,9 +100,16 @@ class HandleListener(tweepy.StreamListener):
                             batchDictionary[cat] = []
                             
                         batchDictionary[cat].append(json_object['id'])
+                        
+                    local_tweet_id = getLocalTweetIdForTwitterTweetID(json_object['id'], db)
+                    if(local_tweet_id == 0):
+                        #print "creating new entry for: "+decoded['text']
+                        insertTweet( source_id, json_object['text'], json_object['id'], db)
+                
             except KeyError, e:
                 print "we got a key error so we're just dropping out"
                 source_id = 0
+                
                 
 
 
