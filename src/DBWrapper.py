@@ -184,7 +184,19 @@ def insertBatch(insertion_map, local_db):
         sql = sql[:-2]
         sql+="); "
         full_sql += sql
-    print "Batch Insert would be: "+full_sql
+    cursor = local_db.cursor()
+    try:
+        # Execute the SQL command
+        cursor.execute(full_sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of occurrence"
+        print str(e)
+        local_db.rollback()
+        
+    cursor.close()
     
 
 def updateTweetTimeStamp(tweet_list, local_db):
