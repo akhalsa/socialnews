@@ -1,6 +1,7 @@
 import tweepy
 import thread
 import src.CategoryModel
+import time
 
 import datetime
 import MySQLdb
@@ -28,6 +29,11 @@ api = tweepy.API(auth)
 auth_bot = tweepy.OAuthHandler("1mxHCmJv9pQqFsFO9emtgjrSB", "CcrfJ3WTLqaAigBj0yOhnpAa8bzB6FRG9iIOCVgNktnTgkuHNb")
 auth_bot.set_access_token("3618709285-bccgXE7SINoljfJbslsWvP8gP5j9AyQV2FELgIx", "GledD6R46Ghy4dIgtEQBhvW4KfI0n2dN6IUGbWFU2qac2")
 api_bot = tweepy.API(auth_bot)
+
+
+    
+    
+
 
 class HandleListener(tweepy.StreamListener):
         
@@ -61,14 +67,8 @@ class HandleListener(tweepy.StreamListener):
                     data_structure.append(self.db_queue.get())
                 
                 print "queue size after get: "+str(self.db_queue.qsize())
-                
                 self.processBatchData(data_structure)
-                
-                
-                if((datetime.datetime.now() - self.lastClear).total_seconds() > 900):
-                        print "starting to clear entries"
-                        clearOldEntries(db)
-                        self.lastClear = datetime.datetime.now()
+
         
         def processBatchData(self, data_array):
             #must create a map that looks like this:
@@ -226,11 +226,30 @@ def postTweet(text, tweet_id):
         print "retweet exception: "
         print str(e)
              
-    
+def periodicClean():
+    while True:
+        local_db = MySQLdb.connect(
+                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                user="akhalsa",
+                passwd="sophiesChoice1",
+                db="newsdb",
+                charset='utf8',
+                port=3306)
+        clearOldEntries(local_db)
+        local_db.close()
+        time.sleep(30)
+        
 
     
 if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
+    
+    #### start periodic cleaning #####
+    worker = Thread(target=periodicClean, args=())
+    worker.setDaemon(True)
+    worker.start()
+    
+    
     handle = HandleListener(mdl)
     while True:
         pass
