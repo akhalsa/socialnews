@@ -173,6 +173,47 @@ def getAllTwitterIds(local_db):
     cursor.close()
     return return_list
 
+
+def insertBatch(insertion_map, local_db):
+    ##insertion_map = {category_id: [tweet_id,...]}
+    full_sql = ""
+    for cat in insertion_map:
+        sql = "INSERT INTO Occurrence_"+cat+" (twitter_id) VALUES ("
+        for tweet_id in insertion_map[cat]:
+            sql += "'"+tweet_id+"', "
+        sql = sql[:-2]
+        sql+="); "
+        full_sql += sql
+    print "Batch Insert would be: "+full_sql
+    
+
+def updateTweetTimeStamp(tweet_list, local_db):
+    if (len(tweet_list) == 0):
+        return
+    
+    sql = "UPDATE Tweet set timestamp=CURRENT_TIMESTAMP WHERE twitter_id IN ("
+    for tweet_id in tweet_list:
+        sql += "'"+str(tweet_id)+"', "
+        
+    sql = sql[:-2]
+    sql +=");"
+    cursor = local_db.cursor()
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of occurrence"
+        print str(e)
+        local_db.rollback()
+        
+    cursor.close()
+    
+    
+    
+
 def addOccurance(tweet_id, source_id, local_db):
     addOccurance_start = datetime.datetime.now()
     local_id = getLocalTweetIdForTwitterTweetID(tweet_id, local_db)

@@ -79,19 +79,29 @@ class HandleListener(tweepy.StreamListener):
             
             
             insertion_map = {}
+            unique_ids = {}
             for data in data_array:
                 decoded = json.loads(data)
-                self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
+                self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded, unique_ids)
                 if("retweeted_status" in decoded):
                     decoded = decoded['retweeted_status']
-                    self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded)
+                    self.attemptToInsertIntoBatchDictionaty(insertion_map, decoded, unique_ids)
+            
+            ##ok by this point we have a category map that needs to be used to update entries in all categories
+            ## we need to do that insertion into the categories and update the tweets table time stampts
+            ## tweets table is populated
+            ## first run batch insert
+            insertBatch(insertion_map, self.db)
+            
+            updateTweetTimeStamp(unique_ids, self.db)
+            
                 
             
             
                     
                     
                     
-        def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object):
+        def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object, unique_ids):
             try:
                 if(self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id'])) != None):
                     categories = self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id']))
@@ -105,6 +115,7 @@ class HandleListener(tweepy.StreamListener):
                     if(local_tweet_id == 0):
                         #print "creating new entry for: "+decoded['text']
                         insertTweet( source_id, json_object['text'], json_object['id'], db)
+                    unique_ids[json_object['id']] = True 
                 
             except KeyError, e:
                 print "we got a key error so we're just dropping out"
