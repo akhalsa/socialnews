@@ -111,6 +111,7 @@ def getAlreadyRetweeted(tweet_id_list, local_db):
     if(len(tweet_id_list)>0):
         sql = sql[:-2]
     sql += ");"
+    print "sql was: "+sql
     cursor = local_db.cursor()
     cursor.execute(sql)
     for row in cursor.fetchall():
