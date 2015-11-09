@@ -244,7 +244,7 @@ def insertBatch(insertion_map, local_db):
 def batchInsertTweet(tweets, local_db):
     sql ="INSERT INTO Tweet(source_twitter_id, text, twitter_id) VALUES "
     for tweet in tweets:
-        sql += "('"+tweets[tweet]["twitter_user_id"]+"', '"+tweets[tweet]["text"]+"', '"+str(tweet)+"'), "
+        sql += "('"+str(tweets[tweet]["twitter_user_id"])+"', '"+str(tweets[tweet]["text"])+"', '"+str(tweet)+"'), "
         
     if(len(tweets)>0):
         sql = sql[:-2]
