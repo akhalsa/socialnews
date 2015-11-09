@@ -61,7 +61,7 @@ class HandleListener(tweepy.StreamListener):
                     data_structure.append(self.db_queue.get())
                 
                 print "queue size after get: "+str(self.db_queue.qsize())
-                insertion_start = datetime.datetime.now()
+                
                 self.processBatchData(data_structure)
                 
                 
@@ -69,14 +69,13 @@ class HandleListener(tweepy.StreamListener):
                         print "starting to clear entries"
                         clearOldEntries(db)
                         self.lastClear = datetime.datetime.now()
-                print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds"    
                 self.db_queue.task_done()
         
         def processBatchData(self, data_array):
             #must create a map that looks like this:
             # insertion_map = {category_id: [tweet_id,...]}
             # tweet_insertion_map{twitter_id, }
-            
+            insertion_start = datetime.datetime.now()
             
             insertion_map = {}
             unique_ids = {}
@@ -95,6 +94,7 @@ class HandleListener(tweepy.StreamListener):
             
             updateTweetTimeStamp(unique_ids, db)
             
+            print "total insertion time: "+str((datetime.datetime.now() - insertion_start).total_seconds()) +" seconds for: "+str(len(unique_ids))+" records"    
                 
             
             
