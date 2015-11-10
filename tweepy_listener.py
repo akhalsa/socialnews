@@ -171,7 +171,7 @@ def periodicSurge():
                 charset='utf8',
                 port=3306)
         new_tweets = getTweetIdsSince(local_db_surge, 300)
-        retweet_targets = getOccurrencesInCategory(local_db_surge, 300, 50, 1, new_tweets)
+        retweet_targets = getOccurrencesInCategory(local_db_surge, 300, 800, 1, new_tweets)
         if(len(retweet_targets) != 0):
             retweet_targets = getAlreadyRetweeted(retweet_targets, local_db_surge)
             for target in retweet_targets:
