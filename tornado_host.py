@@ -33,9 +33,13 @@ class CategoryChildren(tornado.web.RequestHandler):
                 charset='utf8',
                 port=3306)
         cat_id = findCategoryIdWithName(cat_label, local_db)
-        children = findCategoryChildrenForId(str(cat_id), local_db)
-        return_dictionary = {"children":children}
-        self.finish(json.dumps(return_dictionary))
+        first_children = findCategoryChildrenForId(str(cat_id), local_db)
+        cat_map = {}
+        for cat in first_children:
+            second_children = findCategoryChildrenForId(findCategoryIdWithName(cat, local_db),  local_db)
+            cat_map[cat] = second_children
+            
+        self.finish(json.dumps(cat_map))
         
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
