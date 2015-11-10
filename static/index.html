@@ -12,8 +12,8 @@
   <script src="js/bootstrap.min.js"></script>
   <script type="text/javascript">
         $.getJSON("/category/Sports", function (result){
-            children = result.children
-            console.log("got children: "+children);
+            
+            console.log("got children: "+result);
             /*var children_div = document.getElementById('children');
             $.each(children, function(i, child){
                 var aTag = document.createElement('a');
