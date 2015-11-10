@@ -13,7 +13,7 @@
   <script type="text/javascript">
         $.getJSON("/category/Sports", function (result){
             
-            console.log("got children: "+result);
+            console.log("got children: "+JSON.stringify(result, null, 4));
             /*var children_div = document.getElementById('children');
             $.each(children, function(i, child){
                 var aTag = document.createElement('a');
