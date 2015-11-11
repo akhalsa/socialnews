@@ -358,9 +358,12 @@ def getCategoryStructure(local_db):
     print "generate child lookup: "
     print children_lookup
     
-    print "this leaves you with a top level list of: "+str(full_list)
-    
-    
+    response = []
+    for top_level in full_list:
+        response.append(buildMap(name_map,children_lookup, top_level ))
+        
+    print "built structure of: "
+    print str(response)
     
         
     # for row in rows:
@@ -377,6 +380,16 @@ def getCategoryStructure(local_db):
         
     
     
+def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
+    output = {}
+    output["id"] = id_to_descend
+    output["name"] = id_to_name_map[id_to_descend]
+    output["children"] = []
+    for child in id_to_children_array_map[id_to_descend]:
+        output["children"].append(buildMap(id_to_name_map, id_to_children_array_map, child))
+
+    return output
+
 
 
 
