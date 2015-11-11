@@ -344,6 +344,8 @@ def getCategoryStructure(local_db):
         cursor = local_db.cursor()
         cursor.execute(sql)
         relationship = cursor.fetchone()
+        if(relationship == None):
+            pass
         print "found parent_id: "+str(relationship[0])+" and child id: "+str(row[0])
         
     
