@@ -339,19 +339,26 @@ def getCategoryStructure(local_db):
     cursor.close()
     
     name_map = {}
+    full_list = []
     for row in rows:
         name_map[row[0]] = row[1]
+        full_list.append(row[0])
     cursor = local_db.cursor()   
     sql = "SELECT * From CategoryParentRelationship;"
     cursor.execute(sql)
+    
+    
     children_lookup = {}
     for mapping in cursor.fetchall():
         if(mapping[1] not in children_lookup):
             children_lookup[mapping[1]] = []
         children_lookup[mapping[1]].append(mapping[2])
+        full_list.remove(mapping[2])
     cursor.close()
     print "generate child lookup: "
     print children_lookup
+    
+    print "this leaves you with a top level list of: "+str(full_list)
     
     
     
