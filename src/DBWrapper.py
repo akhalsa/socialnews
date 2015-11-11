@@ -330,4 +330,19 @@ def findTableIdWithTwitterId(twitter_id, local_db):
     #print "lock released at 227"
     return return_id
 
+def getCategoryStructure(local_db):
+    cursor = local_db.cursor()
+    sql = "SELECT * From Category;"
+    cursor.execute(sql)
+    top = []
+    rows = cursor.fetchall()
+    cursor.close()
+    for row in rows:
+        print "found id: "+str(row[0])+" has name: "+str(row[1])
+        sql = "SELECT child_category_id From CategoryParentRelationship WHERE child_category_id like "+str(row[0])+";"
+        #relationship_cursor = local_db.cur
+    
+    
+
+
 

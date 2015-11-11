@@ -23,37 +23,29 @@ import src.CategoryModel
 
 define("port", default=8888, help="run on the given port", type=int)
 
-class CategoryChildren(tornado.web.RequestHandler):
-    def get(self, cat_label):
-        local_db = MySQLdb.connect(
-                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
-                user="akhalsa",
-                passwd="sophiesChoice1",
-                db="newsdb",
-                charset='utf8',
-                port=3306)
-        cat_id = findCategoryIdWithName(cat_label, local_db)
-        first_children = findCategoryChildrenForId(str(cat_id), local_db)
-        cat_map = {}
-        for cat in first_children:
-            second_children = findCategoryChildrenForId(str(findCategoryIdWithName(str(cat), local_db)),  local_db)
-            cat_map[cat] = second_children
-            
-        self.finish(json.dumps(cat_map))
-        
+
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
-        cur = db.cursor()
-        cur.execute("SELECT * FROM Category")
-        
-        output_array = []
-        for row in cur.fetchall():
-            print ("appending: "+row[1])
-            output_map = dict()
-            output_map["Name"] = row[1]
-            output_array.append(output_map)
-        cur.close()
-        self.finish(json.dumps(output_array))
+        local_db = MySQLdb.connect(
+                        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        getCategoryStructure(local_db)
+        self.finish()
+        # cur = db.cursor()
+        # cur.execute("SELECT * FROM Category")
+        # 
+        # output_array = []
+        # for row in cur.fetchall():
+        #     print ("appending: "+row[1])
+        #     output_map = dict()
+        #     output_map["Name"] = row[1]
+        #     output_array.append(output_map)
+        # cur.close()
+        # self.finish(json.dumps(output_array))
     
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
@@ -90,10 +82,6 @@ app = tornado.web.Application([
 if __name__ == '__main__':
     
     parse_command_line()
-    #db.query('SET GLOBAL wait_timeout=28800')
-    
-    
-    print "done loading handles"
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
     
