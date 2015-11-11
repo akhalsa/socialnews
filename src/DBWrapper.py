@@ -340,7 +340,11 @@ def getCategoryStructure(local_db):
     for row in rows:
         print "found id: "+str(row[0])+" has name: "+str(row[1])
         sql = "SELECT child_category_id From CategoryParentRelationship WHERE child_category_id like "+str(row[0])+";"
-        #relationship_cursor = local_db.cur
+        cursor = local_db.cursor()
+        cursor.execute(sql)
+        relationship = cursor.fetchone()
+        print "found parent_id: "+str(relationship[1])+" and child id: "+str(relationship[2])
+        
     
     
 
