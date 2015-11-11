@@ -337,6 +337,10 @@ def getCategoryStructure(local_db):
     top = []
     rows = cursor.fetchall()
     cursor.close()
+    temp_map = {}
+    for row in rows:
+        temp_map[row[0]] = row[1]
+        
     for row in rows:
         sql = "SELECT parent_category_id From CategoryParentRelationship WHERE child_category_id like "+str(row[0])+";"
         cursor = local_db.cursor()
@@ -344,12 +348,8 @@ def getCategoryStructure(local_db):
         relationship = cursor.fetchone()
         cursor.close()
         if(relationship != None):
-            cursor = local_db.cursor()
-            sql = "SELECT * From Category WHERE ID like "+str(relationship[0])
-            cursor.execute(sql)
-            parent_category = cursor.fetchone()[1]
+            parent_category = temp_map[relationship[0]]
             print "found parent: "+str(parent_category)+" to category: "+str(row[1])
-            cursor.close()
         
     
     
