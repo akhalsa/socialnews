@@ -337,19 +337,36 @@ def getCategoryStructure(local_db):
     top = []
     rows = cursor.fetchall()
     cursor.close()
-    temp_map = {}
+    
+    name_map = {}
     for row in rows:
-        temp_map[row[0]] = row[1]
+        name_map[row[0]] = row[1]
+    cursor = local_db.cursor()   
+    sql = "SELECT * From CategoryParentRelationship;"
+    cursor.execute(sql)
+    children_lookup = {}
+    for mapping in cursor.fetchall():
+        if(mapping[1] not in children_lookup):
+            children_lookup[mapping[1]] = []
+        children_lookup[mapping[1]].append(mapping[2])
+    cursor.close()
+    print "generate child lookup: "
+    print children_lookup
+    
+    
+    
         
-    for row in rows:
-        sql = "SELECT parent_category_id From CategoryParentRelationship WHERE child_category_id like "+str(row[0])+";"
-        cursor = local_db.cursor()
-        cursor.execute(sql)
-        relationship = cursor.fetchone()
-        cursor.close()
-        if(relationship != None):
-            parent_category = temp_map[relationship[0]]
-            print "found parent: "+str(parent_category)+" to category: "+str(row[1])
+    # for row in rows:
+    #     sql = "SELECT parent_category_id From CategoryParentRelationship WHERE child_category_id like "+str(row[0])+";"
+    #     cursor = local_db.cursor()
+    #     cursor.execute(sql)
+    #     relationship = cursor.fetchone()
+    #     cursor.close()
+    #     if (relationship == None):
+    #         top.append({"id":row[0], "name":row[1]})
+    #     if(relationship != None):
+    #         parent_category = temp_map[relationship[0]]
+    #         print "found parent: "+str(parent_category)+" to category: "+str(row[1])
         
     
     
