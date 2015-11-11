@@ -33,19 +33,10 @@ class Category(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        getCategoryStructure(local_db)
-        self.finish()
-        # cur = db.cursor()
-        # cur.execute("SELECT * FROM Category")
-        # 
-        # output_array = []
-        # for row in cur.fetchall():
-        #     print ("appending: "+row[1])
-        #     output_map = dict()
-        #     output_map["Name"] = row[1]
-        #     output_array.append(output_map)
-        # cur.close()
-        # self.finish(json.dumps(output_array))
+        
+        self.finish(json.dumps(getCategoryStructure(local_db)))
+        
+
     
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):

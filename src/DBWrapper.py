@@ -362,23 +362,7 @@ def getCategoryStructure(local_db):
     for top_level in full_list:
         response.append(buildMap(name_map,children_lookup, top_level ))
         
-    print "built structure of: "
-    print str(response)
-    
-        
-    # for row in rows:
-    #     sql = "SELECT parent_category_id From CategoryParentRelationship WHERE child_category_id like "+str(row[0])+";"
-    #     cursor = local_db.cursor()
-    #     cursor.execute(sql)
-    #     relationship = cursor.fetchone()
-    #     cursor.close()
-    #     if (relationship == None):
-    #         top.append({"id":row[0], "name":row[1]})
-    #     if(relationship != None):
-    #         parent_category = temp_map[relationship[0]]
-    #         print "found parent: "+str(parent_category)+" to category: "+str(row[1])
-        
-    
+    return response
     
 def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
     output = {}
