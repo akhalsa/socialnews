@@ -36,13 +36,21 @@
                 top_options_string += "<li";
                 if (selected_top_index == i) {
                     top_options_string += " class=\"active\""
-                    current_cat = $( ".current-page" ).children("a").html(child.name);
-                    console.log("selected cat has name: "+current_cat);
+                    $( ".current-page" ).children("a").html(child.name);
+                    console.log("neighbor is: "+$(".current-page").next().html());
+                    
                 }
                 top_options_string += " id=\"top_level_id_"+i+"\"><a href=\"#\">"+child.name+"</a></li>";
                 
             });
             top_nav_container.innerHTML = top_options_string;
+            
+            /***
+             *
+             *   
+             */
+            
+            
             $.each(category_structure, function(i, child){
                $("#top_level_id_"+i).click(function(){ topChooser(i); return false; }); 
             });
