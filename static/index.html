@@ -18,7 +18,7 @@
         $.getJSON("/category", function(result){
             console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
             $.each(result, function(i, child){
-                console.log("i"+i+" child: "+child);
+                console.log("i"+i+" child: "+child+" with id: "+child.id+" and name: "+child.name);
             });
         });
 
