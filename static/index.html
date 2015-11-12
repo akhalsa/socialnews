@@ -16,12 +16,10 @@
          *
          */
         $.getJSON("/category", function(result){
-            console.log("got cat structure of:  "+JSON.stringify(result, null, 4))
-
-            for (top_level in result) {
-                console.log(JSON.stringify(top_level));
+            console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
+            $.each(children, function(i, child){
+                console.log("i"+i+" child: "+child);
             }
-            
         });
 
         window.onload = function (){
