@@ -20,7 +20,7 @@
             $.each(result, function(i, child){
                 
                 console.log("i"+i+" child: "+child+" with id: "+child.id+" and name: "+child.name);
-                $each(child.children, function(k, second_child){
+                $.each(child.children, function(k, second_child){
                     console.log("category: "+child+" has child: "+second_child.name);
                 });
             });
