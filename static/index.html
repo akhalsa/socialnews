@@ -36,6 +36,7 @@
                 top_options_string += "<li";
                 if (selected_top_index == i) {
                     top_options_string += " class=\"active\""
+                    $( ".current-page" ).children("a.first").html(child.name);
                 }
                 top_options_string += " id=\"top_level_id_"+i+"\"><a href=\"#\">"+child.name+"</a></li>";
                 
@@ -44,6 +45,7 @@
             $.each(category_structure, function(i, child){
                $("#top_level_id_"+i).click(function(){ topChooser(i); return false; }); 
             });
+            
             
         }
 
@@ -94,7 +96,7 @@
     <div class="col-xs-2 wrap-sub-nav">
       <ul id="nav-category" class="sub">
       	<li class="current-page"><a href="#">Sports</a></li>
-        <!--<li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></div>
+        <li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></div>
         	<ul>
             	<li><a href="#">iOS</a></li>
                 <li class="current-sub"><a href="#">OS X</a></li>
@@ -102,7 +104,7 @@
                 <li><a href="#">TV</a></li>
                 <li><a href="#">iPhone</a></li>
             </ul>
-        </li>-->
+        </li>
         
         <li><a href="#">Google</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
         <li><a href="#">Microsoft</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
