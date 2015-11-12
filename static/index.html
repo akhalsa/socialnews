@@ -37,7 +37,9 @@
                 if (selected_top_index == i) {
                     top_options_string += " class=\"active\""
                     $( ".current-page" ).children("a").html(child.name);
-                    console.log("neighbor is: "+$(".current-page").next().html());
+                    //TODO: all neighbor elements get populated by child.chilren categories
+                    $(".current-page").nextAll().remove();
+                    
                     
                 }
                 top_options_string += " id=\"top_level_id_"+i+"\"><a href=\"#\">"+child.name+"</a></li>";
@@ -45,10 +47,7 @@
             });
             top_nav_container.innerHTML = top_options_string;
             
-            /***
-             *
-             *   
-             */
+
             
             
             $.each(category_structure, function(i, child){
