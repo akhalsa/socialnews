@@ -36,7 +36,7 @@
                 top_options_string += "<li";
                 if (selected_top_index == i) {
                     top_options_string += " class=\"active\""
-                    current_cat = $( ".current-page" ).children("a").html();
+                    current_cat = $( ".current-page" ).children("a").html(child.name);
                     console.log("selected cat has name: "+current_cat);
                 }
                 top_options_string += " id=\"top_level_id_"+i+"\"><a href=\"#\">"+child.name+"</a></li>";
