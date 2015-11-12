@@ -39,6 +39,10 @@
                     $( ".current-page" ).children("a").html(child.name);
                     //TODO: all neighbor elements get populated by child.chilren categories
                     $(".current-page").nextAll().remove();
+                    $.each(child.children, function(k, second_level){
+                        $(".current-page").after( "<li><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>");
+                        
+                    });
                     
                     
                 }
