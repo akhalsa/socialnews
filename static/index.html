@@ -17,6 +17,10 @@
          */
         $.getJSON("/category", function(result){
             console.log("got cat structure of:  "+JSON.stringify(result, null, 4))
+
+            for (top_level in result) {
+                console.log(top_level["name"]);
+            }
             
         });
 
