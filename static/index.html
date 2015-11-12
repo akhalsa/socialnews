@@ -15,16 +15,33 @@
          *  Start by loading the category structure
          *
          */
+        var selected_top_index = 0;
+        
+        var category_structure;
+        
         $.getJSON("/category", function(result){
             console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
+            category_structure = result;
+            renderTopNav()
+            
+        });
+        
+        function renderTopNav() {
+            top_nav_container = document.getElementById("top_level_nav");
+            var top_options_string = "";
+            
             $.each(result, function(i, child){
                 
                 console.log("i"+i+" child: "+child+" with id: "+child.id+" and name: "+child.name);
-                $.each(child.children, function(k, second_child){
-                    console.log("category: "+child+" has child: "+second_child.name);
-                });
+                top_options_string += "<li";
+                if (selected_top_index == i) {
+                    top_options_string += " class=\"active\""
+                }
+                top_options_string += "><a href=\"#\">"+child.name+"</a></li>";
+                
             });
-        });
+            top_nav_container.innerHTML = top_options_string;
+        }
 
 
         window.onload = function (){
@@ -39,14 +56,14 @@
   <div class="container-fluid top-nav">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar">/span>
+        <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
       <a class="navbar-brand" href="#"><img src="images/logo.png" alt="Filtra" /></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" id="top_level_nav">
         <li class="active"><a href="#">Front Page</a></li>
         <li><a href="#">Technology</a></li>
         <li><a href="#">Sports</a></li>
