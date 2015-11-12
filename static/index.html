@@ -11,17 +11,15 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script type="text/javascript">
-        $.getJSON("/category/Sports", function (result){
+        /*
+         *  Start by loading the category structure
+         *
+         */
+        $.getJSON("/category/", function(result){
+            console.log("got cat structure of:  "+JSON.stringify(result, null, 4))
             
-            console.log("got children: "+JSON.stringify(result, null, 4));
-            /*var children_div = document.getElementById('children');
-            $.each(children, function(i, child){
-                var aTag = document.createElement('a');
-                aTag.setAttribute('href',window.location.href.split('?')[0]+"?cat="+child+"&time="+document.getElementById('seconds').value);
-                aTag.innerHTML = child;
-                children_div.appendChild(aTag);
-            });*/
         });
+
         window.onload = function (){
             
         }
