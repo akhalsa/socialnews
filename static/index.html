@@ -40,10 +40,11 @@
                 top_options_string += " id=\"top_level_id_"+i+"\"><a href=\"#\">"+child.name+"</a></li>";
                 
             });
+            top_nav_container.innerHTML = top_options_string;
             $.each(category_structure, function(i, child){
                $("#top_level_id_"+i).click(function(){ topChooser(i); return false; }); 
             });
-            top_nav_container.innerHTML = top_options_string;
+            
         }
 
         function topChooser(i) {
