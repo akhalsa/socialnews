@@ -32,7 +32,7 @@
             top_nav_container = document.getElementById("top_level_nav");
             var top_options_string = "";
             
-            $.each(category_structure.reverse(), function(i, child){
+            $.each(category_structure, function(i, child){
                 
                 console.log("i"+i+" child: "+child+" with id: "+child.id+" and name: "+child.name);
                 top_options_string += "<li";
