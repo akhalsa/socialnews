@@ -16,7 +16,8 @@
          *
          */
         var selected_top_index = 0;
-        var selected_secondary_index = 0;
+        var selected_secondary_index = -1;
+        var selected_third_index = -1;
         
         
         var category_structure;
@@ -42,14 +43,28 @@
                     //TODO: all neighbor elements get populated by child.chilren categories
                     $(".current-page").nextAll().remove();
                     var list_string = "";
-                    $.each(child.children.reverse(), function(k, second_level){
-                        if (k == selected_secondary_index) {
-                            list_string += "<li id=\"sub-nav2\"><div id=\"wrap-pr\"><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a></div></li>";
+                    $.each(child.children.reverse(), function(j, second_level){
+                        if (j == selected_secondary_index) {
+                            list_string += "<li id=\"sub-nav2\"><div id=\"wrap-pr\"><a href=\"#\">"
+                            list_string += second_level.name + "</a><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a></div></li>";
+                            if (second_level.children.length>0) {
+                                list_string += "<ul>"
+                            }
+                            $.each(second_level.children, function(k, third_level){
+                                if (k == selected_third_index) {
+                                    list_string += "<li class=\"current-sub\"><a href=\"#\">"+third_level.name+"</a></li>";
+                                }
+                                list_string += "<li><a href=\"#\">"+third_level.name+"</a></li>"; 
+                            });
+                            if (second_level.children.length>0) {
+                                list_string += "</ul>";
+                            }
+                            list_string += "</li>";
+                        
                         } else{
                             list_string += "<li><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>";
 
                         }
-                        
                     });
                     $(".current-page").after(list_string);
                     
