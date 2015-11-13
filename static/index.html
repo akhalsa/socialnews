@@ -16,6 +16,8 @@
          *
          */
         var selected_top_index = 0;
+        var selected_secondary_index = 0;
+        
         
         var category_structure;
         
@@ -40,7 +42,12 @@
                     //TODO: all neighbor elements get populated by child.chilren categories
                     $(".current-page").nextAll().remove();
                     $.each(child.children, function(k, second_level){
-                        $(".current-page").after( "<li><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>");
+                        if (k  ==selected_secondary_index) {
+                            $(".current-page").after("<li id=\"sub-nav2\"><div id=\"wrap-pr\"><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a></div></li>");
+                            
+                        }else{
+                            $(".current-page").after( "<li><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>");
+                        }
                         
                     });
                     
