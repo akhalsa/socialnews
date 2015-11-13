@@ -42,7 +42,8 @@
                     //TODO: all neighbor elements get populated by child.chilren categories
                     $(".current-page").nextAll().remove();
                     var list_string = "";
-                    $.each(child.children.reverse(), function(j, second_level){
+                    var reverseable = child.children.slice();
+                    $.each(reverseable.reverse(), function(j, second_level){
                         if (j == selected_secondary_index) {
                             console.log("j val: "+j+" has name "+second_level.name);
                             list_string += "<li id=\"sub-nav2\" onclick=\"topChooser("+i+","+j+",-1)\"><div id=\"wrap-pr\"><a href=\"#\">"
