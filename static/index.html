@@ -45,7 +45,7 @@
                     var list_string = "";
                     $.each(child.children.reverse(), function(j, second_level){
                         if (j == selected_secondary_index) {
-                            list_string += "<li id=\"sub-nav2\"><div id=\"wrap-pr\"><a href=\"#\">"
+                            list_string += "<li id=\"sub-nav2\" onclick=\"topChooser("+i+","+j+",-1)\"><div id=\"wrap-pr\"><a href=\"#\">"
                             list_string += second_level.name + "</a><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a></div></li>";
                             if (second_level.children.length>0) {
                                 list_string += "<ul>"
@@ -62,7 +62,7 @@
                             list_string += "</li>";
                         
                         } else{
-                            list_string += "<li><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>";
+                            list_string += "<li onclick=\"topChooser("+i+","+j+",-1)\"><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>";
 
                         }
                     });
@@ -79,14 +79,16 @@
             
             
             $.each(category_structure, function(i, child){
-               $("#top_level_id_"+i).click(function(){ topChooser(i); return false; }); 
+               $("#top_level_id_"+i).click(function(){ topChooser(i, -1, -1); return false; }); 
             });
             
             
         }
 
-        function topChooser(i) {
+        function topChooser(i, j, k) {
             console.log("got a call to top chooser with val: "+i);
+            selected_secondary_index = j;
+            selected_third_index = k;
             selected_top_index = i;
             renderTopNav();
         }
