@@ -53,9 +53,9 @@
                             }
                             $.each(second_level.children, function(k, third_level){
                                 if (k == selected_third_index) {
-                                    list_string += "<li class=\"current-sub\"><a href=\"#\">"+third_level.name+"</a></li>";
+                                    list_string += "<li class=\"current-sub\" onclick=\"topChooser("+i+","+j+","+k+")\"><a href=\"#\">"+third_level.name+"</a></li>";
                                 }
-                                list_string += "<li><a href=\"#\">"+third_level.name+"</a></li>"; 
+                                list_string += "<li><a href=\"#\" onclick=\"topChooser("+i+","+j+","+k+")\">"+third_level.name+"</a></li>"; 
                             });
                             if (second_level.children.length>0) {
                                 list_string += "</ul>";
