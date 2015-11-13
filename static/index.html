@@ -19,8 +19,12 @@
         var selected_secondary_index = 0;
         var selected_third_index = -1;
         
+        var time_frame_index = 0;
+        var time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
+                           {seconds:10800, text:"Past 3 Hours"}, {seconds:10800, text:"Today"}];
         
         var category_structure;
+        
         
         $.getJSON("/category", function(result){
             console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
@@ -94,6 +98,23 @@
             selected_third_index = k;
             selected_top_index = i;
             renderTopNav();
+        }
+        
+        function renderTimeFrame() {
+            $("#time").empty();
+            $.each(time_frames, function(i, time_frame){
+                if (i == time_frame_index) {
+                    time_options_string += "<li class=\"current\" onclick=\"selectTimeFrameIndex("+i+")\"><a href=\"#\"><span class=\"genericon genericon-time\"></span>"+time_frame.text
+                    +"</a><br/><span class=\"genericon genericon-downarrow\"></span></li>";
+            
+                }
+                time_options_string += "<li onclick=\"selectTimeFrameIndex("+i+")\"><a href=\"#\"><span class=\"genericon genericon-time\"></span>"+time_frame.text+"</a></li>";
+            });
+            
+        }
+        function selectTimeFrameIndex(new_index) {
+            time_frame_index = new_index;
+            renderTimeFrame();
         }
 
         window.onload = function (){
