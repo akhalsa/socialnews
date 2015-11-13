@@ -29,7 +29,8 @@
         $.getJSON("/category", function(result){
             console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
             category_structure = result;
-            renderTopNav()
+            renderTopNav();
+            renderTimeFrame();
             
         });
         
@@ -81,9 +82,6 @@
                 
             });
             top_nav_container.innerHTML = top_options_string;
-            
-
-            
             
             $.each(category_structure, function(i, child){
                $("#top_level_id_"+i).click(function(){ topChooser(i, -1, -1); return false; }); 
