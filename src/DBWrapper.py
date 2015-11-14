@@ -132,8 +132,8 @@ def getOccurrencesInCategory(local_db, seconds_delta, threshold, category_id, id
     
     for t_id in ids_to_check:
         sql += "'"+str(t_id)+"', "
-    
-    sql = sql[:-2]
+    if(len(ids_to_check)>0):
+        sql = sql[:-2]
     sql += ") GROUP BY twitter_id;"
     cursor = local_db.cursor()
     cursor.execute(sql)
