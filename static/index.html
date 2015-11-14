@@ -34,6 +34,23 @@
             
         });
         
+        
+        function renderTweets() {
+            var cat_name = ""
+            console.log("top category: "+str(category_structure[selected_top_index].name));
+            
+            
+
+            
+            /*$.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
+                console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
+                category_structure = result;
+                renderTopNav();
+                renderTimeFrame();
+                
+            });*/
+        }
+        
         function renderTopNav() {
             top_nav_container = document.getElementById("top_level_nav");
             var top_options_string = "";
@@ -120,7 +137,7 @@
         }
 
         window.onload = function (){
-            
+            renderTweets();
         }
   </script>
 </head>
