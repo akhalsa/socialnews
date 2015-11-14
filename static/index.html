@@ -38,24 +38,23 @@
         function renderTweets() {
             var cat_name = ""
             if ((selected_secondary_index != -1) &&(selected_third_index != -1)){
-                console.log("selected category: "+String(category_structure[selected_top_index].children[selected_secondary_index].children[selected_third_index].name));
+                cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].children[selected_third_index].name);
             }else if (selected_secondary_index != -1) {
-                console.log("selected category: "+String(category_structure[selected_top_index].children[selected_secondary_index].name));
+                cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].name);
             }else {
-                console.log("selected category: "+String(category_structure[selected_top_index].name));
+                cat_name= String(category_structure[selected_top_index].name);
             }
+            
             
             
             
 
             
-            /*$.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
-                console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
-                category_structure = result;
-                renderTopNav();
-                renderTimeFrame();
+            $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
+                console.log("got tweets:  "+JSON.stringify(result, null, 4));
+
                 
-            });*/
+            });
         }
         
         function renderTopNav() {
