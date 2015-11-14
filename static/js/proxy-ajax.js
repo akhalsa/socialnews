@@ -33,9 +33,9 @@ $.ajax = function(settings) {
             error: settings.error
         };
 
-        /*settings.complete = function(jqXHR, textStatus) {
+        settings.complete = function(jqXHR, textStatus) {
             settingsCopy.complete(jqXHR, textStatus);
-        };*/
+        };
 
         settings.success = function(data, textStatus, jqXHR) {
             settingsCopy.success(data, textStatus, jqXHR);
