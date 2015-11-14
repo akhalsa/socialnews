@@ -37,7 +37,14 @@
         
         function renderTweets() {
             var cat_name = ""
-            console.log("top category: "+String(category_structure[selected_top_index].name));
+            if ((selected_secondary_index != -1) &&(selected_third_index != -1)){
+                console.log("selected category: "+String(category_structure[selected_top_index][selected_secondary_index][selected_third_index].name));
+            }else if (selected_secondary_index != -1) {
+                console.log("selected category: "+String(category_structure[selected_top_index][selected_secondary_index].name));
+            }else {
+                console.log("selected category: "+String(category_structure[selected_top_index].name));
+            }
+            
             
             
 
@@ -113,6 +120,7 @@
             selected_third_index = k;
             selected_top_index = i;
             renderTopNav();
+            renderTweets();
         }
         
         function renderTimeFrame() {
