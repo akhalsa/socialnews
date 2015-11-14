@@ -49,6 +49,7 @@
             }else {
                 cat_name= String(category_structure[selected_top_index].name);
             }
+            console.log("selected cat name: "+cat_name);
             
             
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
