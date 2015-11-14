@@ -119,7 +119,10 @@
                                 console.log("onComplete");
                                 console.log("looking for text");
                                 //must find all the outbound links in the structure
-                                console.log($("#tweet_preview_"+i).html());
+                                //console.log($("#tweet_preview_"+i).html());
+                                $("#tweet_preview_"+i).find('a').each(function(e) {
+                                   console.log("found link: "+e);
+                                });
                                 console.log("done");
                             }
                         });
