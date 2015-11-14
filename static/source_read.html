@@ -19,6 +19,23 @@
             window.onload = function (){
                 console.log("running onload");
                 document.getElementById('seconds').defaultValue = QueryString.time;
+                
+                jQuery("#tweet_cont").linkpreview({
+                        previewContainer: "#tweet_prev",
+                        url : "/page_load/www.google.com",
+                        preProcess: function() {
+                            console.log("preProcess");
+                        },
+                        onSuccess: function() {
+                            console.log("onSuccess");
+                        },
+                        onError: function() {
+                            console.log("onError");
+                        },
+                        onComplete: function() {
+                            console.log("onComplete");
+                        }
+                });
             }
             var QueryString = function () {
                 // This function is anonymous, is executed immediately and 
@@ -53,73 +70,73 @@
                     children_div.appendChild(aTag);
                 });
             });
-            $.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
-                var tweets = [];
-                
-                $.each(result, function(i, field){
-                    
-                    var finished = false;
-                    
-                    for	(index = 0; index < tweets.length; index++) {
-                        
-                        if ((parseInt(field.tweet_count) > parseInt(tweets[index].tweet_count)) &&(finished == false)) {
-                            tweets.splice(index, 0, field);
-                            finished = true;
-                        }
-                    }
-                    
-                    if (!finished) {
-                        tweets.push(field);
-                    }
-                });
-                
-                tweet_list_element = document.getElementById("tweet_list");
-                tweet_list_element.innerHTML = "";
-                //console.log("tweet list length is: "+tweet_list.length);
-                for (i=0; i<tweets.length; i++) {
-                    //console.log("adding: "+tweet_list[i]);
-                    var list_item = document.createElement('li');
-                    list_item.setAttribute("id", "list_item_"+i);
-                    var source_div = document.createElement('div');
-                    
-                    var image_element = document.createElement("img");
-                    image_element.src = tweets[i].pic;
-                    var name_span = document.createElement("span");
-                    name_span.appendChild(document.createTextNode(tweets[i].name));
-                    source_div.appendChild(image_element);
-                    source_div.appendChild(name_span);
-                    list_item.appendChild(source_div);
-                    list_item.appendChild(document.createTextNode(tweets[i].text+": "+tweets[i].tweet_count));
-                    var div_item = document.createElement('div');
-                    div_item.setAttribute("id", "div_item_"+i);
-                    list_item.appendChild(div_item)
-                    tweet_list_element.appendChild(list_item);
-                    var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-                    var link_exists = false;
-                    
-                    if(tweets[i].text.match(urlRegEx)){
-                        link_exists = true;
-                        jQuery(list_item).linkpreview({
-                        previewContainer: "#div_item_"+i,
-                        url : tweets[i].text.match(urlRegEx)[0],
-                        preProcess: function() {
-                            console.log("preProcess");
-                        },
-                        onSuccess: function() {
-                            console.log("onSuccess");
-                        },
-                        onError: function() {
-                            console.log("onError");
-                        },
-                        onComplete: function() {
-                            console.log("onComplete");
-                        }
-                    });
-                    }
-                    
-                }
-
-            });
+            //$.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
+            //    var tweets = [];
+            //    
+            //    $.each(result, function(i, field){
+            //        
+            //        var finished = false;
+            //        
+            //        for	(index = 0; index < tweets.length; index++) {
+            //            
+            //            if ((parseInt(field.tweet_count) > parseInt(tweets[index].tweet_count)) &&(finished == false)) {
+            //                tweets.splice(index, 0, field);
+            //                finished = true;
+            //            }
+            //        }
+            //        
+            //        if (!finished) {
+            //            tweets.push(field);
+            //        }
+            //    });
+            //    
+            //    tweet_list_element = document.getElementById("tweet_list");
+            //    tweet_list_element.innerHTML = "";
+            //    //console.log("tweet list length is: "+tweet_list.length);
+            //    for (i=0; i<tweets.length; i++) {
+            //        //console.log("adding: "+tweet_list[i]);
+            //        var list_item = document.createElement('li');
+            //        list_item.setAttribute("id", "list_item_"+i);
+            //        var source_div = document.createElement('div');
+            //        
+            //        var image_element = document.createElement("img");
+            //        image_element.src = tweets[i].pic;
+            //        var name_span = document.createElement("span");
+            //        name_span.appendChild(document.createTextNode(tweets[i].name));
+            //        source_div.appendChild(image_element);
+            //        source_div.appendChild(name_span);
+            //        list_item.appendChild(source_div);
+            //        list_item.appendChild(document.createTextNode(tweets[i].text+": "+tweets[i].tweet_count));
+            //        var div_item = document.createElement('div');
+            //        div_item.setAttribute("id", "div_item_"+i);
+            //        list_item.appendChild(div_item)
+            //        tweet_list_element.appendChild(list_item);
+            //        var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
+            //        var link_exists = false;
+            //        
+            //        if(tweets[i].text.match(urlRegEx)){
+            //            link_exists = true;
+            //            jQuery(list_item).linkpreview({
+            //            previewContainer: "#div_item_"+i,
+            //            url : tweets[i].text.match(urlRegEx)[0],
+            //            preProcess: function() {
+            //                console.log("preProcess");
+            //            },
+            //            onSuccess: function() {
+            //                console.log("onSuccess");
+            //            },
+            //            onError: function() {
+            //                console.log("onError");
+            //            },
+            //            onComplete: function() {
+            //                console.log("onComplete");
+            //            }
+            //        });
+            //        }
+            //        
+            //    }
+            //
+            //});
             
             
         
@@ -137,5 +154,12 @@
         </div>
         <ul id="tweet_list">
         </ul>
+        
+        <div id="tweet_cont">
+            
+        </div>
+        <div id="tweet_prev">
+            
+        </div>
     </body>
 </html>
