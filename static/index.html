@@ -73,7 +73,7 @@
                     
                     if(child.text.match(urlRegEx)){
                         jQuery("#tweet_"+i).linkpreview({
-                            url : tweets[i].text.match(urlRegEx)[0],
+                            url : child.text.match(urlRegEx)[0],
                             preProcess: function() {
                                 console.log("preProcess");
                             },
