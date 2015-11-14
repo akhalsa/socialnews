@@ -8,8 +8,11 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="fonts/genericons/genericons.css">
   <link rel="stylesheet" href="css/non-responsive.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-linkpreview.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap-linkpreview.js"></script>
+  
   <script type="text/javascript">
         /*
          *  Start by loading the category structure
@@ -58,10 +61,35 @@
                     tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
                     tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
                     tweet_html += "<div class=\"clear\"></div></div>";
-                    tweet_html += "<div class=\"wrap-con-tw\">"+child.text+"</div></div>"
+                    tweet_html += "<div class=\"wrap-con-tw\">"+child.text+"<div class=\"preview-tw\" id=\"+tweet_"+i+"\"></div></div>"
+                    
+                    
                 });
                 $("#time").after(tweet_html);
                 
+                $.each(result, function(i, child){
+                    var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
+
+                    
+                    if(child.text.match(urlRegEx)){
+                        jQuery(list_item).linkpreview({
+                            previewContainer: "#tweet_"+i,
+                            url : tweets[i].text.match(urlRegEx)[0],
+                            preProcess: function() {
+                                console.log("preProcess");
+                            },
+                            onSuccess: function() {
+                                console.log("onSuccess");
+                            },
+                            onError: function() {
+                                console.log("onError");
+                            },
+                            onComplete: function() {
+                                console.log("onComplete");
+                            }
+                        });
+                    }    
+                });
             });
         }
         
