@@ -62,8 +62,13 @@ class PageLoad(tornado.web.RequestHandler):
                 print "********** ATTEMPTING TO ASYNC LOAD: "+url
                 self.finish(urllib2.urlopen(url).read(200000))
                 
-
+class IndexHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self):
+        self.render("static/index.html")
+        
 app = tornado.web.Application([
+    (r'/', IndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
