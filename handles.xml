@@ -1,5 +1,24 @@
 <?xml version="1.0"?>
 <root>
+    <category name="Paris Terror Attack">
+        <handle>@cnni</handle>
+        <handle>@cnnbrk</handle>
+        <handle>@BBCBreaking</handle>
+        <handle>@itvnews</handle>
+        <handle>@SOSParis1311</handle>
+        <handle>@BFMTV</handle>
+        <handle>@lemondefr</handle>
+        <handle>@afpfr</handle>
+        <handle>@Paris</handle>
+        <handle>@lemondelive</handle>
+        <handle>@AJIB_fr</handle>
+        <handle>@Contrepoints</handle>
+        <handle>@paris_2015</handle>
+        <handle>@Le_Figaro</handle>
+        <handle>@France24_fr</handle>
+        <handle>@France24</handle>
+        <handle>@LeHuffPost</handle>
+    </category>
     <category name="Sports">
         <handle>@billbarnwell</handle>
         <handle>@jimrome</handle>

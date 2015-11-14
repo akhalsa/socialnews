@@ -182,6 +182,7 @@ def periodicSurge():
         
         local_db_surge.close()
 
+
     
 if __name__ == '__main__':
     mdl = src.CategoryModel.CategoryModel(db, api)
