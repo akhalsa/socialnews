@@ -376,8 +376,9 @@ def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
     output = {}
     output["id"] = id_to_descend
     output["name"] = id_to_name_map[id_to_descend]
+    output["children"] = []
     if(id_to_descend in id_to_children_array_map):
-        output["children"] = []
+        
         for child in id_to_children_array_map[id_to_descend]:
             output["children"].append(buildMap(id_to_name_map, id_to_children_array_map, child))
 
