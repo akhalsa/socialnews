@@ -53,8 +53,9 @@ class Reader(tornado.web.RequestHandler):
                 if(cat_id == 0):
                         self.finish("Category Error, Try Again")
                 print "found category id: "+str(cat_id)        
+                
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db)
-                self.finish(json.dumps(lookup[0]))
+                self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
         def get(self, url):

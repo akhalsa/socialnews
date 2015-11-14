@@ -10,14 +10,18 @@ def getTweetOccurances(seconds, cat_id, local_db):
     cursor.execute(sql)
     results = {}
     twitter_ids = []
+    top_tweets = []
     for row in cursor.fetchall():
             twitter_ids.append(row[0])
             results[row[0]] = {"tweet_count":row[1] }
+            top_tweets.append({"id":row[0], "tweet_count":row[1]})
+            
+            
 
     cursor.close()
     #add text
     if(len(twitter_ids)==0):
-            return (results, twitter_ids)
+            return top_tweets
     
     cursor = local_db.cursor()
     #sql = "SELECT twitter_id, text, source_id From Tweet A "
@@ -38,12 +42,16 @@ def getTweetOccurances(seconds, cat_id, local_db):
 
     cursor.execute(sql)
     for row in cursor.fetchall():
-            results[row[0]]["text"] = row[1]
-            results[row[0]]["name"] = row[2]
-            results[row[0]]["pic"] = row[3]
+        for tweet_dict in top_tweets:
+            if(tweet_dict["id"] == row[0]):
+                tweet_dict["text"] = row[1]
+                tweet_dict["name"] = row[2]
+                tweet_dict["pic"] = row[3]
+                break
+            
     cursor.close()
-    print results
-    return (results, twitter_ids)
+    print top_tweets
+    return top_tweets
 
 def findCategoryIdWithName(cat_name, local_db):
     cursor = local_db.cursor()
