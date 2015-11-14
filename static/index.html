@@ -46,14 +46,12 @@
             }
             
             
-            
-            
-
-            
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
-                console.log("got tweets:  "+JSON.stringify(result, null, 4));
+                
                 $.each(result, function(i, child){
                     console.log("tweet has id: "+child.tweet_count);
+                    //lets clear all the tweets
+                     $("#time").nextAll().remove();
                 });
                 
             });
