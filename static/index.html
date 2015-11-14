@@ -34,7 +34,6 @@
     var trackOutboundLink = function(url) {
        ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
          function () {
-         document.location = url;
          }
        });
     }
@@ -123,8 +122,7 @@
                                 $("#tweet_preview_"+i).find('a').each(function(e) {
                                    //console.log("found link: "+e+" with text: "+$( this ).text()+" and url: "+$( this ).attr("href"));
                                    $(this).click(function() {
-                                        trackOutboundLink($( this ).attr("href"))
-                                        return false;
+                                        trackOutboundLink($( this ).attr("href"));
                                    });
                                 });
                                 console.log("done");
