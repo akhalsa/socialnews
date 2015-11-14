@@ -124,6 +124,7 @@
                                    //console.log("found link: "+e+" with text: "+$( this ).text()+" and url: "+$( this ).attr("href"));
                                    $(this).click(function() {
                                         trackOutboundLink($( this ).attr("href"))
+                                        return false;
                                    });
                                 });
                                 console.log("done");
