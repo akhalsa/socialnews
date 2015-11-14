@@ -47,12 +47,20 @@
             
             
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
+                $("#time").nextAll().remove();
+                tweet_html = "";
                 
                 $.each(result, function(i, child){
                     console.log("tweet has id: "+child.tweet_count);
                     //lets clear all the tweets
-                     $("#time").nextAll().remove();
+                    tweet_html += "<div class=\"con-tw\">";
+                    tweet_html += "<div class=\"wrap-user\">";
+                    tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
+                    tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
+                    tweet_html += "<div class=\"clear\"></div></div>";
+                    tweet_html += "<div class=\"wrap-con-tw\">"+child.text+"</div></div>"
                 });
+                $("#time").after(tweet_html);
                 
             });
         }
