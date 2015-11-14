@@ -61,7 +61,7 @@
                     tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
                     tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
                     tweet_html += "<div class=\"clear\"></div></div>";
-                    tweet_html += "<div class=\"wrap-con-tw\">"+child.text+"<div class=\"preview-tw\" id=\"+tweet_"+i+"\"></div></div>"
+                    tweet_html += "<div class=\"wrap-con-tw\" ><span id=\"+tweet_"+i+"\">"+child.text+"</span><div class=\"preview-tw\" ></div></div>"
                     
                     
                 });
@@ -72,8 +72,7 @@
 
                     
                     if(child.text.match(urlRegEx)){
-                        jQuery(list_item).linkpreview({
-                            previewContainer: "#tweet_"+i,
+                        jQuery("#tweet_"+i).linkpreview({
                             url : tweets[i].text.match(urlRegEx)[0],
                             preProcess: function() {
                                 console.log("preProcess");
