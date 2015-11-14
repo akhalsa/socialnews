@@ -121,7 +121,10 @@
                                 //must find all the outbound links in the structure
                                 //console.log($("#tweet_preview_"+i).html());
                                 $("#tweet_preview_"+i).find('a').each(function(e) {
-                                   console.log("found link: "+e+" with text: "+$( this ).text()+" and url: "+$( this ).attr("href"));
+                                   //console.log("found link: "+e+" with text: "+$( this ).text()+" and url: "+$( this ).attr("href"));
+                                   $(this).click(function() {
+                                        trackOutboundLink($( this ).attr("href"))
+                                   });
                                 });
                                 console.log("done");
                             }
