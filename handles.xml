@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <root>
-    <category name="Democratic Presidential Debate">
+    <category name="Politics">
         <category name="Politicians">
             <category name="Democrats">
                 <handle>@BarackObama</handle>
@@ -159,6 +159,7 @@
                 <handle>@weeklystandard</handle>
                 <handle>@BillKristol</handle>
                 <handle>@glennbeck</handle>
+                <handle>@ezraklein</handle>
             </category>
             <category name = "Liberal">
                 <handle>@billmaher</handle>
