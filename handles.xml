@@ -51,6 +51,8 @@
                 <handle>@SenatorCantwell</handle>
                 <handle>@Sen_JoeManchin</handle>
                 <handle>@SenatorBaldwin</handle>
+                <handle>@HillaryClinton</handle>
+                <handle>@MartinOMalley</handle>
             </category>
             <category name="Republicans">
                 <handle>@SenShelby</handle>
@@ -112,17 +114,65 @@
                 <handle>@SenRonJohnson</handle>
                 <handle>@SenatorEnzi</handle>
                 <handle>@SenJohnBarrasso</handle>
+                <handle>@JebBush</handle>
+                <handle>@RealBenCarson</handle>
+                <handle>@ChrisChristie</handle>
+                <handle>@GovChristie</handle>
+                <handle>@CarlyFiorina</handle>
+                <handle>@GovMikeHuckabee</handle>
+                <handle>@BobbyJindal</handle>
+                <handle>@JohnKasich</handle>
+                <handle>@GovernorPataki</handle>
+                <handle>@realDonaldTrump</handle>
+                <handle>@PRyan</handle>
+                <handle>@SpeakerRyan</handle>
+                <handle>@GOPLeader</handle>
+                <handle>@kevinomccarthy</handle>
             </category>
         </category>
         <category name ="Media">
-            <category name="Comedians">
-                
+            <category name ="Moderate">
+                <handle>@NateSilver538</handle>
+                <handle>@PolitiFact</handle>
+                <handle>@CBSPolitics</handle>
+                <handle>@NBCPolitics</handle>
+                <handle>@ABCPolitics</handle>
+                <handle>@washingtonpost</handle>
+                <handle>@katiecouric</handle>
             </category>
-            <category name = "Republican Pundits">
-                
+            <category name = "Conservative">
+                <handle>@DennisDMZ</handle>
+                <handle>@oreillyfactor</handle>
+                <handle>@DRUDGE_REPORT</handle>
+                <handle>@DRUDGE</handle>
+                <handle>@seanhannity</handle>
+                <handle>@megynkelly</handle>
+                <handle>@MicheleBachmann</handle>
+                <handle>@AnnCoulter</handle>
+                <handle>@davidfrum</handle>
+                <handle>@DailyCaller</handle>
+                <handle>@BreitbartNews</handle>
+                <handle>@michellemalkin</handle>
+                <handle>@weeklystandard</handle>
+                <handle>@BillKristol</handle>
             </category>
-            <category name = "Democratic Pundits">
-                
+            <category name = "Liberal">
+                <handle>@billmaher</handle>
+                <handle>@TheDailyShow</handle>
+                <handle>@StephenAtHome</handle>
+                <handle>@colbertlateshow</handle>
+                <handle>@HuffPostPol</handle>
+                <handle>@TheDemocrats</handle>
+                <handle>@harikondabolu</handle>
+                <handle>@iamjohnoliver</handle>
+                <handle>@LastWeekTonight</handle>
+                <handle>@MSNBC</handle>
+                <handle>@PoliticsNation</handle>
+                <handle>@maddow</handle>
+                <handle>@KeithOlbermann</handle>
+                <handle>@dailykos</handle>
+                <handle>@MotherJones</handle>
+                <handle>@thenation</handle>
             </category>
         </category>
     </category>
