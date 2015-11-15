@@ -139,6 +139,9 @@
                 <handle>@ABCPolitics</handle>
                 <handle>@washingtonpost</handle>
                 <handle>@katiecouric</handle>
+                <handle>@BuzzFeedPol</handle>
+                <handle>@jaketapper</handle>
+                <handle>@bpolitics</handle>
             </category>
             <category name = "Conservative">
                 <handle>@DennisDMZ</handle>
@@ -155,6 +158,7 @@
                 <handle>@michellemalkin</handle>
                 <handle>@weeklystandard</handle>
                 <handle>@BillKristol</handle>
+                <handle>@glennbeck</handle>
             </category>
             <category name = "Liberal">
                 <handle>@billmaher</handle>
@@ -173,6 +177,8 @@
                 <handle>@dailykos</handle>
                 <handle>@MotherJones</handle>
                 <handle>@thenation</handle>
+                <handle>@GStephanopoulos</handle>
+                <handle>@politico</handle>
             </category>
         </category>
     </category>
