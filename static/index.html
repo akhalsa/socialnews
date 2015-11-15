@@ -37,6 +37,20 @@
          }
        });
     }
+    
+    var trackCategorySelection = function(cat_name){
+        ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+         function () {
+         }
+       });   
+    }
+    
+    var trackTimeRangeSelection = function(seconds){
+        ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
+         function () {
+         }
+       });  
+    }
   </script>
   <script type="text/javascript">
         /*
@@ -62,21 +76,20 @@
             renderTweets();
         });
         
-        
-        function renderTweets() {
+        function currentCatName() {
             var cat_name = ""
             if ((selected_secondary_index != -1) &&(selected_third_index != -1)){
                 cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].children[selected_third_index].name);
-                console.log("selected cat name: "+cat_name+" based on first index: "+selected_top_index+", second index: "+selected_secondary_index
-                            + " and third index: "+selected_third_index);
             }else if (selected_secondary_index != -1) {
                 cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].name);
-                console.log("selected cat name: "+cat_name+" based on first index: "+selected_top_index+" and second index: "+selected_secondary_index);
             }else {
                 cat_name= String(category_structure[selected_top_index].name);
-                console.log("selected cat name: "+cat_name);
             }
+            return cat_name;
+        }
+        function renderTweets() {
             
+            cat_name = currentCatName();
             
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
                 $("#time").nextAll().remove();
@@ -195,6 +208,7 @@
             selected_top_index = i;
             renderTopNav();
             renderTweets();
+            trackCategorySelection(currentCatName());
         }
         
         function renderTimeFrame() {
@@ -217,6 +231,7 @@
             time_frame_index = new_index;
             renderTimeFrame();
             renderTweets();
+            trackTimeRangeSelection(time_frames[time_frame_index].seconds);
         }
 
   </script>
