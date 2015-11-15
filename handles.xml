@@ -1,5 +1,131 @@
 <?xml version="1.0"?>
 <root>
+    <category name="Democratic Presidential Debate">
+        <category name="Politicians">
+            <category name="Democrats">
+                <handle>@BarackObama</handle>
+                <handle>@WhiteHouse</handle>
+                <handle>@SenFeinstein</handle>
+                <handle>@SenatorBoxer</handle>
+                <handle>@SenBennetCO</handle>
+                <handle>@SenBlumenthal</handle>
+                <handle>@ChrisMurphyCT</handle>
+                <handle>@SenatorCarper</handle>
+                <handle>@ChrisCoons</handle>
+                <handle>@SenBillNelson</handle>
+                <handle>@brianschatz</handle>
+                <handle>@maziehirono</handle>
+                <handle>@SenatorDurbin</handle>
+                <handle>@SenDonnelly</handle>
+                <handle>@SenAngusKing</handle>
+                <handle>@SenatorBarb</handle>
+                <handle>@SenatorCardin</handle>
+                <handle>@SenWarren</handle>
+                <handle>@SenMarkey</handle>
+                <handle>@stabenow</handle>
+                <handle>@amyklobuchar</handle>
+                <handle>@alfranken</handle>
+                <handle>@clairecmc</handle>
+                <handle>@SenatorTester</handle>
+                <handle>@SenatorReid</handle>
+                <handle>@SenatorShaheen</handle>
+                <handle>@JeanneShaheen</handle>
+                <handle>@SenatorMenendez</handle>
+                <handle>@CoryBooker</handle>
+                <handle>@SenatorTomUdall</handle>
+                <handle>@MartinHeinrich</handle>
+                <handle>@SenSchumer</handle>
+                <handle>@SenGillibrand</handle>
+                <handle>@SenatorHeitkamp</handle>
+                <handle>@SenSherrodBrown</handle>
+                <handle>@RonWyden</handle>
+                <handle>@SenJeffMerkley</handle>
+                <handle>@SenBobCasey</handle>
+                <handle>@SenJackReed</handle>
+                <handle>@SenWhitehouse</handle>
+                <handle>@SenatorLeahy</handle>
+                <handle>@BernieSanders</handle>
+                <handle>@MarkWarner</handle>
+                <handle>@timkaine</handle>
+                <handle>@PattyMurray</handle>
+                <handle>@SenatorCantwell</handle>
+                <handle>@Sen_JoeManchin</handle>
+                <handle>@SenatorBaldwin</handle>
+            </category>
+            <category name="Republicans">
+                <handle>@SenShelby</handle>
+                <handle>@SenatorSessions</handle>
+                <handle>@lisamurkowski</handle>
+                <handle>@SenDanSullivan</handle>
+                <handle>@SenJohnMcCain</handle>
+                <handle>@JeffFlake</handle>
+                <handle>@JohnBoozman</handle>
+                <handle>@SenTomCotton</handle>
+                <handle>@CoryGardner</handle>
+                <handle>@marcorubio</handle>
+                <handle>@SenatorIsakson</handle>
+                <handle>@sendavidperdue</handle>
+                <handle>@MikeCrapo</handle>
+                <handle>@SenatorRisch</handle>
+                <handle>@SenatorKirk</handle>
+                <handle>@SenDanCoats</handle>
+                <handle>@ChuckGrassley</handle>
+                <handle>@joniernst</handle>
+                <handle>@SenPatRoberts</handle>
+                <handle>@JerryMoran</handle>
+                <handle>@SenateMajLdr</handle>
+                <handle>@McConnellPress</handle>
+                <handle>@RandPaul</handle>
+                <handle>@DavidVitter</handle>
+                <handle>@BillCassidy</handle>
+                <handle>@SenatorCollins</handle>
+                <handle>@SenGaryPeters</handle>
+                <handle>@SenThadCochran</handle>
+                <handle>@SenatorWicker</handle>
+                <handle>@RoyBlunt</handle>
+                <handle>@SteveDaines</handle>
+                <handle>@SenatorFischer</handle>
+                <handle>@BenSasse</handle>
+                <handle>@DeanHeller</handle>
+                <handle>@SenDeanHeller</handle>
+                <handle>@KellyAyotte</handle>
+                <handle>@SenatorBurr</handle>
+                <handle>@ThomTillis</handle>
+                <handle>@SenJohnHoeven</handle>
+                <handle>@senrobportman</handle>
+                <handle>@robportman</handle>
+                <handle>@jiminhofe</handle>
+                <handle>@SenatorLankford</handle>
+                <handle>@jameslankford</handle>
+                <handle>@SenToomey</handle>
+                <handle>@LindseyGrahamSC</handle>
+                <handle>@SenatorTimScott</handle>
+                <handle>@SenJohnThune</handle>
+                <handle>@johnthune</handle>
+                <handle>@SenatorRounds</handle>
+                <handle>@SenAlexander</handle>
+                <handle>@SenBobCorker</handle>
+                <handle>@JohnCornyn</handle>
+                <handle>@tedcruz</handle>
+                <handle>@SenMikeLee</handle>
+                <handle>@SenCapito</handle>
+                <handle>@SenRonJohnson</handle>
+                <handle>@SenatorEnzi</handle>
+                <handle>@SenJohnBarrasso</handle>
+            </category>
+        </category>
+        <category name ="Media">
+            <category name="Comedians">
+                
+            </category>
+            <category name = "Republican Pundits">
+                
+            </category>
+            <category name = "Democratic Pundits">
+                
+            </category>
+        </category>
+    </category>
     <category name="Paris Terror Attack">
         <handle>@cnni</handle>
         <handle>@cnnbrk</handle>
