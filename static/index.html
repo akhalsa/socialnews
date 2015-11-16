@@ -67,6 +67,8 @@
         
         var category_structure;
         
+        var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
+
         
         $.getJSON("/category", function(result){
             console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
@@ -103,15 +105,16 @@
                     tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
                     tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
                     tweet_html += "<div class=\"clear\"></div></div>";
-                    tweet_html += "<div class=\"wrap-con-tw\" ><span id=\"tweet_"+i+"\">"+child.text+"</span><div class=\"preview-tw\" id=\"tweet_preview_"+i+"\" ></div></div></div>";
+                    tweet_html += "<div class=\"wrap-con-tw\" ><span id=\"tweet_"+i+"\">"
+                    tweet_html += child.text.replace(urlRegEx,"<a href='$1'>$1</a>"); 
+                    tweet_html +="</span><div class=\"preview-tw\" id=\"tweet_preview_"+i+"\" ></div></div></div>";
                     
                     
                 });
                 $("#time").after(tweet_html);
                 
                 $.each(result, function(i, child){
-                    var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-
+                    
                     
                     if(child.text.match(urlRegEx)){
                         console.log("scanning for previews with url: "+child.text.match(urlRegEx)[0]);
