@@ -46,6 +46,7 @@
                 <handle>@Patriots</handle>
                 <handle>@tomecurran</handle>
                 <handle>@Jordanems</handle>
+                <handle>@PatriotsExtra</handle>
             </category>
             <category name="Jets">
                 <handle>@BrianCoz</handle>
@@ -146,6 +147,7 @@
         <category name="Politicians">
             <category name="Democrats">
                 <handle>@BarackObama</handle>
+                <handle>@POTUS</handle>
                 <handle>@WhiteHouse</handle>
                 <handle>@SenFeinstein</handle>
                 <handle>@SenatorBoxer</handle>
