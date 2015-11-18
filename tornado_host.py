@@ -78,9 +78,10 @@ app = tornado.web.Application([
 
 if __name__ == '__main__':
     
+    
+    parse_command_line()
     print "got host: "
     print host
-    parse_command_line()
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
     
