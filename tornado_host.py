@@ -12,6 +12,7 @@ import urllib2
 import threading
 import datetime
 import requests
+import argparse
 
 
 from tornado.options import define, options, parse_command_line
@@ -77,6 +78,8 @@ app = tornado.web.Application([
 
 if __name__ == '__main__':
     
+    print "got host: "
+    print host
     parse_command_line()
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
