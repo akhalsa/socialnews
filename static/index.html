@@ -20,9 +20,11 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-70081756-1', 'auto');
-    ga('send', 'pageview');
+    if(window.location.href.indexOf("filtra.io") > -1){
+        ga('create', 'UA-70081756-1', 'auto');
+        ga('send', 'pageview');
+    }
+    
   
   </script>
   <script>
@@ -32,24 +34,31 @@
     * as the event label.
     */
     var trackOutboundLink = function(url) {
-       ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
-         function () {
-         }
-       });
+        if(window.location.href.indexOf("filtra.io") > -1){
+            ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+                function () {
+                }
+            });
+        }
+       
     }
     
     var trackCategorySelection = function(cat_name){
-        ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
-         function () {
-         }
-       });   
+        if(window.location.href.indexOf("filtra.io") > -1){
+            ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+             function () {
+             }
+           });
+        }
     }
     
     var trackTimeRangeSelection = function(seconds){
-        ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
-         function () {
-         }
-       });  
+        if(window.location.href.indexOf("filtra.io") > -1){
+            ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
+             function () {
+             }
+           });
+        }
     }
   </script>
   <script type="text/javascript">
