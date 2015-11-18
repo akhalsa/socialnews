@@ -83,7 +83,7 @@ if __name__ == '__main__':
     
     parse_command_line()
     print "got host: "
-    print mysql_host
+    print options.mysql_host
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
     
