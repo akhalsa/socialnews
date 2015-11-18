@@ -149,7 +149,7 @@ def postTweet(text, tweet_id):
 def periodicClean():
     while True:
         local_db_clean = MySQLdb.connect(
-                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                host=host_target,
                 user="akhalsa",
                 passwd="sophiesChoice1",
                 db="newsdb",
@@ -163,7 +163,7 @@ def periodicSurge():
     while True:
         time.sleep(30)
         local_db_surge = MySQLdb.connect(
-                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                host=host_target,
                 user="akhalsa",
                 passwd="sophiesChoice1",
                 db="newsdb",
@@ -208,10 +208,12 @@ if __name__ == '__main__':
     worker.setDaemon(True)
     worker.start()
     
-    ######start periodic surge scanning
-    worker_two = Thread(target=periodicSurge, args=())
-    worker_two.setDaemon(True)
-    worker_two.start()
+    ####### dont check for surges on dev
+    if(options.mysql_host == 0):
+        ######start periodic surge scanning
+        worker_two = Thread(target=periodicSurge, args=())
+        worker_two.setDaemon(True)
+        worker_two.start()
     
     handle = HandleListener(mdl)
     while True:
