@@ -24,11 +24,17 @@ import src.CategoryModel
 
 define("port", default=8888, help="run on the given port", type=int)
 
-define("mysql_host", default="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com", help="Just need the end point", type=str)
+define("mysql_host", default="0", help="Just need the end point", type=int)
+
+host_live = "avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
+host_dev = "avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
+host_target = host_live
+
 
 
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
+        print "running get from: "+host_target
         local_db = MySQLdb.connect(
                         host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
                         user="akhalsa",
@@ -82,8 +88,11 @@ if __name__ == '__main__':
     
     
     parse_command_line()
-    print "got host: "
-    print options.mysql_host
+    if(options.mysql_host == 0):
+        host_target = host_live
+    elif(options.mysql_host == 1):
+        host_target = host_dev
+        
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
     
