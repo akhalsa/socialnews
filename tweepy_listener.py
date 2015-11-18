@@ -192,15 +192,14 @@ if __name__ == '__main__':
         host_target = host_dev
         
     global db
-    print "got host target: "+host_target
-    
-    # db = MySQLdb.connect(
-    #     host=host_target,
-    #     user="akhalsa",
-    #     passwd="sophiesChoice1",
-    #     db="newsdb",
-    #     charset='utf8',
-    #     port=3306)
+
+    db = MySQLdb.connect(
+        host=host_target,
+        user="akhalsa",
+        passwd="sophiesChoice1",
+        db="newsdb",
+        charset='utf8',
+        port=3306)
     
     mdl = src.CategoryModel.CategoryModel(db, api)
     
