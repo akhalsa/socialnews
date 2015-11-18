@@ -24,6 +24,8 @@ import src.CategoryModel
 
 define("port", default=8888, help="run on the given port", type=int)
 
+define("mysql_host", default="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com", help="Just need the end point", type=str)
+
 
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
@@ -81,7 +83,7 @@ if __name__ == '__main__':
     
     parse_command_line()
     print "got host: "
-    print host
+    print mysql_host
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
     
