@@ -34,9 +34,8 @@ host_target = host_live
 
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
-        print "running get from: "+host_target
         local_db = MySQLdb.connect(
-                        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                        host=host_target,
                         user="akhalsa",
                         passwd="sophiesChoice1",
                         db="newsdb",
@@ -50,7 +49,7 @@ class Category(tornado.web.RequestHandler):
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
                 local_db = MySQLdb.connect(
-                        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                        host=host_target,
                         user="akhalsa",
                         passwd="sophiesChoice1",
                         db="newsdb",
