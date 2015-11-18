@@ -191,6 +191,7 @@ if __name__ == '__main__':
         host_target = host_dev
         
     global db
+    print "got host target: "+host_target
     
     # db = MySQLdb.connect(
     #     host=host_target,
