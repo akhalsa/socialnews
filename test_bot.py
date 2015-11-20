@@ -1,15 +1,12 @@
-#test twitter posting
-
 import tweepy
+from tweepy import Stream
 
-key = "1mxHCmJv9pQqFsFO9emtgjrSB"
-secret = "CcrfJ3WTLqaAigBj0yOhnpAa8bzB6FRG9iIOCVgNktnTgkuHNb"
-
-access_token = "3618709285-bccgXE7SINoljfJbslsWvP8gP5j9AyQV2FELgIx"
-token_secret = "GledD6R46Ghy4dIgtEQBhvW4KfI0n2dN6IUGbWFU2qac2"
-
-
-auth = tweepy.OAuthHandler(key, secret)
-auth.set_access_token(access_token, token_secret)
+auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
+auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
 api = tweepy.API(auth)
-api.update_status(status = 'hello from tweepy library!')
+
+
+stream = tweepy.Stream(auth, self)
+stream.filter(track=['baseball'])
+
+
