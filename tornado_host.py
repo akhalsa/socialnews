@@ -12,6 +12,7 @@ import urllib2
 import threading
 import datetime
 import requests
+import argparse
 
 
 from tornado.options import define, options, parse_command_line
@@ -23,11 +24,18 @@ import src.CategoryModel
 
 define("port", default=8888, help="run on the given port", type=int)
 
+define("mysql_host", default="0", help="Just need the end point", type=int)
+
+host_live = "avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
+host_dev = "avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
+host_target = host_live
+
+
 
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
         local_db = MySQLdb.connect(
-                        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                        host=host_target,
                         user="akhalsa",
                         passwd="sophiesChoice1",
                         db="newsdb",
@@ -41,7 +49,7 @@ class Category(tornado.web.RequestHandler):
 class Reader(tornado.web.RequestHandler):
         def get(self, cat, time_frame_seconds):
                 local_db = MySQLdb.connect(
-                        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                        host=host_target,
                         user="akhalsa",
                         passwd="sophiesChoice1",
                         db="newsdb",
@@ -77,7 +85,13 @@ app = tornado.web.Application([
 
 if __name__ == '__main__':
     
+    
     parse_command_line()
+    if(options.mysql_host == 0):
+        host_target = host_live
+    elif(options.mysql_host == 1):
+        host_target = host_dev
+        
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
     

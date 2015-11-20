@@ -12,14 +12,9 @@ from threading import Thread
 from Queue import Queue
 from tweepy import Stream
 from src.DBWrapper import *
+from tornado.options import define, options, parse_command_line
 
-db = MySQLdb.connect(
-        host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
-        user="akhalsa",
-        passwd="sophiesChoice1",
-        db="newsdb",
-        charset='utf8',
-        port=3306)
+
 
 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
@@ -30,7 +25,11 @@ auth_bot = tweepy.OAuthHandler("1mxHCmJv9pQqFsFO9emtgjrSB", "CcrfJ3WTLqaAigBj0yO
 auth_bot.set_access_token("3618709285-bccgXE7SINoljfJbslsWvP8gP5j9AyQV2FELgIx", "GledD6R46Ghy4dIgtEQBhvW4KfI0n2dN6IUGbWFU2qac2")
 api_bot = tweepy.API(auth_bot)
 
+define("mysql_host", default="0", help="Just need the end point", type=int)
 
+host_live = "avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
+host_dev = "avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
+host_target = host_live
     
     
 
@@ -150,7 +149,7 @@ def postTweet(text, tweet_id):
 def periodicClean():
     while True:
         local_db_clean = MySQLdb.connect(
-                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                host=host_target,
                 user="akhalsa",
                 passwd="sophiesChoice1",
                 db="newsdb",
@@ -164,7 +163,7 @@ def periodicSurge():
     while True:
         time.sleep(30)
         local_db_surge = MySQLdb.connect(
-                host="avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com",
+                host=host_target,
                 user="akhalsa",
                 passwd="sophiesChoice1",
                 db="newsdb",
@@ -185,6 +184,23 @@ def periodicSurge():
 
     
 if __name__ == '__main__':
+        
+    parse_command_line()
+    if(options.mysql_host == 0):
+        host_target = host_live
+    elif(options.mysql_host == 1):
+        host_target = host_dev
+        
+    global db
+
+    db = MySQLdb.connect(
+        host=host_target,
+        user="akhalsa",
+        passwd="sophiesChoice1",
+        db="newsdb",
+        charset='utf8',
+        port=3306)
+    
     mdl = src.CategoryModel.CategoryModel(db, api)
     
     #### start periodic cleaning #####
@@ -192,10 +208,12 @@ if __name__ == '__main__':
     worker.setDaemon(True)
     worker.start()
     
-    ######start periodic surge scanning
-    worker_two = Thread(target=periodicSurge, args=())
-    worker_two.setDaemon(True)
-    worker_two.start()
+    ####### dont check for surges on dev
+    if(options.mysql_host == 0):
+        ######start periodic surge scanning
+        worker_two = Thread(target=periodicSurge, args=())
+        worker_two.setDaemon(True)
+        worker_two.start()
     
     handle = HandleListener(mdl)
     while True:
