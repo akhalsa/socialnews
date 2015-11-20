@@ -38,7 +38,7 @@ class HandleListener(tweepy.StreamListener):
         
         
         def __init__(self, mdl, refresh):
-                self.setupSocket()
+                self.setupSocket(0)
                 self.db_queue = Queue()
                 worker = Thread(target=self.handleData, args=())
                 worker.setDaemon(True)
@@ -49,7 +49,8 @@ class HandleListener(tweepy.StreamListener):
                 self.refresh_handle_time_seconds = refresh
                 
                 
-        def setupSocket(self):
+        def setupSocketWithDelay(self, delay):
+                time.sleep(delay)
                 print "starting to set up socket listen on new thread"
                 self.kickoff_time = datetime.datetime.now()
                 stream = tweepy.Stream(auth, self)
@@ -59,7 +60,7 @@ class HandleListener(tweepy.StreamListener):
         def on_data(self, data):
                 self.db_queue.put(data)
                 if((datetime.datetime.now() - self.kickoff_time).seconds > self.refresh_handle_time_seconds):
-                        self.setupSocket()
+                        thread.start_new_thread( self.setupSocket, (3, ) )
                         return False
                 else:
                         return True
