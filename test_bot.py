@@ -22,8 +22,8 @@ stream.filter(track=['baseball'], async=True)
 
 
 print " ****************   LOOK AT ME  **************"
-while True:
-    pass
+time.sleep(5)
+stream.disconnect()
 
 
 
