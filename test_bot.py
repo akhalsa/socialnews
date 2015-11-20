@@ -23,7 +23,8 @@ class HandleListener(tweepy.StreamListener):
 
     def on_error(self, status):
         print status
-listen = HandleListener()
+        
+listen = HandleListener(15)
 
 stream = tweepy.Stream(auth, listen)
 stream.filter(track=['baseball'], async=True)
