@@ -20,6 +20,8 @@ listen = HandleListener()
 stream = tweepy.Stream(auth, listen)
 stream.filter(track=['baseball'])
 
+
+print " ****************   LOOK AT ME  **************"
 while True:
     pass
 
