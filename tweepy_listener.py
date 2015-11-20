@@ -38,7 +38,7 @@ class HandleListener(tweepy.StreamListener):
         
         
         def __init__(self, mdl, refresh):
-                self.setupSocket(0)
+                self.setupSocketWithDelay(0)
                 self.db_queue = Queue()
                 worker = Thread(target=self.handleData, args=())
                 worker.setDaemon(True)
@@ -60,7 +60,7 @@ class HandleListener(tweepy.StreamListener):
         def on_data(self, data):
                 self.db_queue.put(data)
                 if((datetime.datetime.now() - self.kickoff_time).seconds > self.refresh_handle_time_seconds):
-                        thread.start_new_thread( self.setupSocket, (3, ) )
+                        thread.start_new_thread( self.setupSocketWithDelay, (3, ) )
                         return False
                 else:
                         return True
