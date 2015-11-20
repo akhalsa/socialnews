@@ -17,13 +17,13 @@ class HandleListener(tweepy.StreamListener):
         print status
 listen = HandleListener()
 
-stream = tweepy.Stream(auth, listen)
+stream = tweepy.Stream(auth, listen, timeout=20)
 stream.filter(track=['baseball'], async=True)
 
 
 print " ****************   LOOK AT ME  **************"
-time.sleep(5)
-stream.disconnect()
+time.sleep(30)
+print "  *************** ITS BEEN 30 SECONDS ***********"
 
 
 
