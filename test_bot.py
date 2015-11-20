@@ -18,7 +18,7 @@ class HandleListener(tweepy.StreamListener):
 listen = HandleListener()
 
 stream = tweepy.Stream(auth, listen)
-stream.filter(track=['baseball'])
+stream.filter(track=['baseball'], async=True)
 
 
 print " ****************   LOOK AT ME  **************"
