@@ -36,8 +36,9 @@ host_target = host_live
 
 class HandleListener(tweepy.StreamListener):
         
-        def __init__(self, mdl):
-                thread.start_new_thread( self.setupSocket, ( ) )
+        
+        def __init__(self, mdl, refresh):
+                self.setupSocket()
                 self.db_queue = Queue()
                 worker = Thread(target=self.handleData, args=())
                 worker.setDaemon(True)
@@ -45,16 +46,23 @@ class HandleListener(tweepy.StreamListener):
                 self.lastClear = datetime.datetime.now() - datetime.timedelta(hours = 1)
                 self.lastPost = datetime.datetime.now()
                 self.mdl = mdl
+                self.refresh_handle_time_seconds = refresh
                 
-        def setupSocket(self, ):
+                
+        def setupSocket(self):
                 print "starting to set up socket listen on new thread"
+                self.kickoff_time = datetime.datetime.now()
                 stream = tweepy.Stream(auth, self)
-                stream.filter(follow=getAllTwitterIds(db))
+                stream.filter(follow=getAllTwitterIds(db), async=True)
 
                 
         def on_data(self, data):
                 self.db_queue.put(data)
-                return True
+                if((datetime.datetime.now() - self.kickoff_time).seconds > self.refresh_handle_time_seconds):
+                        self.setupSocket()
+                        return False
+                else:
+                        return True
 
         def on_error(self, status):
                 print status
@@ -215,7 +223,7 @@ if __name__ == '__main__':
         worker_two.setDaemon(True)
         worker_two.start()
     
-    handle = HandleListener(mdl)
+    handle = HandleListener(mdl, 15)
     while True:
         pass
 
