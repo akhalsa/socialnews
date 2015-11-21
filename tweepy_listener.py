@@ -190,6 +190,8 @@ def periodicSurge():
         
         local_db_surge.close()
 
+def name():
+        pass
 
     
 if __name__ == '__main__':
