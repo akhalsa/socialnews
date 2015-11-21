@@ -224,7 +224,7 @@ if __name__ == '__main__':
         worker_two.setDaemon(True)
         worker_two.start()
     
-    handle = HandleListener(mdl, 15)
+    handle = HandleListener(mdl, 300)
     while True:
         pass
 
