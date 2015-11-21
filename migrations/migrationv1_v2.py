@@ -11,6 +11,7 @@ host_target = host_live
 
 
 def forward():
+    print "got sys arg: "+sys.argv[0]+" and second sys arg: "+sys.argv[1]
     
     if(sys.argv[1] == 0):
         host_target = host_live
