@@ -16,7 +16,8 @@ def forward():
         host_target = host_live
     elif(sys.argv[1] == 1):
         host_target = host_dev
-        
+    
+    print "found host target"+host_target   
     global db
     
     db = MySQLdb.connect(
