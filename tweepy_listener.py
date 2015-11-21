@@ -190,8 +190,21 @@ def periodicSurge():
         
         local_db_surge.close()
 
-def name():
-        pass
+def updateSource():
+        while True:
+                
+                local_db_twitter_source = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+                handle_to_update = fetchOldestHandleTwitterId(local_db_twitter_source)
+                print "***************** GOT TWITTER HANDLE FOR UPDATING  "+str(handle_to_update)
+                time.sleep(15)
+                
+                
 
     
 if __name__ == '__main__':
@@ -216,6 +229,11 @@ if __name__ == '__main__':
     
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
+    worker.setDaemon(True)
+    worker.start()
+    
+    ###### start periodic updating of twitter source info #######
+    worker = Thread(target=updateSource, args=())
     worker.setDaemon(True)
     worker.start()
     
