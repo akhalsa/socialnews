@@ -13,9 +13,9 @@ host_target = host_live
 def forward():
     print "got sys arg: "+sys.argv[0]+" and second sys arg: "+sys.argv[1]
     
-    if(sys.argv[1] == 0):
+    if(sys.argv[1] == "0"):
         host_target = host_live
-    elif(sys.argv[1] == 1):
+    elif(sys.argv[1] == "1"):
         print "got to host_target assignment"
         host_target = host_dev
     
