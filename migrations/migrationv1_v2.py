@@ -15,6 +15,7 @@ def forward():
     if(sys.argv[1] == 0):
         host_target = host_live
     elif(sys.argv[1] == 1):
+        print "got to host_target assignment"
         host_target = host_dev
     
     print "found host target"+host_target   
