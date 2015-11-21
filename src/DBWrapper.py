@@ -265,7 +265,7 @@ def fetchOldestHandleTwitterId(local_db):
     sql = "SELECT * FROM TwitterSource ORDER BY timestamp ASC LIMIT 1"
     cursor.execute(sql)
     handle_id = None
-    for row in cursor.fetchone():
+    for row in cursor.fetchall():
         handle_id = row[3]
     cursor.close()
     return handle_id
