@@ -41,6 +41,9 @@ def forward():
     
     sql = "ALTER TABLE TwitterSource ADD `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP;";
     executeSql(db, sql)
+    sql = "UPDATE TwitterSource SET timestamp=CURRENT_TIMESTAMP;"
+    executeSql(db, sql)
+    
     
 def backward():
     if(sys.argv[1] == "0"):
