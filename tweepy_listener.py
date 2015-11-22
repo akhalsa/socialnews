@@ -13,6 +13,7 @@ from Queue import Queue
 from tweepy import Stream
 from src.DBWrapper import *
 from tornado.options import define, options, parse_command_line
+import re
 
 
 
@@ -200,8 +201,14 @@ def updateSource():
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-                handle_to_update = fetchOldestHandleTwitterId(local_db_twitter_source)
+                handle_to_update = fetchOldestHandle(local_db_twitter_source)
                 print "***************** GOT TWITTER HANDLE FOR UPDATING  "+str(handle_to_update)
+                user = self.api.get_user(screen_name = one_handle.cdata)
+                user_id = re.escape(str(user.id))
+                username = re.escape(user.name)
+                profile_link = user.profile_image_url
+                
+                print "****** THIS GIVES NEW USER_ID: "+user_id+" username: "+username+" and profile link: "+profile_link
                 time.sleep(15)
                 
                 

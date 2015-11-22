@@ -259,14 +259,14 @@ def batchInsertTweet(tweets, local_db):
         
     cursor.close()
     
-def fetchOldestHandleTwitterId(local_db):
+def fetchOldestHandle(local_db):
     cursor = local_db.cursor()
     
     sql = "SELECT * FROM TwitterSource ORDER BY timestamp ASC LIMIT 1"
     cursor.execute(sql)
     handle_id = None
     for row in cursor.fetchall():
-        handle_id = row[3]
+        handle_id = row[2]
     cursor.close()
     return handle_id
 
