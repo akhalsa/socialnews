@@ -469,12 +469,13 @@ def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_lin
 def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
     print "twitter_id: "+str(twitter_id)
-    print "twitter_name: "+str(twitter_name)
+    print "twitter_name: "
+    print twitter_name
     print "twitter_handle: "+str(twitter_handle)
     
     sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
     sql += str(ip_address)+"', "+MySQLdb.escape_string(str(category_id))+", "+MySQLdb.escape_string(str(twitter_id))+", '"
-    sql += MySQLdb.escape_string(str(twitter_handle))+"', '"+MySQLdb.escape_string(str(twitter_name))+"', "
+    sql += MySQLdb.escape_string(str(twitter_handle))+"', '"+MySQLdb.escape_string(twitter_name)+"', "
     sql += "1" if upvote else "-1"
     sql += ");"
     
