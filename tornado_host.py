@@ -45,7 +45,7 @@ class Category(tornado.web.RequestHandler):
         self.finish(json.dumps(getCategoryStructure(local_db)))
 
 class HandleListForCategoryId(tornado.web.RequestHandler):
-    def get(self, cat_id):
+    def get(self, cat_name):
         local_db = MySQLdb.connect(
                         host=host_target,
                         user="akhalsa",
@@ -55,8 +55,9 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
                         port=3306)
         
         #this should get the full list of handles and their scores in the category
-        getAllHandlesForCategory(local_db, cat_id)
-        self.finish("200")
+        cat_id = findCategoryIdWithName(cat_name, local_db)
+        handle_list = getAllHandlesForCategory(local_db, cat_id)
+        self.finish(json.dumps(handle_list))
 
 class HandleVoteReceiver(tornado.web.RequestHandler):
     def post(self,twitter_id, category_id, positive  ):

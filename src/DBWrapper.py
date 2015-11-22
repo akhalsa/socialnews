@@ -419,10 +419,12 @@ def getAllHandlesForCategory(local_db, category_id):
     #note this will get all votes, up or down
     sql = "SELECT twitter_id, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
     cursor.execute(sql)
+    return_list = []
     for row in cursor.fetchall() :
-        print "found handle: "+str(row[0])+" had votes: "+str(row[1])
+        return_list.append({"twitter_id": row[0], "score":row[1]})  
         
     cursor.close()
+    return return_list
 
 
 
