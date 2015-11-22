@@ -443,7 +443,7 @@ def getAllHandlesForCategory(local_db, category_id):
     cursor.execute(sql)
     return_list = []
     for row in cursor.fetchall() :
-        return_list.append({"twitter_id": str(row[0]), "score":str(row[1])})  
+        return_list.append({"twitter_id": str(row[0]), "handle":str(row[1]), "username":str(row[2]), "score":row[3]})  
         
     cursor.close()
     return return_list
