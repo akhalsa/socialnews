@@ -456,6 +456,8 @@ def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twit
     sql += MySQLdb.escape_string(str(twitter_handle))+"', '"+MySQLdb.escape_string(str(twitter_name))+"', "
     sql += "1" if upvote else "-1"
     sql += ");"
+    
+    print "will insert with sql: "+sql
     try:
             # Execute the SQL command
             cursor.execute(sql)
