@@ -114,7 +114,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 self.finish("bad handle/insertion")
                 return
 
-        insertVote(local_db, self.request.remote_ip, category_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
+        insertVote(local_db, self.request.remote_ip, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
         
         self.finish("200")
         
