@@ -102,7 +102,10 @@
             
             cat_name = currentCatName();
             $.getJSON("/category/"+cat_name, function(result){
-               console.log("we're monitoring handles: "+result); 
+                $.each(result, function(i, child){
+                    console.log("we're monitoring handle: "+child); 
+                });
+               
             });
             
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
