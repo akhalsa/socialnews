@@ -77,7 +77,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         insertVote(local_db, self.request.remote_ip, category_id, twitter_id, positive )
         
-        self.finish("got source_id: "+source_id+" cat id:"+category_id+" positive: "+positive +" and ip address: "+self.request.remote_ip)
+        self.finish("got source_id: "+twitter_id+" cat id:"+category_id+" positive: "+positive +" and ip address: "+self.request.remote_ip)
         
         
     
