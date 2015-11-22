@@ -419,7 +419,8 @@ def insertVote(local_db, ip_address, category_id, twitter_id, upvote ):
     cursor = local_db.cursor()
     sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, value) VALUES ('"
     sql += str(ip_address)+"', "+MySQLdb.escape_string(str(category_id))+", "+MySQLdb.escape_string(str(twitter_id))+", "
-    sql += "1" if upvote else "-1);"
+    sql += "1" if upvote else "-1"
+    sql += ");"
     
     try:
             # Execute the SQL command
