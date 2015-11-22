@@ -203,7 +203,7 @@ def updateSource():
                         port=3306)
                 handle_to_update = fetchOldestHandle(local_db_twitter_source)
                 print "***************** GOT TWITTER HANDLE FOR UPDATING  "+str(handle_to_update)
-                user = api.get_user(screen_name = one_handle.cdata)
+                user = api.get_user(screen_name = handle_to_update)
                 user_id = re.escape(str(user.id))
                 username = re.escape(user.name)
                 profile_link = user.profile_image_url
