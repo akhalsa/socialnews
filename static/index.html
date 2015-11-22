@@ -103,7 +103,7 @@
             cat_name = currentCatName();
             $.getJSON("/category/"+cat_name, function(result){
                 $.each(result, function(i, child){
-                    console.log("we're monitoring handle: "+child); 
+                    console.log("we're monitoring handle: "+child.twitter_id+" with score: "+child.score); 
                 });
                
             });
