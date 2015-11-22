@@ -13,6 +13,7 @@ from Queue import Queue
 from tweepy import Stream
 from src.DBWrapper import *
 from tornado.options import define, options, parse_command_line
+import re
 
 
 
@@ -190,6 +191,30 @@ def periodicSurge():
         
         local_db_surge.close()
 
+def updateSource():
+        while True:
+                try: 
+                        local_db_twitter_source = MySQLdb.connect(
+                                host=host_target,
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
+                        handle_to_update = fetchOldestHandle(local_db_twitter_source)
+                        print "***************** GOT TWITTER HANDLE FOR UPDATING  "+str(handle_to_update)
+                        user = api.get_user(screen_name = handle_to_update)
+                        user_id = re.escape(str(user.id))
+                        username = re.escape(user.name)
+                        profile_link = user.profile_image_url
+                        updateHandle(local_db_twitter_source, username, user_id, handle_to_update, profile_link)
+                except Exception, e:
+                        print "retweet exception: "
+                        print str(e)
+                        
+                time.sleep(15)
+                
+                
 
     
 if __name__ == '__main__':
@@ -214,6 +239,11 @@ if __name__ == '__main__':
     
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
+    worker.setDaemon(True)
+    worker.start()
+    
+    ###### start periodic updating of twitter source info #######
+    worker = Thread(target=updateSource, args=())
     worker.setDaemon(True)
     worker.start()
     

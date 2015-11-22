@@ -259,7 +259,31 @@ def batchInsertTweet(tweets, local_db):
         
     cursor.close()
     
+def fetchOldestHandle(local_db):
+    cursor = local_db.cursor()
+    
+    sql = "SELECT * FROM TwitterSource ORDER BY timestamp ASC LIMIT 1"
+    cursor.execute(sql)
+    handle_id = None
+    for row in cursor.fetchall():
+        handle_id = row[2]
+    cursor.close()
+    return handle_id
 
+def updateHandle(local_db, username, user_id, handle, link):
+    cursor = local_db.cursor()
+    sql = "UPDATE TwitterSource SET Name='"+username+"', twitter_id='"+user_id+"', profile_image='"+link+"', timestamp=CURRENT_TIMESTAMP WHERE twitter_handle='"+handle+"';"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of occurrence"
+        print str(e)
+        local_db.rollback()
+    cursor.close()
     
 
 def updateTweetTimeStamp(tweet_list, local_db):
