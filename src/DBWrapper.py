@@ -347,16 +347,37 @@ def getCategoriesWithSourceId(source_id, local_db):
     cursor.close()
     return return_list
 
-def findTableIdWithTwitterId(twitter_id, local_db):
+def findTableInfoWithTwitterId(twitter_id, local_db):
     cursor = local_db.cursor()
-    sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
+    sql = "SELECT ID, name, twitter_handle, twitter_id FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
     cursor.execute(sql)
-    return_id = 0
+    return_map = None
     for row in cursor.fetchall() :
-        return_id = row[0]
+        return_map = {}
+        return_map ["local_id"] =row[0]
+        return_map["twitter_name"] = row[1]
+        return_map["twitter_handle"]=row[2]
+        return_map["twitter_id"]  = row[3]
+        
     cursor.close()
     #print "lock released at 227"
-    return return_id
+    return return_map
+
+def findTableInfoWithTwitterHandle(twitter_handle, local_db):
+    cursor = local_db.cursor()
+    sql = "SELECT ID, name, twitter_handle, twitter_id FROM TwitterSource WHERE twitter_handle like '"+twitter_handle+"';"
+    cursor.execute(sql)
+    return_map = None
+    for row in cursor.fetchall() :
+        return_map = {}
+        return_map ["local_id"] =row[0]
+        return_map["twitter_name"] = row[1]
+        return_map["twitter_handle"]=row[2]
+        return_map["twitter_id"]  = row[3]
+        
+    cursor.close()
+    #print "lock released at 227"
+    return return_map
 
 def getCategoryStructure(local_db):
     cursor = local_db.cursor()
@@ -417,7 +438,7 @@ def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
 def getAllHandlesForCategory(local_db, category_id):
     cursor = local_db.cursor()
     #note this will get all votes, up or down
-    sql = "SELECT twitter_id, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+    sql = "SELECT twitter_id, twitter_handle, twitter_name SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
     cursor.execute(sql)
     return_list = []
     for row in cursor.fetchall() :
@@ -428,10 +449,11 @@ def getAllHandlesForCategory(local_db, category_id):
 
 
 
-def insertVote(local_db, ip_address, category_id, twitter_id, upvote ):
+def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
-    sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, value) VALUES ('"
+    sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name value) VALUES ('"
     sql += str(ip_address)+"', "+MySQLdb.escape_string(str(category_id))+", "+MySQLdb.escape_string(str(twitter_id))+", "
+    sql += MySQLdb.escape_string(str(twitter_handle))+", "+MySQLdb.escape_string(str(twitter_name))+", "
     sql += "1" if upvote else "-1"
     sql += ");"
     try:

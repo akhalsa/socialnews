@@ -80,7 +80,9 @@ class CategoryModel:
         ##############################
         ids = getAllTwitterIds(self.db)
         for handle_id in ids:
-            local_id = findTableIdWithTwitterId(handle_id, self.db)
+            local_info = findTableInfoWithTwitterId(handle_id, self.db)
+            local_id = local_info["local_id"]
+            
             cats = getCategoriesWithSourceId(local_id, self.db)
             self.categories[handle_id] = cats
             
