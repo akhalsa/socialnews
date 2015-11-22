@@ -43,7 +43,7 @@ def forward():
     sql += "ID int(11) NOT NULL AUTO_INCREMENT,"
     sql += "ip_address varchar(255) DEFAULT NULL,"
     sql += "category_id INT DEFAULT NULL,"
-    sql += "source_id INT DEFAULT NULL,"
+    sql += "twitter_id INT DEFAULT NULL,"
     sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
     sql += "value INT DEFAULT NULL,"
     sql += "PRIMARY KEY (ID), INDEX(timestamp));"

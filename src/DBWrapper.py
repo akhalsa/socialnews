@@ -406,8 +406,35 @@ def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
 
 
 
-def getVotesByIpForTimeFrame(local_db, ip_iddress, seconds):
-    print "hi im a dummy voting lookup method"
+def getVoteCountByIpForTimeFrame(local_db, ip_iddress, seconds):
+    cursor = local_db.cursor()
+    sql = "SELECT * From VoteHistory WHERE ip_address like '"+ip_address+"' and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
+    cursor.execute(sql)
+    votes = cursor.rowcount
+    cursor.close()
+    return votes
+
+
+def insertVote(local_db, ip_address, category_id, twitter_id, upvote ):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, value) VALUES ('"
+    sql += str(ip_address)+"', "+MySQLdb.escape_string(str(category_id))+", "+MySQLdb.escape_string(str(twitter_id))+", "
+    sql += "1" if upvote else "0);"
+    
+    try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+    except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of occurrence"
+            print str(e)
+            local_db.rollback()
+    cursor.close()
+    return
+
+    
 
 
 

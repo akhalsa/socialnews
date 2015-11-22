@@ -53,9 +53,12 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
+        
+        #this should get the full list of handles and their scores in the category
+        
 
 class HandleVoteReceiver(tornado.web.RequestHandler):
-    def post(self,source_id, category_id, positive  ):
+    def post(self,twitter_id, category_id, positive  ):
         #first check to see if this ip address has been used more than 5 times
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -64,9 +67,19 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
+        
+        votes_this_hour = getVotesByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
+        if(votes_this_hour > 5):
+            self.finish("{'message':'you are out of votes, please wait for them to recharge}")
+        
+        #ok this ip address isnt throttled
+        #lets add a vote
+        
+        insertVote(local_db, self.request.remote_ip, category_id, twitter_id, positive )
+        
         self.finish("got source_id: "+source_id+" cat id:"+category_id+" positive: "+positive +" and ip address: "+self.request.remote_ip)
         
-        #votes_this_hour = getVotesByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
+        
     
     
 
