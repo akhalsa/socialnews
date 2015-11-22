@@ -448,10 +448,30 @@ def getAllHandlesForCategory(local_db, category_id):
     cursor.close()
     return return_list
 
+def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_link):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+twitter_name+"','"+twitter_handle+"', '"+twitter_id+"', '"+profile_link+"');"
+    try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+    except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of occurrence"
+            print str(e)
+            local_db.rollback()
+            
+    cursor.close()
+    
 
 
 def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
+    print "twitter_id: "+str(twitter_id)
+    print "twitter_name: "+str(twitter_name)
+    print "twitter_handle: "+str(twitter_handle)
+    
     sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
     sql += str(ip_address)+"', "+MySQLdb.escape_string(str(category_id))+", "+MySQLdb.escape_string(str(twitter_id))+", '"
     sql += MySQLdb.escape_string(str(twitter_handle))+"', '"+MySQLdb.escape_string(str(twitter_name))+"', "

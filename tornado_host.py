@@ -30,6 +30,9 @@ host_live = "avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
 host_dev = "avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
 host_target = host_live
 
+auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
+auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
+api = tweepy.API(auth)
 
 
 class Category(tornado.web.RequestHandler):    
@@ -93,7 +96,14 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             print "need to insert data for this handle"
             
         else:
-            insertVote(local_db, self.request.remote_ip, category_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
+            user = api.get_user(screen_name = twitter_handle)
+            user_id = re.escape(str(user.id))
+            username = re.escape(user.name)
+            profile_link = user.profile_image_url    
+            createHandle(local_db,user_id, username, twitter_handle, profile_link )
+            table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
+            
+        insertVote(local_db, self.request.remote_ip, category_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
         
         self.finish("200")
         
