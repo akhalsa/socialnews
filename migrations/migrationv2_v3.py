@@ -46,7 +46,7 @@ def forward():
     sql += "source_id INT DEFAULT NULL,"
     sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
     sql += "value INT DEFAULT NULL,"
-    sql += "PRIMARY KEY (ID));"
+    sql += "PRIMARY KEY (ID), INDEX(timestamp));"
     executeSql(db, sql)
     print sql
     sql = "DROP TABLE SourceCategoryRelationship;"
@@ -77,7 +77,7 @@ def backward():
     sql += "ID int(11) NOT NULL AUTO_INCREMENT,"
     sql += "source_id int(11) DEFAULT NULL,"
     sql += "category_id int(11) DEFAULT NULL,"
-    sql += "PRIMARY KEY (ID))"
+    sql += "PRIMARY KEY (ID));"
     
     executeSql(db, sql)
     

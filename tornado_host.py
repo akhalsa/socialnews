@@ -43,7 +43,32 @@ class Category(tornado.web.RequestHandler):
                         port=3306)
         
         self.finish(json.dumps(getCategoryStructure(local_db)))
+
+class HandleListForCategoryId(tornado.web.RequestHandler):
+    def get(self, cat_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+
+class HandleVoteReceiver(tornado.web.RequestHandler):
+    def post(self,source_id, category_id, positive  ):
+        #first check to see if this ip address has been used more than 5 times
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        self.finish("got source_id: "+source_id+" cat id:"+category_id+" positive: "+positive +" and ip address: "+self.request.remote_ip)
         
+        #votes_this_hour = getVotesByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
+    
+    
 
     
 class Reader(tornado.web.RequestHandler):
@@ -78,6 +103,8 @@ class IndexHandler(tornado.web.RequestHandler):
 app = tornado.web.Application([
     (r'/', IndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
+    (r"/handle/(.*)/", HandleListForCategoryId),
+    (r"/handle/(.*)/category_id/(.*)/upvote(.*)", HandleVoteReceiver),
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/(.*)',  PageLoad),

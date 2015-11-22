@@ -24,10 +24,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
             return top_tweets
     
     cursor = local_db.cursor()
-    #sql = "SELECT twitter_id, text, source_id From Tweet A "
-    #sql += "INNER JOIN (SELECT Name, profile_image, ID FROM TwitterSource) B "
-    #sql += "ON A.source = A.source_id "
-    #sql += "WHERE A.twitter_id in ("
     sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
     first_fin = False
     for t_id in twitter_ids:
@@ -407,6 +403,11 @@ def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
             output["children"].append(buildMap(id_to_name_map, id_to_children_array_map, child))
 
     return output
+
+
+
+def getVotesByIpForTimeFrame(local_db, ip_iddress, seconds):
+    print "hi im a dummy voting lookup method"
 
 
 
