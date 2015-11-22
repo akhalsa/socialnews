@@ -116,8 +116,8 @@ class IndexHandler(tornado.web.RequestHandler):
 app = tornado.web.Application([
     (r'/', IndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
-    (r"/category/(.*)/", HandleListForCategoryId),
-    (r"/handle/(.*)/category_id/(.*)/upvote/(.*)", HandleVoteReceiver),
+    (r"/category/(.*)", HandleListForCategoryId),
+    (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/(.*)',  PageLoad),
