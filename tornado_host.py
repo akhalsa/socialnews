@@ -104,7 +104,7 @@ app = tornado.web.Application([
     (r'/', IndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/handle/(.*)/", HandleListForCategoryId),
-    (r"/handle/(.*)/category_id/(.*)/upvote(.*)", HandleVoteReceiver),
+    (r"/handle/(.*)/category_id/(.*)/upvote/(.*)", HandleVoteReceiver),
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/(.*)',  PageLoad),
