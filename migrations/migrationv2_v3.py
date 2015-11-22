@@ -45,7 +45,7 @@ def forward():
     sql += "category_id INT DEFAULT NULL,"
     sql += "twitter_id INT DEFAULT NULL,"
     sql += "twitter_handle varchar(255) DEFAULT NULL,"
-    sql += "twitter_name varhchar(255) DEFAULT NULL,"
+    sql += "twitter_name varchar(255) DEFAULT NULL,"
     sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
     sql += "value INT DEFAULT NULL,"
     sql += "PRIMARY KEY (ID), INDEX(timestamp));"
