@@ -86,7 +86,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             self.finish("bad vote value")
             return
         
-        table_info = findTableInfoWithTwitterHandle(local_db, twitter_handle)
+        table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
         print "table info for that handle is: "+str(table_info)
         
         if(table_info == None):
