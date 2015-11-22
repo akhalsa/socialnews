@@ -68,7 +68,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                         charset='utf8',
                         port=3306)
         
-        votes_this_hour = getVotesByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
+        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
         if(votes_this_hour > 5):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
         
