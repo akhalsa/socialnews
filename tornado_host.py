@@ -55,7 +55,8 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
                         port=3306)
         
         #this should get the full list of handles and their scores in the category
-        
+        getAllHandlesForCategory(local_db, cat_id)
+        self.finish("200")
 
 class HandleVoteReceiver(tornado.web.RequestHandler):
     def post(self,twitter_id, category_id, positive  ):
@@ -70,16 +71,13 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
         print "found votes this hour of: "+str(votes_this_hour)
-        if(votes_this_hour > 5):
+        if(votes_this_hour >= 5):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
             return
         
-        #ok this ip address isnt throttled
-        #lets add a vote
-        
         insertVote(local_db, self.request.remote_ip, category_id, twitter_id, positive )
         
-        self.finish("got source_id: "+twitter_id+" cat id:"+category_id+" positive: "+positive +" and ip address: "+self.request.remote_ip)
+        self.finish("200")
         
         
     

@@ -414,6 +414,17 @@ def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
     cursor.close()
     return votes
 
+def getAllHandlesForCategory(local_db, category_id):
+    cursor = local_db.cursor()
+    #note this will get all votes, up or down
+    sql = "SELECT twitter_id, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count;"
+    cursor.execute(sql)
+    for row in cursor.fetchall() :
+        print "found handle: "+str(row[0])+" had votes: "+str(row[1])
+        
+    cursor.close()
+
+
 
 def insertVote(local_db, ip_address, category_id, twitter_id, upvote ):
     cursor = local_db.cursor()
