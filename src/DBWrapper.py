@@ -432,10 +432,6 @@ def insertVote(local_db, ip_address, category_id, twitter_id, upvote ):
     sql += str(ip_address)+"', "+MySQLdb.escape_string(str(category_id))+", "+MySQLdb.escape_string(str(twitter_id))+", "
     sql += "1" if upvote else "-1"
     sql += ");"
-    if(upvote):
-        print "this will be an upvote"
-    else:
-        print "this will be a downvote"
     try:
             # Execute the SQL command
             cursor.execute(sql)

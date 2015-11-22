@@ -74,8 +74,16 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         if(votes_this_hour >= 5):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
             return
+        upvote = False
+        if(positive == "1"):
+            upvote = True
+        elif (positive == "0"):
+            upvote = False
+        else:
+            self.finish("bad vote value")
+            return
         
-        insertVote(local_db, self.request.remote_ip, category_id, twitter_id, positive )
+        insertVote(local_db, self.request.remote_ip, category_id, twitter_id, upvote )
         
         self.finish("200")
         
