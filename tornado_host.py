@@ -94,16 +94,19 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         print "table info for that handle is: "+str(table_info)
         
         if(table_info == None):
-            print "need to insert data for this handle"
-            
-        else:
-            user = api.get_user(screen_name = twitter_handle)
-            user_id = re.escape(str(user.id))
-            username = re.escape(user.name)
-            profile_link = user.profile_image_url    
-            createHandle(local_db,user_id, username, twitter_handle, profile_link )
-            table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
-            
+            try:
+                user = api.get_user(screen_name = twitter_handle)
+                user_id = re.escape(str(user.id))
+                username = re.escape(user.name)
+                profile_link = user.profile_image_url
+                if(user_id != None):
+                    createHandle(local_db,user_id, username, twitter_handle, profile_link )
+                    table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
+            except Exception, e:
+                print "failed to insert :/"
+                self.finish("bad handle/insertion")
+                return
+
         insertVote(local_db, self.request.remote_ip, category_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
         
         self.finish("200")
