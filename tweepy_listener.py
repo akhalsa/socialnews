@@ -179,12 +179,13 @@ def periodicSurge():
                 db="newsdb",
                 charset='utf8',
                 port=3306)
+        print "************ surge check *********************"
         new_tweets = getTweetIdsSince(local_db_surge, 300)
         retweet_targets = getOccurrencesInCategory(local_db_surge, 300, 800, 1, new_tweets)
         if(len(retweet_targets) != 0):
             retweet_targets = getAlreadyRetweeted(retweet_targets, local_db_surge)
             for target in retweet_targets:
-                print "should retweet: "+str(target)+" with text: "+new_tweets[target]
+                print "***************** should retweet: "+str(target)+" with text: "+new_tweets[target]+" ********"
                 postTweet(new_tweets[target], target)
                 insertIntoRetweet(target, True, local_db_surge)
         
