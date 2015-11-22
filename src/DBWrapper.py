@@ -406,7 +406,7 @@ def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
 
 
 
-def getVoteCountByIpForTimeFrame(local_db, ip_iddress, seconds):
+def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
     cursor = local_db.cursor()
     sql = "SELECT * From VoteHistory WHERE ip_address like '"+ip_address+"' and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
     cursor.execute(sql)
