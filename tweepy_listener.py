@@ -207,8 +207,7 @@ def updateSource():
                 user_id = re.escape(str(user.id))
                 username = re.escape(user.name)
                 profile_link = user.profile_image_url
-                
-                print "****** THIS GIVES NEW USER_ID: "+user_id+" username: "+username+" and profile link: "+profile_link
+                updateHandle(local_db_twitter_source, username, user_id, handle_to_update, profile_link)
                 time.sleep(15)
                 
                 

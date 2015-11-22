@@ -270,6 +270,21 @@ def fetchOldestHandle(local_db):
     cursor.close()
     return handle_id
 
+def updateHandle(local_db, username, user_id, handle, link):
+    cursor = local_db.cursor()
+    sql = "UPDATE TwitterSource SET Name='"+username+"', twitter_id='"+user_id+"', profile_image='"+link+"', timestamp=CURRENT_TIMESTAMP WHERE twitter_handle='"+handle+"';"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of occurrence"
+        print str(e)
+        local_db.rollback()
+    cursor.close()
+    
 
 def updateTweetTimeStamp(tweet_list, local_db):
     if (len(tweet_list) == 0):
