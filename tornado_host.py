@@ -72,6 +72,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         print "found votes this hour of: "+str(votes_this_hour)
         if(votes_this_hour > 5):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
+            return
         
         #ok this ip address isnt throttled
         #lets add a vote
