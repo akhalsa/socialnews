@@ -438,7 +438,8 @@ def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
 def getAllHandlesForCategory(local_db, category_id):
     cursor = local_db.cursor()
     #note this will get all votes, up or down
-    sql = "SELECT twitter_id, twitter_handle, twitter_name SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+    sql = "SELECT twitter_id, twitter_handle, twitter_name, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+    print "will find handles w sql: "+sql
     cursor.execute(sql)
     return_list = []
     for row in cursor.fetchall() :
@@ -457,7 +458,6 @@ def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twit
     sql += "1" if upvote else "-1"
     sql += ");"
     
-    print sql
     try:
             # Execute the SQL command
             cursor.execute(sql)
