@@ -47,7 +47,7 @@ def forward():
     sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
     sql += "value INT DEFAULT NULL,"
     sql += "PRIMARY KEY (ID));"
-    #executeSql(db, sql)
+    executeSql(db, sql)
     print sql
     sql = "DROP TABLE SourceCategoryRelationship;"
     #executeSql(db, sql)
