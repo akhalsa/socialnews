@@ -66,7 +66,7 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
         self.finish(json.dumps(handle_list))
 
 class HandleVoteReceiver(tornado.web.RequestHandler):
-    def post(self,twitter_handle, category_id, positive  ):
+    def post(self,twitter_handle, category_name, positive  ):
         #first check to see if this ip address has been used more than 5 times
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -89,6 +89,13 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         else:
             self.finish("bad vote value")
             return
+        
+        
+        cat_id = findCategoryIdWithName(re.escape(category_name), local_db)
+        if(cat_id == 0):
+            self.finish("bad category name")
+            return
+        
         
         table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
         print "table info for that handle is: "+str(table_info)
