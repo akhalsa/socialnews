@@ -86,6 +86,8 @@
             renderTimeFrame();
             renderTweets();
         });
+        
+        loadHandles();
         function nominateNewHandle() {
             var handle_string = $("#handle_name").val();
             $("#handle_name").val('');
@@ -113,10 +115,7 @@
             }
             return cat_name;
         }
-        function renderTweets() {
-            
-            cat_name = currentCatName();
-            $('#submit_handle').click(function(){nominateNewHandle();});
+        function loadHandles() {
             $.getJSON("/category/"+cat_name, function(result){
                 var list_elements = "";
                 
@@ -129,6 +128,12 @@
                 $('#handle_input_area').before(list_elements);
                
             });
+        }
+        function renderTweets() {
+            
+            cat_name = currentCatName();
+            $('#submit_handle').click(function(){nominateNewHandle();});
+            
             
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
                 $("#time").nextAll().remove();
