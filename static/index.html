@@ -126,14 +126,18 @@
                     list_elements += "<span class=\"genericon genericon-collapse\"><span class=\"genericon genericon-expand\"></span></a></li>";
                 });
                 console.log("setting li to: "+list_elements);
-                $('#handle_input_area').before(list_elements);
+            
+                list_elements+="<div id=\"handle_input_area\"><input type=\"text\" id=\"handle_name\">";
+                list_elements += "<input type=\"button\" id=\"submit_handle\" value=\"Nominate\"></div>";
+                $('#right_list').html(list_elements);
+                $('#submit_handle').click(function(){nominateNewHandle();});
                
             });
         }
         function renderTweets() {
             
             cat_name = currentCatName();
-            $('#submit_handle').click(function(){nominateNewHandle();});
+            
             
             
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
@@ -424,10 +428,7 @@
     <div class="col-xs-2" >
         <div> </div>
         <ul  class="sub" id="right_list">
-            <div id="handle_input_area">
-                <input type="text" id="handle_name">
-                <input type="button" id="submit_handle" value="Nominate">
-            </div>
+
         </ul>
     </div>
   </div>
