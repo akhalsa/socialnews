@@ -102,7 +102,8 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         if(table_info == None):
             try:
-                user = api.get_user(screen_name = re.escape(twitter_handle))
+                user = api.get_user(screen_name = twitter_handle)
+                twitter_handle = user.screen_name
                 user_id = re.escape(str(user.id))
                 username = re.escape(user.name)
                 profile_link = user.profile_image_url
