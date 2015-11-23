@@ -444,7 +444,7 @@ def getAllHandlesForCategory(local_db, category_id):
     cursor.execute(sql)
     return_list = []
     for row in cursor.fetchall() :
-        return_list.append({"twitter_id": str(row[0]), "handle":re.escape(row[1]), "username":re.escape(row[2]), "score":str(row[3])})  
+        return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "score":str(row[3])})  
         
     cursor.close()
     return return_list
@@ -472,7 +472,7 @@ def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twit
     
     sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
     sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
-    sql += re.escape(twitter_handle)+"', '"+re.escape(twitter_name)+"', "
+    sql += twitter_handle+"', '"+twitter_name+"', "
     sql += "1" if upvote else "-1"
     sql += ");"
     
