@@ -90,7 +90,7 @@
         
         
         function nominateNewHandle() {
-            var handle_string = $("#handle_name").val();
+            var handle_string = $("#handle_name").val().trim();
             $("#handle_name").val('');
             console.log("running check for: "+handle_string);
             var patt = /^@(\w){1,15}$/;
