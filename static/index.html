@@ -106,7 +106,7 @@
                 
                 $.each(result, function(i, child){
                     console.log("we're monitoring handle: "+child.twitter_handle+" with score: "+child.score);
-                    list_elements += "<li><a href=\"#\">"+child.twitter_handle+"</a><a href=\"#\"><span class=\"genericon genericon-collapse\"><span class=\"genericon genericon-expand\"></span></a></li>";
+                    list_elements += "<li><a href=\"#\">"+child.handle+"</a><a href=\"#\"><span class=\"genericon genericon-collapse\"><span class=\"genericon genericon-expand\"></span></a></li>";
                 });
                 console.log("setting li to: "+list_elements);
                 $('#right_list').html(list_elements)
