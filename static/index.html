@@ -89,7 +89,8 @@
         function nominateNewHandle() {
             var handle_string = $("#handle_name").val();
             $("#handle_name").val('');
-            var patt = /^@?(\w){1,15}$/;
+            console.log("running check for: "+handle_string);
+            var patt = /^@(\w){1,15}$/;
             if(patt.test(handle_string)){
                 console.log("valid twitter handle");
             }else{
