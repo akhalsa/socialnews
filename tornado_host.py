@@ -111,6 +111,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                     table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
             except Exception, e:
                 print "failed to insert :/"
+                print e
                 self.finish("bad handle/insertion")
                 return
 
