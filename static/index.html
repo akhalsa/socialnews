@@ -105,7 +105,7 @@
         function renderTweets() {
             
             cat_name = currentCatName();
-            $('#submit_handle').click(nominateNewHandle());
+            $('#submit_handle').click(function(){nominateNewHandle();});
             $.getJSON("/category/"+cat_name, function(result){
                 var list_elements = "";
                 
