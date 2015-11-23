@@ -59,7 +59,7 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
                         port=3306)
         
         #this should get the full list of handles and their scores in the category
-        cat_id = findCategoryIdWithName(cat_name, local_db)
+        cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
         handle_list = getAllHandlesForCategory(local_db, cat_id)
         print "got handle list:"
         print handle_list
@@ -97,18 +97,18 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             return
         
         
-        table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
+        table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
         print "table info for that handle is: "+str(table_info)
         
         if(table_info == None):
             try:
-                user = api.get_user(screen_name = twitter_handle)
+                user = api.get_user(screen_name = re.escape(twitter_handle))
                 user_id = re.escape(str(user.id))
                 username = re.escape(user.name)
                 profile_link = user.profile_image_url
                 if(user_id != None):
-                    createHandle(local_db,user_id, username, twitter_handle, profile_link )
-                    table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
+                    createHandle(local_db,user_id, username, re.escape(twitter_handle), profile_link )
+                    table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
             except Exception, e:
                 print "failed to insert :/"
                 self.finish("bad handle/insertion")
