@@ -235,8 +235,8 @@ def insertBatch(insertion_map, local_db):
 def batchInsertTweet(tweets, local_db):
     sql ="INSERT IGNORE INTO Tweet(source_twitter_id, text, twitter_id) VALUES "
     for tweet in tweets:
-        text_string = tweets[tweet]["text"].encode('utf-8')
-        sql += "('"+str(tweets[tweet]["twitter_user_id"])+"', '"+MySQLdb.escape_string(text_string)+"', '"+str(tweet)+"'), "
+        text_string = tweets[tweet]["text"]
+        sql += "('"+str(tweets[tweet]["twitter_user_id"])+"', '"+re.escape(text_string)+"', '"+str(tweet)+"'), "
         
     if(len(tweets)>0):
         sql = sql[:-2]
@@ -468,14 +468,10 @@ def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_lin
 
 def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
-    print "twitter_id: "+str(twitter_id)
-    print "twitter_name: "
-    print twitter_name
-    print "twitter_handle: "+str(twitter_handle)
     
     sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
-    sql += str(ip_address)+"', "+MySQLdb.escape_string(str(category_id))+", "+MySQLdb.escape_string(str(twitter_id))+", '"
-    sql += MySQLdb.escape_string(twitter_handle.encode('utf-8'))+"', '"+MySQLdb.escape_string(twitter_name.encode('utf-8'))+"', "
+    sql += str(ip_address)+"', "+re.escape(category_id)+", "+re.escape(twitter_id)+", '"
+    sql += re.escape(twitter_handle)+"', '"+re.escape(twitter_name)+"', "
     sql += "1" if upvote else "-1"
     sql += ");"
     
