@@ -93,6 +93,10 @@
             var patt = /^@(\w){1,15}$/;
             if(patt.test(handle_string)){
                 console.log("valid twitter handle");
+                $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/1", function( data ) {
+                    console.log("received data: ");
+                    console.log(data);
+                  });
             }else{
                 alert("Please enter a valid twitter handle");
             }
