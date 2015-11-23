@@ -102,9 +102,13 @@
             
             cat_name = currentCatName();
             $.getJSON("/category/"+cat_name, function(result){
+                var list_elements = "";
+                
                 $.each(result, function(i, child){
-                    console.log("we're monitoring handle: "+child.twitter_id+" with score: "+child.score); 
+                    console.log("we're monitoring handle: "+child.twitter_id+" with score: "+child.score);
+                    list_elements += "<li><a href=\"#\">"+child.twitter_handle+"</a><a href=\"#\"><span class=\"genericon genericon-collapse\"><span class=\"genericon genericon-expand\"></span></a></li>";
                 });
+                $('#right_list').html(list_elements)
                
             });
             
@@ -394,7 +398,7 @@
     </div>
     <div class="col-xs-2" >
         <div> </div>
-        <ul id="nav-handles" class="sub">
+        <ul id="nav-handles" class="sub" id="right_list">
             <li><a href="#">ESPN</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
             <li><a href="#">SportsCenter</a><a href="#"><span class="genericon genericon-collapse"></span><span class="genericon genericon-expand"></span></a></li>
         </ul>
