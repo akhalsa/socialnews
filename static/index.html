@@ -85,9 +85,10 @@
             renderTopNav();
             renderTimeFrame();
             renderTweets();
+            loadHandles();
         });
         
-        loadHandles();
+        
         function nominateNewHandle() {
             var handle_string = $("#handle_name").val();
             $("#handle_name").val('');
@@ -115,6 +116,7 @@
             return cat_name;
         }
         function loadHandles() {
+            console.log("loading handles properly");
             $.getJSON("/category/"+cat_name, function(result){
                 var list_elements = "";
                 
@@ -252,6 +254,7 @@
             selected_top_index = i;
             renderTopNav();
             renderTweets();
+            loadHandles();
             trackCategorySelection(currentCatName());
         }
         
