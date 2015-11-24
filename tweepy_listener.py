@@ -48,9 +48,12 @@ class HandleListener(tweepy.StreamListener):
                 self.lastPost = datetime.datetime.now()
                 self.mdl = mdl
                 self.refresh_handle_time_seconds = refresh
+                self.lock = threading.RLock()
                 
                 
         def setupSocketWithDelay(self, delay):
+                with self.lock:
+                        reloadSourceCategoryRelationship(self.db)
                 time.sleep(delay)
                 print "starting to set up socket listen on new thread"
                 self.kickoff_time = datetime.datetime.now()
@@ -76,7 +79,8 @@ class HandleListener(tweepy.StreamListener):
                     data_structure.append(self.db_queue.get())
                 
                 print "queue size after get: "+str(self.db_queue.qsize())
-                self.processBatchData(data_structure)
+                with self.lock:
+                        self.processBatchData(data_structure)
 
         
         def processBatchData(self, data_array):

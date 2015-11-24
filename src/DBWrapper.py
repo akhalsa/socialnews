@@ -465,7 +465,44 @@ def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_lin
             
     cursor.close()
     
-
+def reloadSourceCategoryRelationship(local_db):
+    cursor = local_db.cursor()
+    sql = "DELETE FROM SourceCategoryRelationship;"
+    try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+    except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of occurrence"
+            print str(e)
+            local_db.rollback()
+    cursor.close()
+    #### ok source category relationship is flushed
+    #### now we need to hit the VotingHistory table to reassemble the source category relationship table
+    #logically we should do this category by category
+    #need to find top vote getters for each category
+    cursor = local_db.cursor()
+    sql = "SELECT * From Category;"
+    cursor.execute(sql)
+    categories = cursor.fetchall()
+    cursor.close()
+    for row in categories:
+        cursor = local_db.cursor()
+        cat_id = row[0]
+        sql = "SELECT twitter_id, COUNT(twitter_id) as vote_count WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC"
+        print "would search with: "+sql
+        
+        #cursor.execute(sql)
+        #for votes_records in cursor.fetchall():
+        #    print "sql return"
+        
+        
+        #return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "score":str(row[3])})  
+        #GROUP BY twitter_id ORDER BY tweet_occurrence_count
+    
+    
 
 def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
