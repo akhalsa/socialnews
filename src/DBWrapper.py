@@ -505,7 +505,10 @@ def reloadSourceCategoryRelationship(local_db):
         sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
         
         for vote_record in votes_records:
+            if (handle_index == count_tracked_handles):
+                break
             sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
+            handle_index += 1
         
         if(handle_index == 0):
             #no votes for anyone in this category...move along
