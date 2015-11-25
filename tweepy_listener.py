@@ -135,7 +135,7 @@ class HandleListener(tweepy.StreamListener):
                     
         def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object, unique_ids):
             try:
-                categories = getCategoriesForTwitterUserId(str(json_object['user']['id']))
+                categories = getCategoriesForTwitterUserId(db, str(json_object['user']['id']))
                 if(categories):
                     for cat in categories:
                         if cat not in batchDictionary:
