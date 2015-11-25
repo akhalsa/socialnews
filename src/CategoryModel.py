@@ -129,7 +129,7 @@ class CategoryModel:
                     twitter_name = re.escape(user.name)
                     twitter_handle = one_handle.cdata
                     profile_link = user.profile_image_url
-                    if(user_id is not False):
+                    if(twitter_id is not False):
                         sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+twitter_name+"','"+twitter_handle+"', '"+twitter_id+"', '"+profile_link+"');"
                         print "will insert with: "+sql
                         source_id = self.executeSql(self.db, sql)
