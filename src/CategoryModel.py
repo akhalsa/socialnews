@@ -59,6 +59,11 @@ class CategoryModel:
         sql = "ALTER TABLE VoteHistory AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
         
+        sql = "DELETE FROM TwitterSource;"
+        self.executeSql(db, sql)
+        sql = "ALTER TABLE TwitterSource AUTO_INCREMENT = 1"
+        self.executeSql(db, sql)
+        
         sql = "DELETE FROM SourceCategoryRelationship;"
         self.executeSql(db, sql)
         sql = "ALTER TABLE SourceCategoryRelationship AUTO_INCREMENT = 1"
