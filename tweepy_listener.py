@@ -39,7 +39,7 @@ host_target = host_live
 class HandleListener(tweepy.StreamListener):
         
         
-        def __init__(self, mdl, refresh):
+        def __init__(self,  refresh):
                 self.lock = threading.RLock()
                 self.setupSocketWithDelay(0)
                 self.db_queue = Queue()
@@ -48,7 +48,6 @@ class HandleListener(tweepy.StreamListener):
                 worker.start()
                 self.lastClear = datetime.datetime.now() - datetime.timedelta(hours = 1)
                 self.lastPost = datetime.datetime.now()
-                self.mdl = mdl
                 self.refresh_handle_time_seconds = refresh
                 
                 
@@ -249,7 +248,6 @@ if __name__ == '__main__':
         charset='utf8',
         port=3306)
     
-    mdl = src.CategoryModel.CategoryModel(db, api)
     
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
@@ -268,7 +266,7 @@ if __name__ == '__main__':
         worker_two.setDaemon(True)
         worker_two.start()
     
-    handle = HandleListener(mdl, 300)
+    handle = HandleListener(300)
     while True:
         pass
 
