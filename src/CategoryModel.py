@@ -1,9 +1,20 @@
 import untangle
 import MySQLdb
 import os
-import tweepy
 import re
 from src.DBWrapper import *
+
+auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
+auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
+api = tweepy.API(auth)
+
+db = MySQLdb.connect(
+        host=host_target,
+        user="akhalsa",
+        passwd="sophiesChoice1",
+        db="newsdb",
+        charset='utf8',
+        port=3306)
 
 class CategoryModel:
     
@@ -41,10 +52,10 @@ class CategoryModel:
         sql = "ALTER TABLE Category AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
         
-        # sql = "DELETE FROM TwitterSource;"
-        # self.executeSql(db, sql)
-        # sql = "ALTER TABLE TwitterSource AUTO_INCREMENT = 1"
-        # self.executeSql(db, sql)
+        sql = "DELETE FROM VoteHistory;"
+        self.executeSql(db, sql)
+        sql = "ALTER TABLE VoteHistory AUTO_INCREMENT = 1"
+        self.executeSql(db, sql)
         
         sql = "DELETE FROM SourceCategoryRelationship;"
         self.executeSql(db, sql)
@@ -141,14 +152,13 @@ class CategoryModel:
                     twitter_name = row[1]
                     cursor.close()
                     
-                #if(source_id != 0):
-                    #insert source category mappings
-                #    for cat in category_chain:
-                #        sql = "INSERT INTO SourceCategoryRelationship(source_id, category_id) VALUES ("+str(source_id)+", "+cat+");"
-                #        self.executeSql(self.db, sql)
-                sql = "INSERT INTO VoteHistory(category_id, twitter_id, twitter_handle, twitter_name, value) VALUES "
-                sql += "("+category_id+", '"+twitter_id+"', '"+twitter_handle+"', '"+twitter_name+"', 1);"
-                self.executeSql(self.db, sql)
+                if(source_id != 0):
+                    for cat_in_chain in category_chain:
+                        sql = "INSERT INTO VoteHistory(category_id, twitter_id, twitter_handle, twitter_name, value) VALUES "
+                        sql += "("+cat_in_chain+", '"+twitter_id+"', '"+twitter_handle+"', '"+twitter_name+"', 1);"
+                        self.executeSql(self.db, sql)
+                
+                
                 
 
         except IndexError, e:
@@ -164,3 +174,10 @@ class CategoryModel:
                 self.insertCategory(cat, category_chain)
         except IndexError, e:
             print "category: "+category['name']+" has no children so were done"
+            
+            
+if __name__ == '__main__':
+    mdl = CategoryModel(db, api)
+        
+    
+
