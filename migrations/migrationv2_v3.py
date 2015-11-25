@@ -75,11 +75,11 @@ def backward():
     sql = "DROP TABLE VoteHistory;";
     executeSql(db, sql)
     
-    sql = "CREATE TABLE SourceCategoryRelationship ("
-    sql += "ID int(11) NOT NULL AUTO_INCREMENT,"
-    sql += "source_id int(11) DEFAULT NULL,"
-    sql += "category_id int(11) DEFAULT NULL,"
-    sql += "PRIMARY KEY (ID));"
-    
-    executeSql(db, sql)
+    # sql = "CREATE TABLE SourceCategoryRelationship ("
+    # sql += "ID int(11) NOT NULL AUTO_INCREMENT,"
+    # sql += "source_id int(11) DEFAULT NULL,"
+    # sql += "category_id int(11) DEFAULT NULL,"
+    # sql += "PRIMARY KEY (ID));"
+    # 
+    # executeSql(db, sql)
     
