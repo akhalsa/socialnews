@@ -148,7 +148,7 @@ class CategoryModel:
                 #        self.executeSql(self.db, sql)
                 sql = "INSERT INTO VoteHistory(category_id, twitter_id, twitter_handle, twitter_name, value) VALUES "
                 sql += "("+category_id+", '"+twitter_id+"', '"+twitter_handle+"', '"+twitter_name+"', 1);"
-                
+                self.executeSql(self.db, sql)
                 
 
         except IndexError, e:

@@ -530,7 +530,17 @@ def reloadSourceCategoryRelationship(local_db):
             local_db.rollback()
         cursor.close()
         
+def getCategoriesForTwitterUserId(local_db, twitter_id):
+    cursor = local_db.cursor()
+    sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_twitter_id like "+str(twitter_id)
+    cats = []
+    cursor.execute(sql)
+    for row in cursor.fetchall():
+        cats.append(row[0])
+    cursor.close()
+    return cats
     
+
 
 def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()

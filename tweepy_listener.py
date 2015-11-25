@@ -55,6 +55,13 @@ class HandleListener(tweepy.StreamListener):
                 
         def setupSocketWithDelay(self, delay):
                 with self.lock:
+                        db = MySQLdb.connect(
+                                host=host_target,
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
                         reloadSourceCategoryRelationship(db)
                 time.sleep(delay)
                 print "starting to set up socket listen on new thread"
@@ -129,8 +136,8 @@ class HandleListener(tweepy.StreamListener):
                     
         def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object, unique_ids):
             try:
-                if(self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id'])) != None):
-                    categories = self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id']))
+                categories = getCategoriesForTwitterUserId(str(json_object['user']['id']))
+                if(categories):
                     for cat in categories:
                         if cat not in batchDictionary:
                             batchDictionary[cat] = []
