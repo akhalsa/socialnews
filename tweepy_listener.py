@@ -39,6 +39,7 @@ class HandleListener(tweepy.StreamListener):
         
         
         def __init__(self, mdl, refresh):
+                self.lock = threading.RLock()
                 self.setupSocketWithDelay(0)
                 self.db_queue = Queue()
                 worker = Thread(target=self.handleData, args=())
@@ -48,9 +49,7 @@ class HandleListener(tweepy.StreamListener):
                 self.lastPost = datetime.datetime.now()
                 self.mdl = mdl
                 self.refresh_handle_time_seconds = refresh
-                self.lock = threading.RLock()
                 
-                print "handle listener init"
                 
                 
         def setupSocketWithDelay(self, delay):
