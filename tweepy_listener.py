@@ -50,6 +50,8 @@ class HandleListener(tweepy.StreamListener):
                 self.refresh_handle_time_seconds = refresh
                 self.lock = threading.RLock()
                 
+                print "handle listener init"
+                
                 
         def setupSocketWithDelay(self, delay):
                 with self.lock:
