@@ -102,6 +102,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         if(table_info == None):
             try:
+                print "no table info for this handle"
                 user = api.get_user(screen_name = twitter_handle)
                 twitter_handle = "@"+user.screen_name
                 user_id = re.escape(str(user.id))
@@ -115,7 +116,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 print e
                 self.finish("bad handle/insertion")
                 return
-
+        print "running insertion"
         insertVote(local_db, self.request.remote_ip, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
         
         self.finish("200")
