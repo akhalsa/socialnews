@@ -22,6 +22,7 @@ class CategoryModel:
     
     def executeSql(self, db, sql):
         cursor = db.cursor()
+        print sql
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
