@@ -78,21 +78,21 @@ class CategoryModel:
         ##############################
         ##### build category mapping
         ##############################
-        ids = getAllTwitterIds(self.db)
-        for handle_id in ids:
-            local_info = findTableInfoWithTwitterId(handle_id, self.db)
-            local_id = local_info["local_id"]
-            
-            cats = getCategoriesWithSourceId(local_id, self.db)
-            self.categories[handle_id] = cats
-            
-        print "now have cats: "+str(self.categories)
-        
-    def getCategoriesForTwitterUserId(self, handle_id):
-        if(handle_id in self.categories):
-            return self.categories[handle_id]
-        else:
-            return None
+    #     ids = getAllTwitterIds(self.db)
+    #     for handle_id in ids:
+    #         local_info = findTableInfoWithTwitterId(handle_id, self.db)
+    #         local_id = local_info["twitter_id"]
+    #         
+    #         cats = getCategoriesWithSourceId(local_id, self.db)
+    #         self.categories[handle_id] = cats
+    #         
+    #     print "now have cats: "+str(self.categories)
+    #     
+    # def getCategoriesForTwitterUserId(self, handle_id):
+    #     if(handle_id in self.categories):
+    #         return self.categories[handle_id]
+    #     else:
+    #         return None
         
     def insertCategory(self, category, parent_id_list):
         #1 create new category entry for this category
