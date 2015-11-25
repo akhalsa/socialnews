@@ -2,6 +2,7 @@ import untangle
 import MySQLdb
 import os
 import re
+import tweepy
 from tornado.options import define, options, parse_command_line
 
 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
