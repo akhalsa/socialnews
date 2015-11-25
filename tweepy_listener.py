@@ -55,7 +55,7 @@ class HandleListener(tweepy.StreamListener):
                 
         def setupSocketWithDelay(self, delay):
                 with self.lock:
-                        reloadSourceCategoryRelationship(self.db)
+                        reloadSourceCategoryRelationship(db)
                 time.sleep(delay)
                 print "starting to set up socket listen on new thread"
                 self.kickoff_time = datetime.datetime.now()
