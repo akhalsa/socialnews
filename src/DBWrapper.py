@@ -491,17 +491,42 @@ def reloadSourceCategoryRelationship(local_db):
     for row in categories:
         cursor = local_db.cursor()
         cat_id = row[0]
-        sql = "SELECT twitter_id, COUNT(twitter_id) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC"
-        print "would search with: "+sql
+        #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
+        sql = "SELECT twitter_id, COUNT(twitter_id) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
         
-        #cursor.execute(sql)
-        #for votes_records in cursor.fetchall():
-        #    print "sql return"
+        cursor.execute(sql)
+        total_nominated_handles = cursor.rowcount
+        votes_records = cursor.fetchall()
+        cursor.close()
+        cursor = local_db.cursor()
+        #simple algorithm... lets insert the top 25
+        count_tracked_handles = max(25, int(total_nominated_handles/2))
+        handle_index = 0
+        sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
         
+        for vote_record in votes_records:
+            sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
         
-        #return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "score":str(row[3])})  
-        #GROUP BY twitter_id ORDER BY tweet_occurrence_count
-    
+        if(handle_index == 0):
+            #no votes for anyone in this category...move along
+            print "no votes for: "+str(cat_id)
+            continue
+        
+        sql = sql[:-2]
+        
+        sql += ";"
+        try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+        except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of occurrence"
+            print str(e)
+            local_db.rollback()
+        cursor.close()
+        
     
 
 def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
