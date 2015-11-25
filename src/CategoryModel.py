@@ -22,7 +22,7 @@ class CategoryModel:
     
     def executeSql(self, db, sql):
         cursor = db.cursor()
-        print sql
+        
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
@@ -31,6 +31,7 @@ class CategoryModel:
         except Exception,e:
                 # Rollback in case there is any error
                 print "error on insertion of occurrence"
+                print sql
                 print str(e)
                 db.rollback()
         lastRow = cursor.lastrowid
@@ -138,7 +139,7 @@ class CategoryModel:
                     print "fetching data for: "+one_handle.cdata
                     user = self.api.get_user(screen_name = one_handle.cdata)
                     twitter_id = re.escape(str(user.id))
-                    twitter_name = re.escape(user.name)
+                    twitter_name = MySQLdb.escape_string(user.name)
                     twitter_handle = one_handle.cdata
                     profile_link = user.profile_image_url
                     if(twitter_id is not False):
