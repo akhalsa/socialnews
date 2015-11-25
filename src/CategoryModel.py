@@ -139,19 +139,18 @@ class CategoryModel:
                     print "fetching data for: "+one_handle.cdata
                     user = self.api.get_user(screen_name = one_handle.cdata)
                     twitter_id = re.escape(str(user.id))
-                    twitter_name = MySQLdb.escape_string(user.name)
+                    twitter_name = re.escape(user.name)
                     twitter_handle = one_handle.cdata
                     profile_link = user.profile_image_url
                     if(twitter_id is not False):
                         sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+twitter_name+"','"+twitter_handle+"', '"+twitter_id+"', '"+profile_link+"');"
-                        print "will insert with: "+sql
                         source_id = self.executeSql(self.db, sql)
                      
                 else:
                     source_id = row[0]
                     twitter_id = row[3]
                     twitter_handle = row[2]
-                    twitter_name = row[1]
+                    twitter_name = re.escape(row[1])
                     cursor.close()
                     
                 if(source_id != 0):
