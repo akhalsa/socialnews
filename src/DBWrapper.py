@@ -491,7 +491,7 @@ def reloadSourceCategoryRelationship(local_db):
     for row in categories:
         cursor = local_db.cursor()
         cat_id = row[0]
-        sql = "SELECT twitter_id, COUNT(twitter_id) as vote_count WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC"
+        sql = "SELECT twitter_id, COUNT(twitter_id) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC"
         print "would search with: "+sql
         
         #cursor.execute(sql)

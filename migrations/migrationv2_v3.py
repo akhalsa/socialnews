@@ -51,9 +51,8 @@ def forward():
     sql += "PRIMARY KEY (ID), INDEX(timestamp));"
     executeSql(db, sql)
     print sql
-    # sql = "DROP TABLE SourceCategoryRelationship;"
-    # executeSql(db, sql)
-    # print sql
+    sql = "ALTER TABLE SourceCategoryRelationship CHANGE source_id source_twitter_id INT;"
+    executeSql(db, sql)
     
     
     
@@ -75,11 +74,13 @@ def backward():
     sql = "DROP TABLE VoteHistory;";
     executeSql(db, sql)
     
+    sql = "ALTER TABLE SourceCategoryRelationship CHANGE source_twitter_id source_id INT;"
+    executeSql(db, sql)
     # sql = "CREATE TABLE SourceCategoryRelationship ("
     # sql += "ID int(11) NOT NULL AUTO_INCREMENT,"
     # sql += "source_id int(11) DEFAULT NULL,"
     # sql += "category_id int(11) DEFAULT NULL,"
     # sql += "PRIMARY KEY (ID));"
     # 
-    # executeSql(db, sql)
+    # 
     
