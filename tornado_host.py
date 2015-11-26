@@ -84,12 +84,14 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         upvote = False
         if(positive == "1"):
             upvote = True
-        elif (positive == "0"):
+        elif (positive == "-1"):
             upvote = False
         else:
             self.finish("bad vote value")
             return
-        
+        ##########REMEMBER you have a boolean translation layer between restful value "positive" that gets switched to a boolean
+        ######for now this is fine because it also adds some security
+        ###########but dont forget!!!!!!
         
         cat_id = findCategoryIdWithName(re.escape(category_name), local_db)
         if(cat_id == 0):
