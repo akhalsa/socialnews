@@ -443,8 +443,15 @@ def getAllHandlesForCategory(local_db, category_id):
     print "will find handles w sql: "+sql
     cursor.execute(sql)
     return_list = []
+    total_nominated_handles = cursor.rowcount
+    tracked_handles_count = returnCutOffCount(total_nominated_handles)
+    insertion_count = 0
     for row in cursor.fetchall() :
-        return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "score":str(row[3])})  
+        tracked = 0
+        if (insertion_count < tracked_handles_count):
+                tracked = 1
+        return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "score":str(row[3]), "tracked":tracked})
+        insertion_count += 1
         
     cursor.close()
     return return_list
@@ -464,7 +471,10 @@ def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_lin
             local_db.rollback()
             
     cursor.close()
-    
+
+def returnCutOffCount(total_nominated_handles):
+    return max(25, int(total_nominated_handles/2))
+
 def reloadSourceCategoryRelationship(local_db):
     cursor = local_db.cursor()
     sql = "DELETE FROM SourceCategoryRelationship;"
@@ -500,7 +510,7 @@ def reloadSourceCategoryRelationship(local_db):
         cursor.close()
         cursor = local_db.cursor()
         #simple algorithm... lets insert the top 25
-        count_tracked_handles = max(25, int(total_nominated_handles/2))
+        count_tracked_handles = returnCutOffCount(total_nominated_handles)
         handle_index = 0
         sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
         
