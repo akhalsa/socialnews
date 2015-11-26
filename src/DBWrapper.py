@@ -436,7 +436,15 @@ def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
     cursor.close()
     return votes
 
-def getAllHandlesForCategory(local_db, category_id):
+def getAllHandlesForCategory(local_db, category_id, ip_address):
+    cursor = local_db.cursor()
+    sql = "SELECT value, twitter_id From VoteHistory WHERE ip_address like '"+str(ip_address)+"' AND category_id like '"+str(category_id)+"';"
+    cursor.execute(sql)
+    user_vote_history = {}
+    for row in cursor.fetchall():
+        user_vote_history[row[1]] = row[0]
+    cursor.close()
+    
     cursor = local_db.cursor()
     #note this will get all votes, up or down
     sql = "SELECT twitter_id, twitter_handle, twitter_name, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
@@ -450,7 +458,12 @@ def getAllHandlesForCategory(local_db, category_id):
         tracked = 0
         if (insertion_count < tracked_handles_count):
                 tracked = 1
-        return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "score":str(row[3]), "tracked":tracked})
+        
+        vote_val = 0
+        if(row[0] in user_vote_history):
+            vote_val = user_vote_history[row[0]]
+            
+        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "score":str(row[3]), "tracked":tracked})
         insertion_count += 1
         
     cursor.close()
