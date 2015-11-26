@@ -60,7 +60,7 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
         
         #this should get the full list of handles and their scores in the category
         cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
-        handle_list = getAllHandlesForCategory(local_db, cat_id)
+        handle_list = getAllHandlesForCategory(local_db, cat_id, self.request.remote_ip)
         print "got handle list:"
         print handle_list
         self.finish(json.dumps(handle_list))
