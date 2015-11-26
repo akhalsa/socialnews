@@ -126,10 +126,10 @@
                     list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D0D0D0\" ");
                     list_elements += "><a href=\"#\">"+child.handle+"</a>";
                     list_elements += "<span class=\"genericon genericon-collapse\" ";
-                    list_elements += (child.vote_val == -1) ? "style=\"color:yellow\"":"";
+                    list_elements += (child.vote_val == 1) ? "style=\"color:yellow\"":"";
                     list_elements += "></span>";
                     list_elements += "<span class=\"genericon genericon-expand\" ";
-                    list_elements += (child.vote_val == 1)? "style=\"color:yellow\"":"";
+                    list_elements += (child.vote_val == -1)? "style=\"color:yellow\"":"";
                     list_elements += "></span></li>";
                 });
                 console.log("setting li to: "+list_elements);
