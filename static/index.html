@@ -96,12 +96,16 @@
             var patt = /^@(\w){1,15}$/;
             if(patt.test(handle_string)){
                 console.log("valid twitter handle");
-                $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/1", function( data ) {
-                    loadHandles();
-                  });
+                voteForHandle(handle_string, 1);
             }else{
                 alert("Please enter a valid twitter handle");
             }
+        }
+        
+        function voteForHandle(handle_string, value) {
+          $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
+            loadHandles();
+          });
         }
         
         function currentCatName() {
@@ -125,12 +129,14 @@
                     list_elements += "<li "
                     list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D0D0D0\" ");
                     list_elements += "><a href=\"#\">"+child.handle+"</a>";
-                    list_elements += "<span class=\"genericon genericon-collapse\" ";
-                    list_elements += (child.vote_val == 1) ? "style=\"color:yellow\"":"";
-                    list_elements += "></span>";
-                    list_elements += "<span class=\"genericon genericon-expand\" ";
-                    list_elements += (child.vote_val == -1)? "style=\"color:yellow\"":"";
-                    list_elements += "></span></li>";
+                    upvote_click_listener = child.vote_val == 0 ? "onclick=\"voteForHandle('"+child.handle+"',1)\"" : "";
+                    upvote_clicked = (child.vote_val == 1) ? "style=\"color:yellow\"":"";
+                    
+                    downvote_click_listener = child.vote_val == 0 ? " onclick=\"voteForHandle('"+child.handle+"',-1)\"" : " ";
+                    downvote_clicked = (child.vote_val == -1) ? " style=\"color:yellow\" ":"";
+                    
+                    list_elements += "<span "+upvote_click_listener+" class=\"genericon genericon-collapse\" "+upvote_clicked+"></span>";
+                    list_elements += "<span class=\"genericon genericon-expand\" "+downvote_click_listener+downvote_clicked+"></span></li>";
                 });
                 console.log("setting li to: "+list_elements);
             
