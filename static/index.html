@@ -124,7 +124,7 @@
                     console.log("we're monitoring handle: "+child.twitter_handle+" with score: "+child.score);
                     list_elements += "<li><a href=\"#\">"+child.handle+"</a>";
                     list_elements += "<span class=\"genericon genericon-collapse\" ";
-                    list_elements += child.tracked == 1 ? "style=\"background-color:white\" ": "";
+                    list_elements += "style=\"background-color:" +(child.tracked == 1 ? "yellow\" ": "white\" ");
                     list_elements += "></span>";
                     list_elements += "<span class=\"genericon genericon-expand\"></span></li>";
                 });
