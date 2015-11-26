@@ -436,15 +436,35 @@ def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
     cursor.close()
     return votes
 
-def getAllHandlesForCategory(local_db, category_id):
+def getAllHandlesForCategory(local_db, category_id, ip_address):
+    cursor = local_db.cursor()
+    sql = "SELECT value, twitter_id From VoteHistory WHERE ip_address like '"+str(ip_address)+"' AND category_id like '"+str(category_id)+"';"
+    cursor.execute(sql)
+    user_vote_history = {}
+    for row in cursor.fetchall():
+        user_vote_history[row[1]] = row[0]
+    cursor.close()
+    
     cursor = local_db.cursor()
     #note this will get all votes, up or down
     sql = "SELECT twitter_id, twitter_handle, twitter_name, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
     print "will find handles w sql: "+sql
     cursor.execute(sql)
     return_list = []
+    total_nominated_handles = cursor.rowcount
+    tracked_handles_count = returnCutOffCount(total_nominated_handles)
+    insertion_count = 0
     for row in cursor.fetchall() :
-        return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "score":str(row[3])})  
+        tracked = 0
+        if (insertion_count < tracked_handles_count):
+                tracked = 1
+        
+        vote_val = 0
+        if(row[0] in user_vote_history):
+            vote_val = user_vote_history[row[0]]
+            
+        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "score":str(row[3]), "tracked":tracked})
+        insertion_count += 1
         
     cursor.close()
     return return_list
@@ -464,7 +484,10 @@ def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_lin
             local_db.rollback()
             
     cursor.close()
-    
+
+def returnCutOffCount(total_nominated_handles):
+    return max(25, int(total_nominated_handles/2))
+
 def reloadSourceCategoryRelationship(local_db):
     cursor = local_db.cursor()
     sql = "DELETE FROM SourceCategoryRelationship;"
@@ -500,7 +523,7 @@ def reloadSourceCategoryRelationship(local_db):
         cursor.close()
         cursor = local_db.cursor()
         #simple algorithm... lets insert the top 25
-        count_tracked_handles = max(25, int(total_nominated_handles/2))
+        count_tracked_handles = returnCutOffCount(total_nominated_handles)
         handle_index = 0
         sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
         
