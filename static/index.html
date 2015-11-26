@@ -123,7 +123,7 @@
                 $.each(result, function(i, child){
                     console.log("we're monitoring handle: "+child.twitter_handle+" with score: "+child.score);
                     list_elements += "<li "
-                    list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "gray\" ");
+                    list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D3D3D3\" ");
                     list_elements += "><a href=\"#\">"+child.handle+"</a>";
                     list_elements += "<span class=\"genericon genericon-collapse\"></span>";
                     list_elements += "<span class=\"genericon genericon-expand\"></span></li>";
