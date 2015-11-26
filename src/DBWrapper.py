@@ -1,5 +1,6 @@
 import MySQLdb
 import datetime
+import re
 
 def getTweetOccurances(seconds, cat_id, local_db):
     cursor = local_db.cursor()
@@ -24,10 +25,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
             return top_tweets
     
     cursor = local_db.cursor()
-    #sql = "SELECT twitter_id, text, source_id From Tweet A "
-    #sql += "INNER JOIN (SELECT Name, profile_image, ID FROM TwitterSource) B "
-    #sql += "ON A.source = A.source_id "
-    #sql += "WHERE A.twitter_id in ("
     sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
     first_fin = False
     for t_id in twitter_ids:
@@ -239,8 +236,8 @@ def insertBatch(insertion_map, local_db):
 def batchInsertTweet(tweets, local_db):
     sql ="INSERT IGNORE INTO Tweet(source_twitter_id, text, twitter_id) VALUES "
     for tweet in tweets:
-        text_string = tweets[tweet]["text"].encode('utf-8')
-        sql += "('"+str(tweets[tweet]["twitter_user_id"])+"', '"+MySQLdb.escape_string(text_string)+"', '"+str(tweet)+"'), "
+        text_string = tweets[tweet]["text"]
+        sql += "('"+str(tweets[tweet]["twitter_user_id"])+"', '"+re.escape(text_string)+"', '"+str(tweet)+"'), "
         
     if(len(tweets)>0):
         sql = sql[:-2]
@@ -351,16 +348,37 @@ def getCategoriesWithSourceId(source_id, local_db):
     cursor.close()
     return return_list
 
-def findTableIdWithTwitterId(twitter_id, local_db):
+def findTableInfoWithTwitterId(twitter_id, local_db):
     cursor = local_db.cursor()
-    sql = "SELECT ID FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
+    sql = "SELECT ID, name, twitter_handle, twitter_id FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
     cursor.execute(sql)
-    return_id = 0
+    return_map = None
     for row in cursor.fetchall() :
-        return_id = row[0]
+        return_map = {}
+        return_map ["local_id"] =row[0]
+        return_map["twitter_name"] = row[1]
+        return_map["twitter_handle"]=row[2]
+        return_map["twitter_id"]  = row[3]
+        
     cursor.close()
     #print "lock released at 227"
-    return return_id
+    return return_map
+
+def findTableInfoWithTwitterHandle(twitter_handle, local_db):
+    cursor = local_db.cursor()
+    sql = "SELECT ID, name, twitter_handle, twitter_id FROM TwitterSource WHERE twitter_handle like '"+twitter_handle+"';"
+    cursor.execute(sql)
+    return_map = None
+    for row in cursor.fetchall() :
+        return_map = {}
+        return_map ["local_id"] =row[0]
+        return_map["twitter_name"] = row[1]
+        return_map["twitter_handle"]=row[2]
+        return_map["twitter_id"]  = row[3]
+        
+    cursor.close()
+    #print "lock released at 227"
+    return return_map
 
 def getCategoryStructure(local_db):
     cursor = local_db.cursor()
@@ -407,6 +425,169 @@ def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
             output["children"].append(buildMap(id_to_name_map, id_to_children_array_map, child))
 
     return output
+
+
+
+def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
+    cursor = local_db.cursor()
+    sql = "SELECT * From VoteHistory WHERE ip_address like '"+ip_address+"' and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
+    cursor.execute(sql)
+    votes = cursor.rowcount
+    cursor.close()
+    return votes
+
+def getAllHandlesForCategory(local_db, category_id, ip_address):
+    cursor = local_db.cursor()
+    sql = "SELECT value, twitter_id From VoteHistory WHERE ip_address like '"+str(ip_address)+"' AND category_id like '"+str(category_id)+"';"
+    cursor.execute(sql)
+    user_vote_history = {}
+    for row in cursor.fetchall():
+        user_vote_history[row[1]] = row[0]
+    cursor.close()
+    
+    cursor = local_db.cursor()
+    #note this will get all votes, up or down
+    sql = "SELECT twitter_id, twitter_handle, twitter_name, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+    print "will find handles w sql: "+sql
+    cursor.execute(sql)
+    return_list = []
+    total_nominated_handles = cursor.rowcount
+    tracked_handles_count = returnCutOffCount(total_nominated_handles)
+    insertion_count = 0
+    for row in cursor.fetchall() :
+        tracked = 0
+        if (insertion_count < tracked_handles_count):
+                tracked = 1
+        
+        vote_val = 0
+        if(row[0] in user_vote_history):
+            vote_val = user_vote_history[row[0]]
+            
+        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "score":str(row[3]), "tracked":tracked})
+        insertion_count += 1
+        
+    cursor.close()
+    return return_list
+
+def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_link):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO TwitterSource(Name, twitter_handle, twitter_id, profile_image) VALUES ('"+twitter_name+"','"+twitter_handle+"', '"+twitter_id+"', '"+profile_link+"');"
+    try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+    except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of occurrence"
+            print str(e)
+            local_db.rollback()
+            
+    cursor.close()
+
+def returnCutOffCount(total_nominated_handles):
+    return max(25, int(total_nominated_handles/2))
+
+def reloadSourceCategoryRelationship(local_db):
+    cursor = local_db.cursor()
+    sql = "DELETE FROM SourceCategoryRelationship;"
+    try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+    except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of occurrence"
+            print str(e)
+            local_db.rollback()
+    cursor.close()
+    #### ok source category relationship is flushed
+    #### now we need to hit the VotingHistory table to reassemble the source category relationship table
+    #logically we should do this category by category
+    #need to find top vote getters for each category
+    cursor = local_db.cursor()
+    sql = "SELECT * From Category;"
+    cursor.execute(sql)
+    categories = cursor.fetchall()
+    cursor.close()
+    for row in categories:
+        cursor = local_db.cursor()
+        cat_id = row[0]
+        #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
+        sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+        
+        cursor.execute(sql)
+        total_nominated_handles = cursor.rowcount
+        votes_records = cursor.fetchall()
+        cursor.close()
+        cursor = local_db.cursor()
+        #simple algorithm... lets insert the top 25
+        count_tracked_handles = returnCutOffCount(total_nominated_handles)
+        handle_index = 0
+        sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
+        
+        for vote_record in votes_records:
+            if (handle_index == count_tracked_handles):
+                break
+            sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
+            handle_index += 1
+        
+        if(handle_index == 0):
+            #no votes for anyone in this category...move along
+            print "no votes for: "+str(cat_id)
+            continue
+        
+        sql = sql[:-2]
+        
+        sql += ";"
+        try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+        except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of occurrence"
+            print str(e)
+            local_db.rollback()
+        cursor.close()
+        
+def getCategoriesForTwitterUserId(local_db, twitter_id):
+    cursor = local_db.cursor()
+    sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_twitter_id like "+str(twitter_id)
+    cats = []
+    cursor.execute(sql)
+    for row in cursor.fetchall():
+        cats.append(row[0])
+    cursor.close()
+    return cats
+    
+
+
+def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
+    cursor = local_db.cursor()
+    
+    sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
+    sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
+    sql += twitter_handle+"', '"+twitter_name+"', "
+    sql += "1" if upvote else "-1"
+    sql += ");"
+    
+    try:
+            # Execute the SQL command
+            cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+    except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of occurrence"
+            print str(e)
+            local_db.rollback()
+    cursor.close()
+    return
+
+    
 
 
 

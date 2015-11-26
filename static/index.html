@@ -85,7 +85,24 @@
             renderTopNav();
             renderTimeFrame();
             renderTweets();
+            loadHandles();
         });
+        
+        
+        function nominateNewHandle() {
+            var handle_string = $("#handle_name").val().trim();
+            $("#handle_name").val('');
+            console.log("running check for: "+handle_string);
+            var patt = /^@(\w){1,15}$/;
+            if(patt.test(handle_string)){
+                console.log("valid twitter handle");
+                $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/1", function( data ) {
+                    loadHandles();
+                  });
+            }else{
+                alert("Please enter a valid twitter handle");
+            }
+        }
         
         function currentCatName() {
             var cat_name = ""
@@ -98,9 +115,37 @@
             }
             return cat_name;
         }
+        function loadHandles() {
+            console.log("loading handles properly");
+            $.getJSON("/category/"+cat_name, function(result){
+                var list_elements = "";
+                
+                $.each(result, function(i, child){
+                    console.log("we're monitoring handle: "+child.twitter_handle+" with score: "+child.score);
+                    list_elements += "<li "
+                    list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D0D0D0\" ");
+                    list_elements += "><a href=\"#\">"+child.handle+"</a>";
+                    list_elements += "<span class=\"genericon genericon-collapse\" ";
+                    list_elements += (child.vote_val == 1) ? "style=\"color:yellow\"":"";
+                    list_elements += "></span>";
+                    list_elements += "<span class=\"genericon genericon-expand\" ";
+                    list_elements += (child.vote_val == -1)? "style=\"color:yellow\"":"";
+                    list_elements += "></span></li>";
+                });
+                console.log("setting li to: "+list_elements);
+            
+                list_elements+="<div id=\"handle_input_area\"><input type=\"text\" id=\"handle_name\">";
+                list_elements += "<input type=\"button\" id=\"submit_handle\" value=\"Nominate\"></div>";
+                $('#right_list').html(list_elements);
+                $('#submit_handle').click(function(){nominateNewHandle();});
+               
+            });
+        }
         function renderTweets() {
             
             cat_name = currentCatName();
+            
+            
             
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
                 $("#time").nextAll().remove();
@@ -220,6 +265,7 @@
             selected_top_index = i;
             renderTopNav();
             renderTweets();
+            loadHandles();
             trackCategorySelection(currentCatName());
         }
         
@@ -385,6 +431,12 @@
             </div>
         </div>
         <!-- tweets end -->
+    </div>
+    <div class="col-xs-2" >
+        <div> </div>
+        <ul  class="sub" id="right_list">
+
+        </ul>
     </div>
   </div>
 </div>

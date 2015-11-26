@@ -13,6 +13,7 @@ import threading
 import datetime
 import requests
 import argparse
+import re
 
 
 from tornado.options import define, options, parse_command_line
@@ -30,6 +31,9 @@ host_live = "avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
 host_dev = "avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
 host_target = host_live
 
+auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
+auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
+api = tweepy.API(auth)
 
 
 class Category(tornado.web.RequestHandler):    
@@ -43,7 +47,81 @@ class Category(tornado.web.RequestHandler):
                         port=3306)
         
         self.finish(json.dumps(getCategoryStructure(local_db)))
+
+class HandleListForCategoryId(tornado.web.RequestHandler):
+    def get(self, cat_name):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
         
+        #this should get the full list of handles and their scores in the category
+        cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
+        handle_list = getAllHandlesForCategory(local_db, cat_id, self.request.remote_ip)
+        print "got handle list:"
+        print handle_list
+        self.finish(json.dumps(handle_list))
+
+class HandleVoteReceiver(tornado.web.RequestHandler):
+    def post(self,twitter_handle, category_name, positive  ):
+        #first check to see if this ip address has been used more than 5 times
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        
+        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
+        print "found votes this hour of: "+str(votes_this_hour)
+        if(votes_this_hour >= 50):
+            self.finish("{'message':'you are out of votes, please wait for them to recharge}")
+            return
+        upvote = False
+        if(positive == "1"):
+            upvote = True
+        elif (positive == "0"):
+            upvote = False
+        else:
+            self.finish("bad vote value")
+            return
+        
+        
+        cat_id = findCategoryIdWithName(re.escape(category_name), local_db)
+        if(cat_id == 0):
+            self.finish("bad category name")
+            return
+        
+        
+        table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
+        print "table info for that handle is: "+str(table_info)
+        
+        if(table_info == None):
+            try:
+                user = api.get_user(screen_name = twitter_handle)
+                twitter_handle = "@"+user.screen_name
+                user_id = re.escape(str(user.id))
+                username = re.escape(user.name)
+                profile_link = user.profile_image_url
+                if(user_id != None):
+                    createHandle(local_db,user_id, username, re.escape(twitter_handle), profile_link )
+                    table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
+            except Exception, e:
+                print "failed to insert :/"
+                print e
+                self.finish("bad handle/insertion")
+                return
+        insertVote(local_db, self.request.remote_ip, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
+        
+        self.finish("200")
+        
+        
+    
+    
 
     
 class Reader(tornado.web.RequestHandler):
@@ -78,6 +156,8 @@ class IndexHandler(tornado.web.RequestHandler):
 app = tornado.web.Application([
     (r'/', IndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
+    (r"/category/(.*)", HandleListForCategoryId),
+    (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/(.*)',  PageLoad),

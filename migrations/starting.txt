@@ -1,0 +1,96 @@
+use newsdb;
+
+
++----------------------------+
+| Tables_in_newsdb           |
++----------------------------+
+| Category                   |
+| CategoryParentRelationship |
+| Occurrence_1               |
+| Occurrence_10              |
+| Occurrence_11              |
+| Occurrence_12              |
+| Occurrence_13              |
+| Occurrence_14              |
+| Occurrence_15              |
+| Occurrence_16              |
+| Occurrence_17              |
+| Occurrence_18              |
+| Occurrence_19              |
+| Occurrence_2               |
+| Occurrence_20              |
+| Occurrence_21              |
+| Occurrence_22              |
+| Occurrence_23              |
+| Occurrence_24              |
+| Occurrence_25              |
+| Occurrence_26              |
+| Occurrence_27              |
+| Occurrence_28              |
+| Occurrence_29              |
+| Occurrence_3               |
+| Occurrence_30              |
+| Occurrence_31              |
+| Occurrence_4               |
+| Occurrence_5               |
+| Occurrence_6               |
+| Occurrence_7               |
+| Occurrence_8               |
+| Occurrence_9               |
+| Retweets                   |
+| SourceCategoryRelationship |
+| Tweet                      |
+| TwitterSource              |
++----------------------------+
+
+
+CREATE TABLE `Category` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1 |
+
+CREATE TABLE `CategoryParentRelationship` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_category_id` int(11) DEFAULT NULL,
+  `child_category_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1 |
+
+
+CREATE TABLE `Retweets` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `twitter_id` varchar(255) DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `surge` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=881 DEFAULT CHARSET=latin1
+
+ SourceCategoryRelationship | CREATE TABLE `SourceCategoryRelationship` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `source_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1168 DEFAULT CHARSET=latin1
+
+Tweet | CREATE TABLE `Tweet` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `text` varchar(255) DEFAULT NULL,
+  `twitter_id` varchar(255) DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `source_twitter_id` varchar(255) DEFAULT NULL,
+  `insertion_timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `twitter_id_2` (`twitter_id`),
+  KEY `twitter_id` (`twitter_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12614 DEFAULT CHARSET=latin1
+
+ TwitterSource | CREATE TABLE `TwitterSource` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `twitter_handle` varchar(255) DEFAULT NULL,
+  `twitter_id` varchar(255) DEFAULT NULL,
+  `profile_image` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=415 DEFAULT CHARSET=latin1
+
