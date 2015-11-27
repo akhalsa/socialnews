@@ -110,7 +110,8 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         print "got image url: "+img_url
                         print "found title: "+soup.title.string.encode('utf-8')
                         print "found description"
-                        print desc[0]['content'].encode('utf-8')
+                        if(len(desc)>0 and "content" in desc[0]):
+                            print desc[0]['content'].encode('utf-8')
 
 
 
@@ -320,7 +321,6 @@ def batchInsertTweet(tweets, local_db):
     if(len(tweets)>0):
         sql = sql[:-2]
     
-    print "running w sql: "+sql
     cursor = local_db.cursor()
     try:
         # Execute the SQL command
