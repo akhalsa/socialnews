@@ -72,21 +72,23 @@ def getTweetOccurances(seconds, cat_id, local_db):
                             try:
                                 if(img["src"].endswith(".gif")):
                                     img_url = img["src"]
-                                    print "found a gif!!!: "+img["src"]
+                                    #print "found a gif!!!: "+img["src"]
                                     break
                                 
                                 img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
                                 width, height = img_file.size
                                 area = width*height      
                                 if(area > max_area):               
-                                    print "switching from: "+img_url+" to url:" + img["src"]
+                                    #print "switching from: "+img_url+" to url:" + img["src"]
                                     img_url = img["src"]
                                     max_area = area
                                     
                             except Exception, e:
                                print e
                                print "GOT EXCEPTION!!!"
-                    
+                               
+                               
+                        print "got image url: "+img_url
                         print "found title: "+soup.title.string.encode('utf-8')
 
 
