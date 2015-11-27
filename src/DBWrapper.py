@@ -104,7 +104,8 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                print "GOT EXCEPTION on url: "+img["src"]
                                
                         
-                        
+                        img_url = img_url.encode('utf-8')
+                        url = url.encode('utf-8')
                         print "got image url: "+img_url
                         title = soup.title.string.encode('utf-8')
                         blurb_text = ""
