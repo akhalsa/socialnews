@@ -25,7 +25,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
             return top_tweets
     
     cursor = local_db.cursor()
-    sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image"
+    sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image, "
     sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked "
     sql += " From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
 
@@ -40,7 +40,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
             
     sql += ");"
 
-    print "we have an sql value of: "
     print sql
     
     cursor.execute(sql)
