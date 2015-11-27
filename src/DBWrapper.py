@@ -64,12 +64,11 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         soup = BeautifulSoup(page_content, 'html.parser')
                         #body = soup.find('body')
                         
-                        link = soup.find("img", scr=True)
+                        for img in soup.findAll("img", src=True):
+                             print " image_url" + img["src"]
                     
                         print "found title: "+str(soup.title.string)
-                        if(link):
-                            print "found first image: "+link["src"]
-                    
+
 
 
                     ##if there is no link, we can leave everything as null and mark it as checked
