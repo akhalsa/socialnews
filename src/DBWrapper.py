@@ -81,7 +81,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                     print "skipping: "+img["src"]+" with width: "+str(width)+" and heigh: "+str(height)
                                     continue
                                 
-                                if(width>40 and height>40):               
+                                if(width>100 and height>100):               
                                     #print "switching from: "+img_url+" to url:" + img["src"]
                                     img_url = img["src"]
                                     break
