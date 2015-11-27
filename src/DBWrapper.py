@@ -108,10 +108,13 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         title = u''
                         if(soup.find("meta", {"name":"title"})):
                             title_prospect = soup.find("meta", {"name":"title"})
-                            print title_prospect
-                            if(title_prospect and ("content" in title_prospect)):
-                                title = title_prospect["content"]
-                                print title
+                            print "found title: "+title_prospect["content"]
+                            title = title_prospect["content"]
+                            
+                            #print title_prospect
+                            #if(title_prospect and ("content" in title_prospect)):
+                            #    title = title_prospect["content"]
+                            #    print title
                         else:
                             for titles in soup.findAll('title'):
                                 if (titles != tweet_dict["text"]):
