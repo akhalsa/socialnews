@@ -116,7 +116,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         print "img url: "+img_url
                         print "tweet_dict id: "+tweet_dict["id"]
                         sql = "UPDATE Tweet SET blurb=\""+re.escape(blurb_text)+"\", link_url=\""+url+"\", link_text=\""+re.escape(title)+"\", "
-                        sql = sql.encode('utf-8')
+                        sql = unicode(sql, 'utf-8')
                         
                         second_sql = "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
