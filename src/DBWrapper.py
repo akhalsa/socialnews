@@ -116,9 +116,10 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         sql = "UPDATE Tweet SET blurb=\""+re.escape(blurb_text)+"\", link_url=\""+url+"\", link_text=\""+re.escape(title)
                         sql += "\", img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         print "will update tweet with sql: "+sql
+                        insertion_cursor = local_db.cursor()
                         try:
                                 # Execute the SQL command
-                                cursor.execute(sql)
+                                insertion_cursor.execute(sql)
                                 # Commit your changes in the database
                                 local_db.commit()
                         except Exception,e:
@@ -126,14 +127,34 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                 print "error on insertion of retweet"
                                 print str(e)
                                 local_db.rollback()
-                        cursor.close()
+                        insertion_cursor.close()
+                        tweet_dict["blurb"] = blurb_text
+                        tweet_dict["link_url"] = url
+                        tweet_dict["link_text"] = title
+                        tweet_dict["img_url"] = img_url
                         
 
 
 
                     else:
-                        #no link found
-                        pass
+                        insertion_cursor = local_db.cursor()
+                        sql = "UPDATE Tweet SET checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
+                        print "will update tweet with sql: "+sql
+                        try:
+                                # Execute the SQL command
+                                insertion_cursor.execute(sql)
+                                # Commit your changes in the database
+                                local_db.commit()
+                        except Exception,e:
+                                # Rollback in case there is any error
+                                print "error on insertion of retweet"
+                                print str(e)
+                                local_db.rollback()
+                        insertion_cursor.close()
+                        tweet_dict["blurb"] = ""
+                        tweet_dict["link_url"] = ""
+                        tweet_dict["link_text"] = ""
+                        tweet_dict["img_url"] = ""
                 else:
                     tweet_dict["blurb"] = row[4]
                     tweet_dict["link_url"] = row[5]
