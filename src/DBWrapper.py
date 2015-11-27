@@ -65,6 +65,8 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         page_content = urllib2.urlopen(url).read(200000)
                         soup = BeautifulSoup(page_content, 'html.parser')
                         body = soup.find('body')
+                        desc = soup.findAll(attrs={"name":"description"})
+                        
                         img_url = ""
                         max_area = 0
                         for img in body.findAll("img", src=True):
@@ -103,9 +105,12 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                print e
                                print "GOT EXCEPTION on url: "+img["src"]
                                
-                               
+                        
+                        
                         print "got image url: "+img_url
                         print "found title: "+soup.title.string.encode('utf-8')
+                        print "found description"
+                        print desc[0]['content'].encode('utf-8')
 
 
 
