@@ -139,7 +139,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
                     else:
                         insertion_cursor = local_db.cursor()
                         sql = "UPDATE Tweet SET checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
-                        print "will update tweet with sql: "+sql
                         try:
                                 # Execute the SQL command
                                 insertion_cursor.execute(sql)
