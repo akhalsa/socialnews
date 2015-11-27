@@ -64,7 +64,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         soup = BeautifulSoup(page_content, 'html.parser')
                         #body = soup.find('body')
                         
-                        link = soup.find(itemprop="image")
+                        link = soup.find(itemprop="img")
                     
                         print "found title: "+str(soup.title.string)
                         if(link):
