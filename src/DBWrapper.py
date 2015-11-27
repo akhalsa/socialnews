@@ -63,7 +63,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                     if(len(urls) > 0):
                         url = urls[0]
                         page_content = urllib2.urlopen(url).read(200000)
-                        soup = BeautifulSoup(page_content)
+                        soup = BeautifulSoup(page_content, "html5lib")
                         body = soup.find('body')
                         desc = soup.findAll(attrs={"name":"description"})
                         
@@ -109,6 +109,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         ()
                         if(soup.find("meta", {"name":"description"})):
                             title_prospect = soup.find("meta", {"name":"description"})
+                            print title_prospect
                             if(title_prospect and ("content" in title_prospect)):
                                 title = title_prospect["content"]
                                 print title
