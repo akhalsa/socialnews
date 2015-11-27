@@ -108,16 +108,32 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         
                         print "got image url: "+img_url
-                        print "found title: "+soup.title.string.encode('utf-8')
-                        print "found description"
+                        title = soup.title.string.encode('utf-8')
+                        blurb_text = ""
                         if(len(desc)>0 and "content" in desc[0]):
-                            print desc[0]['content'].encode('utf-8')
+                            blurb_text = desc[0]['content'].encode('utf-8')
+                            
+                        sql = "UPDATE Tweet SET blurb=\""+re.escape(blurb_text)+"\", link_url=\""+url+"\", link_text=\""+re.escape(title)
+                        sql += "\", img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
+                        print "will update tweet with sql: "+sql
+                        try:
+                                # Execute the SQL command
+                                cursor.execute(sql)
+                                # Commit your changes in the database
+                                local_db.commit()
+                        except Exception,e:
+                                # Rollback in case there is any error
+                                print "error on insertion of retweet"
+                                print str(e)
+                                local_db.rollback()
+                        cursor.close()
+                        
 
 
 
-                    ##if there is no link, we can leave everything as null and mark it as checked
-                    
-                    pass
+                    else:
+                        #no link found
+                        pass
                 else:
                     tweet_dict["blurb"] = row[4]
                     tweet_dict["link_url"] = row[5]
