@@ -2,6 +2,7 @@ import MySQLdb
 import datetime
 import re
 import urllib2
+import Image
 from bs4 import BeautifulSoup
 
 
