@@ -65,15 +65,24 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         page_content = urllib2.urlopen(url).read(200000)
                         soup = BeautifulSoup(page_content, 'html.parser')
                         body = soup.find('body')
-                        
+                        img_url = ""
+                        max_area = 0
                         for img in body.findAll("img", src=True):
-                            
                         
                             try:
-                               img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
-                               width, height = img_file.size
-                               if( width > 150 and height > 150):
-                                    print " image_url" + img["src"]
+                        
+                                img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
+                                width, height = img_file.size
+                                area = width*height
+                                if(img["src"].endswith(".gif")):
+                                    img_url = img["src"]
+                                    max_area = width*height
+                                    print "found a gif!!!: "+img["src"]
+                                elif (area > max_area):
+                                    print "switching from: "+img_url+" to url:" + img["src"]
+                                    img_url = img["src"]
+                                    max_area = area
+                                    
                             except Exception, e:
                                print e
                                print "GOT EXCEPTION!!!"
