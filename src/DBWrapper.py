@@ -120,7 +120,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         second_sql = "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         print "got update text pt1: "+sql
                         print "get update text pt2: "+second_sql
-                        sql = sql+second_sql
+                        sql = sql.encode('utf-8')+second_sql.encode('utf-8')
                         insertion_cursor = local_db.cursor()
                         try:
                                 # Execute the SQL command
