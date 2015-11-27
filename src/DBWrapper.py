@@ -114,9 +114,9 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         
                         
-                        sql = u"UPDATE Tweet SET blurb=\""+MySQLdb.escape_string(blurb_text)
+                        sql = u"UPDATE Tweet SET blurb=\""+re.escape(blurb_text)
                         sql += u"\", link_url=\""+url
-                        sql += u"\", link_text=\""+MySQLdb.escape_string(title)+u"\", "
+                        sql += u"\", link_text=\""+re.escape(title)+u"\", "
                         sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
                         if(isinstance(sql, unicode)):
