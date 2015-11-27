@@ -69,7 +69,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                             
                             
                             try: 
-                               img_file = Image.open(img["src"])
+                               img_file = Image.open(urllib2.urlopen(img["src"]))
                                width, height = img_file.size
                                if( width > 150 and height > 150):
                                     print " image_url" + img["src"]
