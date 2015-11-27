@@ -73,8 +73,9 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                width, height = img_file.size
                                if( width > 150 and height > 150):
                                     print " image_url" + img["src"]
-                            except IOError:
-                               return False
+                            except IOError, e:
+                               print e
+                               print "GOT EXCEPTION!!!"
                     
                         print "found title: "+str(soup.title.string)
 
