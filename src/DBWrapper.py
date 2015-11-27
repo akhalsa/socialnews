@@ -111,41 +111,16 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         for potential_desc in desc:
                             if("content" in potential_desc):
-                                blurb_text = re.escape(potential_desc['content']).encode('utf-8')
+                                blurb_text = re.escape(potential_desc['content'])
                         
                         
                         
                         sql = u"UPDATE Tweet SET blurb=\""+blurb_text
                         sql += u"\", link_url=\""+url
-                        print "will load title: "+title
-                        if(isinstance(title, unicode)):
-                            print "title is unicode"
-                        else:
-                            print "title isnt unicode"
                         sql += u"\", link_text=\""+title+u"\", "
                         sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
-                        if isinstance(sql, str):
-                            print sql
-                            print "is a string"
-                        elif isinstance(sql, unicode):
-                            print sql
-                            print "is unicode"
-                        else:
-                            print sql
-                            print "WTF"
-                            
-                        if isinstance(second_sql, str):
-                            print second_sql
-                            print "is a string"
-                        elif isinstance(second_sql, unicode):
-                            print second_sql
-                            print "is unicode"
-                        else:
-                            print second_sql
-                            print "WTF"
-
-                        sql += second_sql
+                        
                         insertion_cursor = local_db.cursor()
                         try:
                                 # Execute the SQL command
