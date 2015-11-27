@@ -39,6 +39,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
             
     sql += ");"
 
+    print sql
     cursor.execute(sql)
     for row in cursor.fetchall():
         for tweet_dict in top_tweets:
