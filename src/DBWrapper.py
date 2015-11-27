@@ -174,12 +174,12 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         insertion_cursor.close()
                         tweet_dict["blurb"] = ""
                         tweet_dict["link_url"] = ""
-                        tweet_dict["link_text"] = ""
+                        tweet_dict["title"] = ""
                         tweet_dict["img_url"] = ""
                 else:
                     tweet_dict["blurb"] = row[4]
                     tweet_dict["link_url"] = row[5]
-                    tweet_dict["link_text"] = row[6]
+                    tweet_dict["title"] = row[6]
                     tweet_dict["img_url"] = row[7]
                     
                 break
