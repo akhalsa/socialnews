@@ -119,10 +119,9 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         sql += u"\", link_text=\""+re.escape(title)+u"\", "
                         sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
-                        if(isinstance(sql, unicode)):
-                            print "ok we got this into unicode"
-                        else:
-                            print "GOD DAMMIT THIS ISNT UNICODE"
+                        print "title is: "+title
+                        
+                        print "blurb is: "+blurb_text
                         
                         insertion_cursor = local_db.cursor()
                         try:
