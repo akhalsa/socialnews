@@ -106,7 +106,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         url = url.encode('utf-8')
                         title = u''
                         if(soup.title.string):
-                            title = unicode(re.escape(soup.title.string), ('utf-8'))
+                            title = re.escape(soup.title.string)
                         blurb_text = u""
                         
                         for potential_desc in desc:
