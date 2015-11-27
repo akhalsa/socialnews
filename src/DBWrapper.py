@@ -3,6 +3,7 @@ import datetime
 import re
 import urllib2
 import Image
+import cStringIO
 from bs4 import BeautifulSoup
 
 
@@ -69,7 +70,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                             
                             
                             try: 
-                               img_file = Image.open(urllib2.urlopen(img["src"]))
+                               img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"])))
                                width, height = img_file.size
                                if( width > 150 and height > 150):
                                     print " image_url" + img["src"]
