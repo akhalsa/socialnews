@@ -68,13 +68,13 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         for img in body.findAll("img", src=True):
                             
-                            
+                        
                             try:
                                img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
                                width, height = img_file.size
                                if( width > 150 and height > 150):
                                     print " image_url" + img["src"]
-                            except IOError, e:
+                            except Exception, e:
                                print e
                                print "GOT EXCEPTION!!!"
                     
