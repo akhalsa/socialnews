@@ -78,7 +78,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                print e
                                print "GOT EXCEPTION!!!"
                     
-                        print "found title: "+str(soup.title.string)
+                        print "found title: "+soup.title.string.encode('utf-8')
 
 
 
