@@ -118,7 +118,7 @@ def insertIntoRetweet(tweet_id, isSurge, local_db):
             local_db.commit()
     except Exception,e:
             # Rollback in case there is any error
-            print "error on insertion of occurrence"
+            print "error on insertion of retweet"
             print str(e)
             local_db.rollback()
     cursor.close()
@@ -190,7 +190,7 @@ def clearOldEntries(local_db):
                     local_db.commit()
             except Exception,e:
                     # Rollback in case there is any error
-                    print "error on insertion of occurrence"
+                    print "error on delete from occurrence"
                     print str(e)
                     local_db.rollback()
             cursor.close()
@@ -275,7 +275,7 @@ def batchInsertTweet(tweets, local_db):
         local_db.commit()
     except Exception,e:
         # Rollback in case there is any error
-        print "error on insertion of occurrence"
+        print "error into tweets batch"
         print str(e)
         local_db.rollback()
         
@@ -302,7 +302,7 @@ def updateHandle(local_db, username, user_id, handle, link):
         local_db.commit()
     except Exception,e:
         # Rollback in case there is any error
-        print "error on insertion of occurrence"
+        print "error on update of twitter source"
         print str(e)
         local_db.rollback()
     cursor.close()
@@ -326,7 +326,7 @@ def updateTweetTimeStamp(tweet_list, local_db):
         local_db.commit()
     except Exception,e:
         # Rollback in case there is any error
-        print "error on insertion of occurrence"
+        print "error on tweet update"
         print str(e)
         local_db.rollback()
         
@@ -504,7 +504,7 @@ def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_lin
             local_db.commit()
     except Exception,e:
             # Rollback in case there is any error
-            print "error on insertion of occurrence"
+            print "error on insertion of twitter source"
             print str(e)
             local_db.rollback()
             
@@ -523,7 +523,7 @@ def reloadSourceCategoryRelationship(local_db):
             local_db.commit()
     except Exception,e:
             # Rollback in case there is any error
-            print "error on insertion of occurrence"
+            print "error on deleting everything from source cat relationship"
             print str(e)
             local_db.rollback()
     cursor.close()
@@ -573,7 +573,7 @@ def reloadSourceCategoryRelationship(local_db):
             local_db.commit()
         except Exception,e:
             # Rollback in case there is any error
-            print "error on insertion of occurrence"
+            print "error on insertion of source cat relationship"
             print str(e)
             local_db.rollback()
         cursor.close()
@@ -606,7 +606,7 @@ def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twit
             local_db.commit()
     except Exception,e:
             # Rollback in case there is any error
-            print "error on insertion of occurrence"
+            print "error on insertion of vote"
             print str(e)
             local_db.rollback()
     cursor.close()
