@@ -77,7 +77,11 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                 
                                 img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
                                 width, height = img_file.size
-                                area = width*height      
+                                area = width*height
+                                if max(width, height) / min(width, height) > 1.5:
+                                    print "skipping: "+img["src"]+" with width: "+str(width)+" and heigh: "+str(height)
+                                    continue
+                                
                                 if(width>40 and height>40):               
                                     #print "switching from: "+img_url+" to url:" + img["src"]
                                     img_url = img["src"]
