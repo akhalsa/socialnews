@@ -267,6 +267,7 @@ def batchInsertTweet(tweets, local_db):
     if(len(tweets)>0):
         sql = sql[:-2]
     
+    print "running w sql: "+sql
     cursor = local_db.cursor()
     try:
         # Execute the SQL command
