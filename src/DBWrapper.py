@@ -58,7 +58,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                     #ok this hasnt been checked.
                     ##so we need to first determine if there is a url
                     ## so lets scan the text for a link first
-                    
+                    print "analysing tweet: "+row[1]
                     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_dict["text"])
                     if(len(urls) > 0):
                         url = urls[0]
@@ -74,12 +74,10 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                 img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
                                 width, height = img_file.size
                                 if img.has_attr('height'):
-                                    print "adjusting to height: "+img['height']
                                     float_height = float(img['height'])
                                     if(float_height != 0):
                                         height = float_height  # set height if site modifies it
                                 if img.has_attr('width'):
-                                    print "adjusting to width: "+img['width']
                                     float_width = float(img['width'])
                                     if(float_width != 0):
                                         width =  float_width # set width if site modifies it
@@ -124,7 +122,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                 local_db.commit()
                         except Exception,e:
                                 # Rollback in case there is any error
-                                print "error on insertion of retweet"
+                                print "error on update of tweet "
                                 print str(e)
                                 local_db.rollback()
                         insertion_cursor.close()
