@@ -175,9 +175,13 @@
                     }
                     if (child.title) {
                       tweet_html += "<a href=\""+child.link_url+"\">"+child.title+"</a>";
+                    }else{
+                      console.log(child.text +" has no title");
                     }
                     if (child.blurb) {
                       tweet_html += "<p>"+child.blurb+"</p>";
+                    }else{
+                      console.log(child.text +" has no blurb");
                     }
                     tweet_html += "<div class=\"clear\"></div></div></div>";
                   }
