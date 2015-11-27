@@ -102,8 +102,8 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                 pass
                                
                         
-                        img_url = img_url.encode('utf-8')
-                        url = url.encode('utf-8')
+                        img_url = img_url
+                        url = url
                         title = u''
                         if(soup.title.string):
                             title = re.escape(soup.title.string)
@@ -120,6 +120,8 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         sql += u"\", link_text=\""+title+u"\", "
                         sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
+                        if(isinstance(sql, unicode)):
+                            print "ok we got this into unicode"
                         
                         insertion_cursor = local_db.cursor()
                         try:
