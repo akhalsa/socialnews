@@ -101,7 +101,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                     
                             except Exception, e:
                                print e
-                               print "GOT EXCEPTION!!!"
+                               print "GOT EXCEPTION on url: "+img["src"]
                                
                                
                         print "got image url: "+img_url
