@@ -122,6 +122,8 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         if(isinstance(sql, unicode)):
                             print "ok we got this into unicode"
+                        else:
+                            print "GOD DAMMIT THIS ISNT UNICODE"
                         
                         insertion_cursor = local_db.cursor()
                         try:
