@@ -111,8 +111,10 @@ def getTweetOccurances(seconds, cat_id, local_db):
                             if("content" in potential_desc):
                                 blurb_text = potential_desc['content'].encode('utf-8')
                         
-
-                            
+                        
+                        print img_url
+                        print "img url: "+img_url
+                        
                         sql = "UPDATE Tweet SET blurb=\""+re.escape(blurb_text)+"\", link_url=\""+url+"\", link_text=\""+re.escape(title)
                         sql += "\", img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         insertion_cursor = local_db.cursor()
