@@ -65,7 +65,15 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         body = soup.find('body')
                         
                         for img in body.findAll("img", src=True):
-                             print " image_url" + img["src"]
+                            
+                            
+                            try: 
+                               img_file = Image.open(img["src"])
+                               width, height = img_file.size
+                               if( width > 150 and height > 150):
+                                    print " image_url" + img["src"]
+                            except IOError:
+                               return False
                     
                         print "found title: "+str(soup.title.string)
 
