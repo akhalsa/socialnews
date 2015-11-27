@@ -66,8 +66,9 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         link = body.find(itemprop="image")
                     
-                        print "found title: "+str(soup.title.name)
-                        print "found first image: "+link["src"]
+                        print "found title: "+str(soup.title.string)
+                        if(link):
+                            print "found first image: "+link["src"]
                     
 
 
