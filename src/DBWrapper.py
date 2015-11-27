@@ -52,9 +52,11 @@ def getTweetOccurances(seconds, cat_id, local_db):
                     ## so lets scan the text for a link first
                     
                     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_dict["text"])
-                    
+                    i=0
                     for url in urls:
-                        print "found url"+str(url)
+                        print "found url_"++str(i)+" "+str(url)
+                        i += 1
+                    
                     
 
 
