@@ -105,7 +105,13 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         img_url = img_url
                         url = url
                         
-                        title = soup.find('title').string
+                        title = u''
+                        for titles in soup.findAll('title'):
+                            if (titles != tweet_dict["text"]):
+                                title = titles.string
+                                break
+                            
+                            
                         blurb_text = u""
                         
                         for potential_desc in desc:
