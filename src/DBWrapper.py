@@ -100,8 +100,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                     max_area = area
                                     
                             except Exception, e:
-                               print e
-                               print "GOT EXCEPTION on url: "+img["src"]
+                                pass
                                
                         
                         img_url = img_url.encode('utf-8')
