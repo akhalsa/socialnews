@@ -179,10 +179,9 @@
                     if (child.blurb) {
                       tweet_html += "<p>"+child.blurb+"</p>";
                     }
-                    tweet_html += "<div class=\"clear\"></div></div></div></div></div>";
-                    
+                    tweet_html += "<div class=\"clear\"></div></div></div>";
                   }
-                  
+                  tweet_html += "</div></div>";
                 });
                 $("#time").after(tweet_html);
                 
