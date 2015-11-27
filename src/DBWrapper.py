@@ -109,6 +109,8 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         if(len(desc)>0 and "content" in desc[0]):
                             print "found blurb: "+desc[0]['content'].encode('utf-8')
                             blurb_text = desc[0]['content'].encode('utf-8')
+                        elif (len(desc)>0):
+                            print "the problem was there was no content in desc[0]"
                         else:
                             print "no blurb found"
                             
