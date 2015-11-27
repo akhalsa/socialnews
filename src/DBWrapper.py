@@ -104,19 +104,18 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         img_url = img_url.encode('utf-8')
                         url = url.encode('utf-8')
-                        title = soup.title.string.encode('utf-8')
+                        title = re.escape(soup.title.string).encode('utf-8')
                         blurb_text = ""
                         
                         for potential_desc in desc:
                             if("content" in potential_desc):
-                                blurb_text = potential_desc['content'].encode('utf-8')
+                                blurb_text = re.escape(potential_desc['content']).encode('utf-8')
                         
                         
                         print img_url
                         print "img url: "+img_url
                         print "tweet_dict id: "+tweet_dict["id"]
-                        sql = "UPDATE Tweet SET blurb=\""+re.escape(blurb_text)+"\", link_url=\""+url+"\", link_text=\""+re.escape(title)+"\", "
-                        sql = unicode(sql, 'utf-8')
+                        sql = "UPDATE Tweet SET blurb=\""+blurb_text+"\", link_url=\""+url+"\", link_text=\""+title+"\", "
                         
                         second_sql = "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
