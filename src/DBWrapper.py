@@ -65,7 +65,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         page_content = urllib2.urlopen(url).read(200000)
                         soup = BeautifulSoup(page_content, "html5lib")
                         body = soup.find('body')
-                        desc = soup.findAll(attrs={"name":"description"})
                         
                         img_url = ""
                         max_area = 0
@@ -125,20 +124,19 @@ def getTweetOccurances(seconds, cat_id, local_db):
                             
                         blurb_text = u""
                         
-                        for potential_desc in desc:
-                            if("content" in potential_desc):
-                                blurb_text = potential_desc['content']
-                        
-                        
+                        if(soup.find("meta", {"property":"og:description"})):
+                            blurb_text = soup.find("meta", {"property":"og:description"})["content"]
+                            print "blurb from og:description: "+blurb_text
+                        elif(soup.find("meta", {"name": "description"})):
+                            blurb_text = soup.find("meta", {"name": "description"})["content"]
+                            print "blurb from name description: "+blurb_text
                         
                         sql = u"UPDATE Tweet SET blurb=\""+re.escape(blurb_text)
                         sql += u"\", link_url=\""+url
                         sql += u"\", link_text=\""+re.escape(title)+u"\", "
                         sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
-                        print "title is: "+title
-                        
-                        print "blurb is: "+blurb_text
+
                         
                         insertion_cursor = local_db.cursor()
                         try:
