@@ -69,11 +69,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         max_area = 0
                         for img in body.findAll("img", src=True):
                             try:
-                                if(img["src"].endswith(".gif")):
-                                    img_url = img["src"]
-                                    #print "found a gif!!!: "+img["src"]
-                                    break
-                                
                                 img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
                                 width, height = img_file.size
                                 if img.has_attr('height'):
@@ -91,6 +86,13 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                 if max(width, height) / min(width, height) > 1.5:
                                     print "skipping: "+img["src"]+" with width: "+str(width)+" and heigh: "+str(height)
                                     continue
+                                
+                                if((img["src"].endswith(".gif")) and (area > 10000)):
+                                    img_url = img["src"]
+                                    #print "found a gif!!!: "+img["src"]
+                                    break
+                                
+                                
                                 
                                 if(area > max_area):               
                                     #print "switching from: "+img_url+" to url:" + img["src"]
