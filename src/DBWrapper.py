@@ -77,9 +77,9 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                 img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
                                 width, height = img_file.size
                                 if img.has_key('height'):
-                                    height = img['height']  # set height if site modifies it
+                                    height = int(img['height'])  # set height if site modifies it
                                 if img.has_key('width'):
-                                    width = img['width']  # set width if site modifies it
+                                    width = int(img['width'])  # set width if site modifies it
                                     
                                 area = width*height
                                 if max(width, height) / min(width, height) > 1.5:
