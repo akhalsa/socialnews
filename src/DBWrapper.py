@@ -67,7 +67,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         body = soup.find('body')
                         img_url = ""
                         #max_area = 0
-                        for img in body.findAll("img", src=True):
+                        for img in body.findAll(itemprop="image"):
                         
                             try:
                                 if(img["src"].endswith(".gif")):
