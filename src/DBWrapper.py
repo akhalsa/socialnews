@@ -76,11 +76,13 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                 
                                 img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
                                 width, height = img_file.size
-                                if img.has_key('height'):
+                                if img.has_attr('height'):
+                                    print "adjusting to height: "+img['height']
                                     float_height = float(img['height'])
                                     if(float_height != 0):
                                         height = float_height  # set height if site modifies it
-                                if img.has_key('width'):
+                                if img.has_attr('width'):
+                                    print "adjusting to width: "+img['width']
                                     float_width = float(img['width'])
                                     if(float_width != 0):
                                         width =  float_width # set width if site modifies it
