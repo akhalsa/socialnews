@@ -106,13 +106,12 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         url = url.encode('utf-8')
                         title = soup.title.string.encode('utf-8')
                         blurb_text = ""
-                        if(len(desc)>0 and "content" in desc[0]):
-                            print "found blurb: "+desc[0]['content'].encode('utf-8')
-                            blurb_text = desc[0]['content'].encode('utf-8')
-                        elif (len(desc)>0):
-                            print "the problem was there was no content in desc[0]"
-                        else:
-                            print "no blurb found"
+                        
+                        for potential_desc in desc:
+                            if("content" in potential_desc):
+                                blurb_text = potential_desc['content'].encode('utf-8')
+                        
+
                             
                         sql = "UPDATE Tweet SET blurb=\""+re.escape(blurb_text)+"\", link_url=\""+url+"\", link_text=\""+re.escape(title)
                         sql += "\", img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
