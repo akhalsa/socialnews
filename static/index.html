@@ -173,7 +173,7 @@
                     if (child.img_url) {
                       tweet_html += "<img src=\""+child.img_url+"\" width=\"150\"/>";
                     }
-                    if (child.title) {
+                    if ((child.title) && (child.link_url)) {
                       tweet_html += "<a href=\""+child.link_url+"\">"+child.title+"</a>";
                     }else{
                       console.log(child.text +" has no title");
