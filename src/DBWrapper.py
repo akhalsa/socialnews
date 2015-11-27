@@ -117,11 +117,28 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         print "tweet_dict id: "+tweet_dict["id"]
                         sql = "UPDATE Tweet SET blurb=\""+re.escape(blurb_text)+"\", link_url=\""+url+"\", link_text=\""+re.escape(title)+"\", "
                         
-                        second_sql = "img_url=\""+re.escape(img_url)+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
+                        second_sql = "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
-                        print sql
-                        print second_sql
-                        
+                        if isinstance(sql, str):
+                            print sql
+                            print "is a string"
+                        elif isinstance(sql, unicode):
+                            print sql
+                            print "is unicode"
+                        else:
+                            print sql
+                            print "WTF"
+                            
+                        if isinstance(second_sql, str):
+                            print second_sql
+                            print "is a string"
+                        elif isinstance(second_sql, unicode):
+                            print second_sql
+                            print "is unicode"
+                        else:
+                            print second_sql
+                            print "WTF"
+
                         sql += second_sql
                         insertion_cursor = local_db.cursor()
                         try:
