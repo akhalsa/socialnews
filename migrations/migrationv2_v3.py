@@ -54,7 +54,10 @@ def forward():
     sql = "ALTER TABLE SourceCategoryRelationship CHANGE source_id source_twitter_id INT;"
     executeSql(db, sql)
     
-    sql = "ALTER TABLE Tweet ADD blurb varchar(255), link_url varchar(255), link_text varchar(255), img_url varchar(255);"
+    sql = "ALTER TABLE Tweet ADD COLUMN blurb varchar(255),"
+    sql += " ADD COLUMN link_url varchar(255),"
+    sql += " ADD COLUMN link_text varchar(255),"
+    sql += " ADD COLUMN img_url varchar(255);"
     executeSql(db, sql)
     
     
@@ -80,7 +83,10 @@ def backward():
     sql = "ALTER TABLE SourceCategoryRelationship CHANGE source_twitter_id source_id INT;"
     executeSql(db, sql)
     
-    sql = "ALTER TABLE Tweet DROP COLUMN blurb, link_url, link_text, img_url;"
+    sql = "ALTER TABLE Tweet DROP COLUMN blurb,"
+    sql += " DROP COLUMN link_url,"
+    sql += " DROP COLUMN link_text,"
+    sql += " DROP COLUMN img_url;"
     executeSql(db, sql)
     
     # sql = "CREATE TABLE SourceCategoryRelationship ("
