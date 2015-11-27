@@ -25,7 +25,9 @@ def getTweetOccurances(seconds, cat_id, local_db):
             return top_tweets
     
     cursor = local_db.cursor()
-    sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
+    sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image"
+    sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked "
+    sql+= " From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
     first_fin = False
     for t_id in twitter_ids:
             if(first_fin == False):
@@ -44,8 +46,28 @@ def getTweetOccurances(seconds, cat_id, local_db):
                 tweet_dict["text"] = row[1]
                 tweet_dict["name"] = row[2]
                 tweet_dict["pic"] = row[3]
+                if(row[8] == 0):
+                    #ok this hasnt been checked.
+                    ##so we need to first determine if there is a url
+                    ## so lets scan the text for a link first
+                    
+                    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_dict["text"])
+                    
+                    for url in urls:
+                        print "found url"+str(url)
+                    
+
+
+                    ##if there is no link, we can leave everything as null and mark it as checked
+                    
+                    pass
+                else:
+                    tweet_dict["blurb"] = row[4]
+                    tweet_dict["link_url"] = row[5]
+                    tweet_dict["link_text"] = row[6]
+                    tweet_dict["img_url"] = row[7]
+                    
                 break
-            
     cursor.close()
     print top_tweets
     return top_tweets
