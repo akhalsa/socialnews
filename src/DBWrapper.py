@@ -1,6 +1,9 @@
 import MySQLdb
 import datetime
 import re
+import urllib2
+from bs4 import BeautifulSoup
+
 
 def getTweetOccurances(seconds, cat_id, local_db):
     cursor = local_db.cursor()
@@ -57,9 +60,14 @@ def getTweetOccurances(seconds, cat_id, local_db):
                     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_dict["text"])
                     if(len(urls) > 0):
                         url = urls[0]
-                        print "will run w url: "+url
+                        page_content = urllib2.urlopen(url).read(200000)
+                        soup = BeautifulSoup(page_content, 'html.parser')
+                        body = soup.find('body')
+                        
+                        link = body.find(itemprop="image")
                     
-                    
+                        print "found title: "+soup.title
+                        print "found first image: "+link["src"]
                     
 
 
