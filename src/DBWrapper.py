@@ -84,7 +84,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                     
                                 area = width*height
                                 if max(width, height) / min(width, height) > 1.5:
-                                    print "skipping: "+img["src"]+" with width: "+str(width)+" and heigh: "+str(height)
                                     continue
                                 
                                 if((img["src"].endswith(".gif")) and (area > 10000)):
@@ -105,7 +104,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         img_url = img_url.encode('utf-8')
                         url = url.encode('utf-8')
-                        print "got image url: "+img_url
                         title = soup.title.string.encode('utf-8')
                         blurb_text = ""
                         if(len(desc)>0 and "content" in desc[0]):
@@ -113,7 +111,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
                             
                         sql = "UPDATE Tweet SET blurb=\""+re.escape(blurb_text)+"\", link_url=\""+url+"\", link_text=\""+re.escape(title)
                         sql += "\", img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
-                        print "will update tweet with sql: "+sql
                         insertion_cursor = local_db.cursor()
                         try:
                                 # Execute the SQL command
