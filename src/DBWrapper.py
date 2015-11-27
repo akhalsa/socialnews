@@ -66,7 +66,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         soup = BeautifulSoup(page_content, 'html.parser')
                         body = soup.find('body')
                         img_url = ""
-                        #max_area = 0
+                        max_area = 0
                         for img in body.findAll("img", src=True):
                             try:
                                 if(img["src"].endswith(".gif")):
@@ -92,11 +92,10 @@ def getTweetOccurances(seconds, cat_id, local_db):
                                     print "skipping: "+img["src"]+" with width: "+str(width)+" and heigh: "+str(height)
                                     continue
                                 
-                                if(width>100 and height>100):               
+                                if(area > max_area):               
                                     #print "switching from: "+img_url+" to url:" + img["src"]
                                     img_url = img["src"]
-                                    break
-                                    #max_area = area
+                                    max_area = area
                                     
                             except Exception, e:
                                print e
