@@ -104,7 +104,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         
                         img_url = img_url.encode('utf-8')
                         url = url.encode('utf-8')
-                        title = unicode(re.escape(soup.title.string), 'utf-8')
+                        title = re.escape(soup.title.string).encode('utf-8')
                         blurb_text = ""
                         
                         for potential_desc in desc:
@@ -130,7 +130,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                         else:
                             print "title isnt unicode"
                             
-                        sql = "UPDATE Tweet SET blurb=\""+blurb_text+"\", link_url=\""+url+"\", link_text=\""+title+"\", "
+                        sql = u"UPDATE Tweet SET blurb=\""+blurb_text+u"\", link_url=\""+url+u"\", link_text=\""+title+"\", "
                         
                         second_sql = "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
                         
