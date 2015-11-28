@@ -15,43 +15,45 @@ def updateTweet(tweet_text, tweet_id, local_db):
         body = soup.find('body')
         
         img_url = ""
-        max_area = 0
-        for img in body.findAll("img", src=True):
-            try:
-                img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
-                width, height = img_file.size
-                if img.has_attr('height'):
-                    float_height = float(img['height'])
-                    if(float_height != 0):
-                        height = float_height  # set height if site modifies it
-                if img.has_attr('width'):
-                    float_width = float(img['width'])
-                    if(float_width != 0):
-                        width =  float_width # set width if site modifies it
-                    
-                area = width*height
-                #if max(width, height) / min(width, height) > 1.5:
-                #    continue
-                
-                if((img["src"].endswith(".gif")) and (area > 10000)):
-                    img_url = img["src"]
-                    #print "found a gif!!!: "+img["src"]
-                    break
-                
-                
-                
-                if(area > max_area):               
-                    #print "switching from: "+img_url+" to url:" + img["src"]
-                    img_url = img["src"]
-                    max_area = area
-                    
-            except Exception, e:
-                pass
-               
         
         if(soup.find("meta", {"property":"og:image"})):
             image_prospect = soup.find("meta", {"property":"og:title"})["content"]
             print "there is an image prospect of: "+image_prospect
+            img_url = image_prospect
+            
+        else:
+            max_area = 0
+            for img in body.findAll("img", src=True):
+                try:
+                    img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
+                    width, height = img_file.size
+                    if img.has_attr('height'):
+                        float_height = float(img['height'])
+                        if(float_height != 0):
+                            height = float_height  # set height if site modifies it
+                    if img.has_attr('width'):
+                        float_width = float(img['width'])
+                        if(float_width != 0):
+                            width =  float_width # set width if site modifies it
+                        
+                    area = width*height
+                    #if max(width, height) / min(width, height) > 1.5:
+                    #    continue
+                    
+                    if((img["src"].endswith(".gif")) and (area > 10000)):
+                        img_url = img["src"]
+                        #print "found a gif!!!: "+img["src"]
+                        break
+                    
+                    
+                    
+                    if(area > max_area):               
+                        #print "switching from: "+img_url+" to url:" + img["src"]
+                        img_url = img["src"]
+                        max_area = area
+                        
+                except Exception, e:
+                    pass
         
         title = u''
         if(soup.find("meta", {"property":"og:title"})):
