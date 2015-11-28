@@ -65,7 +65,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
 
         else:
             for titles in soup.findAll('title'):
-                if (titles != tweet_dict["text"]):
+                if (titles != tweet_text):
                     title = titles.string
                     break
             
