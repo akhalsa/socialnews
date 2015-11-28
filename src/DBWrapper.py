@@ -30,8 +30,8 @@ def updateTweet(tweet_text, tweet_id, local_db):
                         width =  float_width # set width if site modifies it
                     
                 area = width*height
-                if max(width, height) / min(width, height) > 1.5:
-                    continue
+                #if max(width, height) / min(width, height) > 1.5:
+                #    continue
                 
                 if((img["src"].endswith(".gif")) and (area > 10000)):
                     img_url = img["src"]
