@@ -263,7 +263,7 @@ def updateTweets():
                                                 print "exception: "+str(e)
                 
                 print "***total update time "+str((datetime.datetime.now() - start_update).total_seconds())+" seconds"        
-                
+                time.sleep(60)
                 
                 
                 
