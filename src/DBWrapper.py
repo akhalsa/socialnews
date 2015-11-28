@@ -6,6 +6,116 @@ import Image
 import cStringIO
 from bs4 import BeautifulSoup
 
+def updateTweet(tweet_text, tweet_id, local_db):
+    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_text)
+    if(len(urls) > 0):
+        url = urls[0]
+        page_content = urllib2.urlopen(url).read(200000)
+        soup = BeautifulSoup(page_content, "html5lib")
+        body = soup.find('body')
+        
+        img_url = ""
+        max_area = 0
+        for img in body.findAll("img", src=True):
+            try:
+                img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
+                width, height = img_file.size
+                if img.has_attr('height'):
+                    float_height = float(img['height'])
+                    if(float_height != 0):
+                        height = float_height  # set height if site modifies it
+                if img.has_attr('width'):
+                    float_width = float(img['width'])
+                    if(float_width != 0):
+                        width =  float_width # set width if site modifies it
+                    
+                area = width*height
+                if max(width, height) / min(width, height) > 1.5:
+                    continue
+                
+                if((img["src"].endswith(".gif")) and (area > 10000)):
+                    img_url = img["src"]
+                    #print "found a gif!!!: "+img["src"]
+                    break
+                
+                
+                
+                if(area > max_area):               
+                    #print "switching from: "+img_url+" to url:" + img["src"]
+                    img_url = img["src"]
+                    max_area = area
+                    
+            except Exception, e:
+                pass
+               
+        
+        img_url = img_url
+        url = url
+        
+        title = u''
+        if(soup.find("meta", {"property":"og:title"})):
+            title_prospect = soup.find("meta", {"property":"og:title"})
+            print "found og:title: "+title_prospect["content"]
+            title = title_prospect["content"]
+            
+        elif(soup.find("meta", {"name":"title"})):
+            title_prospect = soup.find("meta", {"name":"title"})
+            print "found name:title: "+title_prospect["content"]
+            title = title_prospect["content"]
+
+        else:
+            for titles in soup.findAll('title'):
+                if (titles != tweet_dict["text"]):
+                    title = titles.string
+                    break
+            
+            
+        blurb_text = u""
+        
+        if(soup.find("meta", {"property":"og:description"})):
+            blurb_text = soup.find("meta", {"property":"og:description"})["content"]
+            print "blurb from og:description: "+blurb_text
+        elif(soup.find("meta", {"name": "description"})):
+            blurb_text = soup.find("meta", {"name": "description"})["content"]
+            print "blurb from name description: "+blurb_text
+        
+        sql = u"UPDATE Tweet SET blurb=\""+re.escape(blurb_text)
+        sql += u"\", link_url=\""+url
+        sql += u"\", link_text=\""+re.escape(title)+u"\", "
+        sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_id+"';"
+        
+
+        
+        insertion_cursor = local_db.cursor()
+        try:
+                # Execute the SQL command
+                insertion_cursor.execute(sql)
+                # Commit your changes in the database
+                local_db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on update of tweet "
+                print str(e)
+                local_db.rollback()
+        insertion_cursor.close()
+    else:
+        insertion_cursor = local_db.cursor()
+        sql = "UPDATE Tweet SET checked=1 WHERE twitter_id like '"+tweet_id+"';"
+        try:
+                # Execute the SQL command
+                insertion_cursor.execute(sql)
+                # Commit your changes in the database
+                local_db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on insertion of retweet"
+                print str(e)
+                local_db.rollback()
+        insertion_cursor.close()
+
+        
+        
+
 
 def getTweetOccurances(seconds, cat_id, local_db):
     cursor = local_db.cursor()
@@ -44,8 +154,6 @@ def getTweetOccurances(seconds, cat_id, local_db):
             sql += t_id
             
     sql += ");"
-
-    print sql
     
     cursor.execute(sql)
     for row in cursor.fetchall():
@@ -54,134 +162,11 @@ def getTweetOccurances(seconds, cat_id, local_db):
                 tweet_dict["text"] = row[1]
                 tweet_dict["name"] = row[2]
                 tweet_dict["pic"] = row[3]
-                if(row[8] == 0):
-                    #ok this hasnt been checked.
-                    ##so we need to first determine if there is a url
-                    ## so lets scan the text for a link first
-                    print "analysing tweet: "+row[1]
-                    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_dict["text"])
-                    if(len(urls) > 0):
-                        url = urls[0]
-                        page_content = urllib2.urlopen(url).read(200000)
-                        soup = BeautifulSoup(page_content, "html5lib")
-                        body = soup.find('body')
-                        
-                        img_url = ""
-                        max_area = 0
-                        for img in body.findAll("img", src=True):
-                            try:
-                                img_file = Image.open(cStringIO.StringIO(urllib2.urlopen(img["src"]).read()))
-                                width, height = img_file.size
-                                if img.has_attr('height'):
-                                    float_height = float(img['height'])
-                                    if(float_height != 0):
-                                        height = float_height  # set height if site modifies it
-                                if img.has_attr('width'):
-                                    float_width = float(img['width'])
-                                    if(float_width != 0):
-                                        width =  float_width # set width if site modifies it
-                                    
-                                area = width*height
-                                if max(width, height) / min(width, height) > 1.5:
-                                    continue
-                                
-                                if((img["src"].endswith(".gif")) and (area > 10000)):
-                                    img_url = img["src"]
-                                    #print "found a gif!!!: "+img["src"]
-                                    break
-                                
-                                
-                                
-                                if(area > max_area):               
-                                    #print "switching from: "+img_url+" to url:" + img["src"]
-                                    img_url = img["src"]
-                                    max_area = area
-                                    
-                            except Exception, e:
-                                pass
-                               
-                        
-                        img_url = img_url
-                        url = url
-                        
-                        title = u''
-                        if(soup.find("meta", {"property":"og:title"})):
-                            title_prospect = soup.find("meta", {"property":"og:title"})
-                            print "found og:title: "+title_prospect["content"]
-                            title = title_prospect["content"]
-                            
-                        elif(soup.find("meta", {"name":"title"})):
-                            title_prospect = soup.find("meta", {"name":"title"})
-                            print "found name:title: "+title_prospect["content"]
-                            title = title_prospect["content"]
-
-                        else:
-                            for titles in soup.findAll('title'):
-                                if (titles != tweet_dict["text"]):
-                                    title = titles.string
-                                    break
-                            
-                            
-                        blurb_text = u""
-                        
-                        if(soup.find("meta", {"property":"og:description"})):
-                            blurb_text = soup.find("meta", {"property":"og:description"})["content"]
-                            print "blurb from og:description: "+blurb_text
-                        elif(soup.find("meta", {"name": "description"})):
-                            blurb_text = soup.find("meta", {"name": "description"})["content"]
-                            print "blurb from name description: "+blurb_text
-                        
-                        sql = u"UPDATE Tweet SET blurb=\""+re.escape(blurb_text)
-                        sql += u"\", link_url=\""+url
-                        sql += u"\", link_text=\""+re.escape(title)+u"\", "
-                        sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
-                        
-
-                        
-                        insertion_cursor = local_db.cursor()
-                        try:
-                                # Execute the SQL command
-                                insertion_cursor.execute(sql)
-                                # Commit your changes in the database
-                                local_db.commit()
-                        except Exception,e:
-                                # Rollback in case there is any error
-                                print "error on update of tweet "
-                                print str(e)
-                                local_db.rollback()
-                        insertion_cursor.close()
-                        tweet_dict["blurb"] = blurb_text
-                        tweet_dict["link_url"] = url
-                        tweet_dict["title"] = title
-                        tweet_dict["img_url"] = img_url
-                        
-
-
-
-                    else:
-                        insertion_cursor = local_db.cursor()
-                        sql = "UPDATE Tweet SET checked=1 WHERE twitter_id like '"+tweet_dict["id"]+"';"
-                        try:
-                                # Execute the SQL command
-                                insertion_cursor.execute(sql)
-                                # Commit your changes in the database
-                                local_db.commit()
-                        except Exception,e:
-                                # Rollback in case there is any error
-                                print "error on insertion of retweet"
-                                print str(e)
-                                local_db.rollback()
-                        insertion_cursor.close()
-                        tweet_dict["blurb"] = ""
-                        tweet_dict["link_url"] = ""
-                        tweet_dict["title"] = ""
-                        tweet_dict["img_url"] = ""
-                else:
-                    tweet_dict["blurb"] = row[4]
-                    tweet_dict["link_url"] = row[5]
-                    tweet_dict["title"] = row[6]
-                    tweet_dict["img_url"] = row[7]
-                    
+                tweet_dict["blurb"] = row[4]
+                tweet_dict["link_url"] = row[5]
+                tweet_dict["title"] = row[6]
+                tweet_dict["img_url"] = row[7]
+                tweet_dict["checked"] = row[8]
                 break
     cursor.close()
     print top_tweets
@@ -197,24 +182,17 @@ def findCategoryIdWithName(cat_name, local_db):
     cursor.close()
     return return_id
 
-def findCategoryChildrenForId(cat_id, local_db):
+def getAllCategoryIds(local_db):
     cursor = local_db.cursor()
-    sql = "SELECT child_category_id From CategoryParentRelationship WHERE parent_category_id LIKE "+cat_id
+    sql = "SELECT ID FROM Category;"
     cursor.execute(sql)
-    child_id_list = []
+    cat_id_list = []
     for row in cursor.fetchall() :
-            child_id_list.append(str(row[0]))
+        cat_id_list.append(row[0])
     cursor.close()
-    
-    cursor = local_db.cursor()
-    return_list = []
-    for id in child_id_list:
-            sql = "SELECT Name From Category WHERE ID like "+id
-            cursor.execute(sql)
-            row = cursor.fetchone()
-            return_list.append(str(row[0]))
-    cursor.close()
-    return return_list
+    return cat_id_list
+
+
 
     
 def insertIntoRetweet(tweet_id, isSurge, local_db):
@@ -337,7 +315,7 @@ def insertTweet(source_id, text_string, twitter_tweet_id, local_db):
             local_db.rollback()
     cursor.close()
     
-    
+            
 def getAllTwitterIds(local_db):
     cursor = local_db.cursor()
     sql = "SELECT twitter_id FROM TwitterSource;"
@@ -475,31 +453,7 @@ def addOccurance(tweet_id, source_id, local_db):
     #print "addOccurrance took: "+str((datetime.datetime.now() - addOccurance_start).total_seconds())+" seconds"
     
 
-def getCategoriesWithSourceId(source_id, local_db):
-    cursor = local_db.cursor()
-    sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_id like "+str(source_id)+";"
-    cursor.execute(sql)
-    return_list = []
-    for row in cursor.fetchall():
-            return_list.append(row[0])
-    cursor.close()
-    return return_list
 
-def findTableInfoWithTwitterId(twitter_id, local_db):
-    cursor = local_db.cursor()
-    sql = "SELECT ID, name, twitter_handle, twitter_id FROM TwitterSource WHERE twitter_id like '"+twitter_id+"';"
-    cursor.execute(sql)
-    return_map = None
-    for row in cursor.fetchall() :
-        return_map = {}
-        return_map ["local_id"] =row[0]
-        return_map["twitter_name"] = row[1]
-        return_map["twitter_handle"]=row[2]
-        return_map["twitter_id"]  = row[3]
-        
-    cursor.close()
-    #print "lock released at 227"
-    return return_map
 
 def findTableInfoWithTwitterHandle(twitter_handle, local_db):
     cursor = local_db.cursor()
