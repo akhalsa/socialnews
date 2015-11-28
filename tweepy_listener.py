@@ -287,7 +287,7 @@ if __name__ == '__main__':
     #### start periodic update of necessary tweets
     worker_three = Thread(target=updateTweets, args=())
     worker_three.setDaemon(True)
-    worker_three.start
+    worker_three.start()
     
     #### st
     ####### dont check for surges on dev
