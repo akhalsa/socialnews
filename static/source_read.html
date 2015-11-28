@@ -2,53 +2,164 @@
     <head>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
+        <script type="text/javascript" src="js/bootstrap-linkpreview.js"></script>
+        <script type="text/javascript" src="js/proxy-ajax.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/responsive.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-linkpreview.css">
+        
         <script type="text/javascript">
-        function getSearchParameters() {
-            var prmstr = window.location.search.substr(1);
-            return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
-        }
-        
-        function transformToAssocArray( prmstr ) {
-            var params = {};
-            var prmarr = prmstr.split("&");
-            for ( var i = 0; i < prmarr.length; i++) {
-                var tmparr = prmarr[i].split("=");
-                params[tmparr[0]] = tmparr[1];
+            function refresh(){
+                console.log("refreshed!");
+                console.log("will load: "+window.location.href.split('?')[0]+"?cat="+QueryString.cat+"&time="+document.getElementById('seconds').value);
+
+                window.location.href = window.location.href.split('?')[0]+"?cat="+QueryString.cat+"&time="+document.getElementById('seconds').value;
             }
-            return params;
-        }
-        
-        var params = getSearchParameters();
-        //alert("found category label: "+unescape(params.cat));
-        //must connect to a web socket now
-        var ws = new WebSocket('ws://' + window.location.host+'/ws');
-        //ws.binaryType = "arraybuffer"; // We are talking binary
-        //messageContainer.innerHTML = "Message starting";
-        ws.onopen = function() {
-            console.log("sending!");
-            ws.send(unescape(params.cat));
-        };
-        ws.onmessage = function (evt) {
-            var received_msg = evt.data;
-            var json_tweet = JSON.parse(received_msg);
-            console.log(json_tweet);
-            tweet_list = document.getElementById("tweet_list");
-            var newTweetListItem = document.createElement("li");
-            var TweetListValue = document.createTextNode(json_tweet.user.screen_name+": \""+json_tweet.text+"\"");
-            newTweetListItem.appendChild(TweetListValue);
-            tweet_list.appendChild(newTweetListItem);
-        }
-        ws.onclose = function() {
-            console.log("connection is closed");
-            //messageContainer.innerHTML = "Connection is closed...";
-        };
+            window.onload = function (){
+                console.log("running onload");
+                document.getElementById('seconds').defaultValue = QueryString.time;
+                
+                jQuery("#tweet_cont").linkpreview({
+                        previewContainer: "#tweet_prev",
+                        url : "/page_load/www.google.com",
+                        preProcess: function() {
+                            console.log("preProcess");
+                        },
+                        onSuccess: function() {
+                            console.log("onSuccess");
+                        },
+                        onError: function() {
+                            console.log("onError");
+                        },
+                        onComplete: function() {
+                            console.log("onComplete");
+                        }
+                });
+            }
+            var QueryString = function () {
+                // This function is anonymous, is executed immediately and 
+                // the return value is assigned to QueryString!
+                var query_string = {};
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i=0;i<vars.length;i++) {
+                  var pair = vars[i].split("=");
+                      // If first entry with this name
+                  if (typeof query_string[pair[0]] === "undefined") {
+                    query_string[pair[0]] = decodeURIComponent(pair[1]);
+                      // If second entry with this name
+                  } else if (typeof query_string[pair[0]] === "string") {
+                    var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+                    query_string[pair[0]] = arr;
+                      // If third or later entry with this name
+                  } else {
+                    query_string[pair[0]].push(decodeURIComponent(pair[1]));
+                  }
+                } 
+                  return query_string;
+            }();
+            $.getJSON("/category/"+QueryString.cat, function (result){
+                children = result.children
+                console.log("got children: "+children);
+                var children_div = document.getElementById('children');
+                $.each(children, function(i, child){
+                    var aTag = document.createElement('a');
+                    aTag.setAttribute('href',window.location.href.split('?')[0]+"?cat="+child+"&time="+document.getElementById('seconds').value);
+                    aTag.innerHTML = child;
+                    children_div.appendChild(aTag);
+                });
+            });
+            //$.getJSON("/reader/"+QueryString.cat+"/time/"+QueryString.time, function(result){
+            //    var tweets = [];
+            //    
+            //    $.each(result, function(i, field){
+            //        
+            //        var finished = false;
+            //        
+            //        for	(index = 0; index < tweets.length; index++) {
+            //            
+            //            if ((parseInt(field.tweet_count) > parseInt(tweets[index].tweet_count)) &&(finished == false)) {
+            //                tweets.splice(index, 0, field);
+            //                finished = true;
+            //            }
+            //        }
+            //        
+            //        if (!finished) {
+            //            tweets.push(field);
+            //        }
+            //    });
+            //    
+            //    tweet_list_element = document.getElementById("tweet_list");
+            //    tweet_list_element.innerHTML = "";
+            //    //console.log("tweet list length is: "+tweet_list.length);
+            //    for (i=0; i<tweets.length; i++) {
+            //        //console.log("adding: "+tweet_list[i]);
+            //        var list_item = document.createElement('li');
+            //        list_item.setAttribute("id", "list_item_"+i);
+            //        var source_div = document.createElement('div');
+            //        
+            //        var image_element = document.createElement("img");
+            //        image_element.src = tweets[i].pic;
+            //        var name_span = document.createElement("span");
+            //        name_span.appendChild(document.createTextNode(tweets[i].name));
+            //        source_div.appendChild(image_element);
+            //        source_div.appendChild(name_span);
+            //        list_item.appendChild(source_div);
+            //        list_item.appendChild(document.createTextNode(tweets[i].text+": "+tweets[i].tweet_count));
+            //        var div_item = document.createElement('div');
+            //        div_item.setAttribute("id", "div_item_"+i);
+            //        list_item.appendChild(div_item)
+            //        tweet_list_element.appendChild(list_item);
+            //        var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
+            //        var link_exists = false;
+            //        
+            //        if(tweets[i].text.match(urlRegEx)){
+            //            link_exists = true;
+            //            jQuery(list_item).linkpreview({
+            //            previewContainer: "#div_item_"+i,
+            //            url : tweets[i].text.match(urlRegEx)[0],
+            //            preProcess: function() {
+            //                console.log("preProcess");
+            //            },
+            //            onSuccess: function() {
+            //                console.log("onSuccess");
+            //            },
+            //            onError: function() {
+            //                console.log("onError");
+            //            },
+            //            onComplete: function() {
+            //                console.log("onComplete");
+            //            }
+            //        });
+            //        }
+            //        
+            //    }
+            //
+            //});
+            
+            
         
 
         </script>
     </head>
     <body>
+        <div>
+            <span for="seconds">Time Frame (seconds)</span>
+            <input type="text" id="seconds" >
+            <button type="button" id="refresh" onclick="refresh()" >Refresh</button>
+        </div>
+        <div id="children">
+            
+        </div>
         <ul id="tweet_list">
         </ul>
+        
+        <div id="tweet_cont">
+            
+        </div>
+        <div id="tweet_prev">
+            
+        </div>
     </body>
 </html>

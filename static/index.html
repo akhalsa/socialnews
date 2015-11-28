@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Filtra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="stylesheet" href="static/fonts/genericons/genericons.css">
+  <link rel="stylesheet" href="static/css/non-responsive.css">
+  <link rel="stylesheet" type="text/css" href="static/css/bootstrap-linkpreview.css">
+  <script src="static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script type="text/javascript" src="static/js/bootstrap-linkpreview.js"></script>
+  <script type="text/javascript" src="static/js/proxy-ajax.js"></script>
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    if(window.location.href.indexOf("filtra.io") > -1){
+        ga('create', 'UA-70081756-1', 'auto');
+        ga('send', 'pageview');
+    }
+    
+  
+  </script>
+  <script>
+    /**
+    * Function that tracks a click on an outbound link in Google Analytics.
+    * This function takes a valid URL string as an argument, and uses that URL string
+    * as the event label.
+    */
+    var trackOutboundLink = function(url) {
+        if(window.location.href.indexOf("filtra.io") > -1){
+            ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+                function () {
+                }
+            });
+        }
+       
+    }
+    
+    var trackCategorySelection = function(cat_name){
+        if(window.location.href.indexOf("filtra.io") > -1){
+            ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+             function () {
+             }
+           });
+        }
+    }
+    
+    var trackTimeRangeSelection = function(seconds){
+        if(window.location.href.indexOf("filtra.io") > -1){
+            ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
+             function () {
+             }
+           });
+        }
+    }
+  </script>
+  <script type="text/javascript">
+        /*
+         *  Start by loading the category structure
+         *
+         */
+        var selected_top_index = 0;
+        var selected_secondary_index = -1;
+        var selected_third_index = -1;
+        
+        var time_frame_index = 0;
+        var time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
+                           {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
+        
+        var category_structure;
+        
+        var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
+
+        
+        $.getJSON("/category", function(result){
+            console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
+            category_structure = result;
+            renderTopNav();
+            renderTimeFrame();
+            renderTweets();
+        });
+        
+        function currentCatName() {
+            var cat_name = ""
+            if ((selected_secondary_index != -1) &&(selected_third_index != -1)){
+                cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].children[selected_third_index].name);
+            }else if (selected_secondary_index != -1) {
+                cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].name);
+            }else {
+                cat_name= String(category_structure[selected_top_index].name);
+            }
+            return cat_name;
+        }
+        function renderTweets() {
+            
+            cat_name = currentCatName();
+            
+            $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
+                $("#time").nextAll().remove();
+                tweet_html = "";
+                
+                $.each(result, function(i, child){
+                    console.log("tweet has id: "+child.tweet_count);
+                    //lets clear all the tweets
+                    tweet_html += "<div class=\"con-tw\">";
+                    tweet_html += "<div class=\"wrap-user\">";
+                    tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
+                    tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
+                    tweet_html += "<div class=\"clear\"></div></div>";
+                    tweet_html += "<div class=\"wrap-con-tw\" ><span id=\"tweet_"+i+"\">"
+                    tweet_html += child.text.replace(urlRegEx,"<a href='$1'>$1</a>"); 
+                    tweet_html +="</span><div class=\"preview-tw\" id=\"tweet_preview_"+i+"\" ></div></div></div>";
+                    
+                    
+                });
+                $("#time").after(tweet_html);
+                
+                $.each(result, function(i, child){
+                    
+                    
+                    if(child.text.match(urlRegEx)){
+                        console.log("scanning for previews with url: "+child.text.match(urlRegEx)[0]);
+                        jQuery("#tweet_"+i).linkpreview({
+                            previewContainer: "#tweet_preview_"+i,
+                            url : child.text.match(urlRegEx)[0],
+                            preProcess: function() {
+                                console.log("preProcess");
+                            },
+                            onSuccess: function() {
+                                console.log("onSuccess");
+                            },
+                            onError: function() {
+                                console.log("onError");
+                            },
+                            onComplete: function() {
+                                console.log("onComplete");
+                                console.log("looking for text");
+                                //must find all the outbound links in the structure
+                                //console.log($("#tweet_preview_"+i).html());
+                                $("#tweet_preview_"+i).find('a').each(function(e) {
+                                   //console.log("found link: "+e+" with text: "+$( this ).text()+" and url: "+$( this ).attr("href"));
+                                   $(this).click(function() {
+                                        trackOutboundLink($( this ).attr("href"));
+                                   });
+                                });
+                                console.log("done");
+                            }
+                        });
+                    }    
+                });
+            });
+        }
+        
+        function renderTopNav() {
+            top_nav_container = document.getElementById("top_level_nav");
+            var top_options_string = "";
+            
+            $.each(category_structure, function(i, child){
+                
+                top_options_string += "<li";
+                if (selected_top_index == i) {
+                    top_options_string += " class=\"active\""
+                    $( ".current-page" ).children("a").html(child.name);
+                    //TODO: all neighbor elements get populated by child.chilren categories
+                    $(".current-page").nextAll().remove();
+                    var list_string = "";
+                    //var reverseable = child.children.slice();
+                    $.each(child.children, function(j, second_level){
+                        if (j == selected_secondary_index) {
+                            list_string += "<li id=\"sub-nav2\" ><div id=\"wrap-pr\" onclick=\"topChooser("+i+","+j+",-1)\"><a href=\"#\">"
+                            list_string += second_level.name + "</a><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a></div>";
+                            if (second_level.children.length>0) {
+                                list_string += "<ul>"
+                            }
+                            $.each(second_level.children, function(k, third_level){
+                                if (k == selected_third_index) {
+                                    list_string += "<li class=\"current-sub\" onclick=\"topChooser("+i+","+j+","+k+")\"><a href=\"#\">"+third_level.name+"</a></li>";
+                                }else{
+                                    list_string += "<li><a href=\"#\" onclick=\"topChooser("+i+","+j+","+k+")\">"+third_level.name+"</a></li>";
+                                }
+                            });
+                            if (second_level.children.length>0) {
+                                list_string += "</ul>";
+                            }
+                            list_string += "</li>";
+                        
+                        } else{
+                            console.log("j val: "+j+" has name "+second_level.name);
+                            list_string += "<li onclick=\"topChooser("+i+","+j+",-1)\"><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>";
+
+                        }
+                    });
+                    $(".current-page").after(list_string);
+                    
+                    
+                }
+                top_options_string += " id=\"top_level_id_"+i+"\"><a href=\"#\">"+child.name+"</a></li>";
+                
+            });
+            top_nav_container.innerHTML = top_options_string;
+            
+            $.each(category_structure, function(i, child){
+               $("#top_level_id_"+i).click(function(){ topChooser(i, -1, -1); return false; }); 
+            });
+            
+            
+        }
+
+        function topChooser(i, j, k) {
+            console.log("got a call to top chooser with i:"+i+" j:"+j+" k:"+k);
+            selected_secondary_index = j;
+            selected_third_index = k;
+            selected_top_index = i;
+            renderTopNav();
+            renderTweets();
+            trackCategorySelection(currentCatName());
+        }
+        
+        function renderTimeFrame() {
+            $("#time").empty();
+            time_options_string = "";
+            $.each(time_frames, function(i, time_frame){
+                if (i == time_frame_index) {
+                    time_options_string += "<li class=\"current\" onclick=\"selectTimeFrameIndex("+i+")\"><a href=\"#\"><span class=\"genericon genericon-time\"></span>"+time_frame.text
+                    +"</a><br/><span class=\"genericon genericon-downarrow\"></span></li>";
+            
+                }else{
+                    time_options_string += "<li onclick=\"selectTimeFrameIndex("+i+")\"><a href=\"#\"><span class=\"genericon genericon-time\"></span>"+time_frame.text+"</a></li>";
+                }
+            });
+            time_options_string += "<div class=\"clear\"></div>";
+            $("#time").html(time_options_string);
+            
+        }
+        function selectTimeFrameIndex(new_index) {
+            time_frame_index = new_index;
+            renderTimeFrame();
+            renderTweets();
+            trackTimeRangeSelection(time_frames[time_frame_index].seconds);
+        }
+
+  </script>
+</head>
+
+<body>
+<!-- header start -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid top-nav">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#"><img src="static/images/logo.png" alt="Filtra" /></a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav" id="top_level_nav">
+        <li class="active"><a href="#">Front Page</a></li>
+        <li><a href="#">Technology</a></li>
+        <li><a href="#">Sports</a></li>
+        <li><a href="#">Travel</a></li>
+        <li><a href="#">Politics</a></li>
+        <li><a href="#">Travel</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- header end -->
+<!-- contents start -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-2 wrap-sub-nav">
+      <ul id="nav-category" class="sub">
+      	<li class="current-page"><a href="#">Sports</a></li>
+        <li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></div>
+        	<ul>
+            	<li><a href="#">iOS</a></li>
+                <li class="current-sub"><a href="#">OS X</a></li>
+                <li><a href="#">Watch</a></li>
+                <li><a href="#">TV</a></li>
+                <li><a href="#">iPhone</a></li>
+            </ul>
+        </li>
+        
+        <li><a href="#">Google</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+        <li><a href="#">Microsoft</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+        <li><a href="#">Mobile</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+        <li><a href="#">Game</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+        <li><a href="#">Home</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+        <li class="last-sub"><a href="#">Apps</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+      </ul>
+    </div>
+    <div class="col-xs-8 col-xs-offset-2 wrap-con-main">
+    	<!-- time start -->
+    	<ul id="time">
+        	<li class="current"><a href="#"><span class="genericon genericon-time"></span> Past 15 Minutes</a><br/><span class="genericon genericon-downarrow"></span></li>
+            <li><a href="#"><span class="genericon genericon-time"></span> Past Hour</a></li>
+            <li><a href="#"><span class="genericon genericon-time"></span> Past 3 Hours</a></li>
+            <li><a href="#"><span class="genericon genericon-time"></span> Today</a></li>
+            <div class="clear"></div>
+        </ul>
+    	<!-- time end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+            </div>
+        </div>
+        <!-- tweets end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                <div class="preview-tw">
+                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+					<div class="span8">
+                    	<a href="#">SportsCenter on Twitter</a>
+                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- tweets end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                <div class="preview-tw">
+                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+					<div class="span8">
+                    	<img src="static/images/img-sp.png"/>
+                    	<a href="#">SportsCenter on Twitter</a>
+                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper. </p>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- tweets end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                <div class="preview-tw">
+                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+					<div class="span8">
+                    	<img src="static/images/img-sp.png"/>
+                    	<a href="#">SportsCenter on Twitter</a>
+                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper.</p>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- tweets end -->
+    </div>
+  </div>
+</div>
+<!-- contents end -->
+</body>
+</html>
