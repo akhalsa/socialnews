@@ -18,7 +18,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
         
         if(soup.find("meta", {"property":"og:image"})):
             image_prospect = soup.find("meta", {"property":"og:image"})
-            print "there is an image prospect of: "+image_prospect
+            print "there is an image prospect of: "+image_prospect["content"]
             img_url = image_prospect["content"]
             
         else:
