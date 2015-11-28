@@ -17,9 +17,9 @@ def updateTweet(tweet_text, tweet_id, local_db):
         img_url = ""
         
         if(soup.find("meta", {"property":"og:image"})):
-            image_prospect = soup.find("meta", {"property":"og:title"})["content"]
+            image_prospect = soup.find("meta", {"property":"og:image"})
             print "there is an image prospect of: "+image_prospect
-            img_url = image_prospect
+            img_url = image_prospect["content"]
             
         else:
             max_area = 0
