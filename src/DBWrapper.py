@@ -49,8 +49,9 @@ def updateTweet(tweet_text, tweet_id, local_db):
                 pass
                
         
-        img_url = img_url
-        url = url
+        if(soup.find("meta", {"property":"og:image"})):
+            image_prospect = soup.find("meta", {"property":"og:title"})["content"]
+            print "there is an image prospect of: "+image_prospect
         
         title = u''
         if(soup.find("meta", {"property":"og:title"})):
