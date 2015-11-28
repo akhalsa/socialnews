@@ -222,8 +222,19 @@ def updateSource():
                         profile_link = user.profile_image_url
                         updateHandle(local_db_twitter_source, username, user_id, handle_to_update, profile_link)
                 except Exception, e:
-                        print "retweet exception: "
+                        print "update exception: "
                         print str(e)
+                        local_db_twitter_source = MySQLdb.connect(
+                                host=host_target,
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
+                        ###we dont want to get stuck in a loop on this one broken handle
+                        handle_to_update = fetchOldestHandle(local_db_twitter_source)
+                        updateHandle(local_db_twitter_source, "", "", handle_to_update, "")
+                        
                         
                 time.sleep(15)
                 
