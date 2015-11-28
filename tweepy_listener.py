@@ -246,7 +246,7 @@ def updateTweets():
                         tweets = getTweetOccurances(900, cat_id,local_db_tweet_updater)
                         for tweet in tweets:
                                 if(tweet["checked"] == 0):
-                                        updateTweet(tweet["text"], tweet["id"], local_db)
+                                        updateTweet(tweet["text"], tweet["id"], local_db_tweet_updater)
                 
                 print "***total update time "+str((datetime.datetime.now() - start_update).total_seconds())+" seconds"        
                 
