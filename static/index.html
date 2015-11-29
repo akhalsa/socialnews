@@ -223,6 +223,8 @@
               console.log("finished with tweet: "+tweet.text);
               renderTweets();
               findAndLoadNextPreview();
+            }else{
+              console.log("we were midway throuhg: "+tweet.text+" but had to bail");
             }
             
               
