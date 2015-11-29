@@ -184,6 +184,7 @@
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
                 tweets = [];
                 tweets = result;
+                console.log("we should have a total of: "+tweets.length);
                 renderTweets();
                 findAndLoadNextPreview();
             });
