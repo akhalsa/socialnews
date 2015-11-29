@@ -143,6 +143,7 @@
             });
         }
         function renderTweets(){
+          $("#time").nextAll().remove();
           tweet_html = "";
           console.log("rendering tweets with length: "+tweets.length);
           console.log("last tweet: "+tweets[tweets.length-1].text);
@@ -182,9 +183,7 @@
             cat_name = currentCatName();
             tweets = [];
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
-                $("#time").nextAll().remove();
                 tweets = result;
-                console.log("we should have a total of: "+tweets.length);
                 renderTweets();
                 findAndLoadNextPreview();
             });
