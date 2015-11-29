@@ -197,10 +197,22 @@
               return false;
             }
           });
+          if (tweet == null) {
+            console.log("done loading previews");
+            return;
+          }
           console.log("tweet is: "+tweet);
           console.log("we will now update tweet with id: "+tweet.id);
           $.getJSON("/page_load/twitter_id/"+tweet.id, function(result){
-            console.log("got results "+result)
+            
+            tweet.blurb = result.blurb;
+            tweet.img_url = result.img_url;
+            tweet.link_url = result.link_url;
+            tweet.title = result.title;
+            tweet.checked = result.checked;
+            renderTweets();
+            findAndLoadNextPreview();
+              
           });
         }
         function renderTopNav() {
