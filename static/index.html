@@ -76,6 +76,8 @@
         
         var category_structure;
         
+        var tweets;
+        
         var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
 
         
@@ -84,7 +86,7 @@
             category_structure = result;
             renderTopNav();
             renderTimeFrame();
-            renderTweets();
+            loadTweets();
             loadHandles();
         });
         
@@ -147,51 +149,65 @@
                
             });
         }
-        function renderTweets() {
+        function renderTweets(){
+          
+          tweet_html = "";
+          $.each(tweets, function(i, child){
+            tweet_html += "<div class=\"con-tw\">";
+            tweet_html += "<div class=\"wrap-user\">";
+            tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
+            tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
+            tweet_html += "<div class=\"clear\"></div></div>";
+            
+            tweet_html += "<div class=\"wrap-con-tw\" >";
+            tweet_html += child.text.replace(urlRegEx,"<a href='$1'>$1</a>");
+            tweet_html += "<div class=\"preview-tw\">";
+            if (child.blurb || child.img_url || child.title) {
+              tweet_html += "<div class=\"ic-pr\"><span class=\"genericon genericon-show\"></span> Preview</div>";
+              tweet_html += "<div class=\"span8\">";
+              if (child.img_url) {
+                tweet_html += "<img src=\""+child.img_url+"\" width=\"150\"/>";
+              }
+              if (child.title)  {
+                tweet_html += "<a href=\""+child.link_url+"\">"+child.title+"</a>";
+              }else{
+                console.log(child.text +" has no title");
+              }
+              if (child.blurb) {
+                tweet_html += "<p>"+child.blurb+"</p>";
+              }else{
+                console.log(child.text +" has no blurb");
+              }
+              tweet_html += "<div class=\"clear\"></div></div></div>";
+            }
+            tweet_html += "</div></div>";
+          });
+          $("#time").after(tweet_html);
+        }
+        function loadTweets() {
             
             cat_name = currentCatName();
-            
-            
-            
+            $("#time").nextAll().remove();
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
-                $("#time").nextAll().remove();
-                tweet_html = "";
-
-                $.each(result, function(i, child){
-                  tweet_html += "<div class=\"con-tw\">";
-                  tweet_html += "<div class=\"wrap-user\">";
-                  tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
-                  tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
-                  tweet_html += "<div class=\"clear\"></div></div>";
-                  
-                  tweet_html += "<div class=\"wrap-con-tw\" >";
-                  tweet_html += child.text.replace(urlRegEx,"<a href='$1'>$1</a>");
-                  tweet_html += "<div class=\"preview-tw\">";
-                  if (child.blurb || child.img_url || child.title) {
-                    tweet_html += "<div class=\"ic-pr\"><span class=\"genericon genericon-show\"></span> Preview</div>";
-                    tweet_html += "<div class=\"span8\">";
-                    if (child.img_url) {
-                      tweet_html += "<img src=\""+child.img_url+"\" width=\"150\"/>";
-                    }
-                    if (child.title)  {
-                      tweet_html += "<a href=\""+child.link_url+"\">"+child.title+"</a>";
-                    }else{
-                      console.log(child.text +" has no title");
-                    }
-                    if (child.blurb) {
-                      tweet_html += "<p>"+child.blurb+"</p>";
-                    }else{
-                      console.log(child.text +" has no blurb");
-                    }
-                    tweet_html += "<div class=\"clear\"></div></div></div>";
-                  }
-                  tweet_html += "</div></div>";
-                });
-                $("#time").after(tweet_html);
-                
+                tweets = result;
+                renderTweets();
             });
         }
         
+        function findAndLoadNextPreview(){
+          tweet = null;
+          
+          $.each(tweets, function(i, child){
+            if (child.checked == 0) {
+              tweet = child;
+              return false;
+            }
+          });
+          console.log("we will now update tweet with id: "+tweet.twitter_id);
+          $.getJSON("/page_load/twitter_id/"+tweet.twitter_id, function(result){
+            console.log("got results "+result)
+          });
+        }
         function renderTopNav() {
             top_nav_container = document.getElementById("top_level_nav");
             var top_options_string = "";
@@ -253,7 +269,7 @@
             selected_third_index = k;
             selected_top_index = i;
             renderTopNav();
-            renderTweets();
+            loadTweets();
             loadHandles();
             trackCategorySelection(currentCatName());
         }
@@ -277,7 +293,7 @@
         function selectTimeFrameIndex(new_index) {
             time_frame_index = new_index;
             renderTimeFrame();
-            renderTweets();
+            loadTweets();
             trackTimeRangeSelection(time_frames[time_frame_index].seconds);
         }
 

@@ -146,10 +146,20 @@ class Reader(tornado.web.RequestHandler):
                 self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
-        def get(self, url):
-                print "********** ATTEMPTING TO ASYNC LOAD: "+url
-                self.finish(urllib2.urlopen(url).read(200000))
-                
+    def get(self, twitter_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        tweet_dict = getTweetWithTwitterId(local_db, twitter_id)
+        if(tweet_dict["checked"] == 0):
+            updateTweet(tweet_dict["text"], twitter_id, local_db)
+        tweet_dict = getTweetWithTwitterId(local_db, twitter_id)
+        self.finish(json.dumps(tweet_dict))
+    
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
@@ -162,7 +172,7 @@ app = tornado.web.Application([
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
-    (r'/page_load/(.*)',  PageLoad),
+    (r'/page_load/twitter_id/(.*)',  PageLoad),
 ])
 
 if __name__ == '__main__':

@@ -6,6 +6,22 @@ import Image
 import cStringIO
 from bs4 import BeautifulSoup
 
+def getTweetWithTwitterId(local_db, twitter_id):
+    cursor = local_db.cursor()
+    sql = "SELECT  text, blurb, link_url, link_text, img_url, checked FROM Tweet WHERE twitter_id like '"+twitter_id+"';"
+    cursor.execute(sql)
+    tweet_array = cursor.fetchone()
+    tweet_dict ={}
+    tweet_dict["id"] = twitter_id
+    tweet_dict["text"] = tweet_array[0]
+    tweet_dict["blurb"] = tweet_array[1]
+    tweet_dict["link_url"] = tweet_array[2]
+    tweet_dict["title"] = tweet_array[3]
+    tweet_dict["img_url"] = tweet_array[4]
+    tweet_dict["checked"] = tweet_array[5]
+    cursor.close()    
+    return tweet_dict
+    
 def updateTweet(tweet_text, tweet_id, local_db):
     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_text)
     if(len(urls) > 0):
