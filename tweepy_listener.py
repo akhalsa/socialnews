@@ -273,11 +273,7 @@ if __name__ == '__main__':
     worker.setDaemon(True)
     worker.start()
     
-    #### start periodic update of necessary tweets
-    worker_three = Thread(target=updateTweets, args=())
-    worker_three.setDaemon(True)
-    worker_three.start()
-    
+
     #### st
     ####### dont check for surges on dev
     if(options.mysql_host == 0):
