@@ -143,8 +143,9 @@
             });
         }
         function renderTweets(){
-          
           tweet_html = "";
+          console.log("rendering tweets with length: "+tweets.length);
+          console.log("last tweet: "+tweets[tweets.length-1].text);
           $.each(tweets, function(i, child){
             tweet_html += "<div class=\"con-tw\">";
             tweet_html += "<div class=\"wrap-user\">";
