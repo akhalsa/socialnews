@@ -144,6 +144,93 @@
             </category>
         </category>
     </category>
+    <category name="Celebrities">
+        <handle>@KimKardashian</handle>
+        <handle>@khloekardashian</handle>
+        <handle>@KrisJenner</handle>
+        <handle>@kourtneykardash</handle>
+        <handle>@Caitlyn_Jenner</handle>
+        <handle>@KylieJenner</handle>
+        <handle>@KendallJenner</handle>
+        <handle>@JaredLeto</handle>
+        <handle>@Oprah</handle>
+        <handle>@victoriabeckham</handle>
+        <handle>@jtimberlake</handle>
+        <handle>@ParisHilton</handle>
+        <category name="Musicians">
+            <handle>@justinbieber</handle>
+            <handle>@ArianaGrande</handle>
+            <handle>@justinbieber</handle>
+            <handle>@Adele</handle>
+            <handle>@ChakaKhan</handle>
+            <handle>@NICKIMINAJ</handle>
+            <handle>@ricky_martin</handle>
+            <handle>@officialjaden</handle>
+            <handle>@MarcAnthony</handle>
+            <handle>@Icecube</handle>
+            <handle>@robinthicke</handle>
+            <handle>@common</handle>
+            <handle>@Zendaya</handle>
+            <handle>@Sia</handle>
+            <handle>@xtina</handle>
+            <handle>@CorinneBRae</handle>
+            <handle>@KellyOsbourne</handle>
+        </category>
+        <category name="Actors">
+            <handle>@aplusk</handle>
+            <handle>@RobertDowneyJr</handle>
+            <handle>@BenAffleck</handle>
+            <handle>@EmWatson</handle>
+            <handle>@EmmaStoneWeb</handle>
+            <handle>@itsjenlawrence</handle>
+            <handle>@prattprattpratt</handle>
+            <handle>@RyanGosling</handle>
+            <handle>@VancityReynolds</handle>
+            <handle>@thecampaignbook</handle>
+            <handle>@tomhanks</handle>
+            <handle>@jadapsmith</handle>
+            <handle>@violadavis</handle>
+            <handle>@kerrywashington</handle>
+            <handle>@channingtatum</handle>
+            <handle>@joemanganiello</handle>
+            <handle>@idriselba</handle>
+            <handle>@realctucker</handle>
+            <handle>@TomCruise</handle>
+            <handle>@IAMQUEENLATIFAH</handle>
+            <handle>@SamuelLJackson</handle>
+            <handle>@DrewBarrymore</handle>
+            <handle>@JohnStamos</handle>
+            <handle>@rosariodawson</handle>
+            <handle>@anjelahjohnson</handle>
+            <handle>@aaronpaul_8</handle>
+        </category>
+        <category name="Comedians">
+            <handle>@jimmyfallon</handle>
+            <handle>@fluffyguy</handle>
+            <handle>@amyschumer</handle>
+            <handle>@CedEntertainer</handle>
+            <handle>@stephenathome</handle>
+            <handle>@robdelaney</handle>
+            <handle>@thesulk</handle>
+            <handle>@mindykaling</handle>
+            <handle>@azizansari</handle>
+            <handle>@JennyJohnsonHi5</handle>
+            <handle>@pattonoswalda</handle>
+            <handle>@ConanOBrien</handle>
+            <handle>@kristenschaaled</handle>
+            <handle>@SarahKSilverman</handle>
+            <handle>@EugeneMirman</handle>
+            <handle>@jimmycarr</handle>
+            <handle>@robcorddry</handle>
+            <handle>@JimGaffigan</handle>
+            <handle>@chelseahandler</handle>
+            <handle>@hodgman</handle>
+            <handle>@chrisrock</handle>
+            <handle>@rickygervais</handle>
+            <handle>@SteveMartinToGo</handle>
+        </category>
+
+    </category>
     <category name="Politics">
         <category name="Politicians">
             <category name="Democrats">
@@ -282,7 +369,6 @@
                 <handle>@CBSPolitics</handle>
                 <handle>@NBCPolitics</handle>
                 <handle>@ABCPolitics</handle>
-                <handle>@washingtonpost</handle>
                 <handle>@katiecouric</handle>
                 <handle>@BuzzFeedPol</handle>
                 <handle>@jaketapper</handle>
@@ -329,25 +415,28 @@
             </category>
         </category>
     </category>
-    <category name="International">
+    <category name="International News">
+        <handle>cnn</handle>
         <handle>@cnni</handle>
         <handle>@cnnbrk</handle>
         <handle>@BBCBreaking</handle>
-        <handle>@itvnews</handle>
-        <handle>@SOSParis1311</handle>
-        <handle>@BFMTV</handle>
-        <handle>@lemondefr</handle>
-        <handle>@afpfr</handle>
-        <handle>@Paris</handle>
-        <handle>@lemondelive</handle>
-        <handle>@AJIB_fr</handle>
-        <handle>@Contrepoints</handle>
-        <handle>@paris_2015</handle>
-        <handle>@Le_Figaro</handle>
-        <handle>@France24_fr</handle>
-        <handle>@France24</handle>
-        <handle>@LeHuffPost</handle>
         <handle>@SkyNews</handle>
+        <handle>@HuffingtonPost</handle>
+        <handle>@AJENews</handle>
+        <handle>@AJEnglish</handle>
+        <handle>@VICE</handle>
+        <handle>@ABC</handle>
+        <handle>@FoxNews</handle>
+        <handle>@NBCNews</handle>
+        <handle>@CBSNews</handle>
+        <handle>@nytimes</handle>
+        <handle>@washingtonpost</handle>
+        <handle>@Independent</handle>
+        <handle>@USATODAY</handle>
+        <handle>@guardian</handle>
+        <handle>@AP</handle>
+        <handle>@Reuters</handle>
+        <handle>@WSJ</handle>
     </category>
     
     <category name="Local News">
