@@ -179,11 +179,10 @@
           $("#time").after(tweet_html);
         }
         function loadTweets() {
-            
             cat_name = currentCatName();
-            $("#time").nextAll().remove();
+            tweets = [];
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
-                tweets = [];
+                $("#time").nextAll().remove();
                 tweets = result;
                 console.log("we should have a total of: "+tweets.length);
                 renderTweets();
@@ -210,7 +209,6 @@
             local_tweet = null;
             
             $.each(tweets, function(i, child){
-              console.log("checking: "+child.text);
               if (child.id == result.id) {
                 console.log("found match");
                 local_tweet = child;
