@@ -213,17 +213,16 @@
                 local_tweet = child;
               }
             });
-            if (local_tweet == null) {
-              //ok we switched pages while loading... just discard this
-              return false;
+            if (local_tweet != null){
+              local_tweet.blurb = result.blurb;
+              local_tweet.img_url = result.img_url;
+              local_tweet.link_url = result.link_url;
+              local_tweet.title = result.title;
+              local_tweet.checked = result.checked;
+              renderTweets();
+              findAndLoadNextPreview();
             }
-            local_tweet.blurb = result.blurb;
-            local_tweet.img_url = result.img_url;
-            local_tweet.link_url = result.link_url;
-            local_tweet.title = result.title;
-            local_tweet.checked = result.checked;
-            renderTweets();
-            findAndLoadNextPreview();
+            
               
           });
         }
