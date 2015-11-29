@@ -26,7 +26,12 @@ def updateTweet(tweet_text, tweet_id, local_db):
     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_text)
     if(len(urls) > 0):
         url = urls[0]
-        page_content = urllib2.urlopen(url).read(200000)
+        try:
+            page_content = urllib2.urlopen(url).read(200000)
+        except Exception, e:
+            setTweetIdToUnloadable(local_db, tweet_id)
+            return
+        
         soup = BeautifulSoup(page_content, "html5lib")
         body = soup.find('body')
         
@@ -118,7 +123,12 @@ def updateTweet(tweet_text, tweet_id, local_db):
                 local_db.rollback()
         insertion_cursor.close()
     else:
-        insertion_cursor = local_db.cursor()
+        setTweetIdToUnloadable(local_db, tweet_id)
+
+        
+        
+def setTweetIdToUnloadable(local_db, tweet_id):
+    insertion_cursor = local_db.cursor()
         sql = "UPDATE Tweet SET checked=1 WHERE twitter_id like '"+tweet_id+"';"
         try:
                 # Execute the SQL command
@@ -131,11 +141,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
                 print str(e)
                 local_db.rollback()
         insertion_cursor.close()
-
-        
-        
-
-
+    
 def getTweetOccurances(seconds, cat_id, local_db):
     cursor = local_db.cursor()
 

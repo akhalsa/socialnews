@@ -182,7 +182,7 @@
             cat_name = currentCatName();
             $("#time").nextAll().remove();
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
-                tweets = null;
+                tweets = [];
                 tweets = result;
                 renderTweets();
                 findAndLoadNextPreview();
