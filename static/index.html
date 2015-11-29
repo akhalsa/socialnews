@@ -82,7 +82,6 @@
 
         
         $.getJSON("/category", function(result){
-            console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
             category_structure = result;
             renderTopNav();
             renderTimeFrame();
@@ -122,12 +121,10 @@
             return cat_name;
         }
         function loadHandles() {
-            console.log("loading handles properly");
             $.getJSON("/category/"+cat_name, function(result){
                 var list_elements = "";
                 
                 $.each(result, function(i, child){
-                    console.log("we're monitoring handle: "+child.twitter_handle+" with score: "+child.score);
                     list_elements += "<li "
                     list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D0D0D0\" ");
                     list_elements += "><a href=\"#\">"+child.handle+"</a>";
@@ -140,7 +137,6 @@
                     list_elements += "<span "+upvote_click_listener+" class=\"genericon genericon-collapse\" "+upvote_clicked+"></span>";
                     list_elements += "<span class=\"genericon genericon-expand\" "+downvote_click_listener+downvote_clicked+"></span></li>";
                 });
-                console.log("setting li to: "+list_elements);
             
                 list_elements+="<div id=\"handle_input_area\"><input type=\"text\" id=\"handle_name\">";
                 list_elements += "<input type=\"button\" id=\"submit_handle\" value=\"Nominate\"></div>";
@@ -242,7 +238,6 @@
                             list_string += "</li>";
                         
                         } else{
-                            console.log("j val: "+j+" has name "+second_level.name);
                             list_string += "<li onclick=\"topChooser("+i+","+j+",-1)\"><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>";
 
                         }
@@ -264,7 +259,6 @@
         }
 
         function topChooser(i, j, k) {
-            console.log("got a call to top chooser with i:"+i+" j:"+j+" k:"+k);
             selected_secondary_index = j;
             selected_third_index = k;
             selected_top_index = i;
