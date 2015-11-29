@@ -182,6 +182,7 @@
             cat_name = currentCatName();
             $("#time").nextAll().remove();
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
+                tweets = null;
                 tweets = result;
                 renderTweets();
                 findAndLoadNextPreview();
@@ -204,12 +205,22 @@
           console.log("tweet is: "+tweet);
           console.log("we will now update tweet with id: "+tweet.id);
           $.getJSON("/page_load/twitter_id/"+tweet.id, function(result){
+            local_tweet = null;
             
-            tweet.blurb = result.blurb;
-            tweet.img_url = result.img_url;
-            tweet.link_url = result.link_url;
-            tweet.title = result.title;
-            tweet.checked = result.checked;
+            $.each(tweets, function(i, child){
+              if (child.id == result.id) {
+                local_tweet = child;
+              }
+            });
+            if (local_tweet == null) {
+              //ok we switched pages while loading... just discard this
+              return false;
+            }
+            local_tweet.blurb = result.blurb;
+            local_tweet.img_url = result.img_url;
+            local_tweet.link_url = result.link_url;
+            local_tweet.title = result.title;
+            local_tweet.checked = result.checked;
             renderTweets();
             findAndLoadNextPreview();
               
