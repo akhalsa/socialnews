@@ -129,18 +129,18 @@ def updateTweet(tweet_text, tweet_id, local_db):
         
 def setTweetIdToUnloadable(local_db, tweet_id):
     insertion_cursor = local_db.cursor()
-        sql = "UPDATE Tweet SET checked=1 WHERE twitter_id like '"+tweet_id+"';"
-        try:
-                # Execute the SQL command
-                insertion_cursor.execute(sql)
-                # Commit your changes in the database
-                local_db.commit()
-        except Exception,e:
-                # Rollback in case there is any error
-                print "error on insertion of retweet"
-                print str(e)
-                local_db.rollback()
-        insertion_cursor.close()
+    sql = "UPDATE Tweet SET checked=1 WHERE twitter_id like '"+tweet_id+"';"
+    try:
+            # Execute the SQL command
+            insertion_cursor.execute(sql)
+            # Commit your changes in the database
+            local_db.commit()
+    except Exception,e:
+            # Rollback in case there is any error
+            print "error on insertion of retweet"
+            print str(e)
+            local_db.rollback()
+    insertion_cursor.close()
     
 def getTweetOccurances(seconds, cat_id, local_db):
     cursor = local_db.cursor()
