@@ -198,8 +198,8 @@
             }
           });
           console.log("tweet is: "+tweet);
-          console.log("we will now update tweet with id: "+tweet.twitter_id);
-          $.getJSON("/page_load/twitter_id/"+tweet.twitter_id, function(result){
+          console.log("we will now update tweet with id: "+tweet.id);
+          $.getJSON("/page_load/twitter_id/"+tweet.id, function(result){
             console.log("got results "+result)
           });
         }
