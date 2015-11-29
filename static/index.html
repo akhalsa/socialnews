@@ -210,7 +210,9 @@
             local_tweet = null;
             
             $.each(tweets, function(i, child){
+              console.log("checking: "+child.text);
               if (child.id == result.id) {
+                console.log("found match");
                 local_tweet = child;
               }
             });
@@ -285,6 +287,7 @@
         }
 
         function topChooser(i, j, k) {
+            console.log("UPDATING TOP");
             selected_secondary_index = j;
             selected_third_index = k;
             selected_top_index = i;
