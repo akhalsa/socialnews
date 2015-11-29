@@ -154,6 +154,7 @@ class PageLoad(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
+        twitter_id = re.escape(twitter_id)
         tweet_dict = getTweetWithTwitterId(local_db, twitter_id)
         if(tweet_dict["checked"] == 0):
             updateTweet(tweet_dict["text"], twitter_id, local_db)
