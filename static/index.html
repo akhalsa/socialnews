@@ -219,6 +219,7 @@
               local_tweet.link_url = result.link_url;
               local_tweet.title = result.title;
               local_tweet.checked = result.checked;
+              console.log("finished with tweet: "+tweet.text);
               renderTweets();
               findAndLoadNextPreview();
             }
