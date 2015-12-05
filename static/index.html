@@ -115,12 +115,37 @@
             }
             return cat_name;
         }
+        
+        /*
+         *<li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                
+          <li class="none-active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate new-vote">
+                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                
+         *
+         */
         function loadHandles() {
             $.getJSON("/category/"+cat_name, function(result){
                 var list_elements = "";
                 
                 $.each(result, function(i, child){
-                    list_elements += "<li "
+                    list_elements += "<li ";
+                    list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
+                    list_elements += "<div class=\"handle\">";
+                    console.log(child.handle+" has upvotes: "+child.upvotes+" and downvotes: "+child.downvotes);
+                                      
+                    /*list_elements += "<li "
                     list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D0D0D0\" ");
                     list_elements += "><a href=\"#\">"+child.handle+"</a>";
                     upvote_click_listener = child.vote_val == 0 ? "onclick=\"voteForHandle('"+child.handle+"',1)\"" : "";
@@ -130,13 +155,12 @@
                     downvote_clicked = (child.vote_val == -1) ? " style=\"color:yellow\" ":"";
                     
                     list_elements += "<span "+upvote_click_listener+" class=\"genericon genericon-collapse\" "+upvote_clicked+"></span>";
-                    list_elements += "<span class=\"genericon genericon-expand\" "+downvote_click_listener+downvote_clicked+"></span></li>";
+                    list_elements += "<span class=\"genericon genericon-expand\" "+downvote_click_listener+downvote_clicked+"></span></li>";*/
                 });
             
-                list_elements+="<div id=\"handle_input_area\"><input type=\"text\" id=\"handle_name\">";
-                list_elements += "<input type=\"button\" id=\"submit_handle\" value=\"Nominate\"></div>";
-                $('#right_list').html(list_elements);
-                $('#submit_handle').click(function(){nominateNewHandle();});
+                //list_elements+="<div id=\"handle_input_area\"><input type=\"text\" id=\"handle_name\">";
+                //list_elements += "<input type=\"button\" id=\"submit_handle\" value=\"Nominate\"></div>";
+                //$('#list-vote').html(list_elements);
                
             });
         }

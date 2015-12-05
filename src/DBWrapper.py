@@ -563,7 +563,10 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
     
     cursor = local_db.cursor()
     #note this will get all votes, up or down
-    sql = "SELECT twitter_id, twitter_handle, twitter_name, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+    sql = "SELECT twitter_id, twitter_handle, twitter_name, SUM(value) as vote_count, "
+    sql += " sum (case when value >= 0 then value else 0 end) as positive, "
+    sql += " sum (case when value <= 0 then value else 0 end) as negative, "
+    sql += "From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
     print "will find handles w sql: "+sql
     cursor.execute(sql)
     return_list = []
@@ -579,7 +582,8 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
         if(row[0] in user_vote_history):
             vote_val = user_vote_history[row[0]]
             
-        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "score":str(row[3]), "tracked":tracked})
+        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "score":str(row[3]),
+                            "upvotes": str(row[4]), "downvotes":str(row[5]), "tracked":tracked})
         insertion_count += 1
         
     cursor.close()
