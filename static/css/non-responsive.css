@@ -7,7 +7,7 @@
 /* Account for fixed navbar */
 body {
   min-width: 970px;
-  padding-top: 70px;
+  padding-top: 120px;
 }
 
 /* Finesse the page header spacing */
@@ -35,14 +35,6 @@ body {
 }
 
 /* Demonstrate the grids */
-.col-xs-4 {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  background-color: #eee;
-  background-color: rgba(86,61,124,.15);
-  border: 1px solid #ddd;
-  border: 1px solid rgba(86,61,124,.2);
-}
 
 .container .navbar-header,
 .container .navbar-collapse {
@@ -50,10 +42,6 @@ body {
   margin-left: 0;
 }
 
-/* Always float the navbar header */
-.navbar-header {
-  float: left;
-}
 
 /* Undo the collapsing navbar */
 .navbar-collapse {
