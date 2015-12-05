@@ -238,32 +238,7 @@ def updateSource():
                         
                 time.sleep(15)
                 
-def updateTweets():
-        while True:
-                start_update = datetime.datetime.now()
-                print "***starting tweet scan"  
-                local_db_tweet_updater = MySQLdb.connect(
-                                host=host_target,
-                                user="akhalsa",
-                                passwd="sophiesChoice1",
-                                db="newsdb",
-                                charset='utf8',
-                                port=3306)
-                #get all categories
-                cat_ids = getAllCategoryIds(local_db_tweet_updater)
-                for cat_id in cat_ids:
-                        #ok we want to get all the occurrences in the past 15 min for each category
-                        #and we want to then update any missing tweets
-                        tweets = getTweetOccurances(900, cat_id,local_db_tweet_updater)
-                        for tweet in tweets:
-                                if(tweet["checked"] == 0):
-                                        try:
-                                                updateTweet(tweet["text"], tweet["id"], local_db_tweet_updater)
-                                        except Exception, e:
-                                                print "exception: "+str(e)
-                
-                print "***total update time "+str((datetime.datetime.now() - start_update).total_seconds())+" seconds"        
-                time.sleep(60)
+
                 
                 
                 
@@ -298,11 +273,7 @@ if __name__ == '__main__':
     worker.setDaemon(True)
     worker.start()
     
-    #### start periodic update of necessary tweets
-    worker_three = Thread(target=updateTweets, args=())
-    worker_three.setDaemon(True)
-    worker_three.start()
-    
+
     #### st
     ####### dont check for surges on dev
     if(options.mysql_host == 0):
