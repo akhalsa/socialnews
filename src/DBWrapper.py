@@ -564,8 +564,8 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
     cursor = local_db.cursor()
     #note this will get all votes, up or down
     sql = "SELECT twitter_id, twitter_handle, twitter_name, SUM(value) as vote_count, "
-    sql += " sum (case when value >= 0 then value else 0 end) as positive, "
-    sql += " sum (case when value <= 0 then value else 0 end) as negative, "
+    sql += " SUM(case when value >= 0 then value else 0 end) as positive, "
+    sql += " SUM(case when value <= 0 then value else 0 end) as negative "
     sql += "From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
     print "will find handles w sql: "+sql
     cursor.execute(sql)
