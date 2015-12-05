@@ -568,9 +568,9 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
     sql += "SUM(case when value <= 0 then value else 0 end) as negative "
     sql += "From VoteHistory "
     sql += "LEFT JOIN TwitterSource ON VoteHistory.twitter_id=TwitterSource.twitter_id "
-    sql += "WHERE category_id like 1 "
+    sql += "WHERE category_id like "+str(category_id)+" "
     sql += "GROUP BY VoteHistory.twitter_id ORDER BY vote_count DESC;"
-
+    
     print "will find handles w sql: "+sql
     cursor.execute(sql)
     return_list = []
