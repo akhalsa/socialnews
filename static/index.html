@@ -133,6 +133,10 @@
                     <div class="clear"></div>
                 </li>
                 
+                <ul class="nominate">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                
          *
          */
         function loadHandles() {
@@ -143,7 +147,15 @@
                     list_elements += "<li ";
                     list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
                     list_elements += "<div class=\"handle\">";
-                    console.log(child.handle+" has upvotes: "+child.upvotes+" and downvotes: "+child.downvotes);
+                    list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
+                    
+                    var vote_elements = "";
+                    if (child.vote_val == 0) {
+                      vote_elements += "<ul class=\"nominate\">";
+                      vote_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                      vote_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                      vote_elements += "</ul>";
+                    }
                                       
                     /*list_elements += "<li "
                     list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D0D0D0\" ");
@@ -160,7 +172,7 @@
             
                 //list_elements+="<div id=\"handle_input_area\"><input type=\"text\" id=\"handle_name\">";
                 //list_elements += "<input type=\"button\" id=\"submit_handle\" value=\"Nominate\"></div>";
-                //$('#list-vote').html(list_elements);
+                $('#list-vote').html(list_elements);
                
             });
         }
