@@ -117,54 +117,37 @@
         }
         
         function loadHandles() {
-            console.log("refreshing handles for category: "+cat_name);
-            $.getJSON("/category/"+cat_name, function(result){
-                var list_elements = "";
-                
-                $.each(result, function(i, child){
-                    list_elements += "<li ";
-                    list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
-                    list_elements += "<div class=\"handle\">";
-                    list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
-                    list_elements += "<ul ";
-                    if (child.vote_val == 0) {
-                      list_elements += "class=\"nominate\">";
-                      list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',1)\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                      list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1)\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
-                    }else if (child.vote_val==1) {
-                      list_elements += "class=\"nominate done-up\">";
-                      list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                      list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
-                    }else if (child.vote_val == -1) {
-                      list_elements += "class=\"nominate done-down\">";
-                      list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                      list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
-                      
-                    }
-                    list_elements += "</ul>";
+          cat_name = currentCatName()
+          console.log("refreshing handles for category: "+cat_name);
+          $.getJSON("/category/"+cat_name, function(result){
+              var list_elements = "";
+              
+              $.each(result, function(i, child){
+                  list_elements += "<li ";
+                  list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
+                  list_elements += "<div class=\"handle\">";
+                  list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
+                  list_elements += "<ul ";
+                  if (child.vote_val == 0) {
+                    list_elements += "class=\"nominate\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',1)\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1)\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                  }else if (child.vote_val==1) {
+                    list_elements += "class=\"nominate done-up\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                  }else if (child.vote_val == -1) {
+                    list_elements += "class=\"nominate done-down\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
                     
-                    
-
-                    list_elements += "<div class=\"clear\"></div></li>";
-                                      
-                    /*list_elements += "<li "
-                    list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D0D0D0\" ");
-                    list_elements += "><a href=\"#\">"+child.handle+"</a>";
-                    upvote_click_listener = child.vote_val == 0 ? "onclick=\"voteForHandle('"+child.handle+"',1)\"" : "";
-                    upvote_clicked = (child.vote_val == 1) ? "style=\"color:yellow\"":"";
-                    
-                    downvote_click_listener = child.vote_val == 0 ? " onclick=\"voteForHandle('"+child.handle+"',-1)\"" : " ";
-                    downvote_clicked = (child.vote_val == -1) ? " style=\"color:yellow\" ":"";
-                    
-                    list_elements += "<span "+upvote_click_listener+" class=\"genericon genericon-collapse\" "+upvote_clicked+"></span>";
-                    list_elements += "<span class=\"genericon genericon-expand\" "+downvote_click_listener+downvote_clicked+"></span></li>";*/
-                });
-            
-                //list_elements+="<div id=\"handle_input_area\"><input type=\"text\" id=\"handle_name\">";
-                //list_elements += "<input type=\"button\" id=\"submit_handle\" value=\"Nominate\"></div>";
-                $('#list-vote').html(list_elements);
-               
-            });
+                  }
+                  list_elements += "</ul>";
+                  list_elements += "<div class=\"clear\"></div></li>";
+              });
+              $('#list-vote').html(list_elements);
+             
+          });
         }
         function renderTweets(){
           $("#time").nextAll().remove();
