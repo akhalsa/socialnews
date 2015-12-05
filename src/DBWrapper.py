@@ -586,8 +586,8 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
         if(row[0] in user_vote_history):
             vote_val = user_vote_history[row[0]]
             
-        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "score":str(row[3]),
-                            "upvotes": str(row[4]), "downvotes":str(row[5]), "tracked":tracked})
+        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "profile_pic":row[3], "score":str(row[4]),
+                            "upvotes": str(row[5]), "downvotes":str(row[6]), "tracked":tracked})
         insertion_count += 1
         
     cursor.close()
