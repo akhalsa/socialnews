@@ -121,7 +121,7 @@
           console.log("refreshing handles for category: "+cat_name);
           $.getJSON("/category/"+cat_name, function(result){
               var list_elements = "";
-              
+              console.log("response handles for "+cat_name);
               $.each(result, function(i, child){
                   list_elements += "<li ";
                   list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
