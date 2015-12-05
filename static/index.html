@@ -116,29 +116,6 @@
             return cat_name;
         }
         
-        /*
-         *<li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
-                	<ul class="nominate done-up">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                
-          <li class="none-active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
-                	<ul class="nominate new-vote">
-                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
-                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                
-                <ul class="nominate">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                
-         *
-         */
         function loadHandles() {
             $.getJSON("/category/"+cat_name, function(result){
                 var list_elements = "";
@@ -151,15 +128,21 @@
                     list_elements += "<ul ";
                     if (child.vote_val == 0) {
                       list_elements += "class=\"nominate\">";
+                      list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',1)\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                      list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1)\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
                     }else if (child.vote_val==1) {
                       list_elements += "class=\"nominate done-up\">";
+                      list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                      list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
                     }else if (child.vote_val == -1) {
                       list_elements += "class=\"nominate done-down\">";
+                      list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                      list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                      
                     }
-                    
-                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
                     list_elements += "</ul>";
+                    
+                    
 
                     list_elements += "<div class=\"clear\"></div></li>";
                                       
