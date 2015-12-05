@@ -152,8 +152,6 @@
         function renderTweets(){
           $("#time").nextAll().remove();
           tweet_html = "";
-          console.log("rendering tweets with length: "+tweets.length);
-          console.log("last tweet: "+tweets[tweets.length-1].text);
           $.each(tweets, function(i, child){
             tweet_html += "<div class=\"con-tw\">";
             tweet_html += "<div class=\"wrap-user\">";
@@ -209,14 +207,11 @@
             console.log("done loading previews");
             return;
           }
-          console.log("tweet is: "+tweet);
-          console.log("we will now update tweet with id: "+tweet.id);
           $.getJSON("/page_load/twitter_id/"+tweet.id, function(result){
             local_tweet = null;
             
             $.each(tweets, function(i, child){
               if (child.id == result.id) {
-                console.log("found match");
                 local_tweet = child;
               }
             });
@@ -226,7 +221,6 @@
               local_tweet.link_url = result.link_url;
               local_tweet.title = result.title;
               local_tweet.checked = result.checked;
-              console.log("finished with tweet: "+tweet.text);
               renderTweets();
               findAndLoadNextPreview();
             }else{
