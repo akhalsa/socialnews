@@ -117,6 +117,7 @@
         }
         
         function loadHandles() {
+            console.log("refreshing handles for category: "+cat_name);
             $.getJSON("/category/"+cat_name, function(result){
                 var list_elements = "";
                 
