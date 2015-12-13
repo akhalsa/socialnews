@@ -128,9 +128,6 @@
                   list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
                   list_elements += "<div class=\"handle\">";
                   list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
-                  if (child.handle == "@RavensInsider") {
-                    console.log("ravens inside has pic url:"+child.profile_pic);
-                  }
                   list_elements += "<ul ";
                   if (child.vote_val == 0) {
                     list_elements += "class=\"nominate\">";
@@ -187,7 +184,7 @@
             }
             tweet_html += "</div></div>";
           });
-          $("#time").after(tweet_html);
+          //$("#time").after(tweet_html);
         }
         function loadTweets() {
             cat_name = currentCatName();

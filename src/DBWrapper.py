@@ -166,8 +166,11 @@ def getTweetOccurances(seconds, cat_id, local_db):
     
     cursor = local_db.cursor()
     sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image, "
-    sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked "
-    sql += " From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
+    sql += "Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked, SUM(case when VoteHistory.value >= 0 then VoteHistory.value else 0 end) as positive"
+    sql += "From Tweet Inner "
+    sql += "Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id "
+    sql += "Join VoteHistory ON TwitterSource.twitter_id = VoteHistory.twitter_id " 
+    sql += "WHERE Tweet.twitter_id in ("
 
     first_fin = False
     for t_id in twitter_ids:
@@ -178,7 +181,9 @@ def getTweetOccurances(seconds, cat_id, local_db):
                     
             sql += t_id
             
-    sql += ");"
+    sql += ") "
+    sql += "GROUP BY VoteHistory.twitter_id;"
+    print "sql is: "+sql
     
     cursor.execute(sql)
     for row in cursor.fetchall():
