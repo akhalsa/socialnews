@@ -152,6 +152,9 @@ class CategoryModel:
                     twitter_handle = row[2]
                     twitter_name = re.escape(row[1])
                     cursor.close()
+                
+                if(twitter_handle == "@RavensInsider"):
+                    print "loading ravens votes: "+str(twitter_handle)+ " with id: "+str(twitter_id)
                     
                 if(source_id != 0):
                     for cat_in_chain in category_chain:
