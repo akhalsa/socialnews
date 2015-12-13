@@ -51,7 +51,7 @@ def forward():
     sql += "PRIMARY KEY (ID), INDEX(timestamp));"
     executeSql(db, sql)
     print sql
-    sql = "ALTER TABLE SourceCategoryRelationship CHANGE source_id source_twitter_id INT;"
+    sql = "ALTER TABLE SourceCategoryRelationship CHANGE source_id source_twitter_id varchar(255);"
     executeSql(db, sql)
     
     sql = "ALTER TABLE Tweet ADD COLUMN blurb varchar(255),"
