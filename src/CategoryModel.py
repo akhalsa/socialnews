@@ -160,6 +160,8 @@ class CategoryModel:
                     for cat_in_chain in category_chain:
                         sql = "INSERT INTO VoteHistory(category_id, twitter_id, twitter_handle, twitter_name, value) VALUES "
                         sql += "("+cat_in_chain+", '"+twitter_id+"', '"+twitter_handle+"', '"+twitter_name+"', 1);"
+                        if(twitter_handle == "@RavensInsider"):
+                            print sql
                         self.executeSql(self.db, sql)
                 
                 
