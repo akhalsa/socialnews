@@ -181,7 +181,8 @@ def getTweetOccurances(seconds, cat_id, local_db):
                     
             sql += t_id
             
-    sql += ") "
+    sql += ") AND "
+    sql += "VoteHistory.category_id like "+str(cat_id)+" "
     sql += "GROUP BY VoteHistory.twitter_id;"
     print "sql is: "+sql
     
