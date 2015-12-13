@@ -169,7 +169,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
     sql += "Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked, SUM(case when VoteHistory.value >= 0 then VoteHistory.value else 0 end) as positive "
     sql += "From Tweet "
     sql += "Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id "
-    sql += "Inner Join VoteHistory ON TwitterSource.twitter_id = VoteHistory.twitter_id " 
+    sql += "Inner Join VoteHistory ON Tweet.source_twitter_id = VoteHistory.twitter_id " 
     sql += "WHERE Tweet.twitter_id in ("
 
     first_fin = False
