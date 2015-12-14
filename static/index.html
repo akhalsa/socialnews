@@ -128,9 +128,6 @@
                   list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
                   list_elements += "<div class=\"handle\">";
                   list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
-                  if (child.handle == "@RavensInsider") {
-                    console.log("ravens inside has pic url:"+child.profile_pic);
-                  }
                   list_elements += "<ul ";
                   if (child.vote_val == 0) {
                     list_elements += "class=\"nominate\">";
@@ -327,6 +324,32 @@
 </head>
 
 <body>
+<!-- popup overlay start -->
+<div class="overlay"></div>
+<div class="wrap-popup">
+	<div id="bt-close"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
+	<h3>Nominate a Handle</h3>
+    <!-- left box start -->
+    <div id="p-handle">
+    	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" /></div>
+        <ul id="open-handle-list">
+        	<li>@Con</li>
+            <li>@CNN_BreakingNews</li>
+            <li>@CNN_International</li>
+            <li>@Con_prime</li>
+            <li>@Last_Con</li>
+            <li>@News_Con</li>
+        </ul>
+    </div>
+    <!-- left box end -->
+    <!-- right box start -->
+    <div id="p-twit-list">
+    	<p id="nothing">Nothing to Display</p>
+    </div>
+    <!-- right box end -->
+    <div class="clear"></div>
+</div>
+<!-- popup overlay end -->
 <!-- header start -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid top-nav">
