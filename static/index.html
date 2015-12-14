@@ -90,6 +90,9 @@
           if (newState == false) {
             $('#overlay_id').hide();
             $('#popup_id').hide();
+          }else if (newState == true) {
+            $('#overlay_id').show();
+            $('#popup_id').show();
           }
           popupState = newState;
         }
@@ -363,7 +366,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid top-nav">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" onclick="setTopState(true)">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
