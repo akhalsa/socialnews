@@ -61,9 +61,11 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
         #this should get the full list of handles and their scores in the category
         cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
         handle_list = getAllHandlesForCategory(local_db, cat_id, self.request.remote_ip)
+        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
         print "got handle list:"
-        print handle_list
-        self.finish(json.dumps(handle_list))
+        self.finish(json.dumps({"handles":handle_list, "remaining_votes":(5 - votes_this_hour)}))
+        
+                    
 
 class HandleVoteReceiver(tornado.web.RequestHandler):
     def post(self,twitter_handle, category_name, positive  ):

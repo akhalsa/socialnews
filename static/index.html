@@ -135,7 +135,10 @@
           $.getJSON("/category/"+cat_name, function(result){
               var list_elements = "";
               console.log("response handles for "+cat_name);
-              $.each(result, function(i, child){
+              cats = result.handles;
+              vote_count = result.remaining_votes;
+              console.log("got remaining votes: "+vote_count);
+              $.each(cats, function(i, child){
                   console.log("populating handle: "+child.handle);
                   list_elements += "<li ";
                   list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
