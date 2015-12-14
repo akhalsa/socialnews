@@ -3,7 +3,8 @@
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 @import url(https://fonts.googleapis.com/css?family=Raleway:700,500);
 * {margin:0; padding:0;}
-body {margin:0 auto; font-family:Montserrat, Arial, Helvetica, sans-serif; background-color:#f7f7f7; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
+html, body{min-height: 100%;}
+body {position: relative; margin:0 auto; font-family:Montserrat, Arial, Helvetica, sans-serif; background-color:#f7f7f7; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
 a {text-decoration:none;}
 a:hover {text-decoration:none;}
 .clear {clear: both; display: block; visibility: hidden; line-height:0px;}
@@ -96,7 +97,8 @@ input {border:none;}
 #list-vote li {padding:5px 0 5px 5px;}
 #list-vote .active {background-color:#fff; border-bottom:1px solid #e1e1e1;}
 #list-vote .handle {float:left; font-size:12px;}
-#list-vote .nominate {float:right;}
+#list-vote .handle img {width:35px;}
+#list-vote .nominate {float:right; width:100px;}
 #list-vote .nominate li {padding:0;}
 #list-vote .none-active { border-bottom:1px solid #e1e1e1;}
 #list-vote .none-active img {opacity: 0.4; filter: alpha(opacity=40); /* For IE8 and earlier */}
@@ -115,8 +117,24 @@ input {border:none;}
 .done-up .genericon-expand, .done-down .genericon-collapse {background-color:#fff !important; color:#e1e1e1; margin-right: 0; padding-right:0;}
 .done-up a .genericon-expand, .done-down a .genericon-collapse {color:#e1e1e1 !important;}
 
+#list-vote .new-vote {width:60px;}
+
 /* popup */
-.wrap-popup {background-color:#fff; width:740px; height:450px; padding:30px;}
+.overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: rgba(0,0,0,0.5); /*dim the background*/
+}
+.wrap-popup {background-color:#fff; width:740px; height:450px; padding:30px;
+    position: fixed;
+    top: 20%;
+    left: 20%;
+    border-radius: 5px;
+    z-index: 11;}
 .wrap-popup #bt-close {text-align:right;}
 .wrap-popup #bt-close .genericon {font-size:22px;}
 .wrap-popup #bt-close a .genericon {color:#000;}
