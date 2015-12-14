@@ -138,6 +138,7 @@
               cats = result.handles;
               vote_count = result.remaining_votes;
               console.log("got remaining votes: "+vote_count);
+              $("#remaining_vote_count").html(vote_count+" Votes Left");
               $.each(cats, function(i, child){
                   console.log("populating handle: "+child.handle);
                   list_elements += "<li ";
@@ -383,9 +384,9 @@
         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
       </ul>
-      <ul id="bt-top-nominate"  onclick="setTopState(true)">
-      	<li id="bt-nom"><a href="#"><span class="genericon genericon-search"></span> Nominate</a></li>
-        <li><span class="genericon genericon-checkmark"></span>  5 Votes left <a href="#"><span class="genericon genericon-help"></span></a></li>
+      <ul id="bt-top-nominate"  >
+      	<li id="bt-nom" onclick="setTopState(true)"><a href="#"><span class="genericon genericon-search"></span> Nominate</a></li>
+        <li><span class="genericon genericon-checkmark"></span>  <span id="remaining_vote_count">5 Votes left</span> <a href="#"><span class="genericon genericon-help"></span></a></li>
         <div class="clear"></div>
       </ul>
     </div>

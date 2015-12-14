@@ -63,7 +63,7 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
         handle_list = getAllHandlesForCategory(local_db, cat_id, self.request.remote_ip)
         votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
         print "got handle list:"
-        self.finish(json.dumps({"handles":handle_list, "remaining_votes":(5 - votes_this_hour)}))
+        self.finish(json.dumps({"handles":handle_list, "remaining_votes":(10 - votes_this_hour)}))
         
                     
 
@@ -80,7 +80,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
         print "found votes this hour of: "+str(votes_this_hour)
-        if(votes_this_hour >= 50):
+        if(votes_this_hour >= 10):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
             return
         upvote = False
