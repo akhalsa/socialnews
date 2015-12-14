@@ -340,7 +340,7 @@
 <!-- popup overlay start -->
 <div class="overlay" id="overlay_id"></div>
 <div class="wrap-popup" id="popup_id">
-	<div id="bt-close"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
+	<div id="bt-close" onclick="setTopState(false)"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Nominate a Handle</h3>
     <!-- left box start -->
     <div id="p-handle">
@@ -380,7 +380,7 @@
         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
       </ul>
-      <ul id="bt-top-nominate" onclick="setTopState(true)">
+      <ul id="bt-top-nominate"  onclick="setTopState(true)">
       	<li id="bt-nom"><a href="#"><span class="genericon genericon-search"></span> Nominate</a></li>
         <li><span class="genericon genericon-checkmark"></span>  5 Votes left <a href="#"><span class="genericon genericon-help"></span></a></li>
         <div class="clear"></div>
