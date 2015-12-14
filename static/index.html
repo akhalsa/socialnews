@@ -74,7 +74,8 @@
         var tweets;
         
         var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-
+        
+        var popupState;
         
         $.getJSON("/category", function(result){
             category_structure = result;
@@ -82,8 +83,16 @@
             renderTimeFrame();
             loadTweets();
             loadHandles();
+            setTopState(false);
         });
         
+        function setTopState(newState){
+          if (newState == false) {
+            $('#overlay_id').hide();
+            $('#popup_id').hide();
+          }
+          popupState = newState;
+        }
         
         function nominateNewHandle() {
             var handle_string = $("#handle_name").val().trim();
@@ -325,8 +334,8 @@
 
 <body>
 <!-- popup overlay start -->
-<div class="overlay"></div>
-<div class="wrap-popup">
+<div class="overlay" id="overlay_id"></div>
+<div class="wrap-popup" id="popup_id">
 	<div id="bt-close"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Nominate a Handle</h3>
     <!-- left box start -->
