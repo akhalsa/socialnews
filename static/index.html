@@ -104,9 +104,13 @@
                 search_string_val = $('#search_text').val();
                 $.getJSON("/twitter/search/"+search_string_val, function(result){
                   if (result.search == $('#search_text').val()) {
+                    var list_of_suggestions_html = "";
+                    
                     $.each(result.handles, function(i, child){
                       console.log("will list: @"+child.screen_name);
+                      list_of_suggestions_html += "<li>@"+child.screen_name+"</li>";
                     });
+                    $('#open-handle-list').html(list_of_suggestions_html);
                     
                   }
                 });
