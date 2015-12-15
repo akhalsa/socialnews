@@ -65,6 +65,8 @@
         var selected_secondary_index = -1;
         var selected_third_index = -1;
         
+        var search_string_val;
+        
         var time_frame_index = 0;
         var time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
                            {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
@@ -92,11 +94,18 @@
             $('#overlay_id').hide();
             $('#popup_id').hide();
             $('#search_text').unbind('keyup input paste');
+            search_string_val = "";
+            $('#search_text').val(search_string_val);
           }else if (newState == true) {
             $('#overlay_id').show();
             $('#popup_id').show();
+            
             $('#search_text').bind("keyup input paste", function(event) {
-              console.log( "Handler for .change() called."+$('#search_text').val() );
+              if(search_string_val != $('#search_text').val()){
+                search_string_val = $('#search_text').val();
+                console.log( "Handler for .change() called."+$('#search_text').val() );
+              }
+              
             });
           }
           popupState = newState;
