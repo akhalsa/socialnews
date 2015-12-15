@@ -166,7 +166,7 @@ class PageLoad(tornado.web.RequestHandler):
 class Twitter(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, search_string):
-        response = api.search_users("q=\""+search_string+"\"", 5, 1);
+        response = api.search_users(search_string, 5, 1);
         for match in response:
             print "found match: "+match.name
         print "done matching"
