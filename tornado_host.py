@@ -170,7 +170,7 @@ class Twitter(tornado.web.RequestHandler):
             self.finish(json.dumps([]))
             return
         
-        response = api.search_users(search_string, 5, 1);
+        response = api.search_users(screen_name = search_string, 5, 1);
         response_list = []
         for user in response:
             response_list.append({"name":user.name, "twitter_id": user.id, "screen_name":user.screen_name})
