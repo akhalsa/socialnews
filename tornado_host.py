@@ -166,7 +166,7 @@ class PageLoad(tornado.web.RequestHandler):
 class Twitter(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, search_string):
-        print "got string: "+search_string
+        print self.finish(json.dumps({"search":search_string}))
     
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous

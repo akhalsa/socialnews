@@ -103,7 +103,9 @@
             $('#search_text').bind("keyup input paste", function(event) {
               if(search_string_val != $('#search_text').val()){
                 search_string_val = $('#search_text').val();
-                console.log( "Handler for .change() called."+$('#search_text').val() );
+                $.getJSON("/twitter/search/"+search_string_val, function(result){
+                  console.log("response: "+result);
+                });
               }
               
             });
