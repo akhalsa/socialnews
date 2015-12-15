@@ -94,18 +94,20 @@
             $('#overlay_id').hide();
             $('#popup_id').hide();
             $('#search_text').unbind('keyup input paste');
-            search_string_val = "";
-            $('#search_text').val(search_string_val);
           }else if (newState == true) {
             $('#overlay_id').show();
             $('#popup_id').show();
-            
+            search_string_val = "";
+            $('#search_text').val(search_string_val);
             $('#search_text').bind("keyup input paste", function(event) {
               if(search_string_val != $('#search_text').val()){
                 search_string_val = $('#search_text').val();
                 $.getJSON("/twitter/search/"+search_string_val, function(result){
                   if (result.search == $('#search_text').val()) {
-                    console.log("will update with results for: "+result.search);
+                    $.each(result.handles, function(i, child){
+                      console.log("will list: @"+child.screen_name);
+                    });
+                    
                   }
                 });
               }

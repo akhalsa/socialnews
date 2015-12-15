@@ -175,7 +175,7 @@ class Twitter(tornado.web.RequestHandler):
         for user in response:
             response_list.append({"name":user.name, "twitter_id": user.id, "screen_name":user.screen_name})
         
-        response_full = {"search":search_string, "results":response_list}
+        response_full = {"search":search_string, "handles":response_list}
         
         print json.dumps(response_full)
         self.finish(json.dumps(response_full))
