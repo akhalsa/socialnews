@@ -174,7 +174,7 @@ class Twitter(tornado.web.RequestHandler):
         response_serial = []
         for user in response:
             response_serial.append({"name":user.name, "twitter_id": user.id, "screen_name":user.screen_name})
-
+        print json.dumps(response_serial)
         self.finish(json.dumps(response_serial))
     
 class IndexHandler(tornado.web.RequestHandler):
