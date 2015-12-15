@@ -171,11 +171,14 @@ class Twitter(tornado.web.RequestHandler):
             return
         
         response = api.search_users(search_string, 5, 1);
-        response_serial = []
+        response_list = []
         for user in response:
-            response_serial.append({"name":user.name, "twitter_id": user.id, "screen_name":user.screen_name})
-        print json.dumps(response_serial)
-        self.finish(json.dumps(response_serial))
+            response_list.append({"name":user.name, "twitter_id": user.id, "screen_name":user.screen_name})
+        
+        response_full = {"search":search_string, "results":response_list}
+        
+        print json.dumps(response_full)
+        self.finish(json.dumps(response_full))
     
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
