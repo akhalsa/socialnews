@@ -91,9 +91,13 @@
           if (newState == false) {
             $('#overlay_id').hide();
             $('#popup_id').hide();
+            $('#search_text').change(function() {
+              alert( "Handler for .change() called." );
+            });
           }else if (newState == true) {
             $('#overlay_id').show();
             $('#popup_id').show();
+            $('#search_text').unbind('change');
           }
           popupState = newState;
         }
@@ -348,7 +352,7 @@
 	<h3>Nominate a Handle</h3>
     <!-- left box start -->
     <div id="p-handle">
-    	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" /></div>
+    	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" id="search_text"/></div>
         <ul id="open-handle-list">
         	<li>@Con</li>
             <li>@CNN_BreakingNews</li>

@@ -162,6 +162,11 @@ class PageLoad(tornado.web.RequestHandler):
             updateTweet(tweet_dict["text"], twitter_id, local_db)
         tweet_dict = getTweetWithTwitterId(local_db, twitter_id)
         self.finish(json.dumps(tweet_dict))
+        
+class Twitter(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self, search_string):
+        print "got string: "+search_string
     
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -176,6 +181,7 @@ app = tornado.web.Application([
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/twitter_id/(.*)',  PageLoad),
+    (r'/twitter/search/(.*)', Twitter)
 ])
 
 if __name__ == '__main__':
