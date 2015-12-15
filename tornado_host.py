@@ -166,6 +166,10 @@ class PageLoad(tornado.web.RequestHandler):
 class Twitter(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, search_string):
+        response = api.search_users("q=\""+search_string+"\"", 5, 1);
+        for match in response:
+            print "found match: "+match.name
+        print "done matching"
         print self.finish(json.dumps({"search":search_string}))
     
 class IndexHandler(tornado.web.RequestHandler):
