@@ -172,7 +172,7 @@ class Twitter(tornado.web.RequestHandler):
         
         response = api.search_users(search_string, 5, 1);
 
-        self.finish(json.dumps(response))
+        self.finish(response)
     
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
