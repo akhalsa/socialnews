@@ -103,6 +103,10 @@
             $('#search_text').bind("keyup input paste", function(event) {
               if(search_string_val != $('#search_text').val()){
                 search_string_val = $('#search_text').val();
+                if (search_string_val == "@") {
+                  $('#open-handle-list').html("");
+                  return;
+                }
                 $.getJSON("/twitter/search/"+search_string_val, function(result){
                   if (result.search == $('#search_text').val()) {
                     var list_of_suggestions_html = "";
