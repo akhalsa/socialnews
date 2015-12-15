@@ -91,13 +91,13 @@
           if (newState == false) {
             $('#overlay_id').hide();
             $('#popup_id').hide();
-            $('#search_text').bind('input', function() {
-              console.log( "Handler for .change() called." );
-            });
+            $('#search_text').unbind('change');
           }else if (newState == true) {
             $('#overlay_id').show();
             $('#popup_id').show();
-            $('#search_text').unbind('input');
+            $('#search_text').change(function() {
+              console.log( "Handler for .change() called." );
+            });
           }
           popupState = newState;
         }
