@@ -91,12 +91,12 @@
           if (newState == false) {
             $('#overlay_id').hide();
             $('#popup_id').hide();
-            $('#search_text').unbind('propertychange change click keyup input paste');
+            $('#search_text').unbind('keyup input paste');
           }else if (newState == true) {
             $('#overlay_id').show();
             $('#popup_id').show();
-            $('#search_text').bind("propertychange change click keyup input paste", function(event) {
-              console.log( "Handler for .change() called." );
+            $('#search_text').bind("keyup input paste", function(event) {
+              console.log( "Handler for .change() called."+$('#search_text').val() );
             });
           }
           popupState = newState;
