@@ -167,7 +167,7 @@ class Twitter(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, search_string):
         if(search_string == ""):
-            self.finish(json.dumps([]))
+            self.finish(json.dumps({"search":"", "handles":""}))
             return
         
         response = api.search_users(search_string, 5, 1);
