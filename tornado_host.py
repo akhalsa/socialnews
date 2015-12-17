@@ -179,6 +179,14 @@ class Twitter(tornado.web.RequestHandler):
         
         print json.dumps(response_full)
         self.finish(json.dumps(response_full))
+        
+class TwitterTimeline(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self, search_string):
+        response = api.user_timeline(screen_name=search_string, count=5)
+        for status in response:
+            print status.id, status.user
+        self.finish(json.dumps([]))
     
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -193,7 +201,8 @@ app = tornado.web.Application([
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/twitter_id/(.*)',  PageLoad),
-    (r'/twitter/search/(.*)', Twitter)
+    (r'/twitter/search/(.*)', Twitter),
+    (r'/twitter/timeline/(.*)', TwitterTimeline)
 ])
 
 if __name__ == '__main__':
