@@ -186,6 +186,7 @@ class TwitterTimeline(tornado.web.RequestHandler):
         response = api.user_timeline(screen_name=search_string, count=5)
         for status in response:
             target_url = "https://api.twitter.com/1.1/statuses/oembed.json?id="+str(status.id)
+            print target_url
             response = urllib2.urlopen(target_url)
             dictionary = json.loads(response.read())
             print dictionary["html"]
