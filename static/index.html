@@ -116,7 +116,7 @@
                       
                       $.each(result.handles, function(i, child){
                         console.log("will list: @"+child.screen_name);
-                        list_of_suggestions_html += "<li onclick=\"searchHandleClicked('"+child.screen_name+"')\">@"+child.screen_name+"</li>";
+                        list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
                       });
                       $('#open-handle-list').html(list_of_suggestions_html);
                       
