@@ -89,7 +89,9 @@
         });
         function searchHandleClicked(handle){
           $.getJSON("/twitter/timeline/"+handle, function(result){
-            console.log(result);
+            $.each(result, function(i, child){
+              console.log(child);
+            }
           });
           
         }
