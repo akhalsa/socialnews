@@ -89,9 +89,12 @@
         });
         function searchHandleClicked(handle){
           $.getJSON("/twitter/timeline/"+handle, function(result){
+            $('#p-tweet-container').html("");
+            var tweet_cont = "";
             $.each(result, function(i, child){
-              console.log(child);
+              tweet_cont+= child;
             });
+            $('#p-tweet-container').html(tweet_cont);
           });
           
         }
@@ -399,7 +402,7 @@
     <!-- left box end -->
     <!-- right box start -->
     <div id="p-twit-list">
-      <div class="twitter-tweet-wrap">
+      <div class="twitter-tweet-wrap" id="p-tweet-container">
     	<blockquote class="twitter-tweet"><p>Happy 50th anniversary to the Wilderness Act! Here's a great wilderness photo from <a href="https://twitter.com/YosemiteNPS">@YosemiteNPS</a>. <a href="https://twitter.com/hashtag/Wilderness50?src=hash">#Wilderness50</a> <a href="http://t.co/HMhbyTg18X">pic.twitter.com/HMhbyTg18X</a></p>US Dept of Interior (@Interior) <a href="https://twitter.com/Interior/status/507185938620219395">September 3, 2014</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
         <blockquote class="twitter-tweet"><p>Happy 50th anniversary to the Wilderness Act! Here's a great wilderness photo from <a href="https://twitter.com/YosemiteNPS">@YosemiteNPS</a>. <a href="https://twitter.com/hashtag/Wilderness50?src=hash">#Wilderness50</a> <a href="http://t.co/HMhbyTg18X">pic.twitter.com/HMhbyTg18X</a></p>US Dept of Interior (@Interior) <a href="https://twitter.com/Interior/status/507185938620219395">September 3, 2014</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
