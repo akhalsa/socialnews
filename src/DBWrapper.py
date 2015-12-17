@@ -239,12 +239,15 @@ def insertBatch(insertion_map, local_db):
 def batchInsertTweet(tweets, local_db):
     sql ="INSERT IGNORE INTO Tweet(source_twitter_id, text, twitter_id) VALUES "
     for tweet in tweets:
+        print "process: "
+        print tweets[tweet]["text"]
         text_string = tweets[tweet]["text"].encode('utf-8')
         sql += "('"+str(tweets[tweet]["twitter_user_id"])+"', '"+MySQLdb.escape_string(text_string)+"', '"+str(tweet)+"'), "
         
     if(len(tweets)>0):
         sql = sql[:-2]
     
+    print sql
     cursor = local_db.cursor()
     try:
         # Execute the SQL command
