@@ -1,3 +1,4 @@
+
 @charset "UTF-8";
 /* Default */
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
@@ -166,8 +167,12 @@ input {border:none;}
 .wrap-popup #p-result img {float:left; margin:0 15px 15px 0;}
 .wrap-popup #p-result h4 {color:#000; font-weight:700; font-size:16px; margin-bottom:5px;}
 
+.wrap-popup .twitter-tweet-wrap {height:240px; overflow-y:scroll;}
+
 @media (max-width: 980px) {
 	.col-xs-2 {
     width: 165px;
 }
 }
+style.cssOpen
+Displaying style.css.
