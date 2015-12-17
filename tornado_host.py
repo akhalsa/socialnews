@@ -184,14 +184,15 @@ class TwitterTimeline(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, search_string):
         response = api.user_timeline(screen_name=search_string, count=5)
+        tweets = []
         for status in response:
             target_url = "https://api.twitter.com/1/statuses/oembed.json?id="+str(status.id)
             print target_url
             response = urllib2.urlopen(target_url)
             dictionary = json.loads(response.read())
-            print dictionary["html"]
+            tweets.append(dictionary["html"])
             
-        self.finish(json.dumps([]))
+        self.finish(json.dumps(tweets))
     
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
