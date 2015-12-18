@@ -130,7 +130,7 @@
                       $.each(result.handles, function(i, child){
                         if (("@"+child.screen_name) == $('#search_text').val()) {
                           //button should be active
-                          $('#button-container').html("<button class=\"p-bt-blue\">Ok</button>");
+                          $('#button-container').html("<button class=\"p-bt-blue\">Nominate: "+"@"+child.screen_name+"</button>");
                           found_text_match = true;
                           triggerSearch($('#search_text').val());
                           
@@ -139,7 +139,7 @@
                         list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
                       });
                       if (!found_text_match) {
-                        $('#button-container').html("<button class=\"p-bt-gray\">Ok</button>");
+                        $('#button-container').html("<button class=\"p-bt-gray\">Search</button>");
                       }
                       $('#open-handle-list').html(list_of_suggestions_html);
                       
