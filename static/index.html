@@ -150,8 +150,7 @@
             $('#open-handle-list').html("");
             $('#search_text').val(search_string_val);
             $('#search_text').bind("keyup input paste", function(event) {
-              
-              
+              updatePreview();
             });
           }
           popupState = newState;
