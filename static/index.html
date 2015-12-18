@@ -114,21 +114,20 @@
             $.getJSON("/twitter/search/"+search_string_val, function(result){
               if (result.search == $('#search_text').val()) {
                 var list_of_suggestions_html = "";
-                var found_text_match = false;
-                
+                var text_match = "";
                 $.each(result.handles, function(i, child){
                   if (("@"+child.screen_name) == $('#search_text').val()) {
                     //button should be active
-                    found_text_match = true;
+                    text_match = "@"+child.screen_name
                   }
                   console.log("will list: @"+child.screen_name);
                   list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
                 });
-                if (found_text_match) {
+                if (text_match != "") {
                   console.log("text match");
                   $('#nothing').hide();
                   $('#p-tweet-container').show();
-                  $('#button-container').html("<button class=\"p-bt-blue\">Nominate: "+"@"+child.screen_name+"</button>");
+                  $('#button-container').html("<button class=\"p-bt-blue\">Nominate: "+text_match+"</button>");
                   triggerSearch($('#search_text').val());
                 }else{
                   console.log("text mis match");
