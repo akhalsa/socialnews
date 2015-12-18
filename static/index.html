@@ -171,6 +171,8 @@
             if(patt.test(handle_string)){
                 console.log("valid twitter handle");
                 voteForHandle(handle_string, 1);
+                setTopState(false);
+                loadHandles();
             }else{
                 alert("Please enter a valid twitter handle");
             }
