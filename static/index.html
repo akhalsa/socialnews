@@ -125,11 +125,13 @@
                   list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
                 });
                 if (found_text_match) {
+                  console.log("text match");
                   $('#nothing').hide();
                   $('#p-tweet-container').show();
                   $('#button-container').html("<button class=\"p-bt-blue\">Nominate: "+"@"+child.screen_name+"</button>");
                   triggerSearch($('#search_text').val());
                 }else{
+                  console.log("text mis match");
                   $('#button-container').html("");
                   $('#nothing').show();
                   $('#p-tweet-container').hide();
