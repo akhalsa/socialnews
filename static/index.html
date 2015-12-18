@@ -124,7 +124,7 @@
                       var found_text_match = false;
                       
                       $.each(result.handles, function(i, child){
-                        if (child.screen_name == $('#search_text').val()) {
+                        if (("@"+child.screen_name) == $('#search_text').val()) {
                           console.log("text match");
                         }
                         console.log("will list: @"+child.screen_name);
