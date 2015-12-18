@@ -108,8 +108,11 @@
         function updatePreview(){
           if(search_string_val != $('#search_text').val()){
             search_string_val = $('#search_text').val();
-            if (search_string_val == "@") {
+            if ((search_string_val == "@")||(search_string_val == "")) {
               $('#open-handle-list').html("");
+              $('#button-container').html("");
+              $('#nothing').show();
+              $('#p-tweet-container').hide();
               return;
             }
             $.getJSON("/twitter/search/"+search_string_val, function(result){
