@@ -87,7 +87,7 @@
             loadHandles();
             setTopState(false);
         });
-        function searchHandleClicked(handle){
+        function triggerSearch(handle){
           $.getJSON("/twitter/timeline/"+handle, function(result){
             $('#p-tweet-container').html("");
             var tweet_cont = "";
@@ -97,6 +97,10 @@
             $('#p-tweet-container').html(tweet_cont);
           });
           
+        }
+        function searchHandleClicked(handle){
+          $('#search_text').val(handle);
+          triggerSearch(handle);
         }
         
         function setTopState(newState){
@@ -128,6 +132,7 @@
                           //button should be active
                           $('#button-container').html("<button class=\"p-bt-blue\">Ok</button>");
                           found_text_match = true;
+                          triggerSearch($('#search_text').val());
                           
                         }
                         console.log("will list: @"+child.screen_name);
