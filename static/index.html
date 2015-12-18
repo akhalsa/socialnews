@@ -128,13 +128,11 @@
                   list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
                 });
                 if (text_match != "") {
-                  console.log("text match");
                   $('#nothing').hide();
                   $('#p-tweet-container').show();
-                  $('#button-container').html("<button class=\"p-bt-blue\">Nominate: "+text_match+"</button>");
+                  $('#button-container').html("<button class=\"p-bt-blue\" onclick=\"nominateNewHandle()\">Nominate: "+text_match+"</button>");
                   triggerSearch($('#search_text').val());
                 }else{
-                  console.log("text mis match");
                   $('#button-container').html("");
                   $('#nothing').show();
                   $('#p-tweet-container').hide();
@@ -167,8 +165,7 @@
         }
         
         function nominateNewHandle() {
-            var handle_string = $("#handle_name").val().trim();
-            $("#handle_name").val('');
+            var handle_string = $('#search_text').val().trim();
             console.log("running check for: "+handle_string);
             var patt = /^@(\w){1,15}$/;
             if(patt.test(handle_string)){
