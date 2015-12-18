@@ -121,8 +121,12 @@
                   $.getJSON("/twitter/search/"+search_string_val, function(result){
                     if (result.search == $('#search_text').val()) {
                       var list_of_suggestions_html = "";
+                      var found_text_match = false;
                       
                       $.each(result.handles, function(i, child){
+                        if (child.screen_name == $('#search_text').val()) {
+                          console.log("text match");
+                        }
                         console.log("will list: @"+child.screen_name);
                         list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
                       });
