@@ -119,20 +119,20 @@
                 $.each(result.handles, function(i, child){
                   if (("@"+child.screen_name) == $('#search_text').val()) {
                     //button should be active
-                    $('#nothing').hide();
-                    $('#p-tweet-container').show();
-                    $('#button-container').html("<button class=\"p-bt-blue\">Nominate: "+"@"+child.screen_name+"</button>");
                     found_text_match = true;
-                    triggerSearch($('#search_text').val());
-                    
                   }
                   console.log("will list: @"+child.screen_name);
                   list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
                 });
-                if (!found_text_match) {
+                if (found_text_match) {
+                  $('#nothing').hide();
+                  $('#p-tweet-container').show();
+                  $('#button-container').html("<button class=\"p-bt-blue\">Nominate: "+"@"+child.screen_name+"</button>");
+                  triggerSearch($('#search_text').val());
+                }else{
                   $('#button-container').html("");
                   $('#nothing').show();
-                    $('#p-tweet-container').hide();
+                  $('#p-tweet-container').hide();
                   
                 }
                 $('#open-handle-list').html(list_of_suggestions_html);
@@ -425,7 +425,7 @@
     <!-- right box start -->
     <div id="p-twit-list">
       <p id="nothing">Nothing to Display</p>
-      <div class="twitter-tweet-wrap" id="p-tweet-container" style="visibility:hidden">
+      <div class="twitter-tweet-wrap" id="p-tweet-container">
     	<blockquote class="twitter-tweet"><p>Happy 50th anniversary to the Wilderness Act! Here's a great wilderness photo from <a href="https://twitter.com/YosemiteNPS">@YosemiteNPS</a>. <a href="https://twitter.com/hashtag/Wilderness50?src=hash">#Wilderness50</a> <a href="http://t.co/HMhbyTg18X">pic.twitter.com/HMhbyTg18X</a></p>US Dept of Interior (@Interior) <a href="https://twitter.com/Interior/status/507185938620219395">September 3, 2014</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
         <blockquote class="twitter-tweet"><p>Happy 50th anniversary to the Wilderness Act! Here's a great wilderness photo from <a href="https://twitter.com/YosemiteNPS">@YosemiteNPS</a>. <a href="https://twitter.com/hashtag/Wilderness50?src=hash">#Wilderness50</a> <a href="http://t.co/HMhbyTg18X">pic.twitter.com/HMhbyTg18X</a></p>US Dept of Interior (@Interior) <a href="https://twitter.com/Interior/status/507185938620219395">September 3, 2014</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
