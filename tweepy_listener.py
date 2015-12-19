@@ -135,16 +135,16 @@ class HandleListener(tweepy.StreamListener):
                     
         def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object, unique_ids):
             try:
-                categories = self.mapping[str(json_object['user']['id'])]
-                if(categories):
-                    for cat in categories:
-                        if cat not in batchDictionary:
-                            batchDictionary[cat] = []
-                            
-                        batchDictionary[cat].append(json_object['id'])
-                                            
-                    unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
-                    return True
+                if(str(json_object['user']['id']) in self.mapping):
+                        categories = self.mapping[str(json_object['user']['id'])]
+                        for cat in categories:
+                            if cat not in batchDictionary:
+                                batchDictionary[cat] = []
+                                
+                            batchDictionary[cat].append(json_object['id'])
+                                                
+                        unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
+                        return True
                 
             except KeyError, e:
                 print "we got a key error so we're just dropping out"
