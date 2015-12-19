@@ -634,6 +634,7 @@ def reloadSourceCategoryRelationship(local_db):
     for row in categories:
         cursor = local_db.cursor()
         cat_id = row[0]
+        print "loading with category id: "+str(cat_id)
         #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
         sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
         print "doing select with sql: "
