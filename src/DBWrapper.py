@@ -635,7 +635,7 @@ def reloadSourceCategoryRelationship(local_db):
         cursor = local_db.cursor()
         cat_id = row[0]
         #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
-        sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" AND SUM(value) > 4 GROUP BY twitter_id ORDER BY vote_count DESC;"
+        sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
         print "doing select with sql: "
         print sql
         cursor.execute(sql)
@@ -644,13 +644,18 @@ def reloadSourceCategoryRelationship(local_db):
         cursor.close()
         cursor = local_db.cursor()
         sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
-        
+        handle_index = 0
         for vote_record in votes_records:
+            if(vote_record[1] <= 4):
+                continue
+            
             sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
             
             if vote_record[0] not in mapping:
                 mapping[vote_record[0]] = []
             mapping[vote_record[0]].append(cat_id)
+            handle_index += 1
+            
             
         
         if(handle_index == 0):
