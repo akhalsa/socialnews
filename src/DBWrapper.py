@@ -576,9 +576,9 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
     return_list = []
     insertion_count = 0
     for row in cursor.fetchall() :
-        tracked = 0
-        if (row[4] < 4):
-                tracked = 1
+        tracked = 1
+        if (row[4] <= 4):
+                tracked = 0
         
         vote_val = 0
         if(row[0] in user_vote_history):
@@ -634,11 +634,9 @@ def reloadSourceCategoryRelationship(local_db):
     for row in categories:
         cursor = local_db.cursor()
         cat_id = row[0]
-        print "loading with category id: "+str(cat_id)
         #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
         sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
-        print "doing select with sql: "
-        print sql
+
         cursor.execute(sql)
         total_nominated_handles = cursor.rowcount
         votes_records = cursor.fetchall()
