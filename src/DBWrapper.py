@@ -574,12 +574,10 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
     print "will find handles w sql: "+sql
     cursor.execute(sql)
     return_list = []
-    total_nominated_handles = cursor.rowcount
-    tracked_handles_count = returnCutOffCount(total_nominated_handles)
     insertion_count = 0
     for row in cursor.fetchall() :
         tracked = 0
-        if (insertion_count < tracked_handles_count):
+        if (row[4] < 4):
                 tracked = 1
         
         vote_val = 0
@@ -609,10 +607,8 @@ def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_lin
             
     cursor.close()
 
-def returnCutOffCount(total_nominated_handles):
-    return max(25, int(total_nominated_handles/2))
-
 def reloadSourceCategoryRelationship(local_db):
+    mapping = {}
     cursor = local_db.cursor()
     sql = "DELETE FROM SourceCategoryRelationship;"
     try:
@@ -639,23 +635,22 @@ def reloadSourceCategoryRelationship(local_db):
         cursor = local_db.cursor()
         cat_id = row[0]
         #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
-        sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+        sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" AND vote_count > 4 GROUP BY twitter_id ORDER BY vote_count DESC;"
         
         cursor.execute(sql)
         total_nominated_handles = cursor.rowcount
         votes_records = cursor.fetchall()
         cursor.close()
         cursor = local_db.cursor()
-        #simple algorithm... lets insert the top 25
-        count_tracked_handles = returnCutOffCount(total_nominated_handles)
-        handle_index = 0
         sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
         
         for vote_record in votes_records:
-            if (handle_index == count_tracked_handles):
-                break
             sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
-            handle_index += 1
+            
+            if vote_record[0] not in mapping:
+                mapping[vote_record[0]] = []
+            mapping[vote_record[0]].append(cat_id)
+            
         
         if(handle_index == 0):
             #no votes for anyone in this category...move along
@@ -676,6 +671,7 @@ def reloadSourceCategoryRelationship(local_db):
             print str(e)
             local_db.rollback()
         cursor.close()
+        return mapping
         
 def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor = local_db.cursor()

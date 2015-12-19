@@ -61,7 +61,9 @@ class HandleListener(tweepy.StreamListener):
                                 db="newsdb",
                                 charset='utf8',
                                 port=3306)
-                        reloadSourceCategoryRelationship(db)
+                        mapping = reloadSourceCategoryRelationship(db)
+                print "new mapping: "
+                print mapping
                 time.sleep(delay)
                 print "starting to set up socket listen on new thread"
                 self.kickoff_time = datetime.datetime.now()
