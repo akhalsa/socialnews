@@ -61,9 +61,7 @@ class HandleListener(tweepy.StreamListener):
                                 db="newsdb",
                                 charset='utf8',
                                 port=3306)
-                        mapping = reloadSourceCategoryRelationship(db)
-                print "new mapping: "
-                print mapping
+                        self.mapping = reloadSourceCategoryRelationship(db)
                 time.sleep(delay)
                 print "starting to set up socket listen on new thread"
                 self.kickoff_time = datetime.datetime.now()
@@ -137,7 +135,9 @@ class HandleListener(tweepy.StreamListener):
                     
         def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object, unique_ids):
             try:
-                categories = getCategoriesForTwitterUserId(db, str(json_object['user']['id']))
+                categories = self.mapping[json_object['user']['id']]
+                print "found categories: "
+                print categories
                 if(categories):
                     for cat in categories:
                         if cat not in batchDictionary:
