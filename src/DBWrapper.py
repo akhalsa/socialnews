@@ -637,6 +637,7 @@ def reloadSourceCategoryRelationship(local_db):
         #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
         sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" AND SUM(value) > 4 GROUP BY twitter_id ORDER BY vote_count DESC;"
         print "doing select with sql: "
+        print sql
         cursor.execute(sql)
         total_nominated_handles = cursor.rowcount
         votes_records = cursor.fetchall()
