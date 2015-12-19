@@ -135,7 +135,7 @@ class HandleListener(tweepy.StreamListener):
                     
         def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object, unique_ids):
             try:
-                categories = self.mapping[json_object['user']['id']]
+                categories = self.mapping[str(json_object['user']['id'])]
                 print "found categories: "
                 print categories
                 if(categories):
