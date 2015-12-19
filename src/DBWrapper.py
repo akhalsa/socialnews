@@ -678,7 +678,8 @@ def reloadSourceCategoryRelationship(local_db):
             print str(e)
             local_db.rollback()
         cursor.close()
-        return mapping
+        
+    return mapping
         
 def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor = local_db.cursor()
