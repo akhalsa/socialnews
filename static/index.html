@@ -157,6 +157,7 @@
             search_string_val = "";
             $('#open-handle-list').html("");
             $('#search_text').val(search_string_val);
+            $('#popup_title_label').html("Nominate a Handle for "+currentCatName());
             $('#search_text').bind("keyup input paste", function(event) {
               updatePreview();
             });
@@ -412,12 +413,12 @@
 <div class="overlay" id="overlay_id"></div>
 <div class="wrap-popup" id="popup_id">
 	<div id="bt-close" onclick="setTopState(false)"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
-	<h3>Nominate a Handle</h3>
+	<h3 id="popup_title_label">Nominate a Handle For </h3>
     <!-- left box start -->
     <div id="p-handle">
     	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" id="search_text"/></div>
         <ul id="open-handle-list">
-        	<li>@Con</li>
+            <li>@Con</li>
             <li>@CNN_BreakingNews</li>
             <li>@CNN_International</li>
             <li>@Con_prime</li>
