@@ -101,6 +101,8 @@
         
         var popupState;
         
+        var tweet_loader;
+        
         $.getJSON("/category", function(result){
             category_structure = result;
             renderTopNav();
@@ -188,6 +190,9 @@
         }
         
         function nominateNewHandle() {
+            if (tweet_loader != null) {
+              tweet_loader.abort();
+            }
             var handle_string = $('#search_text').val().trim();
             console.log("running check for: "+handle_string);
             var patt = /^@(\w){1,15}$/;
@@ -203,6 +208,9 @@
         }
         
         function voteForHandle(handle_string, value) {
+          if (tweet_loader != null) {
+            tweet_loader.abort();
+          }
           trackVote();
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
             loadHandles();
@@ -318,7 +326,8 @@
             console.log("done loading previews");
             return;
           }
-          $.getJSON("/page_load/twitter_id/"+tweet.id, function(result){
+          tweet_loader = $.getJSON("/page_load/twitter_id/"+tweet.id, function(result){
+            tweet_loader = null;
             local_tweet = null;
             
             $.each(tweets, function(i, child){
@@ -400,6 +409,9 @@
             selected_secondary_index = j;
             selected_third_index = k;
             selected_top_index = i;
+            if (tweet_loader != null) {
+              tweet_loader.abort();
+            }
             renderTopNav();
             loadTweets();
             loadHandles();
