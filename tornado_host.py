@@ -101,6 +101,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             self.finish("bad category name")
             return
         if(alreadyVoted(local_db, self.request.remote_ip,  cat_id)):
+            print "already voted returned true"
             self.finish("{'message': 'you already voted for this handle'}")
             return
         
