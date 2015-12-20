@@ -688,9 +688,9 @@ def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor.close()
     return cats
     
-def alreadyVoted(local_db, ip_address, category_id):
+def alreadyVoted(local_db, ip_address, category_id, twitter_id):
     cursor = local_db.cursor()
-    sql = "SELECT ID From VoteHistory WHERE ip_address like '"+str(ip_address)+"' and category_id like "+str(category_id)+";"
+    sql = "SELECT ID From VoteHistory WHERE ip_address like '"+str(ip_address)+"' and twitter_id like '"+twitter_id+"' and category_id like "+str(category_id)+";"
     print "sql: "+sql
     cursor.execute(sql)
     row_count = cursor.rowcount

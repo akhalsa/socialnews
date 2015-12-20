@@ -100,10 +100,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         if(cat_id == 0):
             self.finish("bad category name")
             return
-        if(alreadyVoted(local_db, self.request.remote_ip,  cat_id)):
-            print "already voted returned true"
-            self.finish("{'message': 'you already voted for this handle'}")
-            return
+        
         
         table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
         print "table info for that handle is: "+str(table_info)
@@ -123,6 +120,10 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 print e
                 self.finish("bad handle/insertion")
                 return
+        if(alreadyVoted(local_db, self.request.remote_ip,  cat_id, table_info["twitter_id"])):
+            print "already voted returned true"
+            self.finish("{'message': 'you already voted for this handle'}")
+            return
         insertVote(local_db, self.request.remote_ip, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
         
         self.finish("200")
