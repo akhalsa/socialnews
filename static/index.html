@@ -47,6 +47,18 @@
         }
     }
     
+    var trackVote = function(){
+      if(window.location.href.indexOf("filtra.io") > -1){
+        ga('send', 'event', 'vote', 'vote');
+      }
+    }
+    
+    var trackNomination = function(handle){
+      if(window.location.href.indexOf("filtra.io") > -1){
+        ga('send', 'event', 'vote', 'nomination', handle);
+      }
+    }
+    
     var trackTimeRangeSelection = function(seconds){
         if(window.location.href.indexOf("filtra.io") > -1){
             ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
@@ -171,6 +183,7 @@
             var patt = /^@(\w){1,15}$/;
             if(patt.test(handle_string)){
                 console.log("valid twitter handle");
+                trackNomination(handle_string);
                 voteForHandle(handle_string, 1);
                 setTopState(false);
                 loadHandles();
@@ -180,6 +193,7 @@
         }
         
         function voteForHandle(handle_string, value) {
+          trackVote();
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
             loadHandles();
           });
