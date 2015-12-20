@@ -83,6 +83,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         if(votes_this_hour >= 10):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
             return
+        
         upvote = False
         if(positive == "1"):
             upvote = True
@@ -99,7 +100,9 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         if(cat_id == 0):
             self.finish("bad category name")
             return
-        
+        if(alreadyVoted(local_db, self.request.remote_ip,  cat_id)):
+            self.finish("{'message': 'you already voted for this handle'}")
+            return
         
         table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
         print "table info for that handle is: "+str(table_info)

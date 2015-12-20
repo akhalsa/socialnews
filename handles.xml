@@ -561,8 +561,6 @@
         </category>
     </category>
     <category name="National News">
-        <handle>@cnni</handle>
-        <handle>@cnnbrk</handle>
         <handle>@BBCBreaking</handle>
         <handle>@SkyNews</handle>
         <handle>@AJENews</handle>

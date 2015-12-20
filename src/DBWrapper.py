@@ -370,7 +370,6 @@ def insertBatch(insertion_map, local_db):
         print str(e)
         local_db.rollback()
         sys.exit()
-        
     cursor.close()
     
 def batchInsertTweet(tweets, local_db):
@@ -689,11 +688,19 @@ def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor.close()
     return cats
     
+def alreadyVoted(local_db, ip_address, category_id):
+    cursor = local_db.cursor()
+    sql = "SELECT ID From VoteHistory WHERE ip_address like: "+str(ip_address)+" and category_id like "+str(category_id)+";"
+    cursor.execute(sql)
+    row_count = cursor.rowcount
+    cursor.close()
+    return (row_count >0)
 
+    
+    
 
 def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
-    
     sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
     sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
     sql += twitter_handle+"', '"+twitter_name+"', "
