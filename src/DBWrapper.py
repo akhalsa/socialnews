@@ -691,6 +691,7 @@ def getCategoriesForTwitterUserId(local_db, twitter_id):
 def alreadyVoted(local_db, ip_address, category_id):
     cursor = local_db.cursor()
     sql = "SELECT ID From VoteHistory WHERE ip_address like: "+str(ip_address)+" and category_id like "+str(category_id)+";"
+    print "sql: "+sql
     cursor.execute(sql)
     row_count = cursor.rowcount
     cursor.close()
