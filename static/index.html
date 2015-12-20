@@ -49,13 +49,23 @@
     
     var trackVote = function(){
       //if(window.location.href.indexOf("filtra.io") > -1){
-        ga('send', 'event', 'vote', 'vote');
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Vote',
+          eventAction: 'Vote'
+          } );
       //}
     }
     
     var trackNomination = function(handle){
       //if(window.location.href.indexOf("filtra.io") > -1){
-        ga('send', 'event', 'vote', 'nomination', handle);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Vote',
+          eventAction: 'Nomination',
+          eventLabel: handle
+          }
+        );
       //}
     }
     
