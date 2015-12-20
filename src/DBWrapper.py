@@ -577,7 +577,7 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
     insertion_count = 0
     for row in cursor.fetchall() :
         tracked = 1
-        if (row[4] <= 4):
+        if (row[4] <= 0):
                 tracked = 0
         
         vote_val = 0
@@ -645,7 +645,7 @@ def reloadSourceCategoryRelationship(local_db):
         sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
         handle_index = 0
         for vote_record in votes_records:
-            if(vote_record[1] <= 4):
+            if(vote_record[1] <= 0):
                 continue
             
             sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
