@@ -12,6 +12,7 @@
         <handle>@YahooSports</handle>
         <handle>@FOXSports</handle>
         <handle>@SportsCenter</handle>
+        
         <category name="NFL">
             <handle>@AdamSchefter</handle>
             <handle>@MatthewBerryTMR</handle>
@@ -32,6 +33,81 @@
             <handle>@GregABedard</handle>
             <handle>@BR_NFL</handle>
             <handle>@ESPNNFL</handle>
+            
+            
+            <category name="49ers"></category>
+            <category name="Bears"></category>
+            <category name="Bengals">
+                <handle>@ColeyHarvey</handle>
+                <handle>@pauldehnerjr</handle>
+                <handle>@JayMorrisonCMG</handle>
+                <handle>@GeoffHobsonCin</handle>
+                <handle>@Bengals</handle>
+                <handle>@CincyJungle</handle>
+                <handle>@bengalsbuzztap</handle>
+            </category>
+            <category name="Bills">
+                <handle>@ChrisBrownBills</handle>
+                <handle>@mikerodak</handle>
+                <handle>@JoeBuscaglia</handle>
+                <handle>@viccarucci</handle>
+                <handle>@buffalobills</handle>
+            </category>
+            <category name="Broncos"></category>
+            <category name="Browns">
+                <handle>@NateUlrichABJ</handle>
+                <handle>@TonyGrossi</handle>
+                <handle>@MaryKayCabot</handle>
+                <handle>@ScottPetrak</handle>
+                <handle>@PatMcManamon</handle>
+                <handle>@Browns</handle>
+            </category>
+            <category name="Bucaneers"></category>
+            <category name="Cardinals"></category>
+            <category name="Chargers"></category>
+            <category name="Cheifs"></category>
+            <category name="Colts">
+                <handle>@HolderStephen</handle>
+                <handle>@mchappell51</handle>
+                <handle>@KBowenColts</handle>
+                <handle>@MikeWellsNFL</handle>
+                <handle>@zkeefer</handle>
+                <handle>@Colts</handle>
+                <handle>@JoshWilsonSB</handle>
+                <handle>@bkravitz</handle>
+            </category>
+            <category name="Cowboys"></category>
+            <category name="Dolphins">
+                <handle>@AbramsonPBP</handle>
+                <handle>@gunnerhal</handle>
+                <handle>@OmarKelly</handle>
+                <handle>@thephinsider</handle>
+                <handle>@chrisperk</handle>
+                <handle>@ArmandoSalguero</handle>
+                <handle>@MiamiDolphins</handle>
+                <handle>@ACohenFins</handle>
+            </category>
+            <category name="Eagles"></category>
+            <category name="Falcons"></category>
+            <category name="Giants"></category>
+            <category name="Jaguars">
+                <handle>@JohnOehser</handle>
+                <handle>@ryanohalloran</handle>
+                <handle>@ESPNdirocco</handle>
+                <handle>@HaysCarlyon</handle>
+                <handle>@Jaguars</handle>
+            </category>
+            <category name="Jets">
+                <handle>@BrianCoz</handle>
+                <handle>@eallenjets</handle>
+                <handle>@MMehtaNYDN</handle>
+                <handle>@RichCimini</handle>
+                <handle>@nyjets</handle>
+                <handle>@GangGreenNation</handle>
+            </category>
+            <category name="Lions"></category>
+            <category name="Packers"></category>
+            <category name="Panthers"></category>
             <category name="Patriots">
                 <handle>@jeffphowe</handle>
                 <handle>@BenVolin</handle>
@@ -48,31 +124,8 @@
                 <handle>@Jordanems</handle>
                 <handle>@PatriotsExtra</handle>
             </category>
-            <category name="Jets">
-                <handle>@BrianCoz</handle>
-                <handle>@eallenjets</handle>
-                <handle>@MMehtaNYDN</handle>
-                <handle>@RichCimini</handle>
-                <handle>@nyjets</handle>
-                <handle>@GangGreenNation</handle>
-            </category>
-            <category name="Bills">
-                <handle>@ChrisBrownBills</handle>
-                <handle>@mikerodak</handle>
-                <handle>@JoeBuscaglia</handle>
-                <handle>@viccarucci</handle>
-                <handle>@buffalobills</handle>
-            </category>
-            <category name="Dolphins">
-                <handle>@AbramsonPBP</handle>
-                <handle>@gunnerhal</handle>
-                <handle>@OmarKelly</handle>
-                <handle>@thephinsider</handle>
-                <handle>@chrisperk</handle>
-                <handle>@ArmandoSalguero</handle>
-                <handle>@MiamiDolphins</handle>
-                <handle>@ACohenFins</handle>
-            </category>
+            <category name="Raiders"></category>
+            <category name="Rams"></category>
             <category name="Ravens">
                 <handle>@Ravens</handle>
                 <handle>@ryanmink</handle>
@@ -82,23 +135,9 @@
                 <handle>@MikePrestonSun</handle>
                 <handle>@gdowning14</handle>
             </category>
-            <category name="Bengals">
-                <handle>@ColeyHarvey</handle>
-                <handle>@pauldehnerjr</handle>
-                <handle>@JayMorrisonCMG</handle>
-                <handle>@GeoffHobsonCin</handle>
-                <handle>@Bengals</handle>
-                <handle>@CincyJungle</handle>
-                <handle>@bengalsbuzztap</handle>
-            </category>
-            <category name="Browns">
-                <handle>@NateUlrichABJ</handle>
-                <handle>@TonyGrossi</handle>
-                <handle>@MaryKayCabot</handle>
-                <handle>@ScottPetrak</handle>
-                <handle>@PatMcManamon</handle>
-                <handle>@Browns</handle>
-            </category>
+            <category name="Redskins"></category>
+            <category name="Saints"></category>
+            <category name="Seahawks"></category>
             <category name="Steelers">
                 <handle>@MarkKaboly_Trib</handle>
                 <handle>@EdBouchette</handle>
@@ -116,23 +155,6 @@
                 <handle>@AaronWilson_NFL</handle>
                 <handle>@jharrisfootball</handle>
             </category>
-            <category name="Jaguars">
-                <handle>@JohnOehser</handle>
-                <handle>@ryanohalloran</handle>
-                <handle>@ESPNdirocco</handle>
-                <handle>@HaysCarlyon</handle>
-                <handle>@Jaguars</handle>
-            </category>
-            <category name="Colts">
-                <handle>@HolderStephen</handle>
-                <handle>@mchappell51</handle>
-                <handle>@KBowenColts</handle>
-                <handle>@MikeWellsNFL</handle>
-                <handle>@zkeefer</handle>
-                <handle>@Colts</handle>
-                <handle>@JoshWilsonSB</handle>
-                <handle>@bkravitz</handle>
-            </category>
             <category name="Titans">
                 <handle>@terrymc13</handle>
                 <handle>@jwyattsports</handle>
@@ -141,6 +163,132 @@
                 <handle>@JasonWolf</handle>
                 <handle>@Titans</handle>
             </category>
+            <category name="Vikings"></category>
+            
+        </category>
+        
+        <category name="MLB">
+            <category name="Angels">
+                <handle>@Angels</handle>
+            </category>
+            <category name="Astros">
+                <handle>@astros</handle>
+            </category>
+            <category name="Athletics">
+                <handle>@Athletics</handle>
+            </category>
+            <category name="Blue Jays">
+                <handle>@BlueJays</handle>
+            </category>
+            <category name="Braves">
+                <handle>@Braves</handle>
+            </category>
+            <category name="Brewers">
+                <handle>@Brewers</handle>
+            </category>
+            <category name="Cardinals">
+                <handle>@Cardinals</handle>
+            </category>
+            <category name="Cubs">
+                <handle>@Cubs</handle>
+            </category>
+            <category name="Diamondbacks">
+                <handle>@Dbacks</handle>
+            </category>
+            <category name="Dodgers">
+                <handle>@Dodgers</handle>
+            </category>
+            <category name="Giants">
+                <handle>@SFGiants</handle>
+            </category>
+            <category name="Indians">
+                <handle>@Indians</handle>
+            </category>
+            <category name="Mariners">
+                <handle>@Mariners</handle>
+            </category>
+            <category name="Marlins">
+                <handle>@Marlins</handle>
+            </category>
+            <category name="Mets">
+                <handle>@Mets</handle>
+            </category>
+            <category name="Nationals">
+                <handle>@Nationals</handle>
+            </category>
+            <category name="Orioles">
+                <handle>@Orioles</handle>
+            </category>
+            <category name="Padres">
+                <handle>@Padres</handle>
+            </category>
+            <category name="Phillies">
+                <handle>@Phillies</handle>
+            </category>
+            <category name="Pirates">
+                <handle>@Pirates</handle>
+            </category>
+            <category name="Rangers">
+                <handle>@Rangers</handle>
+            </category>
+            <category name="Rays">
+                <handle>@RaysBaseball</handle>
+            </category>
+            <category name="Red Sox">
+                <handle>@RedSox</handle>
+            </category>
+            <category name="Reds">
+                <handle>@Reds</handle>
+            </category>
+            <category name="Rockies">
+                <handle>@Rockies</handle>
+            </category>
+            <category name="Royals">
+                <handle>@Royals</handle>
+            </category>
+            <category name="Tigers">
+                <handle>@tigers</handle>
+            </category>
+            <category name="Twins">
+                <handle>@Twins</handle>
+            </category>
+            <category name="White Sox">
+                <handle>@whitesox</handle>
+            </category>
+            <category name="Yankees">
+                <handle>@Yankees</handle>
+            </category>
+        </category>
+        <category name="NBA">
+            <category name="76ers"></category>
+            <category name="Blazers"></category>
+            <category name="Bucks"></category>
+            <category name="Bulls"></category>
+            <category name="Cavaliers"></category>
+            <category name="Celtics"></category>
+            <category name="Clippers"></category>
+            <category name="Grizzlies"></category>
+            <category name="Hawks"></category>
+            <category name="Heat"></category>
+            <category name="Hornets"></category>
+            <category name="Jazz"></category>
+            <category name="Kings"></category>
+            <category name="Knicks"></category>
+            <category name="Lakers"></category>
+            <category name="Magic"></category>
+            <category name="Mavericks"></category>
+            <category name="Nets"></category>
+            <category name="Nuggets"></category>
+            <category name="Pacers"></category>
+            <category name="Pistons"></category>
+            <category name="Raptors"></category>
+            <category name="Rockets"></category>
+            <category name="Spurs "></category>
+            <category name="Suns"></category>
+            <category name="Thunder"></category>
+            <category name="Timberwolves"></category>
+            <category name="Warriors"></category>
+            <category name="Wizards"></category>
         </category>
     </category>
     <category name="Celebrities">
@@ -412,32 +560,71 @@
             </category>
         </category>
     </category>
-    <category name="International News">
-        <handle>@cnn</handle>
+    <category name="National News">
         <handle>@cnni</handle>
         <handle>@cnnbrk</handle>
         <handle>@BBCBreaking</handle>
         <handle>@SkyNews</handle>
-        <handle>@HuffingtonPost</handle>
         <handle>@AJENews</handle>
         <handle>@AJEnglish</handle>
         <handle>@VICE</handle>
+        <handle>@Independent</handle>
+        <handle>@USATODAY</handle>
+        <handle>@guardian</handle>
+        <handle>@AP</handle>
+        <handle>@Reuters</handle>
+        <handle>@cnn</handle>
+        <handle>@cnni</handle>
+        <handle>@cnnbrk</handle>
+        <handle>@HuffingtonPost</handle>
         <handle>@ABC</handle>
         <handle>@FoxNews</handle>
         <handle>@NBCNews</handle>
         <handle>@CBSNews</handle>
         <handle>@nytimes</handle>
         <handle>@washingtonpost</handle>
-        <handle>@Independent</handle>
-        <handle>@USATODAY</handle>
-        <handle>@guardian</handle>
-        <handle>@AP</handle>
-        <handle>@Reuters</handle>
         <handle>@WSJ</handle>
+        <handle>@LasAngelesTimes</handle>
     </category>
     
-    <category name="Local News">
-        <category name="North East">
+    <category name="Regional">
+        <category name="West Coast">
+            <category name="Los Angeles">
+                <handle>@Lakers</handle>
+                <handle>@Dodgers</handle>
+                <handle>@FOXLA</handle>
+                <handle>@Dodgers</handle>
+                <handle>@NBCLA</handle>
+                <handle>@NWSLosAngeles</handle>
+                <handle>@CBSLA</handle>
+                <handle>@LAist</handle>
+                <handle>@Angels</handle>
+            </category>
+            <category name="San Francisco"></category>
+            <category name="San Jose"></category>
+            <category name="San Diego"></category>
+            <category name="Seattle"></category>
+            <category name="Portland"></category>
+        </category>
+        <category name="Mid West">
+            <category name="Chicago">
+                <handle>@chicagotribune</handle>
+                <handle>@ChicagoBears</handle>
+                <handle>@CFDMedia</handle>
+                <handle>@chicagobulls</handle>
+                <handle>@NHLBlackhawks</handle>
+                <handle>@Suntimes</handle>
+                <handle>@nbcchicago</handle>
+                <handle>@Cubs</handle>
+                <handle>@ABC7Chicago</handle>
+                <handle>@cbschicago</handle>
+                <handle>@Chicago</handle>
+            </category>
+            <category name="Detroit"></category>
+            <category name="Minneapolis"></category>
+            <category name="Cleveland"></category>
+        </category>
+        <category name="East Coast">
             <category name="New York">
                 <handle>@nycgov</handle>
                 <handle>@NBCNewYork</handle>
@@ -466,10 +653,35 @@
                 <handle>@News12LI</handle>
                 <handle>@fox5ny</handle>
             </category>
+            <category name="Boston">
+                <handle>@BostonDotCom</handle>
+                <handle>@marty_walsh</handle>
+                <handle>@BostonGlobe</handle>
+                <handle>@bostonpolice</handle>
+                <handle>@WCVB</handle>
+                <handle>@RedSox</handle>
+                <handle>@WCVB</handle>
+                <handle>@fox25news</handle>
+                <handle>@7News</handle>
+                <handle>@cbsboston</handle>
+                <handle>@CityOfBoston</handle>
+            </category>
+            <category name="Washington DC">
+                <handle>@washingtondc</handle>
+                <handle>@washdcnews</handle>
+            </category>
+            <category name="Philadelphia">
+            </category>
+            <category name="Miami">
+            </category>
+            <category name="Atlanta">   
+            </category>
+            <category name="Orlando"></category>
             
         </category>
-        <category name="Texas">
-            <handle>@texasgov</handle>
+        <category name="South West">
+            <category name="Denver"></category>
+            <category name="Phoenix"></category>
             <category name="Austin">
                 <handle>@longcenter</handle>
                 <handle>@statesman</handle>
