@@ -61,6 +61,9 @@ def forward():
     sql += " ADD COLUMN checked INT DEFAULT 0;"
     executeSql(db, sql)
     
+    sql = "ALTER TABLE TwitterSource ADD UNIQUE INDEX `unique_handles` (twitter_id);"
+    executeSql(db, sql)
+    
     
     
     
@@ -89,6 +92,10 @@ def backward():
     sql += " DROP COLUMN link_text,"
     sql += " DROP COLUMN img_url,"
     sql += " DROP COLUMN checked;"
+    executeSql(db, sql)
+    
+    
+    sql = "ALTER TABLE TwitterSource DROP INDEX `unique_handles`;"
     executeSql(db, sql)
     
     # sql = "CREATE TABLE SourceCategoryRelationship ("
