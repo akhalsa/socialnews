@@ -8,10 +8,8 @@
   <link rel="stylesheet" href="static/css/style.css">
   <link rel="stylesheet" href="static/fonts/genericons/genericons.css">
   <link rel="stylesheet" href="static/css/non-responsive.css">
-  <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-  <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
-  
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -49,6 +47,28 @@
         }
     }
     
+    var trackVote = function(){
+      if(window.location.href.indexOf("filtra.io") > -1){
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Vote',
+          eventAction: 'Vote'
+          } );
+      }
+    }
+    
+    var trackNomination = function(handle){
+      if(window.location.href.indexOf("filtra.io") > -1){
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Vote',
+          eventAction: 'Nomination',
+          eventLabel: handle
+          }
+        );
+      }
+    }
+    
     var trackTimeRangeSelection = function(seconds){
         if(window.location.href.indexOf("filtra.io") > -1){
             ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
@@ -67,6 +87,8 @@
         var selected_secondary_index = -1;
         var selected_third_index = -1;
         
+        var search_string_val;
+        
         var time_frame_index = 0;
         var time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
                            {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
@@ -76,7 +98,8 @@
         var tweets;
         
         var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-
+        
+        var popupState;
         
         $.getJSON("/category", function(result){
             category_structure = result;
@@ -84,23 +107,105 @@
             renderTimeFrame();
             loadTweets();
             loadHandles();
+            updatePreview()
+            setTopState(false);
         });
+        function triggerSearch(handle){
+          $.getJSON("/twitter/timeline/"+handle, function(result){
+            $('#p-tweet-container').html("");
+            var tweet_cont = "";
+            $.each(result, function(i, child){
+              tweet_cont+= child;
+            });
+            $('#p-tweet-container').html(tweet_cont);
+          });
+          
+        }
+        function searchHandleClicked(handle){
+          $('#search_text').val(handle);
+          triggerSearch(handle);
+          updatePreview();
+        }
         
+        function updatePreview(){
+          if(search_string_val != $('#search_text').val()){
+            search_string_val = $('#search_text').val();
+            if ((search_string_val == "@")||(search_string_val == "")) {
+              $('#open-handle-list').html("");
+              $('#button-container').html("");
+              $('#nothing').show();
+              $('#p-tweet-container').hide();
+              return;
+            }
+            $.getJSON("/twitter/search/"+search_string_val, function(result){
+              if (result.search == $('#search_text').val()) {
+                var list_of_suggestions_html = "";
+                var text_match = "";
+                $.each(result.handles, function(i, child){
+                  if (("@"+child.screen_name) == $('#search_text').val()) {
+                    //button should be active
+                    text_match = "@"+child.screen_name
+                  }
+                  console.log("will list: @"+child.screen_name);
+                  list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
+                });
+                if (text_match != "") {
+                  $('#nothing').hide();
+                  $('#p-tweet-container').show();
+                  $('#button-container').html("<button class=\"p-bt-blue\" onclick=\"nominateNewHandle()\">Nominate: "+text_match+"</button>");
+                  triggerSearch($('#search_text').val());
+                }else{
+                  $('#button-container').html("");
+                  $('#nothing').show();
+                  $('#p-tweet-container').hide();
+                  
+                }
+                $('#open-handle-list').html(list_of_suggestions_html);
+                
+              }
+            });
+          }
+        }
+        
+        function setTopState(newState){
+          console.log("setTopState called with val: "+newState);
+          if (newState == false) {
+            $('#overlay_id').hide();
+            $('#popup_id').hide();
+            $('#search_text').unbind('keyup input paste');
+          }else if (newState == true) {
+            $('#overlay_id').show();
+            $('#popup_id').show();
+            search_string_val = "";
+            $('#open-handle-list').html("");
+            $('#search_text').val(search_string_val);
+            $('#popup_title_label').html("Nominate a Handle for "+currentCatName());
+            $('#search_text').bind("keyup input paste", function(event) {
+              updatePreview();
+            });
+          }
+          popupState = newState;
+        }
         
         function nominateNewHandle() {
-            var handle_string = $("#handle_name").val().trim();
-            $("#handle_name").val('');
+ 
+            var handle_string = $('#search_text').val().trim();
             console.log("running check for: "+handle_string);
             var patt = /^@(\w){1,15}$/;
             if(patt.test(handle_string)){
                 console.log("valid twitter handle");
+                trackNomination(handle_string);
                 voteForHandle(handle_string, 1);
+                setTopState(false);
+                loadHandles();
             }else{
                 alert("Please enter a valid twitter handle");
             }
         }
         
         function voteForHandle(handle_string, value) {
+
+          trackVote();
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
             loadHandles();
           });
@@ -117,36 +222,49 @@
             }
             return cat_name;
         }
+        
         function loadHandles() {
-            $.getJSON("/category/"+cat_name, function(result){
-                var list_elements = "";
-                
-                $.each(result, function(i, child){
-                    list_elements += "<li "
-                    list_elements += "style=\"background-color:" +(child.tracked == 1 ? "white\" ": "#D0D0D0\" ");
-                    list_elements += "><a href=\"#\">"+child.handle+"</a>";
-                    upvote_click_listener = child.vote_val == 0 ? "onclick=\"voteForHandle('"+child.handle+"',1)\"" : "";
-                    upvote_clicked = (child.vote_val == 1) ? "style=\"color:yellow\"":"";
+          cat_name = currentCatName()
+          console.log("refreshing handles for category: "+cat_name);
+          $.getJSON("/category/"+cat_name, function(result){
+              var list_elements = "";
+              console.log("response handles for "+cat_name);
+              cats = result.handles;
+              vote_count = result.remaining_votes;
+              console.log("got remaining votes: "+vote_count);
+              $("#remaining_vote_count").html(vote_count+" Votes Left");
+              $.each(cats, function(i, child){
+                  console.log("populating handle: "+child.handle);
+                  list_elements += "<li ";
+                  list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
+                  list_elements += "<div class=\"handle\">";
+                  list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
+                  list_elements += "<ul ";
+                  if (child.vote_val == 0) {
+                    list_elements += "class=\"nominate\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',1)\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1)\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                  }else if (child.vote_val==1) {
+                    list_elements += "class=\"nominate done-up\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                  }else if (child.vote_val == -1) {
+                    list_elements += "class=\"nominate done-down\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
                     
-                    downvote_click_listener = child.vote_val == 0 ? " onclick=\"voteForHandle('"+child.handle+"',-1)\"" : " ";
-                    downvote_clicked = (child.vote_val == -1) ? " style=\"color:yellow\" ":"";
-                    
-                    list_elements += "<span "+upvote_click_listener+" class=\"genericon genericon-collapse\" "+upvote_clicked+"></span>";
-                    list_elements += "<span class=\"genericon genericon-expand\" "+downvote_click_listener+downvote_clicked+"></span></li>";
-                });
-            
-                list_elements+="<div id=\"handle_input_area\"><input type=\"text\" id=\"handle_name\">";
-                list_elements += "<input type=\"button\" id=\"submit_handle\" value=\"Nominate\"></div>";
-                $('#right_list').html(list_elements);
-                $('#submit_handle').click(function(){nominateNewHandle();});
-               
-            });
+                  }
+                  list_elements += "</ul>";
+                  list_elements += "<div class=\"clear\"></div></li>";
+              });
+              console.log("done loading handles");
+              $('#list-vote').html(list_elements);
+             
+          });
         }
         function renderTweets(){
           $("#time").nextAll().remove();
           tweet_html = "";
-          console.log("rendering tweets with length: "+tweets.length);
-          console.log("last tweet: "+tweets[tweets.length-1].text);
           $.each(tweets, function(i, child){
             tweet_html += "<div class=\"con-tw\">";
             tweet_html += "<div class=\"wrap-user\">";
@@ -185,50 +303,10 @@
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
                 tweets = result;
                 renderTweets();
-                findAndLoadNextPreview();
             });
         }
         
-        function findAndLoadNextPreview(){
-          tweet = null;
-          
-          $.each(tweets, function(i, child){
-            if (child.checked == 0) {
-              tweet = child;
-              return false;
-            }
-          });
-          if (tweet == null) {
-            console.log("done loading previews");
-            return;
-          }
-          console.log("tweet is: "+tweet);
-          console.log("we will now update tweet with id: "+tweet.id);
-          $.getJSON("/page_load/twitter_id/"+tweet.id, function(result){
-            local_tweet = null;
-            
-            $.each(tweets, function(i, child){
-              if (child.id == result.id) {
-                console.log("found match");
-                local_tweet = child;
-              }
-            });
-            if (local_tweet != null){
-              local_tweet.blurb = result.blurb;
-              local_tweet.img_url = result.img_url;
-              local_tweet.link_url = result.link_url;
-              local_tweet.title = result.title;
-              local_tweet.checked = result.checked;
-              console.log("finished with tweet: "+tweet.text);
-              renderTweets();
-              findAndLoadNextPreview();
-            }else{
-              console.log("we were midway throuhg: "+result.text+" but had to bail");
-            }
-            
-              
-          });
-        }
+        
         function renderTopNav() {
             top_nav_container = document.getElementById("top_level_nav");
             var top_options_string = "";
@@ -288,6 +366,7 @@
             selected_secondary_index = j;
             selected_third_index = k;
             selected_top_index = i;
+
             renderTopNav();
             loadTweets();
             loadHandles();
@@ -321,31 +400,69 @@
 </head>
 
 <body>
+<!-- popup overlay start -->
+<div class="overlay" id="overlay_id"></div>
+<div class="wrap-popup" id="popup_id">
+	<div id="bt-close" onclick="setTopState(false)"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
+	<h3 id="popup_title_label">Nominate a Handle For </h3>
+    <!-- left box start -->
+    <div id="p-handle">
+    	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" id="search_text"/></div>
+        <ul id="open-handle-list">
+            <li>@Con</li>
+            <li>@CNN_BreakingNews</li>
+            <li>@CNN_International</li>
+            <li>@Con_prime</li>
+            <li>@Last_Con</li>
+            <li>@News_Con</li>
+        </ul>
+    </div>
+    <!-- left box end -->
+    <!-- right box start -->
+    <div id="p-twit-list">
+      <p id="nothing">Nothing to Display</p>
+      <div class="twitter-tweet-wrap" id="p-tweet-container">
+      </div>
+      <span id="button-container"><button class="p-bt-gray">Ok</button></span>
+    </div>
+    <!-- right box end -->
+    <div class="clear"></div>
+</div>
+
+<!-- popup overlay end -->
 <!-- header start -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid top-nav">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" >
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#"><img src="static/images/logo.png" alt="Filtra" /></a>
+      <a class="navbar-brand" href="#"><img src="static/images/logo.png" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+      <div class="clear"></div>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav" id="top_level_nav">
-        <li class="active"><a href="#">Front Page</a></li>
-        <li><a href="#">Technology</a></li>
-        <li><a href="#">Sports</a></li>
-        <li><a href="#">Travel</a></li>
-        <li><a href="#">Politics</a></li>
-        <li><a href="#">Travel</a></li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
       </ul>
+      <ul id="bt-top-nominate"  >
+      	<li id="bt-nom" onclick="setTopState(true)"><a href="#"><span class="genericon genericon-search"></span> Nominate</a></li>
+        <li><span class="genericon genericon-checkmark"></span>  <span id="remaining_vote_count">5 Votes left</span> <a href="#"><span class="genericon genericon-help"></span></a></li>
+        <div class="clear"></div>
+      </ul>
     </div>
+    <!-- nav start -->
+    <ul class="nav navbar-nav" id="top_level_nav">
+      <li class="active"><a href="#">Front Page</a></li>
+      <li><a href="#">Technology</a></li>
+      <li><a href="#">Sports</a></li>
+      <li><a href="#">Travel</a></li>
+      <li><a href="#">Politics</a></li>
+      <li><a href="#">Travel</a></li>
+    </ul>
+    <!-- nav end -->
   </div>
 </nav>
 <!-- header end -->
@@ -371,9 +488,17 @@
         <li><a href="#">Game</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
         <li><a href="#">Home</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
         <li class="last-sub"><a href="#">Apps</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+
       </ul>
     </div>
-    <div class="col-xs-8 col-xs-offset-2 wrap-con-main">
+    <div class="col-xs-7 wrap-con-main">
+    	<!-- Breadcurmbs start -->
+        <ol class="breadcrumb" style="visibility: hidden">
+          <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
+          <li><a href="#">Library</a></li>
+          <li class="active">Data</li>
+        </ol>
+    	<!-- Breadcurmbs end -->
     	<!-- time start -->
     	<ul id="time">
         	<li class="current"><a href="#"><span class="genericon genericon-time"></span> Past 15 Minutes</a><br/><span class="genericon genericon-downarrow"></span></li>
@@ -386,7 +511,14 @@
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
-            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+            	<div class="user">
+                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
                 <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
                 <div class="clear"></div>
             </div>
@@ -398,18 +530,21 @@
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
-            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+            	<div class="user">
+                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                	<ul class="nominate">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
                 <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
                 <div class="clear"></div>
             </div>
             <div class="wrap-con-tw">
             	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
                 <div class="preview-tw">
-                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
-					<div class="span8">
-                    	<a href="#">SportsCenter on Twitter</a>
-                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper.</p>
-                    </div>
+                	<img src="static/images/ic-load.GIF" class="imgpd"/>
                 </div>
             </div>
         </div>
@@ -417,7 +552,14 @@
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
-            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+            	<div class="user">
+                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                	<ul class="nominate done-down">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
                 <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
                 <div class="clear"></div>
             </div>
@@ -438,7 +580,14 @@
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
-            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+            	<div class="user">
+                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                	<ul class="nominate">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
                 <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
                 <div class="clear"></div>
             </div>
@@ -456,13 +605,54 @@
             </div>
         </div>
         <!-- tweets end -->
+        <button id="bt-loadmore">Load More</button>
     </div>
-    <div class="col-xs-2" >
-        <div> </div>
-        <ul  class="sub" id="right_list">
-
-        </ul>
+    <!-- sidebar start -->
+    <div class="col-xs-3">
+    	<!-- vote start -->
+        <div class="box-side vote-wrap">
+        	<h3>Vote <a href="#"><span class="genericon genericon-help"></span></a></h3>
+            <ul id="list-vote">
+            	<li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Bleacher Report LFL</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate done-down">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="none-active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate new-vote">
+                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="none-active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate new-vote">
+                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </div>
+    	<!-- vote end -->
     </div>
+    <!-- sidebar end -->
   </div>
 </div>
 <!-- contents end -->

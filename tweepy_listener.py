@@ -61,7 +61,7 @@ class HandleListener(tweepy.StreamListener):
                                 db="newsdb",
                                 charset='utf8',
                                 port=3306)
-                        reloadSourceCategoryRelationship(db)
+                        self.mapping = reloadSourceCategoryRelationship(db)
                 time.sleep(delay)
                 print "starting to set up socket listen on new thread"
                 self.kickoff_time = datetime.datetime.now()
@@ -135,16 +135,16 @@ class HandleListener(tweepy.StreamListener):
                     
         def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object, unique_ids):
             try:
-                categories = getCategoriesForTwitterUserId(db, str(json_object['user']['id']))
-                if(categories):
-                    for cat in categories:
-                        if cat not in batchDictionary:
-                            batchDictionary[cat] = []
-                            
-                        batchDictionary[cat].append(json_object['id'])
-                                            
-                    unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
-                    return True
+                if(str(json_object['user']['id']) in self.mapping):
+                        categories = self.mapping[str(json_object['user']['id'])]
+                        for cat in categories:
+                            if cat not in batchDictionary:
+                                batchDictionary[cat] = []
+                                
+                            batchDictionary[cat].append(json_object['id'])
+                                                
+                        unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
+                        return True
                 
             except KeyError, e:
                 print "we got a key error so we're just dropping out"
@@ -239,7 +239,34 @@ def updateSource():
                 time.sleep(15)
                 
 
+def scanPreviews():
+        while True:
+                local_db_tweets = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+                all_ids = getAllCategoryIds(local_db_tweets)
+                for cat_id in all_ids:
+                        print "******** Checking: "+str(cat_id)+" *************"
+                        local_db_tweets = MySQLdb.connect(
+                                host=host_target,
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
+                        tweets = getTweetOccurances(900, cat_id, local_db_tweets)
+                        for tweet in tweets:
+                                if(tweet["checked"] == 0):
+                                        print "******** Updating: "+str(tweet["id"])+" *************"
+                                        print "******** IT IS: "+tweet["text"]
+                                        updateTweet(tweet["text"], tweet["id"], local_db_tweets)
                 
+                                
+                        
                 
                 
 
@@ -270,6 +297,11 @@ if __name__ == '__main__':
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=updateSource, args=())
+    worker.setDaemon(True)
+    worker.start()
+    
+    ###### start periodic updating of twitter source info #######
+    worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
     worker.start()
     

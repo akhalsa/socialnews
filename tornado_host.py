@@ -61,9 +61,11 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
         #this should get the full list of handles and their scores in the category
         cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
         handle_list = getAllHandlesForCategory(local_db, cat_id, self.request.remote_ip)
+        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
         print "got handle list:"
-        print handle_list
-        self.finish(json.dumps(handle_list))
+        self.finish(json.dumps({"handles":handle_list, "remaining_votes":(10 - votes_this_hour)}))
+        
+                    
 
 class HandleVoteReceiver(tornado.web.RequestHandler):
     def post(self,twitter_handle, category_name, positive  ):
@@ -78,9 +80,10 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
         print "found votes this hour of: "+str(votes_this_hour)
-        if(votes_this_hour >= 50):
+        if(votes_this_hour >= 10):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
             return
+        
         upvote = False
         if(positive == "1"):
             upvote = True
@@ -117,6 +120,10 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 print e
                 self.finish("bad handle/insertion")
                 return
+        if(alreadyVoted(local_db, self.request.remote_ip,  cat_id, table_info["twitter_id"])):
+            print "already voted returned true"
+            self.finish("{'message': 'you already voted for this handle'}")
+            return
         insertVote(local_db, self.request.remote_ip, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
         
         self.finish("200")
@@ -160,6 +167,37 @@ class PageLoad(tornado.web.RequestHandler):
             updateTweet(tweet_dict["text"], twitter_id, local_db)
         tweet_dict = getTweetWithTwitterId(local_db, twitter_id)
         self.finish(json.dumps(tweet_dict))
+        
+class Twitter(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self, search_string):
+        if(search_string == ""):
+            self.finish(json.dumps({"search":"", "handles":""}))
+            return
+        
+        response = api.search_users(search_string, 5, 1);
+        response_list = []
+        for user in response:
+            response_list.append({"name":user.name, "twitter_id": user.id, "screen_name":user.screen_name})
+        
+        response_full = {"search":search_string, "handles":response_list}
+        
+        print json.dumps(response_full)
+        self.finish(json.dumps(response_full))
+        
+class TwitterTimeline(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self, search_string):
+        response = api.user_timeline(screen_name=search_string, count=5)
+        tweets = []
+        for status in response:
+            target_url = "https://api.twitter.com/1/statuses/oembed.json?id="+str(status.id)
+            print target_url
+            response = urllib2.urlopen(target_url)
+            dictionary = json.loads(response.read())
+            tweets.append(dictionary["html"])
+            
+        self.finish(json.dumps(tweets))
     
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -174,6 +212,8 @@ app = tornado.web.Application([
     (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/twitter_id/(.*)',  PageLoad),
+    (r'/twitter/search/(.*)', Twitter),
+    (r'/twitter/timeline/(.*)', TwitterTimeline)
 ])
 
 if __name__ == '__main__':

@@ -43,7 +43,7 @@ def forward():
     sql += "ID int(11) NOT NULL AUTO_INCREMENT,"
     sql += "ip_address varchar(255) DEFAULT NULL,"
     sql += "category_id INT DEFAULT NULL,"
-    sql += "twitter_id INT DEFAULT NULL,"
+    sql += "twitter_id varchar(255) DEFAULT NULL,"
     sql += "twitter_handle varchar(255) DEFAULT NULL,"
     sql += "twitter_name varchar(255) DEFAULT NULL,"
     sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
@@ -51,7 +51,7 @@ def forward():
     sql += "PRIMARY KEY (ID), INDEX(timestamp));"
     executeSql(db, sql)
     print sql
-    sql = "ALTER TABLE SourceCategoryRelationship CHANGE source_id source_twitter_id INT;"
+    sql = "ALTER TABLE SourceCategoryRelationship CHANGE source_id source_twitter_id varchar(255);"
     executeSql(db, sql)
     
     sql = "ALTER TABLE Tweet ADD COLUMN blurb varchar(255),"
@@ -59,6 +59,9 @@ def forward():
     sql += " ADD COLUMN link_text varchar(255),"
     sql += " ADD COLUMN img_url varchar(255),"
     sql += " ADD COLUMN checked INT DEFAULT 0;"
+    executeSql(db, sql)
+    
+    sql = "ALTER TABLE TwitterSource ADD UNIQUE INDEX `unique_handles` (twitter_id);"
     executeSql(db, sql)
     
     
@@ -89,6 +92,10 @@ def backward():
     sql += " DROP COLUMN link_text,"
     sql += " DROP COLUMN img_url,"
     sql += " DROP COLUMN checked;"
+    executeSql(db, sql)
+    
+    
+    sql = "ALTER TABLE TwitterSource DROP INDEX `unique_handles`;"
     executeSql(db, sql)
     
     # sql = "CREATE TABLE SourceCategoryRelationship ("

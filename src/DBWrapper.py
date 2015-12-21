@@ -76,7 +76,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
                 except Exception, e:
                     pass
         
-        title = u''
+        title = u" "
         if(soup.find("meta", {"property":"og:title"})):
             title_prospect = soup.find("meta", {"property":"og:title"})
             print "found og:title: "+title_prospect["content"]
@@ -94,7 +94,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
                     break
             
             
-        blurb_text = u""
+        blurb_text = u" "
         
         if(soup.find("meta", {"property":"og:description"})):
             blurb_text = soup.find("meta", {"property":"og:description"})["content"]
@@ -103,10 +103,23 @@ def updateTweet(tweet_text, tweet_id, local_db):
             blurb_text = soup.find("meta", {"name": "description"})["content"]
             print "blurb from name description: "+blurb_text
         
-        sql = u"UPDATE Tweet SET blurb=\""+re.escape(blurb_text)
+        if(title == None):
+            title = tweet_text
+        else:
+            title = re.escape(title)
+        
+            
+        if(blurb_text == None):
+            blurb_text = tweet_text
+        else:
+            blurb_text = re.escape(blurb_text)
+            
+        sql = u"UPDATE Tweet SET blurb=\""+blurb_text
         sql += u"\", link_url=\""+url
-        sql += u"\", link_text=\""+re.escape(title)+u"\", "
+        sql += u"\", link_text=\""+title+u"\", "
         sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_id+"';"
+
+            
         
 
         
@@ -124,6 +137,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
         insertion_cursor.close()
     else:
         setTweetIdToUnloadable(local_db, tweet_id)
+
 
         
         
@@ -146,7 +160,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
     cursor = local_db.cursor()
 
     #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
-    sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
+    sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 30;"
     print "loading with sql: "+sql
     cursor.execute(sql)
     results = {}
@@ -370,7 +384,6 @@ def insertBatch(insertion_map, local_db):
         print str(e)
         local_db.rollback()
         sys.exit()
-        
     cursor.close()
     
 def batchInsertTweet(tweets, local_db):
@@ -563,23 +576,29 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
     
     cursor = local_db.cursor()
     #note this will get all votes, up or down
-    sql = "SELECT twitter_id, twitter_handle, twitter_name, SUM(value) as vote_count From VoteHistory WHERE category_id like "+str(category_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+    sql = "SELECT VoteHistory.twitter_id, VoteHistory.twitter_handle, VoteHistory.twitter_name, TwitterSource.profile_image, "
+    sql += "SUM(value) as vote_count, SUM(case when value >= 0 then value else 0 end) as positive, "
+    sql += "SUM(case when value <= 0 then value else 0 end) as negative "
+    sql += "From VoteHistory "
+    sql += "LEFT JOIN TwitterSource ON VoteHistory.twitter_id=TwitterSource.twitter_id "
+    sql += "WHERE category_id like "+str(category_id)+" "
+    sql += "GROUP BY VoteHistory.twitter_id ORDER BY vote_count DESC;"
+    
     print "will find handles w sql: "+sql
     cursor.execute(sql)
     return_list = []
-    total_nominated_handles = cursor.rowcount
-    tracked_handles_count = returnCutOffCount(total_nominated_handles)
     insertion_count = 0
     for row in cursor.fetchall() :
-        tracked = 0
-        if (insertion_count < tracked_handles_count):
-                tracked = 1
+        tracked = 1
+        if (row[4] <= 0):
+                tracked = 0
         
         vote_val = 0
         if(row[0] in user_vote_history):
             vote_val = user_vote_history[row[0]]
             
-        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "score":str(row[3]), "tracked":tracked})
+        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "profile_pic":row[3], "score":str(row[4]),
+                            "upvotes": str(row[5]), "downvotes":str(row[6]), "tracked":tracked})
         insertion_count += 1
         
     cursor.close()
@@ -601,10 +620,8 @@ def createHandle(local_db, twitter_id, twitter_name, twitter_handle, profile_lin
             
     cursor.close()
 
-def returnCutOffCount(total_nominated_handles):
-    return max(25, int(total_nominated_handles/2))
-
 def reloadSourceCategoryRelationship(local_db):
+    mapping = {}
     cursor = local_db.cursor()
     sql = "DELETE FROM SourceCategoryRelationship;"
     try:
@@ -632,22 +649,26 @@ def reloadSourceCategoryRelationship(local_db):
         cat_id = row[0]
         #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
         sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
-        
+
         cursor.execute(sql)
         total_nominated_handles = cursor.rowcount
         votes_records = cursor.fetchall()
         cursor.close()
         cursor = local_db.cursor()
-        #simple algorithm... lets insert the top 25
-        count_tracked_handles = returnCutOffCount(total_nominated_handles)
-        handle_index = 0
         sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
-        
+        handle_index = 0
         for vote_record in votes_records:
-            if (handle_index == count_tracked_handles):
-                break
+            if(vote_record[1] <= 0):
+                continue
+            
             sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
+            
+            if vote_record[0] not in mapping:
+                mapping[vote_record[0]] = []
+            mapping[vote_record[0]].append(cat_id)
             handle_index += 1
+            
+            
         
         if(handle_index == 0):
             #no votes for anyone in this category...move along
@@ -669,6 +690,8 @@ def reloadSourceCategoryRelationship(local_db):
             local_db.rollback()
         cursor.close()
         
+    return mapping
+        
 def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor = local_db.cursor()
     sql = "SELECT category_id FROM SourceCategoryRelationship WHERE source_twitter_id like "+str(twitter_id)
@@ -679,11 +702,20 @@ def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor.close()
     return cats
     
+def alreadyVoted(local_db, ip_address, category_id, twitter_id):
+    cursor = local_db.cursor()
+    sql = "SELECT ID From VoteHistory WHERE ip_address like '"+str(ip_address)+"' and twitter_id like '"+twitter_id+"' and category_id like "+str(category_id)+";"
+    print "sql: "+sql
+    cursor.execute(sql)
+    row_count = cursor.rowcount
+    cursor.close()
+    return (row_count >0)
 
+    
+    
 
 def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
-    
     sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
     sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
     sql += twitter_handle+"', '"+twitter_name+"', "
