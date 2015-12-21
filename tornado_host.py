@@ -21,7 +21,6 @@ from threading import Thread
 from Queue import Queue
 from src.DBWrapper import *
 
-import src.CategoryModel
 
 define("port", default=8888, help="run on the given port", type=int)
 
