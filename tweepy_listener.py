@@ -263,7 +263,7 @@ def scanPreviews():
                                 if(tweet["checked"] == 0):
                                         print "******** Updating: "+str(tweet["id"])+" *************"
                                         print "******** IT IS: "+tweet["text"]
-                                        updateTweet(tweet["text"], tweet["id"], local_db)
+                                        updateTweet(tweet["text"], tweet["id"], local_db_tweets)
                 
                                 
                         
