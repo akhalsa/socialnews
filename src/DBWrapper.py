@@ -76,7 +76,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
                 except Exception, e:
                     pass
         
-        title = u""
+        title = u" "
         if(soup.find("meta", {"property":"og:title"})):
             title_prospect = soup.find("meta", {"property":"og:title"})
             print "found og:title: "+title_prospect["content"]
@@ -94,7 +94,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
                     break
             
             
-        blurb_text = u""
+        blurb_text = u" "
         
         if(soup.find("meta", {"property":"og:description"})):
             blurb_text = soup.find("meta", {"property":"og:description"})["content"]
