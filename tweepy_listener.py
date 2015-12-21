@@ -239,7 +239,34 @@ def updateSource():
                 time.sleep(15)
                 
 
+def scanPreviews():
+        while True:
+                local_db_tweets = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+                all_ids = getAllCategoryIds(local_db_tweets)
+                for cat_id in all_ids:
+                        print "******** Checking: "+str(cat_id)+" *************"
+                        local_db_tweets = MySQLdb.connect(
+                                host=host_target,
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
+                        tweets = getTweetOccurances(900, cat_id, local_db_tweets)
+                        for tweet in tweets:
+                                if(tweet["checked"] == 0):
+                                        print "******** Updating: "+str(tweet["id"])+" *************"
+                                        print "******** IT IS: "+tweet["text"]
+                                        updateTweet(tweet["text"], tweet["id"], local_db)
                 
+                                
+                        
                 
                 
 
@@ -270,6 +297,11 @@ if __name__ == '__main__':
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=updateSource, args=())
+    worker.setDaemon(True)
+    worker.start()
+    
+    ###### start periodic updating of twitter source info #######
+    worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
     worker.start()
     

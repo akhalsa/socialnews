@@ -101,8 +101,6 @@
         
         var popupState;
         
-        var tweet_loader;
-        
         $.getJSON("/category", function(result){
             category_structure = result;
             renderTopNav();
@@ -190,9 +188,7 @@
         }
         
         function nominateNewHandle() {
-            if (tweet_loader != null) {
-              tweet_loader.abort();
-            }
+ 
             var handle_string = $('#search_text').val().trim();
             console.log("running check for: "+handle_string);
             var patt = /^@(\w){1,15}$/;
@@ -208,9 +204,7 @@
         }
         
         function voteForHandle(handle_string, value) {
-          if (tweet_loader != null) {
-            tweet_loader.abort();
-          }
+
           trackVote();
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
             loadHandles();
@@ -309,47 +303,10 @@
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
                 tweets = result;
                 renderTweets();
-                findAndLoadNextPreview();
             });
         }
         
-        function findAndLoadNextPreview(){
-          tweet = null;
-          
-          $.each(tweets, function(i, child){
-            if (child.checked == 0) {
-              tweet = child;
-              return false;
-            }
-          });
-          if (tweet == null) {
-            console.log("done loading previews");
-            return;
-          }
-          tweet_loader = $.getJSON("/page_load/twitter_id/"+tweet.id, function(result){
-            tweet_loader = null;
-            local_tweet = null;
-            
-            $.each(tweets, function(i, child){
-              if (child.id == result.id) {
-                local_tweet = child;
-              }
-            });
-            if (local_tweet != null){
-              local_tweet.blurb = result.blurb;
-              local_tweet.img_url = result.img_url;
-              local_tweet.link_url = result.link_url;
-              local_tweet.title = result.title;
-              local_tweet.checked = result.checked;
-              renderTweets();
-              findAndLoadNextPreview();
-            }else{
-              console.log("we were midway throuhg: "+result.text+" but had to bail");
-            }
-            
-              
-          });
-        }
+        
         function renderTopNav() {
             top_nav_container = document.getElementById("top_level_nav");
             var top_options_string = "";
@@ -409,9 +366,7 @@
             selected_secondary_index = j;
             selected_third_index = k;
             selected_top_index = i;
-            if (tweet_loader != null) {
-              tweet_loader.abort();
-            }
+
             renderTopNav();
             loadTweets();
             loadHandles();
