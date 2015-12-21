@@ -1,6 +1,5 @@
 import tweepy
 import thread
-import src.CategoryModel
 import time
 import urllib2
 import datetime
