@@ -103,12 +103,15 @@ def updateTweet(tweet_text, tweet_id, local_db):
             blurb_text = soup.find("meta", {"name": "description"})["content"]
             print "blurb from name description: "+blurb_text
         
-        if(title):
-            title = re.escape(title)
+        if(title == None):
+            title = tweet_text
         else:
-            print "Title was none?"
+            title = re.escape(title)
+        
             
-        if(blurb_text):
+        if(blurb_text == None):
+            blurb_text = tweet_text
+        else:
             blurb_text = re.escape(blurb_text)
             
         sql = u"UPDATE Tweet SET blurb=\""+blurb_text
