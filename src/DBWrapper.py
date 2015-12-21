@@ -391,12 +391,10 @@ def batchInsertTweet(tweets, local_db):
     for tweet in tweets:
         text_string = tweets[tweet]["text"]
         sql += "('"+str(tweets[tweet]["twitter_user_id"])+"', '"+re.escape(text_string)+"', '"+str(tweet)+"'), "
-
         
     if(len(tweets)>0):
         sql = sql[:-2]
     
-    print sql
     cursor = local_db.cursor()
     try:
         # Execute the SQL command
