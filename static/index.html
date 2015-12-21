@@ -8,13 +8,8 @@
   <link rel="stylesheet" href="static/css/style.css">
   <link rel="stylesheet" href="static/fonts/genericons/genericons.css">
   <link rel="stylesheet" href="static/css/non-responsive.css">
-  <link rel="stylesheet" type="text/css" href="static/css/bootstrap-linkpreview.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-  <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <script type="text/javascript" src="static/js/bootstrap-linkpreview.js"></script>
-  <script type="text/javascript" src="static/js/proxy-ajax.js"></script>
-  
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -52,6 +47,28 @@
         }
     }
     
+    var trackVote = function(){
+      if(window.location.href.indexOf("filtra.io") > -1){
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Vote',
+          eventAction: 'Vote'
+          } );
+      }
+    }
+    
+    var trackNomination = function(handle){
+      if(window.location.href.indexOf("filtra.io") > -1){
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Vote',
+          eventAction: 'Nomination',
+          eventLabel: handle
+          }
+        );
+      }
+    }
+    
     var trackTimeRangeSelection = function(seconds){
         if(window.location.href.indexOf("filtra.io") > -1){
             ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
@@ -70,22 +87,129 @@
         var selected_secondary_index = -1;
         var selected_third_index = -1;
         
+        var search_string_val;
+        
         var time_frame_index = 0;
         var time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
                            {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
         
         var category_structure;
         
+        var tweets;
+        
         var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-
+        
+        var popupState;
         
         $.getJSON("/category", function(result){
-            console.log("got cat structure of:  "+JSON.stringify(result, null, 4));
             category_structure = result;
             renderTopNav();
             renderTimeFrame();
-            renderTweets();
+            loadTweets();
+            loadHandles();
+            updatePreview()
+            setTopState(false);
         });
+        function triggerSearch(handle){
+          $.getJSON("/twitter/timeline/"+handle, function(result){
+            $('#p-tweet-container').html("");
+            var tweet_cont = "";
+            $.each(result, function(i, child){
+              tweet_cont+= child;
+            });
+            $('#p-tweet-container').html(tweet_cont);
+          });
+          
+        }
+        function searchHandleClicked(handle){
+          $('#search_text').val(handle);
+          triggerSearch(handle);
+          updatePreview();
+        }
+        
+        function updatePreview(){
+          if(search_string_val != $('#search_text').val()){
+            search_string_val = $('#search_text').val();
+            if ((search_string_val == "@")||(search_string_val == "")) {
+              $('#open-handle-list').html("");
+              $('#button-container').html("");
+              $('#nothing').show();
+              $('#p-tweet-container').hide();
+              return;
+            }
+            $.getJSON("/twitter/search/"+search_string_val, function(result){
+              if (result.search == $('#search_text').val()) {
+                var list_of_suggestions_html = "";
+                var text_match = "";
+                $.each(result.handles, function(i, child){
+                  if (("@"+child.screen_name) == $('#search_text').val()) {
+                    //button should be active
+                    text_match = "@"+child.screen_name
+                  }
+                  console.log("will list: @"+child.screen_name);
+                  list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
+                });
+                if (text_match != "") {
+                  $('#nothing').hide();
+                  $('#p-tweet-container').show();
+                  $('#button-container').html("<button class=\"p-bt-blue\" onclick=\"nominateNewHandle()\">Nominate: "+text_match+"</button>");
+                  triggerSearch($('#search_text').val());
+                }else{
+                  $('#button-container').html("");
+                  $('#nothing').show();
+                  $('#p-tweet-container').hide();
+                  
+                }
+                $('#open-handle-list').html(list_of_suggestions_html);
+                
+              }
+            });
+          }
+        }
+        
+        function setTopState(newState){
+          console.log("setTopState called with val: "+newState);
+          if (newState == false) {
+            $('#overlay_id').hide();
+            $('#popup_id').hide();
+            $('#search_text').unbind('keyup input paste');
+          }else if (newState == true) {
+            $('#overlay_id').show();
+            $('#popup_id').show();
+            search_string_val = "";
+            $('#open-handle-list').html("");
+            $('#search_text').val(search_string_val);
+            $('#popup_title_label').html("Nominate a Handle for "+currentCatName());
+            $('#search_text').bind("keyup input paste", function(event) {
+              updatePreview();
+            });
+          }
+          popupState = newState;
+        }
+        
+        function nominateNewHandle() {
+ 
+            var handle_string = $('#search_text').val().trim();
+            console.log("running check for: "+handle_string);
+            var patt = /^@(\w){1,15}$/;
+            if(patt.test(handle_string)){
+                console.log("valid twitter handle");
+                trackNomination(handle_string);
+                voteForHandle(handle_string, 1);
+                setTopState(false);
+                loadHandles();
+            }else{
+                alert("Please enter a valid twitter handle");
+            }
+        }
+        
+        function voteForHandle(handle_string, value) {
+
+          trackVote();
+          $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
+            loadHandles();
+          });
+        }
         
         function currentCatName() {
             var cat_name = ""
@@ -98,65 +222,90 @@
             }
             return cat_name;
         }
-        function renderTweets() {
+        
+        function loadHandles() {
+          cat_name = currentCatName()
+          console.log("refreshing handles for category: "+cat_name);
+          $.getJSON("/category/"+cat_name, function(result){
+              var list_elements = "";
+              console.log("response handles for "+cat_name);
+              cats = result.handles;
+              vote_count = result.remaining_votes;
+              console.log("got remaining votes: "+vote_count);
+              $("#remaining_vote_count").html(vote_count+" Votes Left");
+              $.each(cats, function(i, child){
+                  console.log("populating handle: "+child.handle);
+                  list_elements += "<li ";
+                  list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
+                  list_elements += "<div class=\"handle\">";
+                  list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
+                  list_elements += "<ul ";
+                  if (child.vote_val == 0) {
+                    list_elements += "class=\"nominate\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',1)\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1)\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                  }else if (child.vote_val==1) {
+                    list_elements += "class=\"nominate done-up\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                  }else if (child.vote_val == -1) {
+                    list_elements += "class=\"nominate done-down\">";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                    
+                  }
+                  list_elements += "</ul>";
+                  list_elements += "<div class=\"clear\"></div></li>";
+              });
+              console.log("done loading handles");
+              $('#list-vote').html(list_elements);
+             
+          });
+        }
+        function renderTweets(){
+          $("#time").nextAll().remove();
+          tweet_html = "";
+          $.each(tweets, function(i, child){
+            tweet_html += "<div class=\"con-tw\">";
+            tweet_html += "<div class=\"wrap-user\">";
+            tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
+            tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
+            tweet_html += "<div class=\"clear\"></div></div>";
             
+            tweet_html += "<div class=\"wrap-con-tw\" >";
+            tweet_html += child.text.replace(urlRegEx,"<a href='$1'>$1</a>");
+            tweet_html += "<div class=\"preview-tw\">";
+            if (child.blurb || child.img_url || child.title) {
+              tweet_html += "<div class=\"ic-pr\"><span class=\"genericon genericon-show\"></span> Preview</div>";
+              tweet_html += "<div class=\"span8\">";
+              if (child.img_url) {
+                tweet_html += "<img src=\""+child.img_url+"\" width=\"150\"/>";
+              }
+              if (child.title)  {
+                tweet_html += "<a href=\""+child.link_url+"\">"+child.title+"</a>";
+              }else{
+                console.log(child.text +" has no title");
+              }
+              if (child.blurb) {
+                tweet_html += "<p>"+child.blurb+"</p>";
+              }else{
+                console.log(child.text +" has no blurb");
+              }
+              tweet_html += "<div class=\"clear\"></div></div></div>";
+            }
+            tweet_html += "</div></div>";
+          });
+          $("#time").after(tweet_html);
+        }
+        function loadTweets() {
             cat_name = currentCatName();
-            
+            tweets = [];
             $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
-                $("#time").nextAll().remove();
-                tweet_html = "";
-                
-                $.each(result, function(i, child){
-                    console.log("tweet has id: "+child.tweet_count);
-                    //lets clear all the tweets
-                    tweet_html += "<div class=\"con-tw\">";
-                    tweet_html += "<div class=\"wrap-user\">";
-                    tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
-                    tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
-                    tweet_html += "<div class=\"clear\"></div></div>";
-                    tweet_html += "<div class=\"wrap-con-tw\" ><span id=\"tweet_"+i+"\">"
-                    tweet_html += child.text.replace(urlRegEx,"<a href='$1'>$1</a>"); 
-                    tweet_html +="</span><div class=\"preview-tw\" id=\"tweet_preview_"+i+"\" ></div></div></div>";
-                    
-                    
-                });
-                $("#time").after(tweet_html);
-                
-                $.each(result, function(i, child){
-                    
-                    
-                    if(child.text.match(urlRegEx)){
-                        console.log("scanning for previews with url: "+child.text.match(urlRegEx)[0]);
-                        jQuery("#tweet_"+i).linkpreview({
-                            previewContainer: "#tweet_preview_"+i,
-                            url : child.text.match(urlRegEx)[0],
-                            preProcess: function() {
-                                console.log("preProcess");
-                            },
-                            onSuccess: function() {
-                                console.log("onSuccess");
-                            },
-                            onError: function() {
-                                console.log("onError");
-                            },
-                            onComplete: function() {
-                                console.log("onComplete");
-                                console.log("looking for text");
-                                //must find all the outbound links in the structure
-                                //console.log($("#tweet_preview_"+i).html());
-                                $("#tweet_preview_"+i).find('a').each(function(e) {
-                                   //console.log("found link: "+e+" with text: "+$( this ).text()+" and url: "+$( this ).attr("href"));
-                                   $(this).click(function() {
-                                        trackOutboundLink($( this ).attr("href"));
-                                   });
-                                });
-                                console.log("done");
-                            }
-                        });
-                    }    
-                });
+                tweets = result;
+                renderTweets();
             });
         }
+        
         
         function renderTopNav() {
             top_nav_container = document.getElementById("top_level_nav");
@@ -192,7 +341,6 @@
                             list_string += "</li>";
                         
                         } else{
-                            console.log("j val: "+j+" has name "+second_level.name);
                             list_string += "<li onclick=\"topChooser("+i+","+j+",-1)\"><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>";
 
                         }
@@ -214,12 +362,14 @@
         }
 
         function topChooser(i, j, k) {
-            console.log("got a call to top chooser with i:"+i+" j:"+j+" k:"+k);
+            console.log("UPDATING TOP");
             selected_secondary_index = j;
             selected_third_index = k;
             selected_top_index = i;
+
             renderTopNav();
-            renderTweets();
+            loadTweets();
+            loadHandles();
             trackCategorySelection(currentCatName());
         }
         
@@ -242,7 +392,7 @@
         function selectTimeFrameIndex(new_index) {
             time_frame_index = new_index;
             renderTimeFrame();
-            renderTweets();
+            loadTweets();
             trackTimeRangeSelection(time_frames[time_frame_index].seconds);
         }
 
@@ -250,31 +400,69 @@
 </head>
 
 <body>
+<!-- popup overlay start -->
+<div class="overlay" id="overlay_id"></div>
+<div class="wrap-popup" id="popup_id">
+	<div id="bt-close" onclick="setTopState(false)"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
+	<h3 id="popup_title_label">Nominate a Handle For </h3>
+    <!-- left box start -->
+    <div id="p-handle">
+    	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" id="search_text"/></div>
+        <ul id="open-handle-list">
+            <li>@Con</li>
+            <li>@CNN_BreakingNews</li>
+            <li>@CNN_International</li>
+            <li>@Con_prime</li>
+            <li>@Last_Con</li>
+            <li>@News_Con</li>
+        </ul>
+    </div>
+    <!-- left box end -->
+    <!-- right box start -->
+    <div id="p-twit-list">
+      <p id="nothing">Nothing to Display</p>
+      <div class="twitter-tweet-wrap" id="p-tweet-container">
+      </div>
+      <span id="button-container"><button class="p-bt-gray">Ok</button></span>
+    </div>
+    <!-- right box end -->
+    <div class="clear"></div>
+</div>
+
+<!-- popup overlay end -->
 <!-- header start -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid top-nav">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" >
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#"><img src="static/images/logo.png" alt="Filtra" /></a>
+      <a class="navbar-brand" href="#"><img src="static/images/logo.png" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+      <div class="clear"></div>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav" id="top_level_nav">
-        <li class="active"><a href="#">Front Page</a></li>
-        <li><a href="#">Technology</a></li>
-        <li><a href="#">Sports</a></li>
-        <li><a href="#">Travel</a></li>
-        <li><a href="#">Politics</a></li>
-        <li><a href="#">Travel</a></li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
       </ul>
+      <ul id="bt-top-nominate"  >
+      	<li id="bt-nom" onclick="setTopState(true)"><a href="#"><span class="genericon genericon-search"></span> Nominate</a></li>
+        <li><span class="genericon genericon-checkmark"></span>  <span id="remaining_vote_count">5 Votes left</span> <a href="#"><span class="genericon genericon-help"></span></a></li>
+        <div class="clear"></div>
+      </ul>
     </div>
+    <!-- nav start -->
+    <ul class="nav navbar-nav" id="top_level_nav">
+      <li class="active"><a href="#">Front Page</a></li>
+      <li><a href="#">Technology</a></li>
+      <li><a href="#">Sports</a></li>
+      <li><a href="#">Travel</a></li>
+      <li><a href="#">Politics</a></li>
+      <li><a href="#">Travel</a></li>
+    </ul>
+    <!-- nav end -->
   </div>
 </nav>
 <!-- header end -->
@@ -300,9 +488,17 @@
         <li><a href="#">Game</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
         <li><a href="#">Home</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
         <li class="last-sub"><a href="#">Apps</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+
       </ul>
     </div>
-    <div class="col-xs-8 col-xs-offset-2 wrap-con-main">
+    <div class="col-xs-7 wrap-con-main">
+    	<!-- Breadcurmbs start -->
+        <ol class="breadcrumb" style="visibility: hidden">
+          <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
+          <li><a href="#">Library</a></li>
+          <li class="active">Data</li>
+        </ol>
+    	<!-- Breadcurmbs end -->
     	<!-- time start -->
     	<ul id="time">
         	<li class="current"><a href="#"><span class="genericon genericon-time"></span> Past 15 Minutes</a><br/><span class="genericon genericon-downarrow"></span></li>
@@ -315,7 +511,14 @@
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
-            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+            	<div class="user">
+                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
                 <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
                 <div class="clear"></div>
             </div>
@@ -327,18 +530,21 @@
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
-            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+            	<div class="user">
+                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                	<ul class="nominate">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
                 <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
                 <div class="clear"></div>
             </div>
             <div class="wrap-con-tw">
             	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
                 <div class="preview-tw">
-                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
-					<div class="span8">
-                    	<a href="#">SportsCenter on Twitter</a>
-                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper.</p>
-                    </div>
+                	<img src="static/images/ic-load.GIF" class="imgpd"/>
                 </div>
             </div>
         </div>
@@ -346,7 +552,14 @@
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
-            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+            	<div class="user">
+                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                	<ul class="nominate done-down">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
                 <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
                 <div class="clear"></div>
             </div>
@@ -367,7 +580,14 @@
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
-            	<div class="user"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+            	<div class="user">
+                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
+                	<ul class="nominate">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
                 <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
                 <div class="clear"></div>
             </div>
@@ -385,7 +605,54 @@
             </div>
         </div>
         <!-- tweets end -->
+        <button id="bt-loadmore">Load More</button>
     </div>
+    <!-- sidebar start -->
+    <div class="col-xs-3">
+    	<!-- vote start -->
+        <div class="box-side vote-wrap">
+        	<h3>Vote <a href="#"><span class="genericon genericon-help"></span></a></h3>
+            <ul id="list-vote">
+            	<li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Bleacher Report LFL</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate done-down">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="none-active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate new-vote">
+                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="none-active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
+                	<ul class="nominate new-vote">
+                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </div>
+    	<!-- vote end -->
+    </div>
+    <!-- sidebar end -->
   </div>
 </div>
 <!-- contents end -->

@@ -7,6 +7,7 @@ import datetime
 import MySQLdb
 import json
 import re
+import threading
 
 from threading import Thread
 from Queue import Queue
@@ -38,7 +39,8 @@ host_target = host_live
 class HandleListener(tweepy.StreamListener):
         
         
-        def __init__(self, mdl, refresh):
+        def __init__(self,  refresh):
+                self.lock = threading.RLock()
                 self.setupSocketWithDelay(0)
                 self.db_queue = Queue()
                 worker = Thread(target=self.handleData, args=())
@@ -46,11 +48,20 @@ class HandleListener(tweepy.StreamListener):
                 worker.start()
                 self.lastClear = datetime.datetime.now() - datetime.timedelta(hours = 1)
                 self.lastPost = datetime.datetime.now()
-                self.mdl = mdl
                 self.refresh_handle_time_seconds = refresh
                 
                 
+                
         def setupSocketWithDelay(self, delay):
+                with self.lock:
+                        db = MySQLdb.connect(
+                                host=host_target,
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
+                        self.mapping = reloadSourceCategoryRelationship(db)
                 time.sleep(delay)
                 print "starting to set up socket listen on new thread"
                 self.kickoff_time = datetime.datetime.now()
@@ -76,7 +87,8 @@ class HandleListener(tweepy.StreamListener):
                     data_structure.append(self.db_queue.get())
                 
                 print "queue size after get: "+str(self.db_queue.qsize())
-                self.processBatchData(data_structure)
+                with self.lock:
+                        self.processBatchData(data_structure)
 
         
         def processBatchData(self, data_array):
@@ -123,16 +135,16 @@ class HandleListener(tweepy.StreamListener):
                     
         def attemptToInsertIntoBatchDictionaty(self, batchDictionary, json_object, unique_ids):
             try:
-                if(self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id'])) != None):
-                    categories = self.mdl.getCategoriesForTwitterUserId(str(json_object['user']['id']))
-                    for cat in categories:
-                        if cat not in batchDictionary:
-                            batchDictionary[cat] = []
-                            
-                        batchDictionary[cat].append(json_object['id'])
-                                            
-                    unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
-                    return True
+                if(str(json_object['user']['id']) in self.mapping):
+                        categories = self.mapping[str(json_object['user']['id'])]
+                        for cat in categories:
+                            if cat not in batchDictionary:
+                                batchDictionary[cat] = []
+                                
+                            batchDictionary[cat].append(json_object['id'])
+                                                
+                        unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
+                        return True
                 
             except KeyError, e:
                 print "we got a key error so we're just dropping out"
@@ -179,12 +191,13 @@ def periodicSurge():
                 db="newsdb",
                 charset='utf8',
                 port=3306)
+        print "************ surge check *********************"
         new_tweets = getTweetIdsSince(local_db_surge, 300)
         retweet_targets = getOccurrencesInCategory(local_db_surge, 300, 800, 1, new_tweets)
         if(len(retweet_targets) != 0):
             retweet_targets = getAlreadyRetweeted(retweet_targets, local_db_surge)
             for target in retweet_targets:
-                print "should retweet: "+str(target)+" with text: "+new_tweets[target]
+                print "***************** should retweet: "+str(target)+" with text: "+new_tweets[target]+" ********"
                 postTweet(new_tweets[target], target)
                 insertIntoRetweet(target, True, local_db_surge)
         
@@ -209,10 +222,51 @@ def updateSource():
                         profile_link = user.profile_image_url
                         updateHandle(local_db_twitter_source, username, user_id, handle_to_update, profile_link)
                 except Exception, e:
-                        print "retweet exception: "
+                        print "update exception: "
                         print str(e)
+                        local_db_twitter_source = MySQLdb.connect(
+                                host=host_target,
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
+                        ###we dont want to get stuck in a loop on this one broken handle
+                        handle_to_update = fetchOldestHandle(local_db_twitter_source)
+                        updateHandle(local_db_twitter_source, "", "", handle_to_update, "")
+                        
                         
                 time.sleep(15)
+                
+
+def scanPreviews():
+        while True:
+                local_db_tweets = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+                all_ids = getAllCategoryIds(local_db_tweets)
+                for cat_id in all_ids:
+                        print "******** Checking: "+str(cat_id)+" *************"
+                        local_db_tweets = MySQLdb.connect(
+                                host=host_target,
+                                user="akhalsa",
+                                passwd="sophiesChoice1",
+                                db="newsdb",
+                                charset='utf8',
+                                port=3306)
+                        tweets = getTweetOccurances(900, cat_id, local_db_tweets)
+                        for tweet in tweets:
+                                if(tweet["checked"] == 0):
+                                        print "******** Updating: "+str(tweet["id"])+" *************"
+                                        print "******** IT IS: "+tweet["text"]
+                                        updateTweet(tweet["text"], tweet["id"], local_db_tweets)
+                
+                                
+                        
                 
                 
 
@@ -235,7 +289,6 @@ if __name__ == '__main__':
         charset='utf8',
         port=3306)
     
-    mdl = src.CategoryModel.CategoryModel(db, api)
     
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
@@ -247,6 +300,13 @@ if __name__ == '__main__':
     worker.setDaemon(True)
     worker.start()
     
+    ###### start periodic updating of twitter source info #######
+    worker = Thread(target=scanPreviews, args=())
+    worker.setDaemon(True)
+    worker.start()
+    
+
+    #### st
     ####### dont check for surges on dev
     if(options.mysql_host == 0):
         ######start periodic surge scanning
@@ -254,7 +314,7 @@ if __name__ == '__main__':
         worker_two.setDaemon(True)
         worker_two.start()
     
-    handle = HandleListener(mdl, 300)
+    handle = HandleListener(300)
     while True:
         pass
 
