@@ -76,7 +76,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
                 except Exception, e:
                     pass
         
-        title = u''
+        title = u""
         if(soup.find("meta", {"property":"og:title"})):
             title_prospect = soup.find("meta", {"property":"og:title"})
             print "found og:title: "+title_prospect["content"]
@@ -103,10 +103,18 @@ def updateTweet(tweet_text, tweet_id, local_db):
             blurb_text = soup.find("meta", {"name": "description"})["content"]
             print "blurb from name description: "+blurb_text
         
-        sql = u"UPDATE Tweet SET blurb=\""+re.escape(blurb_text)
+        if(title):
+            title = re.escape(title)
+        
+        if(blurb_text):
+            blurb_text = re.escape(blurb_text)
+            
+        sql = u"UPDATE Tweet SET blurb=\""+blurb_text
         sql += u"\", link_url=\""+url
-        sql += u"\", link_text=\""+re.escape(title)+u"\", "
+        sql += u"\", link_text=\""+title+u"\", "
         sql += "img_url=\""+img_url+"\", checked=1 WHERE twitter_id like '"+tweet_id+"';"
+
+            
         
 
         
