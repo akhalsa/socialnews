@@ -98,10 +98,8 @@ def updateTweet(tweet_text, tweet_id, local_db):
         
         if(soup.find("meta", {"property":"og:description"})):
             blurb_text = soup.find("meta", {"property":"og:description"})["content"]
-            print "blurb from og:description: "+blurb_text
         elif(soup.find("meta", {"name": "description"})):
             blurb_text = soup.find("meta", {"name": "description"})["content"]
-            print "blurb from name description: "+blurb_text
         
         if(title == None):
             title = tweet_text
