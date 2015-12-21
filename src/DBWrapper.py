@@ -105,7 +105,9 @@ def updateTweet(tweet_text, tweet_id, local_db):
         
         if(title):
             title = re.escape(title)
-        
+        else:
+            print "Title was none?"
+            
         if(blurb_text):
             blurb_text = re.escape(blurb_text)
             
@@ -132,6 +134,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
         insertion_cursor.close()
     else:
         setTweetIdToUnloadable(local_db, tweet_id)
+
 
         
         
