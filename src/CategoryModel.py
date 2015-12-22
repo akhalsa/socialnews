@@ -69,11 +69,24 @@ class CategoryModel:
         sql = "ALTER TABLE Tweet AUTO_INCREMENT = 1"
         self.executeSql(db, sql)
         
-        sql = "SELECT CONCAT( 'DROP TABLE ', GROUP_CONCAT(table_name) , ';' )  AS statement FROM information_schema.tables  WHERE table_name LIKE 'Occurrence_%';"
+        #sql = "SELECT CONCAT( 'DROP TABLE ', GROUP_CONCAT(table_name) , ';' )  AS statement FROM information_schema.tables  WHERE table_name LIKE 'Occurrence_%';"
+        sql = "select table_name FROM information_schema.tables  WHERE table_name LIKE 'Occurrence_%';"
         cur = db.cursor()
         cur.execute(sql)
-        sql_to_run = cur.fetchone()
+        rows = cur.fetchall()
         cur.close()
+        sql = "DROP TABLE "
+        append_string = ""
+        for row in rows:
+            append_string += row[0]+", " 
+            
+        if(append != ""):
+            sql += append_string
+            cur = db.cursor()
+            cur.execute(sql)
+            cur.close()
+    
+
         self.executeSql(db, str(sql_to_run[0]))
 
         
