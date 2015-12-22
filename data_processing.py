@@ -110,3 +110,7 @@ if __name__ == '__main__':
     worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
     worker.start()
+    
+    while True:
+        continue
+    
