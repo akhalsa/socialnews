@@ -658,7 +658,10 @@ def reloadSourceCategoryRelationship(local_db):
         for vote_record in votes_records:
             if(vote_record[1] <= 0):
                 continue
-            
+            if(not vote_record[0]):
+                print "had to skip one"
+                continue
+                
             sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
             
             if vote_record[0] not in mapping:
