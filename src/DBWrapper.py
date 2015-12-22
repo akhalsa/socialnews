@@ -684,6 +684,7 @@ def reloadSourceCategoryRelationship(local_db):
         except Exception,e:
             # Rollback in case there is any error
             print "error on insertion of source cat relationship"
+            print "sql: "+sql
             print str(e)
             local_db.rollback()
         cursor.close()
