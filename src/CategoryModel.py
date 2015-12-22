@@ -89,9 +89,6 @@ class CategoryModel:
             cur = db.cursor()
             cur.execute(sql)
             cur.close()
-    
-
-        self.executeSql(db, str(sql_to_run[0]))
 
         
         print os.getcwd()
