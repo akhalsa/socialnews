@@ -80,7 +80,7 @@ class CategoryModel:
         for row in rows:
             append_string += row[0]+", " 
             
-        if(append != ""):
+        if(append_string != ""):
             sql += append_string
             cur = db.cursor()
             cur.execute(sql)
