@@ -35,14 +35,14 @@ def updateTweet(tweet_text, tweet_id, local_db):
         soup = BeautifulSoup(page_content, "html5lib")
         body = soup.find('body')
         
-        img_url = ""
+        img_url = u"#"
         
         if(soup.find("meta", {"property":"og:image"})):
             image_prospect = soup.find("meta", {"property":"og:image"})
             print "there is an image prospect of: "+image_prospect["content"]
             img_url = image_prospect["content"]
             
-        else:
+        elif (body != None):
             max_area = 0
             for img in body.findAll("img", src=True):
                 try:
@@ -98,10 +98,8 @@ def updateTweet(tweet_text, tweet_id, local_db):
         
         if(soup.find("meta", {"property":"og:description"})):
             blurb_text = soup.find("meta", {"property":"og:description"})["content"]
-            print "blurb from og:description: "+blurb_text
         elif(soup.find("meta", {"name": "description"})):
             blurb_text = soup.find("meta", {"name": "description"})["content"]
-            print "blurb from name description: "+blurb_text
         
         if(title == None):
             title = tweet_text
