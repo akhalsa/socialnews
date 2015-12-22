@@ -108,9 +108,9 @@ if __name__ == '__main__':
     worker.start()
     
     ###### start periodic updating of twitter source info #######
-    worker = Thread(target=scanPreviews, args=())
-    worker.setDaemon(True)
-    worker.start()
+    #worker = Thread(target=scanPreviews, args=())
+    #worker.setDaemon(True)
+    #worker.start()
     
     while True:
         continue
