@@ -1,6 +1,7 @@
 import MySQLdb
 import urllib2
 import time
+import tweepy
 from threading import Thread
 from src.DBWrapper import *
 from tornado.options import define, options, parse_command_line
