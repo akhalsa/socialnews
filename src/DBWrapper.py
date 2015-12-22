@@ -646,9 +646,9 @@ def reloadSourceCategoryRelationship(local_db):
         cursor = local_db.cursor()
         cat_id = row[0]
         #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
-        sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+        sql_votes = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
 
-        cursor.execute(sql)
+        cursor.execute(sql_votes)
         total_nominated_handles = cursor.rowcount
         votes_records = cursor.fetchall()
         cursor.close()
@@ -660,6 +660,7 @@ def reloadSourceCategoryRelationship(local_db):
                 continue
             if(not vote_record[0]):
                 print "had to skip one"
+                print "repro: "+sql_votes
                 continue
                 
             sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
