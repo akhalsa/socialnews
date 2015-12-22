@@ -76,8 +76,10 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        
-        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, self.request.remote_ip, 3600)
+        x_real_ip = self.request.headers.get("X-Real-IP")
+        remote_ip = x_real_ip or self.request.remote_ip
+        print "using remote ip: "+str(remote_ip)
+        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, remote_ip, 3600)
         print "found votes this hour of: "+str(votes_this_hour)
         if(votes_this_hour >= 10):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
@@ -119,6 +121,8 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 print e
                 self.finish("bad handle/insertion")
                 return
+        
+        
         if(alreadyVoted(local_db, self.request.remote_ip,  cat_id, table_info["twitter_id"])):
             print "already voted returned true"
             self.finish("{'message': 'you already voted for this handle'}")
