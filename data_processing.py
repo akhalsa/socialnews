@@ -93,6 +93,7 @@ def scanPreviews():
                     try:
                         updateTweet(tweet["text"], tweet["id"], local_db_tweets)
                     except Exception, e:
+                        print "got exception on: "+str(tweet["id"])
                         setTweetIdToUnloadable(local_db_tweets, tweet["id"])
             
 
