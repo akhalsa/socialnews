@@ -181,6 +181,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
     sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked "
     sql += " From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
 
+    
     first_fin = False
     for t_id in twitter_ids:
             if(first_fin == False):
@@ -191,7 +192,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
             sql += t_id
             
     sql += ");"
-    
+    print "append with sql: "+sql
     cursor.execute(sql)
     for row in cursor.fetchall():
         for tweet_dict in top_tweets:
