@@ -81,8 +81,8 @@ class CategoryModel:
         obj = untangle.parse('handles.xml')
         #table naming scheme
         #GenCat0
-        for cat in obj.root.category:
-            self.insertCategory(cat, [])
+        #for cat in obj.root.category:
+        #    self.insertCategory(cat, [])
             
         #clear db of any handles which were not in the document
         ########         SHOULD WIPE OUT ANY HANDLES WHICH ARE NO LONGER IN XML
