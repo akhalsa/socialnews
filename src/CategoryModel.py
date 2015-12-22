@@ -82,6 +82,7 @@ class CategoryModel:
             
         if(append_string != ""):
             sql += append_string
+            print "delete with string: "+sql
             cur = db.cursor()
             cur.execute(sql)
             cur.close()
