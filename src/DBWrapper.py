@@ -26,11 +26,9 @@ def updateTweet(tweet_text, tweet_id, local_db):
     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_text)
     if(len(urls) > 0):
         url = urls[0]
-        try:
-            page_content = urllib2.urlopen(url).read(200000)
-        except Exception, e:
-            setTweetIdToUnloadable(local_db, tweet_id)
-            return
+        
+        page_content = urllib2.urlopen(url).read(200000)
+
         
         soup = BeautifulSoup(page_content, "html5lib")
         body = soup.find('body')
@@ -495,6 +493,7 @@ def addOccurance(tweet_id, source_id, local_db):
 def findTableInfoWithTwitterHandle(twitter_handle, local_db):
     cursor = local_db.cursor()
     sql = "SELECT ID, name, twitter_handle, twitter_id FROM TwitterSource WHERE twitter_handle like '"+twitter_handle+"';"
+    print "sql is: "+sql
     cursor.execute(sql)
     return_map = None
     for row in cursor.fetchall() :

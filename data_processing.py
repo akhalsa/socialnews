@@ -89,10 +89,11 @@ def scanPreviews():
             for tweet in tweets:
                 if(tweet["checked"] == 0):
                     print "******** Updating: "+str(tweet["id"])+" *************"
-                    print "******** IT IS: "+tweet["text"]
                     try:
                         updateTweet(tweet["text"], tweet["id"], local_db_tweets)
+                        print "******** Finished: "+str(tweet["id"])
                     except Exception, e:
+                        print "got exception on: "+str(tweet["id"])
                         setTweetIdToUnloadable(local_db_tweets, tweet["id"])
             
 

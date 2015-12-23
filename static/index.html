@@ -203,11 +203,24 @@
             }
         }
         
-        function voteForHandle(handle_string, value) {
+        function voteForHandle(handle_string, value, position, old_up, old_down) {
 
           trackVote();
+          $("#nomination_ul_"+position).removeClass("nominate");
+          html_string = "";
+          if (value==1) {
+            $("#nomination_ul_"+position).addClass("nominate done-up");
+            html_string += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+(old_up+1)+"</span></li>";
+            html_string += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+old_down+"</span></li>";
+          }else if (value == -1) {
+            $("#nomination_ul_"+position).addClass("nominate done-down");
+            html_string += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+old_up+"</span></li>";
+            html_string += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+(old_down+1)+"</span></li>";
+            
+          }
+          $("#nomination_ul_"+position).html(html_string);
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
-            loadHandles();
+            console.log("vote complete");
           });
         }
         
@@ -239,11 +252,11 @@
                   list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
                   list_elements += "<div class=\"handle\">";
                   list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
-                  list_elements += "<ul ";
+                  list_elements += "<ul id='nomination_ul_"+i+"' ";
                   if (child.vote_val == 0) {
                     list_elements += "class=\"nominate\">";
-                    list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',1)\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                    list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1)\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',   1, "+i+", "+child.upvotes+", "+child.downvotes+")\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1, "+i+", "+child.upvotes+", "+child.downvotes+")\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
                   }else if (child.vote_val==1) {
                     list_elements += "class=\"nominate done-up\">";
                     list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
