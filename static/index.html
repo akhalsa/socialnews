@@ -101,6 +101,8 @@
         
         var popupState;
         
+        var remainingVotesString = " Votes Left";
+        
         $.getJSON("/category", function(result){
             category_structure = result;
             renderTopNav();
@@ -204,7 +206,9 @@
         }
         
         function voteForHandle(handle_string, value, position, old_up, old_down) {
-
+          if ($("#remaining_vote_count").html() == ("0"+ remainingVotesString) ){
+            console.log("were out of votes?");
+          }
           trackVote();
           $("#nomination_ul_"+position).removeClass("nominate");
           html_string = "";
@@ -223,7 +227,7 @@
             $.getJSON("/category/"+cat_name, function(result){
               vote_count = result.remaining_votes;
               console.log("got remaining votes: "+vote_count);
-              $("#remaining_vote_count").html(vote_count+" Votes Left");
+              $("#remaining_vote_count").html(vote_count+remainingVotesString);
             });
           });
         }
