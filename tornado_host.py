@@ -118,6 +118,8 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 if(user_id != None):
                     createHandle(local_db,user_id, username, re.escape(twitter_handle), profile_link )
                     table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
+                else:
+                    print "couldnt find: "+twitter_handle
             except Exception, e:
                 print "failed to insert :/"
                 print e
