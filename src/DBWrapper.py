@@ -493,6 +493,7 @@ def addOccurance(tweet_id, source_id, local_db):
 def findTableInfoWithTwitterHandle(twitter_handle, local_db):
     cursor = local_db.cursor()
     sql = "SELECT ID, name, twitter_handle, twitter_id FROM TwitterSource WHERE twitter_handle like '"+twitter_handle+"';"
+    print "sql is: "+sql
     cursor.execute(sql)
     return_map = None
     for row in cursor.fetchall() :
