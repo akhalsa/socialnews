@@ -105,7 +105,7 @@
         
         var cat_0 = getUrlParameter("cat");
         if (typeof cat_0 != 'undefined'){
-          selected_top_index = cat0;
+          selected_top_index = cat_0;
         }
         $.getJSON("/category", function(result){
             category_structure = result;
