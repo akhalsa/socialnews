@@ -222,9 +222,11 @@
             if(patt.test(handle_string)){
                 console.log("valid twitter handle");
                 trackNomination(handle_string);
-                voteForHandle(handle_string, 1);
-                setTopState(false);
-                loadHandles();
+                $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/1", function( data ) {
+                  setTopState(false);
+                  loadHandles();
+                });
+                
             }else{
                 alert("Please enter a valid twitter handle");
             }
