@@ -26,11 +26,9 @@ def updateTweet(tweet_text, tweet_id, local_db):
     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_text)
     if(len(urls) > 0):
         url = urls[0]
-        try:
-            page_content = urllib2.urlopen(url).read(200000)
-        except Exception, e:
-            setTweetIdToUnloadable(local_db, tweet_id)
-            return
+        
+        page_content = urllib2.urlopen(url).read(200000)
+
         
         soup = BeautifulSoup(page_content, "html5lib")
         body = soup.find('body')
@@ -181,6 +179,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
     sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked "
     sql += " From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
 
+    
     first_fin = False
     for t_id in twitter_ids:
             if(first_fin == False):
@@ -191,7 +190,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
             sql += t_id
             
     sql += ");"
-    
+    print "append with sql: "+sql
     cursor.execute(sql)
     for row in cursor.fetchall():
         for tweet_dict in top_tweets:
@@ -494,6 +493,7 @@ def addOccurance(tweet_id, source_id, local_db):
 def findTableInfoWithTwitterHandle(twitter_handle, local_db):
     cursor = local_db.cursor()
     sql = "SELECT ID, name, twitter_handle, twitter_id FROM TwitterSource WHERE twitter_handle like '"+twitter_handle+"';"
+    print "sql is: "+sql
     cursor.execute(sql)
     return_map = None
     for row in cursor.fetchall() :
@@ -646,9 +646,9 @@ def reloadSourceCategoryRelationship(local_db):
         cursor = local_db.cursor()
         cat_id = row[0]
         #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
-        sql = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
+        sql_votes = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
 
-        cursor.execute(sql)
+        cursor.execute(sql_votes)
         total_nominated_handles = cursor.rowcount
         votes_records = cursor.fetchall()
         cursor.close()
@@ -658,7 +658,11 @@ def reloadSourceCategoryRelationship(local_db):
         for vote_record in votes_records:
             if(vote_record[1] <= 0):
                 continue
-            
+            if(not vote_record[0]):
+                print "had to skip one"
+                print "repro: "+sql_votes
+                continue
+                
             sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
             
             if vote_record[0] not in mapping:
@@ -684,6 +688,7 @@ def reloadSourceCategoryRelationship(local_db):
         except Exception,e:
             # Rollback in case there is any error
             print "error on insertion of source cat relationship"
+            print "sql: "+sql
             print str(e)
             local_db.rollback()
         cursor.close()
