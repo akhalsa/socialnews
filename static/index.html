@@ -207,7 +207,7 @@
         
         function voteForHandle(handle_string, value, position, old_up, old_down) {
           if ($("#remaining_vote_count").html() == ("0"+ remainingVotesString) ){
-            console.log("were out of votes?");
+            return;
           }
           trackVote();
           $("#nomination_ul_"+position).removeClass("nominate");
