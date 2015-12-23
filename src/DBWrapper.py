@@ -4,6 +4,7 @@ import re
 import urllib2
 import Image
 import cStringIO
+import socket
 from bs4 import BeautifulSoup
 
 def getTweetWithTwitterId(local_db, twitter_id):
@@ -23,13 +24,15 @@ def getTweetWithTwitterId(local_db, twitter_id):
     return tweet_dict
     
 def updateTweet(tweet_text, tweet_id, local_db):
+    timeout = 10
+    socket.setdefaulttimeout(timeout)
     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_text)
     if(len(urls) > 0):
         url = urls[0]
-        
+        print "loading page"
         page_content = urllib2.urlopen(url).read(200000)
 
-        
+        print "page loaded"
         soup = BeautifulSoup(page_content, "html5lib")
         body = soup.find('body')
         
@@ -72,7 +75,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
                         max_area = area
                         
                 except Exception, e:
-                    pass
+                    print "got exception: "+str(e)
         
         title = u" "
         if(soup.find("meta", {"property":"og:title"})):
