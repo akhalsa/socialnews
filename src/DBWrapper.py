@@ -75,7 +75,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
                         max_area = area
                         
                 except Exception, e:
-                    pass
+                    print "got exception: "+str(e)
         
         title = u" "
         if(soup.find("meta", {"property":"og:title"})):
