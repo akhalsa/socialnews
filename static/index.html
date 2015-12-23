@@ -103,6 +103,16 @@
         
         var remainingVotesString = " Votes Left";
         
+        var cat_1 = getUrlParameter("cat1");
+        if (typeof cat_1 != 'undefined'){
+          selected_top_index = cat_1;
+        }
+        
+        var cat_2 = getUrlParameter("cat2");
+        if (typeof cat_2 != 'undefined'){
+          selected_secondary_index = cat_2;
+        }
+        
         $.getJSON("/category", function(result){
             category_structure = result;
             renderTopNav();
@@ -112,6 +122,21 @@
             updatePreview()
             setTopState(false);
         });
+        
+        function getUrlParameter(sParam) {
+          var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+      
+          for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+    
+            if (sParameterName[0] === sParam) {
+              return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+          }
+        };
         function triggerSearch(handle){
           $.getJSON("/twitter/timeline/"+handle, function(result){
             $('#p-tweet-container').html("");
