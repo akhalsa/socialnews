@@ -210,8 +210,8 @@
           console.log("backing up scroll position: "+scrollPosition);
           trackVote();
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
-            $(window).scrollTop(scrollPosition);
-            loadHandles();
+            //$(window).scrollTop(scrollPosition);
+            //loadHandles();
           });
         }
         
