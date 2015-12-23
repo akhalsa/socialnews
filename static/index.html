@@ -220,7 +220,11 @@
           }
           $("#nomination_ul_"+position).html(html_string);
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
-            console.log("vote complete");
+            $.getJSON("/category/"+cat_name, function(result){
+              vote_count = result.remaining_votes;
+              console.log("got remaining votes: "+vote_count);
+              $("#remaining_vote_count").html(vote_count+" Votes Left");
+            });
           });
         }
         
