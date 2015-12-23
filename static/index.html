@@ -206,7 +206,8 @@
         }
         
         function voteForHandle(handle_string, value, position, old_up, old_down) {
-
+          scrollPosition = $(window).scrollTop();
+          console.log("backing up scroll position: "+scrollPosition);
           trackVote();
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
             loadHandles();
@@ -226,8 +227,7 @@
         }
         
         function loadHandles() {
-          scrollPosition = $(window).scrollTop();
-          console.log("backing up scroll position: "+scrollPosition);
+          
           cat_name = currentCatName()
           console.log("refreshing handles for category: "+cat_name);
           $.getJSON("/category/"+cat_name, function(result){
