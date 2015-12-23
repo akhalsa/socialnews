@@ -227,6 +227,7 @@
         
         function loadHandles() {
           scrollPosition = $(window).scrollTop();
+          console.log("backing up scroll position: "+scrollPosition);
           cat_name = currentCatName()
           console.log("refreshing handles for category: "+cat_name);
           $.getJSON("/category/"+cat_name, function(result){
