@@ -113,6 +113,16 @@
           selected_secondary_index = cat_2;
         }
         
+        var cat_3 = getUrlParameter("cat3");
+        if (typeof cat_3 != 'undefined'){
+          selected_third_index = cat_3;
+        }
+        
+        var url_time_frame = getUrlParameter("time");
+        if (typeof url_time_frame != 'undefined') {
+          time_frame_index = url_time_frame;
+        }
+        
         $.getJSON("/category", function(result){
             category_structure = result;
             renderTopNav();
@@ -414,7 +424,6 @@
             selected_secondary_index = j;
             selected_third_index = k;
             selected_top_index = i;
-
             renderTopNav();
             loadTweets();
             loadHandles();
