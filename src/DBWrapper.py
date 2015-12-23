@@ -4,6 +4,7 @@ import re
 import urllib2
 import Image
 import cStringIO
+import socket
 from bs4 import BeautifulSoup
 
 def getTweetWithTwitterId(local_db, twitter_id):
