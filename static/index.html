@@ -103,10 +103,16 @@
         
         var remainingVotesString = " Votes Left";
         
-        var cat_0 = getUrlParameter("cat");
-        if (typeof cat_0 != 'undefined'){
-          selected_top_index = cat_0;
+        var cat_1 = getUrlParameter("cat1");
+        if (typeof cat_1 != 'undefined'){
+          selected_top_index = cat_1;
         }
+        
+        var cat_2 = getUrlParameter("cat2");
+        if (typeof cat_2 != 'undefined'){
+          selected_secondary_index = cat_2;
+        }
+        
         $.getJSON("/category", function(result){
             category_structure = result;
             renderTopNav();
