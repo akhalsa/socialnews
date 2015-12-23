@@ -223,7 +223,7 @@
             $.getJSON("/category/"+cat_name, function(result){
               vote_count = result.remaining_votes;
               console.log("got remaining votes: "+vote_count);
-              $("#remaining_vote_count").html(vote_count+" Votes Left");
+              $("#remaining_vote_count").text(vote_count+" Votes Left");
             });
           });
         }
