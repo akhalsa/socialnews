@@ -116,8 +116,8 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 username = re.escape(user.name)
                 profile_link = user.profile_image_url
                 if(user_id != None):
-                    createHandle(local_db,user_id, username, re.escape(twitter_handle), profile_link )
-                    table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
+                    createHandle(local_db,user_id, username, twitter_handle, profile_link )
+                    table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
                 else:
                     print "couldnt find: "+twitter_handle
             except Exception, e:
