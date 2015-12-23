@@ -29,7 +29,7 @@ def updateTweet(tweet_text, tweet_id, local_db):
         
         page_content = urllib2.urlopen(url).read(200000)
 
-        
+        print "page loaded"
         soup = BeautifulSoup(page_content, "html5lib")
         body = soup.find('body')
         
