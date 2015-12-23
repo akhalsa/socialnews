@@ -220,7 +220,11 @@
           }
           $("#nomination_ul_"+position).html(html_string);
           $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
-            console.log("vote complete");
+            $.getJSON("/category/"+cat_name, function(result){
+              vote_count = result.remaining_votes;
+              console.log("got remaining votes: "+vote_count);
+              $("#remaining_vote_count").html(vote_count+" Votes Left");
+            });
           });
         }
         
@@ -255,8 +259,8 @@
                   list_elements += "<ul id='nomination_ul_"+i+"' ";
                   if (child.vote_val == 0) {
                     list_elements += "class=\"nominate\">";
-                    list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',   1, "+i+", "+child.upvotes+", "+child.downvotes+")\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                    list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1, "+i+", "+child.upvotes+", "+child.downvotes+")\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
+                    list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',   1, "+i+", "+child.upvotes+", "+child.downvotes+"); return false;\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
+                    list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1, "+i+", "+child.upvotes+", "+child.downvotes+"); return false;\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
                   }else if (child.vote_val==1) {
                     list_elements += "class=\"nominate done-up\">";
                     list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
