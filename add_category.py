@@ -27,42 +27,44 @@ def executeSql(db, sql):
 
 
 def process(new_cat_name, parent_cat_name):
-    db = MySQLdb.connect(
-        host=host_target,
-        user="akhalsa",
-        passwd="sophiesChoice1",
-        db="newsdb",
-        charset='utf8',
-        port=3306)
-    
-    if(new_cat_name == ""):
-        print "you didn't supply a valid category name\n"
-        return
-    
-    cat_id = findCategoryIdWithName(new_cat_name, db)
-    if(cat_id != 0):
-        print "you already nominated that category!"
-        return
-    
-    parent_id = 0
-    if(parent_cat_name != ""):
-        parent_id = findCategoryIdWithName(parent_cat_name, db)
-        if(parent_id == 0):
-            print "invalid parent category name. BAIL!"
+        db = MySQLdb.connect(
+            host=host_target,
+            user="akhalsa",
+            passwd="sophiesChoice1",
+            db="newsdb",
+            charset='utf8',
+            port=3306)
+        
+        if(new_cat_name == ""):
+            print "you didn't supply a valid category name\n"
             return
-    
-    #ok were ready to insert the category
-    sql = "INSERT INTO Category (name) values ('"+new_cat_name+"');"
-    executeSql(db, sql)
-    
-    cat_id = findCategoryIdWithName(new_cat_name, db)
-    
-    if(parent_id != 0):
-        sql = "INSERT INTO CategoryParentRelationship (parent_category_id, child_category_id) values ("+str(parent_id)+", "+str(cat_id)+");"
+        
+        cat_id = findCategoryIdWithName(new_cat_name, db)
+        if(cat_id != 0):
+            print "you already nominated that category!"
+            return
+        
+        parent_id = 0
+        if(parent_cat_name != ""):
+            parent_id = findCategoryIdWithName(parent_cat_name, db)
+            if(parent_id == 0):
+                print "invalid parent category name. BAIL!"
+                return
+        
+        #ok were ready to insert the category
+        sql = "INSERT INTO Category (name) values ('"+new_cat_name+"');"
         executeSql(db, sql)
-
-
-
+        
+        cat_id = findCategoryIdWithName(new_cat_name, db)
+        
+        if(parent_id != 0):
+            sql = "INSERT INTO CategoryParentRelationship (parent_category_id, child_category_id) values ("+str(parent_id)+", "+str(cat_id)+");"
+            executeSql(db, sql)
+            
+        sql = "CREATE TABLE Occurrence_"+cat_id+"  (ID INT AUTO_INCREMENT PRIMARY KEY,twitter_id varchar(255), timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, INDEX(timestamp));"
+        executeSql(self.db, sql)
+        
+        
 if __name__ == '__main__':
         
     parse_command_line()
