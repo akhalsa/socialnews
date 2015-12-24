@@ -62,7 +62,7 @@ def process(new_cat_name, parent_cat_name):
             executeSql(db, sql)
             
         sql = "CREATE TABLE Occurrence_"+str(cat_id)+"  (ID INT AUTO_INCREMENT PRIMARY KEY,twitter_id varchar(255), timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, INDEX(timestamp));"
-        executeSql(self.db, sql)
+        executeSql(db, sql)
         
         
 if __name__ == '__main__':
