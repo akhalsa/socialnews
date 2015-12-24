@@ -35,11 +35,11 @@ def process(new_cat_name, parent_cat_name):
         charset='utf8',
         port=3306)
     
-    if(cat_name == ""):
+    if(new_cat_name == ""):
         print "you didn't supply a valid category name\n"
         return
     
-    cat_id = findCategoryIdWithName(cat_name, db)
+    cat_id = findCategoryIdWithName(new_cat_name, db)
     if(cat_id != 0):
         print "you already nominated that category!"
         return
@@ -52,7 +52,7 @@ def process(new_cat_name, parent_cat_name):
             return
     
     #ok were ready to insert the category
-    sql = "INSERT INTO Category (name) values ('"+cat_name+"');"
+    sql = "INSERT INTO Category (name) values ('"+new_cat_name+"');"
     executeSql(db, sql)
     
     if(parent_id != 0):
