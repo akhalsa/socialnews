@@ -37,7 +37,7 @@ def forward():
             charset='utf8',
             port=3306)
         
-        sql = "ALTER TABLE Category ADD UNIQUE INDEX 'unique_category' (name);"
+        sql = "ALTER TABLE Category ADD UNIQUE INDEX unique_category (name);"
         executeSql(db, sql)
     
 
@@ -55,6 +55,6 @@ def backward():
             charset='utf8',
             port=3306)
         
-        sql = "ALTER TABLE Category DROP INDEX 'unique_category';"
+        sql = "ALTER TABLE Category DROP INDEX unique_category;"
         executeSql(db, sql)
         
