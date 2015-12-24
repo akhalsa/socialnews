@@ -55,8 +55,10 @@ def process(new_cat_name, parent_cat_name):
     sql = "INSERT INTO Category (name) values ('"+new_cat_name+"');"
     executeSql(db, sql)
     
+    cat_id = findCategoryIdWithName(new_cat_name, db)
+    
     if(parent_id != 0):
-        sql = "INSERT INTO CategoryParentRelationship (parent_category_id, child_category_id) values ("+str(cat_id)+", "+str(parent_id)+");"
+        sql = "INSERT INTO CategoryParentRelationship (parent_category_id, child_category_id) values ("+str(parent_id)+", "+str(cat_id)+");"
         executeSql(db, sql)
 
 
