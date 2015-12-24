@@ -69,7 +69,7 @@ if __name__ == '__main__':
     elif(options.mysql_host == 1):
         host_target = host_dev
     
-    process(cat_name, parent_cat_name)
+    process(options.cat_name, options.parent_cat_name)
     
     
     
