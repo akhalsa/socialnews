@@ -61,7 +61,7 @@ def process(new_cat_name, parent_cat_name):
             sql = "INSERT INTO CategoryParentRelationship (parent_category_id, child_category_id) values ("+str(parent_id)+", "+str(cat_id)+");"
             executeSql(db, sql)
             
-        sql = "CREATE TABLE Occurrence_"+cat_id+"  (ID INT AUTO_INCREMENT PRIMARY KEY,twitter_id varchar(255), timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, INDEX(timestamp));"
+        sql = "CREATE TABLE Occurrence_"+str(cat_id)+"  (ID INT AUTO_INCREMENT PRIMARY KEY,twitter_id varchar(255), timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, INDEX(timestamp));"
         executeSql(self.db, sql)
         
         
