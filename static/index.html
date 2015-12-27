@@ -340,7 +340,7 @@
                 tweet_html += "<img src=\""+child.img_url+"\" width=\"150\"/>";
               }
               if (child.title)  {
-                tweet_html += "<a href=\""+child.link_url+"\">"+child.title+"</a>";
+                tweet_html += "<a href=\""+child.link_url+"\" target=\"_blank\">"+child.title+"</a>";
               }else{
                 console.log(child.text +" has no title");
               }
