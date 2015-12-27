@@ -15,7 +15,8 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    if(window.location.href.indexOf("filtra.io") > -1){
+    var tracking_temp = getUrlParameter("tracking");
+    if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking_temp == 'undefined')){
         ga('create', 'UA-70081756-1', 'auto');
         ga('send', 'pageview');
     }
@@ -23,61 +24,7 @@
   
   </script>
   <script>
-    /**
-    * Function that tracks a click on an outbound link in Google Analytics.
-    * This function takes a valid URL string as an argument, and uses that URL string
-    * as the event label.
-    */
-    var trackOutboundLink = function(url) {
-        console.log("calling outbound: "+url);
-        if(window.location.href.indexOf("filtra.io") > -1){
-            ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
-                function () {
-                }
-            });
-        }
-       
-    }
     
-    var trackCategorySelection = function(cat_name){
-        if(window.location.href.indexOf("filtra.io") > -1){
-            ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
-             function () {
-             }
-           });
-        }
-    }
-    
-    var trackVote = function(){
-      if(window.location.href.indexOf("filtra.io") > -1){
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'Vote',
-          eventAction: 'Vote'
-          } );
-      }
-    }
-    
-    var trackNomination = function(handle){
-      if(window.location.href.indexOf("filtra.io") > -1){
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'Vote',
-          eventAction: 'Nomination',
-          eventLabel: handle
-          }
-        );
-      }
-    }
-    
-    var trackTimeRangeSelection = function(seconds){
-        if(window.location.href.indexOf("filtra.io") > -1){
-            ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
-             function () {
-             }
-           });
-        }
-    }
   </script>
   <script type="text/javascript">
         /*
@@ -123,6 +70,8 @@
         if (typeof url_time_frame != 'undefined') {
           time_frame_index = url_time_frame;
         }
+        
+        var tracking = getUrlParameter("tracking");
         
         $.getJSON("/category", function(result){
             category_structure = result;
@@ -456,6 +405,62 @@
         $(function () {
 		$('[data-toggle="popover"]').popover();
 	  })
+        
+        /**
+        * Function that tracks a click on an outbound link in Google Analytics.
+        * This function takes a valid URL string as an argument, and uses that URL string
+        * as the event label.
+        */
+        var trackOutboundLink = function(url) {
+            console.log("calling outbound: "+url);
+            if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+                ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+                    function () {
+                    }
+                });
+            }
+           
+        }
+        
+        var trackCategorySelection = function(cat_name){
+            if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+                ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+                 function () {
+                 }
+               });
+            }
+        }
+        
+        var trackVote = function(){
+          if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Vote',
+              eventAction: 'Vote'
+              } );
+          }
+        }
+        
+        var trackNomination = function(handle){
+          if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Vote',
+              eventAction: 'Nomination',
+              eventLabel: handle
+              }
+            );
+          }
+        }
+        
+        var trackTimeRangeSelection = function(seconds){
+            if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+                ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
+                 function () {
+                 }
+               });
+            }
+        }
 
   </script>
 </head>
