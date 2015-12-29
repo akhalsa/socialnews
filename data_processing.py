@@ -61,9 +61,20 @@ def scanForHappening():
                 for word in words:
                     if (len(word) <=4):
                         continue
+                    
+                    if((word == "http") or (word == "https")):
+                        continue
+                    
                     if(word not in tweet_words):
                         tweet_words[word] = set({})
                     tweet_words[word] |= {tweet["id"]}
+                    
+            #remove all words where set length isnt greater than 2
+            for word in tweet_words:
+                if(len(tweet_words[word]) < 2):
+                    tweet_words.pop(word)
+            
+            print "potential matches: "        
             print tweet_words
                 
 
