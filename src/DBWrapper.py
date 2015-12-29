@@ -24,7 +24,7 @@ def getTweetWithTwitterId(local_db, twitter_id):
     return tweet_dict
     
 def updateTweet(tweet_text, tweet_id, local_db):
-    timeout = 10
+    timeout = 3
     socket.setdefaulttimeout(timeout)
     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet_text)
     if(len(urls) > 0):
