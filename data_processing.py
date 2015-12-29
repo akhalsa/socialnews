@@ -70,9 +70,12 @@ def scanForHappening():
                     tweet_words[word] |= {tweet["id"]}
                     
             #remove all words where set length isnt greater than 2
+            remove_words = []
             for word in tweet_words:
                 if(len(tweet_words[word]) < 2):
-                    tweet_words.pop(word)
+                    remove_words.append(word)
+            for word in remove_words:
+                tweet_words.pop(word)
             
             print "potential matches: "        
             print tweet_words
