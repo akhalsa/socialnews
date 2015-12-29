@@ -62,9 +62,8 @@ def scanForHappening():
                     if (len(word) <=4):
                         continue
                     if(word not in tweet_words):
-                        tweet_words[word] = {}
+                        tweet_words[word] = set({})
                     tweet_words[word] |= {tweet["id"]}
-            
             print tweet_words
                 
 
