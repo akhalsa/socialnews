@@ -2,6 +2,7 @@ import MySQLdb
 import urllib2
 import time
 import tweepy
+import re
 from threading import Thread
 from src.DBWrapper import *
 from tornado.options import define, options, parse_command_line
@@ -31,7 +32,42 @@ def periodicClean():
         local_db_clean.close()
         time.sleep(900)
         
-        
+def scanForHappening():
+    regex = re.compile('\w+')
+    
+    while True:
+        local_db_scan = MySQLdb.connect(
+                host=host_target,
+                user="akhalsa",
+                passwd="sophiesChoice1",
+                db="newsdb",
+                charset='utf8',
+                port=3306)
+        all_ids = getAllCategoryIds(local_db_scan)
+        for cat_id in all_ids:
+            print "******** Checking: "+str(cat_id)+" *************"
+            local_db_scan = MySQLdb.connect(
+                    host=host_target,
+                    user="akhalsa",
+                    passwd="sophiesChoice1",
+                    db="newsdb",
+                    charset='utf8',
+                    port=3306)
+            tweets = getTweetOccurances(900, cat_id, local_db_scan)
+            tweet_words = {}
+            for tweet in tweets:
+                #find all unique words in the text
+                words = regex.findall(tweet["text"].lower())
+                for word in words:
+                    if (len(word) <=4):
+                        continue
+                    if(word not in tweet_words):
+                        tweet_words[word] = {}
+                    tweet_words[word] |= {tweet["id"]}
+            
+            print tweet_words
+                
+
 def updateSource():
     while True:
         try: 
@@ -115,7 +151,7 @@ if __name__ == '__main__':
     worker.start()
     
     ###### start periodic updating of twitter source info #######
-    worker = Thread(target=scanPreviews, args=())
+    worker = Thread(target=scanForHappening, args=())
     worker.setDaemon(True)
     worker.start()
     
