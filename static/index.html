@@ -421,9 +421,14 @@
             loadTweets();
             trackTimeRangeSelection(time_frames[time_frame_index].seconds);
         }
-        jq(function () {
-		jq('[data-toggle="popover"]').popover();
-	  })
+
+        jQuery(document).ready(function($){
+          $(function(){
+            $('[data-toggle="popover"]').popover();
+          });
+          
+        });
+		
         
         /**
         * Function that tracks a click on an outbound link in Google Analytics.
