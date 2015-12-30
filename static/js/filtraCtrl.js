@@ -15,6 +15,6 @@ app.controller("filtraCtrl", function($scope, $http) {
     $scope.topIndexChange = function(top) {
         console.log("changing to: "+top);
         console.log("selected top was: "+selected_top_index);
-        selected_top_index = top;
+        $scope.selected_top_index = top;
     }
 });
