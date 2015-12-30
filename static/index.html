@@ -552,10 +552,14 @@
       	<li class="current-page"><a href="#">Sports</a></li>
         <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
             ng-class="($index==selected_secondary_index) ? 'current-sub' : ''" >
-          
+          <span ng-if="$index==selected_secondary_index">
+            <div id="wrap-pr">
+          </span>
           <a href="#">{{! cat.name }}</a>
           <a href="#"><span ng-class="($index==selected_secondary_index) ? 'genericon genericon-collapse' : 'genericon genericon-expand'"></span></a>
-          
+          <span ng-if="$index==selected_secondary_index">
+            <a href="#"><span class="genericon genericon-collapse"></span></a></div>
+          </span>
         </li>
         <li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></div>
         	<ul>
