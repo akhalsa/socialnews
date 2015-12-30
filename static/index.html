@@ -290,9 +290,9 @@
           });
         }
         function renderTweets(){
-          $("#time").nextAll().remove();
+          jq("#time").nextAll().remove();
           tweet_html = "";
-          $.each(tweets, function(i, child){
+          jq(document).each(tweets, function(i, child){
             tweet_html += "<div class=\"con-tw\">";
             tweet_html += "<div class=\"wrap-user\">";
             tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
@@ -327,7 +327,7 @@
         function loadTweets() {
             cat_name = currentCatName();
             tweets = [];
-            $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
+            jq(document).getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
                 tweets = result;
                 renderTweets();
             });
@@ -382,7 +382,7 @@
             top_nav_container.innerHTML = top_options_string;
             
             $.each(category_structure, function(i, child){
-               $("#top_level_id_"+i).click(function(){ topChooser(i, -1, -1); return false; }); 
+               jq("#top_level_id_"+i).click(function(){ topChooser(i, -1, -1); return false; }); 
             });
             
             
@@ -412,7 +412,7 @@
                 }
             });
             time_options_string += "<div class=\"clear\"></div>";
-            $("#time").html(time_options_string);
+            jq("#time").html(time_options_string);
             
         }
         function selectTimeFrameIndex(new_index) {
@@ -421,7 +421,7 @@
             loadTweets();
             trackTimeRangeSelection(time_frames[time_frame_index].seconds);
         }
-        $(function () {
+        jq(function () {
 		$('[data-toggle="popover"]').popover();
 	  })
         
