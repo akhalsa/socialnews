@@ -1,4 +1,4 @@
-app.controller("myCtrl", function($scope) {
+app.controller("filtraCtrl", function($scope) {
     $scope.selected_top_index = 0;
     $scope.selected_secondary_index = -1;
     $scope.selected_third_index = -1;
