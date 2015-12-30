@@ -537,7 +537,7 @@
     <!-- nav start -->
     <ul class="nav navbar-nav" id="top_level_nav">
       <li ng-repeat="cat in category_structure" ng-class="($index==selected_top_index) ? 'active' : ''" >
-        <a href="#">{{! cat.name }}</a>
+        <a href="#"  ng-click="selected_top_index = $index">{{! cat.name }}</a>
       </li>
     </ul>
     <!-- nav end -->
