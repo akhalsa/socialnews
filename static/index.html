@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="static/css/style.css">
   <link rel="stylesheet" href="static/fonts/genericons/genericons.css">
   <link rel="stylesheet" href="static/css/non-responsive.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"/>
   <script src="static/js/bootstrap.min.js"></script>
   <script src="static/js/filtraApp.js"></script>
@@ -87,6 +88,9 @@
         }
         
         var tracking = getUrlParameter("tracking");
+        
+        var jq = $.noConflict();
+        
         
         /*$.getJSON("/category", function(result){
             category_structure = result;
@@ -351,7 +355,7 @@
                             if (second_level.children.length>0) {
                                 list_string += "<ul>"
                             }
-                            $.each(second_level.children, function(k, third_level){
+                            jq(document).each(second_level.children, function(k, third_level){
                                 if (k == selected_third_index) {
                                     list_string += "<li class=\"current-sub\" onclick=\"topChooser("+i+","+j+","+k+")\"><a href=\"#\">"+third_level.name+"</a></li>";
                                 }else{
@@ -396,9 +400,9 @@
         }
         
         function renderTimeFrame() {
-            $("#time").empty();
+            jq("#time").empty();
             time_options_string = "";
-            $.each(time_frames, function(i, time_frame){
+            jq(document).each(time_frames, function(i, time_frame){
                 if (i == time_frame_index) {
                     time_options_string += "<li class=\"current\" onclick=\"selectTimeFrameIndex("+i+")\"><a href=\"#\"><span class=\"genericon genericon-time\"></span>"+time_frame.text
                     +"</a><br/><span class=\"genericon genericon-downarrow\"></span></li>";
