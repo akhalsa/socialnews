@@ -117,38 +117,38 @@
           }
         };
         function triggerSearch(handle){
-          $.getJSON("/twitter/timeline/"+handle, function(result){
-            $('#p-tweet-container').html("");
+          jq(document).getJSON("/twitter/timeline/"+handle, function(result){
+            jq('#p-tweet-container').html("");
             var tweet_cont = "";
-            $.each(result, function(i, child){
+            jq(document).each(result, function(i, child){
               tweet_cont+= child;
             });
-            $('#p-tweet-container').html(tweet_cont);
+            jq('#p-tweet-container').html(tweet_cont);
           });
           
         }
         function searchHandleClicked(handle){
-          $('#search_text').val(handle);
+          jq('#search_text').val(handle);
           triggerSearch(handle);
           updatePreview();
         }
         
         function updatePreview(){
-          if(search_string_val != $('#search_text').val()){
-            search_string_val = $('#search_text').val();
+          if(search_string_val != jq('#search_text').val()){
+            search_string_val = jq('#search_text').val();
             if ((search_string_val == "@")||(search_string_val == "")) {
-              $('#open-handle-list').html("");
-              $('#button-container').html("");
-              $('#nothing').show();
-              $('#p-tweet-container').hide();
+              jq('#open-handle-list').html("");
+              jq('#button-container').html("");
+              jq('#nothing').show();
+              jq('#p-tweet-container').hide();
               return;
             }
-            $.getJSON("/twitter/search/"+search_string_val, function(result){
-              if (result.search == $('#search_text').val()) {
+            jq(document).getJSON("/twitter/search/"+search_string_val, function(result){
+              if (result.search == jq('#search_text').val()) {
                 var list_of_suggestions_html = "";
                 var text_match = "";
-                $.each(result.handles, function(i, child){
-                  if (("@"+child.screen_name) == $('#search_text').val()) {
+                jq(document).each(result.handles, function(i, child){
+                  if (("@"+child.screen_name) == jq('#search_text').val()) {
                     //button should be active
                     text_match = "@"+child.screen_name
                   }
@@ -156,17 +156,17 @@
                   list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
                 });
                 if (text_match != "") {
-                  $('#nothing').hide();
-                  $('#p-tweet-container').show();
-                  $('#button-container').html("<button class=\"p-bt-blue\" onclick=\"nominateNewHandle()\">Nominate: "+text_match+"</button>");
-                  triggerSearch($('#search_text').val());
+                  jq('#nothing').hide();
+                  jq('#p-tweet-container').show();
+                  jq('#button-container').html("<button class=\"p-bt-blue\" onclick=\"nominateNewHandle()\">Nominate: "+text_match+"</button>");
+                  triggerSearch(jq('#search_text').val());
                 }else{
-                  $('#button-container').html("");
-                  $('#nothing').show();
-                  $('#p-tweet-container').hide();
+                  jq('#button-container').html("");
+                  jq('#nothing').show();
+                  jq('#p-tweet-container').hide();
                   
                 }
-                $('#open-handle-list').html(list_of_suggestions_html);
+                jq('#open-handle-list').html(list_of_suggestions_html);
                 
               }
             });
@@ -176,17 +176,17 @@
         function setTopState(newState){
           console.log("setTopState called with val: "+newState);
           if (newState == false) {
-            $('#overlay_id').hide();
-            $('#popup_id').hide();
-            $('#search_text').unbind('keyup input paste');
+            jq('overlay_id').hide();
+            jq('#popup_id').hide();
+            jq('#search_text').unbind('keyup input paste');
           }else if (newState == true) {
-            $('#overlay_id').show();
-            $('#popup_id').show();
+            jq('#overlay_id').show();
+            jq('#popup_id').show();
             search_string_val = "";
-            $('#open-handle-list').html("");
-            $('#search_text').val(search_string_val);
-            $('#popup_title_label').html("Nominate a Handle for "+currentCatName());
-            $('#search_text').bind("keyup input paste", function(event) {
+            jq('#open-handle-list').html("");
+            jq('#search_text').val(search_string_val);
+            jq('#popup_title_label').html("Nominate a Handle for "+currentCatName());
+            jq('#search_text').bind("keyup input paste", function(event) {
               updatePreview();
             });
           }
@@ -195,13 +195,13 @@
         
         function nominateNewHandle() {
  
-            var handle_string = $('#search_text').val().trim();
+            var handle_string = jq('#search_text').val().trim();
             console.log("running check for: "+handle_string);
             var patt = /^@(\w){1,15}$/;
             if(patt.test(handle_string)){
                 console.log("valid twitter handle");
                 trackNomination(handle_string);
-                $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/1", function( data ) {
+                jq(document).post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/1", function( data ) {
                   setTopState(false);
                   loadHandles();
                 });
@@ -212,28 +212,28 @@
         }
         
         function voteForHandle(handle_string, value, position, old_up, old_down) {
-          if ($("#remaining_vote_count").html() == ("0"+ remainingVotesString) ){
+          if (jq("#remaining_vote_count").html() == ("0"+ remainingVotesString) ){
             return;
           }
           trackVote();
-          $("#nomination_ul_"+position).removeClass("nominate");
+          jq("#nomination_ul_"+position).removeClass("nominate");
           html_string = "";
           if (value==1) {
-            $("#nomination_ul_"+position).addClass("nominate done-up");
+            jq("#nomination_ul_"+position).addClass("nominate done-up");
             html_string += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+(old_up+1)+"</span></li>";
             html_string += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+old_down+"</span></li>";
           }else if (value == -1) {
-            $("#nomination_ul_"+position).addClass("nominate done-down");
+            jq("#nomination_ul_"+position).addClass("nominate done-down");
             html_string += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+old_up+"</span></li>";
             html_string += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+(old_down-1)+"</span></li>";
             
           }
-          $("#nomination_ul_"+position).html(html_string);
-          $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
-            $.getJSON("/category/"+cat_name, function(result){
+          jq("#nomination_ul_"+position).html(html_string);
+          jq(document).post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
+            jq(document).getJSON("/category/"+cat_name, function(result){
               vote_count = result.remaining_votes;
               console.log("got remaining votes: "+vote_count);
-              $("#remaining_vote_count").html(vote_count+remainingVotesString);
+              jq("#remaining_vote_count").html(vote_count+remainingVotesString);
             });
           });
         }
@@ -253,14 +253,14 @@
         function loadHandles() {
           cat_name = currentCatName()
           console.log("refreshing handles for category: "+cat_name);
-          $.getJSON("/category/"+cat_name, function(result){
+          jq(document).getJSON("/category/"+cat_name, function(result){
               var list_elements = "";
               console.log("response handles for "+cat_name);
               cats = result.handles;
               vote_count = result.remaining_votes;
               console.log("got remaining votes: "+vote_count);
-              $("#remaining_vote_count").html(vote_count+" Votes Left");
-              $.each(cats, function(i, child){
+              jq("#remaining_vote_count").html(vote_count+" Votes Left");
+              jq(document).each(cats, function(i, child){
                   console.log("populating handle: "+child.handle);
                   list_elements += "<li ";
                   list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
@@ -285,7 +285,7 @@
                   list_elements += "<div class=\"clear\"></div></li>";
               });
               console.log("done loading handles");
-              $('#list-vote').html(list_elements);
+              jq('#list-vote').html(list_elements);
              
           });
         }
@@ -322,7 +322,7 @@
             }
             tweet_html += "</div></div>";
           });
-          $("#time").after(tweet_html);
+          jq("#time").after(tweet_html);
         }
         function loadTweets() {
             cat_name = currentCatName();
@@ -381,7 +381,7 @@
             });
             top_nav_container.innerHTML = top_options_string;
             
-            $.each(category_structure, function(i, child){
+            jq(document).each(category_structure, function(i, child){
                jq("#top_level_id_"+i).click(function(){ topChooser(i, -1, -1); return false; }); 
             });
             
@@ -422,7 +422,7 @@
             trackTimeRangeSelection(time_frames[time_frame_index].seconds);
         }
         jq(function () {
-		$('[data-toggle="popover"]').popover();
+		jq('[data-toggle="popover"]').popover();
 	  })
         
         /**
