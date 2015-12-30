@@ -7,6 +7,8 @@ app.controller("filtraCtrl", function($scope, $http) {
     $http.get("/category")
     .then(function(response) {
         $scope.category_structure = response.data;
-        console.log("data is: "+response.data);
+        for (index = 0; index < a.response.data; ++index) {
+            console.log(response.data[index].name);
+        }
     });
 });
