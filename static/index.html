@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="static/css/style.css">
   <link rel="stylesheet" href="static/fonts/genericons/genericons.css">
   <link rel="stylesheet" href="static/css/non-responsive.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"/>
   <script src="static/js/bootstrap.min.js"></script>
   <script src="static/js/filtraApp.js"></script>
@@ -90,17 +89,6 @@
         var tracking = getUrlParameter("tracking");
         
         var jq = $.noConflict();
-        
-        
-        /*$.getJSON("/category", function(result){
-            category_structure = result;
-            renderTopNav();
-            renderTimeFrame();
-            loadTweets();
-            loadHandles();
-            updatePreview()
-            setTopState(false);
-        });*/
         
         function getUrlParameter(sParam) {
           var sPageURL = decodeURIComponent(window.location.search.substring(1)),
