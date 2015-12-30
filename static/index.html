@@ -538,7 +538,7 @@
     <!-- nav start -->
     <ul class="nav navbar-nav" id="top_level_nav">
       <li ng-repeat="cat in category_structure" ng-class="{active: $index==selected_top_index}">
-        <a href="#">{{ cat.name }}</a>
+        <a href="#">{{! cat.name }}</a>
       </li>
     </ul>
     <!-- nav end -->
@@ -553,7 +553,7 @@
       	<li class="current-page"><a href="#">Sports</a></li>
         <li ng-repeat="cat in category_structure[selected_top_index]" ng-class="{current-sub: $index==selected_secondary_index}">
           
-          <a href="#">{{ cat.name }}</a>
+          <a href="#">{{! cat.name }}</a>
           <a href="#"><span ng-class="($index==selected_secondary_index) ? 'genericon genericon-collapse' : 'genericon genericon-expand'"></span></a>
           
         </li>
