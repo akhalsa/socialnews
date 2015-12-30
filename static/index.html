@@ -88,7 +88,6 @@
         
         var tracking = getUrlParameter("tracking");
         
-        var jq = $.noConflict();
         
         function getUrlParameter(sParam) {
           var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -104,7 +103,8 @@
             }
           }
         };
-        function triggerSearch(handle){
+        
+        /*function triggerSearch(handle){
           jq(document).getJSON("/twitter/timeline/"+handle, function(result){
             jq('#p-tweet-container').html("");
             var tweet_cont = "";
@@ -114,14 +114,15 @@
             jq('#p-tweet-container').html(tweet_cont);
           });
           
-        }
-        function searchHandleClicked(handle){
+        }*/
+        
+        /*function searchHandleClicked(handle){
           jq('#search_text').val(handle);
           triggerSearch(handle);
           updatePreview();
-        }
+        }*/
         
-        function updatePreview(){
+        /*function updatePreview(){
           if(search_string_val != jq('#search_text').val()){
             search_string_val = jq('#search_text').val();
             if ((search_string_val == "@")||(search_string_val == "")) {
@@ -159,9 +160,9 @@
               }
             });
           }
-        }
+        }*/
         
-        function setTopState(newState){
+        /*function setTopState(newState){
           console.log("setTopState called with val: "+newState);
           if (newState == false) {
             jq('overlay_id').hide();
@@ -179,9 +180,9 @@
             });
           }
           popupState = newState;
-        }
+        }*/
         
-        function nominateNewHandle() {
+        /*function nominateNewHandle() {
  
             var handle_string = jq('#search_text').val().trim();
             console.log("running check for: "+handle_string);
@@ -197,9 +198,9 @@
             }else{
                 alert("Please enter a valid twitter handle");
             }
-        }
+        }*/
         
-        function voteForHandle(handle_string, value, position, old_up, old_down) {
+        /*function voteForHandle(handle_string, value, position, old_up, old_down) {
           if (jq("#remaining_vote_count").html() == ("0"+ remainingVotesString) ){
             return;
           }
@@ -224,7 +225,7 @@
               jq("#remaining_vote_count").html(vote_count+remainingVotesString);
             });
           });
-        }
+        }*/
         
         function currentCatName() {
             var cat_name = ""
@@ -238,7 +239,7 @@
             return cat_name;
         }
         
-        function loadHandles() {
+        /*function loadHandles() {
           cat_name = currentCatName()
           console.log("refreshing handles for category: "+cat_name);
           jq(document).getJSON("/category/"+cat_name, function(result){
@@ -276,8 +277,9 @@
               jq('#list-vote').html(list_elements);
              
           });
-        }
-        function renderTweets(){
+        }*/
+        
+        /*function renderTweets(){
           jq("#time").nextAll().remove();
           tweet_html = "";
           jq(document).each(tweets, function(i, child){
@@ -319,10 +321,10 @@
                 tweets = result;
                 renderTweets();
             });
-        }
+        }*/
         
         
-        function renderTopNav() {
+        /*function renderTopNav() {
             top_nav_container = document.getElementById("top_level_nav");
             var top_options_string = "";
             
@@ -374,9 +376,10 @@
             });
             
             
-        }
+        }*/
+        
 
-        function topChooser(i, j, k) {
+        /*function topChooser(i, j, k) {
             console.log("UPDATING TOP");
             selected_secondary_index = j;
             selected_third_index = k;
@@ -402,13 +405,13 @@
             time_options_string += "<div class=\"clear\"></div>";
             jq("#time").html(time_options_string);
             
-        }
-        function selectTimeFrameIndex(new_index) {
+        }*/
+        /*function selectTimeFrameIndex(new_index) {
             time_frame_index = new_index;
             renderTimeFrame();
             loadTweets();
             trackTimeRangeSelection(time_frames[time_frame_index].seconds);
-        }
+        }*/
 
         /*jQuery(document).ready(function($){
           $(function(){
