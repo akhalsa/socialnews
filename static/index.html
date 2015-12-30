@@ -420,11 +420,7 @@
           
         });*/
         
-        function topIndexChange(top) {
-          console.log("changing to: "+top);
-          console.log("selected top was: "+selected_top_index);
-          selected_top_index = top;
-        }
+        
 		
         
         /**
@@ -543,7 +539,7 @@
     <!-- nav start -->
     <ul class="nav navbar-nav" id="top_level_nav">
       <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
-        <a href="#"  ng-click="topIndexChange($index)">{{! cat.name }}</a>
+        <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
       </li>
     </ul>
     <!-- nav end -->

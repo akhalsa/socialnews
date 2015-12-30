@@ -12,9 +12,12 @@ app.controller("filtraCtrl", function($scope, $http) {
         }
     });
     
-    $scope.topIndexChange = function(top) {
+    $scope.selectionChange = function(top, second, third) {
         console.log("changing to: "+top);
-        console.log("selected top was: "+selected_top_index);
+        console.log("changing to second: "+second);
+        console.log("changing to third: "+third);
         $scope.selected_top_index = top;
+        $scope.selected_secondary_index = second;
+        $scope.selected_third_index = third;
     }
 });
