@@ -550,7 +550,8 @@
     <div class="col-xs-2 wrap-sub-nav">
       <ul id="nav-category" class="sub">
       	<li class="current-page"><a href="#">Sports</a></li>
-        <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index]" ng-class="{current-sub: $index==selected_secondary_index}">
+        <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index]"
+            ng-class="($index==selected_secondary_index) ? 'current-sub' : ''" >
           
           <a href="#">{{! cat.name }}</a>
           <a href="#"><span ng-class="($index==selected_secondary_index) ? 'genericon genericon-collapse' : 'genericon genericon-expand'"></span></a>
