@@ -338,7 +338,7 @@
             top_nav_container = document.getElementById("top_level_nav");
             var top_options_string = "";
             
-            $.each(category_structure, function(i, child){
+            jq(document).each(category_structure, function(i, child){
                 
                 top_options_string += "<li";
                 if (selected_top_index == i) {
