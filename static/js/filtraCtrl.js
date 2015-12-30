@@ -12,7 +12,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         }
     });
     
-    function topIndexChange(top) {
+    $scope.topIndexChange = function(top) {
         console.log("changing to: "+top);
         console.log("selected top was: "+selected_top_index);
         selected_top_index = top;
