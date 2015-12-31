@@ -564,10 +564,6 @@
                 <a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" ng-class="{'current-sub': $index == selected_third_index}">{{! subcat.name}}</a>
               </li>
             </ul>
-            </ul>
-        </li>
-
-
             <a href="#" ng-hide="$index==selected_secondary_index" ng-click="selectionChange(selected_top_index, $index, -1)">
               {{! cat.name }}</a>
             <a href="#" ng-hide="$index==selected_secondary_index"><span class="genericon genericon-expand"></span></a>
