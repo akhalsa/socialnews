@@ -552,8 +552,7 @@
     <div class="col-xs-2 wrap-sub-nav">
       <ul id="nav-category" class="sub">
       	<li class="current-page"><a href="#">Sports</a></li>
-        <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
-            >
+        <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children" id="sub-nav2">
 
             <div id="wrap-pr" ng-show="$index==selected_secondary_index" >
               <a href="#" >{{! cat.name }}</a>
