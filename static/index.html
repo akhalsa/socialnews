@@ -553,7 +553,7 @@
       <ul id="nav-category" class="sub">
       	<li class="current-page"><a href="#">Sports</a></li>
         <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
-          id="{{! $index==selected_secondary_index ? sub-nav2 : random_sub_id_$index}}">
+          id="{{! $index==selected_secondary_index ? 'sub-nav2' : 'random_sub_id_$index'}}">
 
             <div id="wrap-pr" ng-show="$index==selected_secondary_index" >
               <a href="#" >{{! cat.name }}</a>
