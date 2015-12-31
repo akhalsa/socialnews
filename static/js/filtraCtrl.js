@@ -20,6 +20,6 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_secondary_index = second;
         $scope.selected_third_index = third;
         
-        console.log("children length: "+$scope.category_structure[selected_top_index][selected_secondary_index].children.length);
+        console.log("children length: "+$scope.category_structure[selected_top_index].children[selected_secondary_index].children.length);
     }
 });
