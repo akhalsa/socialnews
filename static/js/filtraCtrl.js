@@ -3,6 +3,10 @@ app.controller("filtraCtrl", function($scope, $http) {
     $scope.selected_secondary_index = -1;
     $scope.selected_third_index = -1;
     $scope.category_structure = [];
+    $scope.time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
+                           {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
+    $scope.selected_time = 0;
+    
     
     $http.get("/category")
     .then(function(response) {
@@ -20,5 +24,9 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_secondary_index = second;
         $scope.selected_third_index = third;
         
+    }
+    
+    $scope.timeChange = function(new_time_index){
+        $scope.selected_time = new_time_index;
     }
 });
