@@ -68,12 +68,12 @@ app.controller("filtraCtrl", function($scope, $http) {
     
     function currentCatName() {
         var cat_name = ""
-        if ((selected_secondary_index != -1) &&(selected_third_index != -1)){
-            cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].children[selected_third_index].name);
-        }else if (selected_secondary_index != -1) {
-            cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].name);
+        if (($scope.selected_secondary_index != -1) &&($scope.selected_third_index != -1)){
+            cat_name = String($scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children[$scope.selected_third_index].name);
+        }else if ($scope.selected_secondary_index != -1) {
+            cat_name = String($scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name);
         }else {
-            cat_name= String(category_structure[selected_top_index].name);
+            cat_name= String($scope.category_structure[$scope.selected_top_index].name);
         }
         return cat_name;
     }
