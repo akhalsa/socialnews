@@ -107,7 +107,7 @@ app.controller("filtraCtrl", function($scope, $http) {
     }
     
     function loadHandles(){
-        var endPoint = "/category/"+cat_name;
+        var endPoint = "/category/"+currentCatName();
         $http.get(endPoint)
         .then(function(response) {
             $scope.handle_list = response.data.handles;
