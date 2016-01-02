@@ -64,7 +64,7 @@ input {border:none;}
 #time li a {float:left; background-color:#f7f7f7; padding:7px 10px; color:#33429a; margin-right:5px;}
 #time li a:hover {background-color:#eee;}
 #time li a span {color:#8ac249; padding-top:3px;}
-#time .current a {background-color:#33429a; color:#fff; text-decoration: none;}
+#time .current a {background-color:#33429a; color:#fff;}
 #time .current a:hover {background-color:#33429a;}
 
 /* tweet-con */
