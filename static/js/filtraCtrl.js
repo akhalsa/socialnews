@@ -17,6 +17,15 @@ app.controller("filtraCtrl", function($scope, $http) {
         }
         $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
     });
+    $scope.loadTweets = function(){
+        var stringName = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
+        console.log("will hit end point: "+stringName);
+        $http.get("/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds)
+        .then(function(response) {
+            console.log("got a response");
+        });
+            
+    }
     $scope.breadCrumbSelection = function(bc_index){
         if (bc_index == 0){
             $scope.selected_secondary_index = -1;
@@ -36,6 +45,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_secondary_index = second;
         $scope.selected_third_index = third;
         $scope.reloadCurrentPath();
+        $scope.loadTweets();
         
     }
     $scope.reloadCurrentPath = function(){
@@ -56,6 +66,16 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_time = new_time_index;
     }
     
-    
+    function currentCatName() {
+        var cat_name = ""
+        if ((selected_secondary_index != -1) &&(selected_third_index != -1)){
+            cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].children[selected_third_index].name);
+        }else if (selected_secondary_index != -1) {
+            cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].name);
+        }else {
+            cat_name= String(category_structure[selected_top_index].name);
+        }
+        return cat_name;
+    }
     
 });
