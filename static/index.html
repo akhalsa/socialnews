@@ -606,8 +606,7 @@
                 {{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}</div>
                 <div class="clear"></div>
             </div>
-            <div class="wrap-con-tw">
-            	{{! includeLinks(tweet.text) }}
+            <div class="wrap-con-tw" ng-bind-html="tweet.text | unsafeLink">
             </div>
         </div>
         <!-- tweets end -->

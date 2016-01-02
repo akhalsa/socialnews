@@ -8,8 +8,6 @@ app.controller("filtraCtrl", function($scope, $http) {
                            {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
     $scope.selected_time = 0;
     $scope.tweet_array = [];
-    $scope.urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-        
     
     $http.get("/category")
     .then(function(response) {
@@ -66,9 +64,6 @@ app.controller("filtraCtrl", function($scope, $http) {
         }
     }
     
-    $scope.includeLinks = function(text){
-        return text.replace( $scope.urlRegEx,"<a href='$1' target=\"_blank\" onclick=\"trackOutboundLink('$1')\">$1</a>");
-    }
     
     // LOCAL PRIVATE STUFF... DO NOT CALL FROM HTML DIRECTLY
     function reloadCurrentPath(){
