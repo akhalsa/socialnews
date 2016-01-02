@@ -49,7 +49,18 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_time = new_time_index;
         loadTweets();
     }
-    
+    //view model computations
+    $scope.convertSecondsToDeltaTime = function(seconds){
+        if (seconds < 60) {
+            return seconds+" seconds";
+        } else if (seconds < 3600) {
+            var minutes = Math.round( seconds / 60);
+            return minutes +" minutes";
+        } else{
+            var hours = Math.round( seconds / 3600);
+            return hours + " hours";
+        }
+    }
     // LOCAL PRIVATE STUFF... DO NOT CALL FROM HTML DIRECTLY
     function reloadCurrentPath(){
         if ($scope.selected_secondary_index == -1) {
