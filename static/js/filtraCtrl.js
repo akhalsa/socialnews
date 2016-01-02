@@ -15,17 +15,13 @@ app.controller("filtraCtrl", function($scope, $http) {
         for (index = 0; index < response.data.length; ++index) {
             console.log(response.data[index].name);
         }
-        $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
+        reloadCurrentPath();
+        loadTweets();
     });
-    $scope.loadTweets = function(){
-        var stringName = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
-        console.log("will hit end point: "+stringName);
-        $http.get("/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds)
-        .then(function(response) {
-            console.log("got a response");
-        });
-            
-    }
+    
+    
+    // Configure user selections
+    
     $scope.breadCrumbSelection = function(bc_index){
         if (bc_index == 0){
             $scope.selected_secondary_index = -1;
@@ -33,8 +29,8 @@ app.controller("filtraCtrl", function($scope, $http) {
         }else if (bc_index == 1) {
             $scope.selected_third_index = -1;
         }
-        
-        $scope.reloadCurrentPath();
+        reloadCurrentPath();
+        loadTweets();
     }
     
     $scope.selectionChange = function(top, second, third) {
@@ -44,11 +40,18 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_top_index = top;
         $scope.selected_secondary_index = second;
         $scope.selected_third_index = third;
-        $scope.reloadCurrentPath();
-        $scope.loadTweets();
-        
+        reloadCurrentPath();
+        loadTweets();
     }
-    $scope.reloadCurrentPath = function(){
+    
+    
+    $scope.timeChange = function(new_time_index){
+        $scope.selected_time = new_time_index;
+        loadTweets();
+    }
+    
+    // LOCAL PRIVATE STUFF... DO NOT CALL FROM HTML DIRECTLY
+    function reloadCurrentPath(){
         if ($scope.selected_secondary_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
             
@@ -62,10 +65,6 @@ app.controller("filtraCtrl", function($scope, $http) {
         }
     }
     
-    $scope.timeChange = function(new_time_index){
-        $scope.selected_time = new_time_index;
-    }
-    
     function currentCatName() {
         var cat_name = ""
         if (($scope.selected_secondary_index != -1) &&($scope.selected_third_index != -1)){
@@ -76,6 +75,15 @@ app.controller("filtraCtrl", function($scope, $http) {
             cat_name= String($scope.category_structure[$scope.selected_top_index].name);
         }
         return cat_name;
+    }
+    
+    function loadTweets(){
+        var stringName = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
+        $http.get("/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds)
+        .then(function(response) {
+            console.log("got a response");
+        });
+            
     }
     
 });
