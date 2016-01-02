@@ -635,7 +635,7 @@
         <div class="box-side vote-wrap">
         	<h3>Vote <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="Cast your vote to see more or less from the nominated handles below"><span class="genericon genericon-help"></span></a></h3>
             <ul id="list-vote">
-              <li class="active" ng-repeat="handle in handle_list">
+              <li ng-repeat="handle in handle_list" ng-class="{'active': handle.tracked, 'none-active': !handle.tracked}" >
                 <div class="handle">
                   <img src="{{! handle.profile_pic }}"/>
                   {{! handle.handle }}
