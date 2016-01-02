@@ -611,7 +611,7 @@
               <div class="preview-tw" ng-show="tweet.blurb || tweet.img_url || tweet.title" >
                 <div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
                 <div class="span8">
-                    	<img src="{{! tweet.img_url}}" ng-show="tweet.img_url"/>
+                    	<img src="{{! tweet.img_url}}" ng-show="tweet.img_url" width="150"/>
                         
                     	<a href="#" ng-show="tweet.title">{{! tweet.title }}</a>
                         <a href="#" ng-hide="tweet.title" ng-bind-html="tweet.text | unsafeLink"></a>
