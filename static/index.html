@@ -606,7 +606,17 @@
                 {{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}</div>
                 <div class="clear"></div>
             </div>
-            <div class="wrap-con-tw" ng-bind-html="tweet.text | unsafeLink">
+            <div class="wrap-con-tw" >
+              <span ng-bind-html="tweet.text | unsafeLink"></span>
+              <div class="preview-tw">
+                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+					<div class="span8">
+                    	<img src="static/images/img-sp.png"/>
+                    	<a href="#">SportsCenter on Twitter</a>
+                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper.</p>
+                        <div class="clear"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- tweets end -->
