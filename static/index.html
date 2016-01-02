@@ -593,7 +593,6 @@
     	<!-- time end -->
         <!-- tweets start -->
         <button id="bt-loadmore">Load More</button>
-        <div class="clear"></div>
         <div class="con-tw" ng-repeat="tweet in tweet_array">
         	<div class="wrap-user">
             	<div class="user">
@@ -636,6 +635,18 @@
         <div class="box-side vote-wrap">
         	<h3>Vote <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="Cast your vote to see more or less from the nominated handles below"><span class="genericon genericon-help"></span></a></h3>
             <ul id="list-vote">
+              <li ng-repeat="handle in handle_list">
+                <div class="handle">
+                  <img src="{{! handle.profile_pic }}"/>
+                  {{! handle.handle }}
+                  <ul class="nominate done-up">
+                    <li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                    <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                  </ul>
+                </div>
+              </li>
+              
+              
             	<li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
                 	<ul class="nominate done-up">
                     	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>

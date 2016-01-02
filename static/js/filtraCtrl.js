@@ -8,6 +8,8 @@ app.controller("filtraCtrl", function($scope, $http) {
                            {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
     $scope.selected_time = 0;
     $scope.tweet_array = [];
+    $scope.handle_list = [];
+    $scope.remaining_votes = 0;
     
     $http.get("/category")
     .then(function(response) {
@@ -17,6 +19,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         }
         reloadCurrentPath();
         loadTweets();
+        loadHandles()
     });
     
     
@@ -31,6 +34,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         }
         reloadCurrentPath();
         loadTweets();
+        loadHandles();
     }
     
     $scope.selectionChange = function(top, second, third) {
@@ -42,6 +46,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_third_index = third;
         reloadCurrentPath();
         loadTweets();
+        loadHandles();
     }
     
     
@@ -93,14 +98,21 @@ app.controller("filtraCtrl", function($scope, $http) {
     }
     
     function loadTweets(){
-        var stringName = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
-        console.log("load from: "+stringName);
-        $http.get("/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds)
+        var endPoint = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
+        $http.get(endPoint)
         .then(function(response) {
             console.log("got a solid response");
             $scope.tweet_array = response.data;
         });
-            
+    }
+    
+    function loadHandles(){
+        var endPoint = "/category/"+cat_name;
+        $http.get(endPoint)
+        .then(function(response) {
+            $scope.handle_list = response.data.handles;
+            $scope.remaining_votes = response.data.remaining_votes;
+        });
     }
     
 });
