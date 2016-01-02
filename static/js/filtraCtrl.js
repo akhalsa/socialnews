@@ -28,11 +28,13 @@ app.controller("filtraCtrl", function($scope, $http) {
         
         if ($scope.selected_secondary_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index]];
+            
         } else if ($scope.selected_third_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index], $scope.category_structure[$scope.selected_secondary_index] ]
         } else{
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index], $scope.category_structure[$scope.selected_secondary_index], $scope.category_structure[$scope.selected_third_index] ]
         }
+        console.log($scope.current_path)
         
     }
     
