@@ -582,7 +582,7 @@
     	<!-- time start -->
     	<ul id="time">
           <li ng-repeat="time_block in time_frames" ng-class="{'current': $index==selected_time}" ng-click="timeChange($index)">
-            <span class="genericon genericon-time"></span>{{! time_block.text}}
+            <a href="#"><span class="genericon genericon-time"></span>{{! time_block.text}}</a>
             <br ng-show="$index==selected_time"><span class="genericon genericon-downarrow" ng-show="$index==selected_time"></span>            
           </li>
           <div class="clear"></div>
