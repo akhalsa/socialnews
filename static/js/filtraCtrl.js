@@ -15,7 +15,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         for (index = 0; index < response.data.length; ++index) {
             console.log(response.data[index].name);
         }
-        $scope.current_path = [$scope.category_structure[$scope.selected_top_index]];
+        $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
     });
     
     $scope.selectionChange = function(top, second, third) {
@@ -27,12 +27,15 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_third_index = third;
         
         if ($scope.selected_secondary_index == -1) {
-            $scope.current_path = [$scope.category_structure[$scope.selected_top_index]];
+            $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
             
         } else if ($scope.selected_third_index == -1) {
-            $scope.current_path = [$scope.category_structure[$scope.selected_top_index], $scope.category_structure[$scope.selected_secondary_index] ]
+            $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
+                                   $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name ]
         } else{
-            $scope.current_path = [$scope.category_structure[$scope.selected_top_index], $scope.category_structure[$scope.selected_secondary_index], $scope.category_structure[$scope.selected_third_index] ]
+            $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
+                                   $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name,
+                                   $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children[$scope.selected_third_index].name ]
         }
         console.log($scope.current_path)
         
