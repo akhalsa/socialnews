@@ -79,6 +79,7 @@ app.controller("filtraCtrl", function($scope, $http) {
     
     function loadTweets(){
         var stringName = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
+        console.log("load from: "+stringName);
         $http.get("/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds)
         .then(function(response) {
             $scope.tweet_array = response.data;
