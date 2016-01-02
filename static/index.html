@@ -561,7 +561,7 @@
             </div>
             <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
               <li ng-repeat="subcat in category_structure[selected_top_index].children[selected_secondary_index].children"
-                  ng-class="{'current-sub': $index==selected_third_index}" ng-click="selectionChange(selected_top_index, $index, -1)>
+                  ng-class="{'current-sub': $index==selected_third_index}">
                 <a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" >{{! subcat.name}}</a>
               </li>
             </ul>
