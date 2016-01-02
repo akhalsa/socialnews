@@ -641,9 +641,15 @@
                   {{! handle.handle }}
                 </div>
                 
-                <ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0, 'new-vote':handle.vote_val == 0}" >
-                  <li ng-class="{'up-v': handle.vote_val !=0}"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                  <li ng-class="{'down-v': handle.vote_val !=0}"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                <ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}" >
+                  <li ng-class="{'up-v': handle.vote_val !=0}">
+                    <a href="#"><span class="genericon genericon-collapse"></span></a>
+                    <span >53</span>
+                  </li>
+                  <li ng-class="{'down-v': handle.vote_val !=0}">
+                    <a href="#"><span class="genericon genericon-expand"></span></a>
+                    <span >7</span>
+                  </li>
                 </ul>
 
                 
