@@ -561,7 +561,7 @@
             </div>
             <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
               <li ng-repeat="subcat in category_structure[selected_top_index].children[selected_secondary_index].children"
-                  ng-class="{'current-sub': $index==selected_third_index}">
+                  ng-class="{'current-sub': $index==selected_third_index}" ng-click="selectionChange(selected_top_index, $index, -1)>
                 <a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" >{{! subcat.name}}</a>
               </li>
             </ul>
@@ -575,7 +575,7 @@
     	<!-- Breadcurmbs start -->
         <ol class="breadcrumb">
           <li ng-repeat="category in current_path" ng-class="{'active': $last}">
-            <a href="#" ng-hide="$last">
+            <a href="#" ng-hide="$last" ng-click="breadCrumbSelection($index)">
               <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
             </a>
             <span ng-show="$last">{{! category}}</span>

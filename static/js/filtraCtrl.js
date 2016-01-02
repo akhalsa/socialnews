@@ -17,6 +17,16 @@ app.controller("filtraCtrl", function($scope, $http) {
         }
         $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
     });
+    $scope.breadCrumbSelection = function(bc_index){
+        if (bc_index == 0){
+            $scope.selected_secondary_index = -1;
+            $scope.selected_third_index = -1;
+        }else if (bc_index == 1) {
+            $scope.selected_third_index = -1;
+        }
+        
+        $scope.reloadCurrentPath();
+    }
     
     $scope.selectionChange = function(top, second, third) {
         console.log("changing to: "+top);
@@ -25,7 +35,10 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_top_index = top;
         $scope.selected_secondary_index = second;
         $scope.selected_third_index = third;
+        $scope.reloadCurrentPath();
         
+    }
+    $scope.reloadCurrentPath = function(){
         if ($scope.selected_secondary_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
             
@@ -37,12 +50,12 @@ app.controller("filtraCtrl", function($scope, $http) {
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children[$scope.selected_third_index].name ]
         }
-        console.log($scope.current_path)
-        
     }
     
     $scope.timeChange = function(new_time_index){
         $scope.selected_time = new_time_index;
     }
+    
+    
     
 });
