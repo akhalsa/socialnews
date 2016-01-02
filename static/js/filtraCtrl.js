@@ -7,7 +7,7 @@ app.controller("filtraCtrl", function($scope, $http) {
     $scope.time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
                            {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
     $scope.selected_time = 0;
-    
+    $scope.tweet_array = [];
     
     $http.get("/category")
     .then(function(response) {
@@ -81,7 +81,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         var stringName = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
         $http.get("/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds)
         .then(function(response) {
-            console.log("got a response");
+            $scope.tweet_array = response.data;
         });
             
     }
