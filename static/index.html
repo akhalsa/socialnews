@@ -449,6 +449,7 @@
         }
         
         var trackVote = function(){
+          console.log("vote track trigger");
           if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
             ga('send', {
               hitType: 'event',
@@ -642,11 +643,11 @@
                 </div>
                 
                 <ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}" >
-                  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, 1); ">
+                  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="trackVote(); voteForHandle(handle.handle, 1); ">
                     <a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a>
                     <span >{{! handle.upvotes}}</span>
                   </li>
-                  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, -1);">
+                  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="trackVote(); voteForHandle(handle.handle, -1);">
                     <a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a>
                     <span >{{! handle.downvotes}}</span>
                   </li>
