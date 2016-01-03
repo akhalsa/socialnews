@@ -75,6 +75,11 @@ app.controller("filtraCtrl", function($scope, $http) {
             return;
         }
         handle.vote_val += value;
+        if (value > 0) {
+            handle.upvotes += value;
+        }else if (value < 0) {
+            handle.downvotes += value;
+        }
         $scope.remaining_votes -= 1;
     }
     
