@@ -11,12 +11,12 @@ app.filter('matchTwitterName', function(){
     return function(handles, name){
         console.log("testing filter logging name: "+name+" and input array length: "+handles.length);
         var out = [];
-         angular.forEach(handles, function(handle) {
-            if (handle.name == name) {
-                out.push(handle);
+        for(i=0; i<handles.length; i++){
+            if (handles[i].name == name) {
+                out.push(handles[i]);
             }
-         });
-         //console.log("found out length: "+out.length);
-         return out;
+        }
+        console.log("found out length: "+out.length);
+        return out;
     }
 });
