@@ -89,6 +89,11 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.remaining_votes -= 1;
         $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value).then(function(response) {});
     }
+    
+    $scope.runSearch = function(){
+        console.log("search val: "+$scope.search);
+        
+    }
 
     //VIEW MODEL GENERATION ---- basically static methods for html
     
