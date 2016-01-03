@@ -55,6 +55,45 @@ app.controller("filtraCtrl", function($scope, $http) {
         loadTweets();
     }
     
+    
+    $scope.voteForHandle = function(handle_string, value, event){
+        event.stopPropagation();
+        if ($scope.remaining_votes == 0) {
+            return;
+        }
+        if (handle.vote_val != 0) {
+            return;
+        }
+        handle.vote_val += value;
+        $scope.remaining_votes -= 1;
+    }
+    
+    //function voteForHandle(handle_string, value, position, old_up, old_down) {
+    //      if (jq("#remaining_vote_count").html() == ("0"+ remainingVotesString) ){
+    //        return;
+    //      }
+    //      trackVote();
+    //      jq("#nomination_ul_"+position).removeClass("nominate");
+    //      html_string = "";
+    //      if (value==1) {
+    //        jq("#nomination_ul_"+position).addClass("nominate done-up");
+    //        html_string += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+(old_up+1)+"</span></li>";
+    //        html_string += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+old_down+"</span></li>";
+    //      }else if (value == -1) {
+    //        jq("#nomination_ul_"+position).addClass("nominate done-down");
+    //        html_string += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+old_up+"</span></li>";
+    //        html_string += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+(old_down-1)+"</span></li>";
+    //        
+    //      }
+    //      jq("#nomination_ul_"+position).html(html_string);
+    //      jq(document).post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
+    //        jq(document).getJSON("/category/"+cat_name, function(result){
+    //          vote_count = result.remaining_votes;
+    //          console.log("got remaining votes: "+vote_count);
+    //          jq("#remaining_vote_count").html(vote_count+remainingVotesString);
+    //        });
+    //      });
+    //    }
     //VIEW MODEL GENERATION ---- basically static methods for html
     
     $scope.convertSecondsToDeltaTime = function(seconds){
