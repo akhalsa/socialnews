@@ -642,11 +642,11 @@
                 </div>
                 
                 <ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}" >
-                  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, 1); $event.stopPropagation();">
+                  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, 1); $event.stopPropagation()">
                     <a href="#"><span class="genericon genericon-collapse"></span></a>
                     <span >{{! handle.upvotes}}</span>
                   </li>
-                  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, -1); $event.stopPropagation();">
+                  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, -1); $event.stopPropagation()">
                     <a href="#"><span class="genericon genericon-expand"></span></a>
                     <span >{{! handle.downvotes}}</span>
                   </li>
