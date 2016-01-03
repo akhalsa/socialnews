@@ -14,6 +14,8 @@ app.filter('matchTwitterName', function(){
          angular.forEach(handles, function(handle) {
             if (handle.name == name) {
                 out.push(handle);
+            }else{
+                console.log("mismatch: "+handle.name+" is not the same as: "+name);
             }
          });
          console.log("found out length: "+out.length);
