@@ -59,7 +59,16 @@ app.controller("filtraCtrl", function($scope, $http) {
     $scope.voteForHandle = function(handle_string, value, event){
         console.log("vote triggered");
         event.stopPropagation();
-        
+        handle = null;
+        for(i=0; i<$scope.handle_list.length; i++ ){
+            if ($scope.handle_list[i].handle == handle_string) {
+                handle = $scope.handle_list[i];
+            }
+        }
+        if (handle == null) {
+            console.log("handle match missing");
+            return;
+        }
         if ($scope.remaining_votes == 0) {
             return;
         }
