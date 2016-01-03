@@ -82,6 +82,10 @@ app.controller("filtraCtrl", function($scope, $http) {
             handle.downvotes = parseInt(handle.downvotes) + value; 
         }
         $scope.remaining_votes -= 1;
+        $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value)
+        .then(function(response) {
+            loadHandles();
+        });
     }
     
     //function voteForHandle(handle_string, value, position, old_up, old_down) {
