@@ -9,10 +9,9 @@ app.filter('unsafeLink', function($sce) {
 
 app.filter('matchTwitterName', function(){
     return function(handles, name){
-        console.log("testing filter logging name: "+name+" and input array length: "+handles.length);
         var out = [];
         for(i=0; i<handles.length; i++){
-            if (handles[i].name == name) {
+            if (handles[i].username == name) {
                 out.push(handles[i]);
             }
         }
