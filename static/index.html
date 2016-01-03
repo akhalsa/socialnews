@@ -485,9 +485,9 @@
 
 <body ng-app="filtraApp" ng-controller="filtraCtrl">
 <!-- popup overlay start -->
-<div class="overlay" id="overlay_id" style="visibility: hidden"></div>
-<div class="wrap-popup" id="popup_id" style="visibility: hidden">
-	<div id="bt-close" onclick="setTopState(false)"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
+<div class="overlay" id="overlay_id" ng-show="nomination_visible" ng-click="togglePopup();"></div>
+<div class="wrap-popup" id="popup_id" ng-show="nomination_visible">
+	<div id="bt-close" ng-click="togglePopup();"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
 	<h3 id="popup_title_label">Nominate a Handle For </h3>
     <!-- left box start -->
     <div id="p-handle">
@@ -532,7 +532,7 @@
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
       </ul>
       <ul id="bt-top-nominate"  >
-      	<li id="bt-nom" onclick="setTopState(true)"><a href="#"><span class="genericon genericon-search"></span> Nominate</a><a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="Know a Twitter handle we should be following? Add it here!"><span class="genericon genericon-help"></span></a></li>
+      	<li id="bt-nom" ng-click="togglePopup();"><a href="#"><span class="genericon genericon-search"></span> Nominate</a><a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="Know a Twitter handle we should be following? Add it here!"><span class="genericon genericon-help"></span></a></li>
         <li><span class="genericon genericon-checkmark"></span>  <span id="remaining_vote_count">{{! remaining_votes}} Votes left</span> </li>
         <div class="clear"></div>
       </ul>

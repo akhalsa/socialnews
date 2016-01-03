@@ -10,6 +10,7 @@ app.controller("filtraCtrl", function($scope, $http) {
     $scope.tweet_array = [];
     $scope.handle_list = [];
     $scope.remaining_votes = 0;
+    $scope.nomination_visible = false;
     
     $http.get("/category")
     .then(function(response) {
@@ -55,6 +56,9 @@ app.controller("filtraCtrl", function($scope, $http) {
         loadTweets();
     }
     
+    $scope.togglePopup = function(){
+        $scope.nomination_visible = !$scope.nomination_visible;
+    }
     
     $scope.voteForHandle = function(handle_string, value){
         handle = null;
