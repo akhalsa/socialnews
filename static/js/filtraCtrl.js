@@ -9,6 +9,7 @@ app.controller("filtraCtrl", function($scope, $http) {
     $scope.selected_time = 0;
     $scope.tweet_array = [];
     $scope.handle_list = [];
+    $scope.suggestion_list = [];
     $scope.remaining_votes = 0;
     $scope.nomination_visible = false;
     
@@ -92,8 +93,32 @@ app.controller("filtraCtrl", function($scope, $http) {
     
     $scope.runSearch = function(){
         console.log("search val: "+$scope.search);
+        if (($scope.search == "@") || ($scope.search == "")) {
+            $scope.suggestion_list = [];
+            return;
+        }
+        
+        $http.get("/twitter/search/"+$scope.search)
+        .then(function(response) {
+            $scope.suggestion_list = response.handles;
+        });
         
     }
+    
+    /*
+     *if(search_string_val != jq('#search_text').val()){
+            search_string_val = jq('#search_text').val();
+            if ((search_string_val == "@")||(search_string_val == "")) {
+              jq('#open-handle-list').html("");
+              jq('#button-container').html("");
+              jq('#nothing').show();
+              jq('#p-tweet-container').hide();
+              return;
+            }
+            jq(document).getJSON("/twitter/search/"+search_string_val, function(result){
+              if (result.search == jq('#search_text').val()) {
+                var list_of_suggestions_html = "";
+                var text_match = ""; */
 
     //VIEW MODEL GENERATION ---- basically static methods for html
     

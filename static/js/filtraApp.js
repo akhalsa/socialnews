@@ -15,7 +15,6 @@ app.filter('matchTwitterName', function(){
                 out.push(handles[i]);
             }
         }
-        console.log("found out length: "+out.length);
         return out;
     }
 });

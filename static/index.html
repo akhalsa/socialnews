@@ -493,12 +493,7 @@
     <div id="p-handle">
     	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" ng-model="search" ng-change="runSearch()"/></div>
         <ul id="open-handle-list">
-            <li>@Con</li>
-            <li>@CNN_BreakingNews</li>
-            <li>@CNN_International</li>
-            <li>@Con_prime</li>
-            <li>@Last_Con</li>
-            <li>@News_Con</li>
+          <li ng-repeat="handle in suggestion_list">{{! handle.screen_name}}</li>
         </ul>
     </div>
     <!-- left box end -->
