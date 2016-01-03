@@ -100,7 +100,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         
         $http.get("/twitter/search/"+$scope.search)
         .then(function(response) {
-            $scope.suggestion_list = response.handles;
+            $scope.suggestion_list = response.data.handles;
         });
         
     }
