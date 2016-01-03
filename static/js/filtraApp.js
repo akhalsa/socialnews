@@ -9,7 +9,7 @@ app.filter('unsafeLink', function($sce) {
 
 app.filter('matchTwitterName', function(){
     return function(handles, name){
-        console.log("testing filter logging");
+        console.log("testing filter logging name: "+name);
         var out = [];
          angular.forEach(handles, function(handle) {
             if (handle.name == name) {
