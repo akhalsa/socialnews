@@ -6,3 +6,15 @@ app.filter('unsafeLink', function($sce) {
         return $sce.trustAsHtml(text.replace(urlRegEx,"<a href='$1' target=\"_blank\" onclick=\"trackOutboundLink('$1')\">$1</a>"));
     };
 });
+
+app.filter('matchTwitterName', function(){
+    return function(handles, name){
+        var out = [];
+         angular.forEach(handles, function(handle) {
+            if (handle.name == name) {
+                out.push(handle);
+            }
+         });
+         return out;
+    }
+});
