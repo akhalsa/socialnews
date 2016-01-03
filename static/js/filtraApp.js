@@ -9,16 +9,14 @@ app.filter('unsafeLink', function($sce) {
 
 app.filter('matchTwitterName', function(){
     return function(handles, name){
-        //console.log("testing filter logging name: "+name);
+        console.log("testing filter logging name: "+name+" and input array length: "+handles.length);
         var out = [];
          angular.forEach(handles, function(handle) {
             if (handle.name == name) {
                 out.push(handle);
-            }else{
-                console.log("mismatch: "+handle.name+" is not the same as: "+name);
             }
          });
-         console.log("found out length: "+out.length);
+         //console.log("found out length: "+out.length);
          return out;
     }
 });
