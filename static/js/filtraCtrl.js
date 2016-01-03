@@ -59,6 +59,7 @@ app.controller("filtraCtrl", function($scope, $http) {
     $scope.voteForHandle = function(handle_string, value, event){
         event.stopPropagation();
         handle = null;
+        value = parseInt(value);
         for(i=0; i<$scope.handle_list.length; i++ ){
             if ($scope.handle_list[i].handle == handle_string) {
                 handle = $scope.handle_list[i];
