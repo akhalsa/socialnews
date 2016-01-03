@@ -84,7 +84,7 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.remaining_votes -= 1;
         $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value)
         .then(function(response) {
-            loadHandles();
+            
         });
     }
     
