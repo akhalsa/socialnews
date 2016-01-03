@@ -57,6 +57,7 @@ app.controller("filtraCtrl", function($scope, $http) {
     }
     
     $scope.togglePopup = function(){
+        console.log("toggle popup");
         $scope.nomination_visible = !$scope.nomination_visible;
     }
     
