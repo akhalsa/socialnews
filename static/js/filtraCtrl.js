@@ -57,7 +57,9 @@ app.controller("filtraCtrl", function($scope, $http) {
     
     
     $scope.voteForHandle = function(handle_string, value, event){
+        console.log("vote triggered");
         event.stopPropagation();
+        
         if ($scope.remaining_votes == 0) {
             return;
         }
