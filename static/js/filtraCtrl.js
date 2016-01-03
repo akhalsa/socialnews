@@ -54,6 +54,9 @@ app.controller("filtraCtrl", function($scope, $http) {
         $scope.selected_time = new_time_index;
         loadTweets();
     }
+    $scope.refreshHandles = function(){
+        loadHandles();
+    }
     
     
     $scope.voteForHandle = function(handle_string, value){
