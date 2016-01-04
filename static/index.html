@@ -500,7 +500,7 @@
     <!-- right box start -->
     <div id="p-twit-list">
       <p id="nothing" ng-show="handle_preview_html.length==0">Nothing to Display</p>
-      <div class="twitter-tweet-wrap" id="p-tweet-container" ng-hide="handle_preview_html.length == 0" ng-bind-html="handle_preview_html">
+      <div class="twitter-tweet-wrap" id="p-tweet-container" ng-hide="handle_preview_html.length == 0" ng-bind-html="handle_preview_html_safe">
       </div>
       <span id="button-container" ng-hide="handle_preview_html.length == 0"><button class="p-bt-blue">Nominate {{! search }}</button></span>
     </div>
