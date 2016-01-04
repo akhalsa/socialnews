@@ -105,7 +105,10 @@ app.controller("filtraCtrl", function($scope, $http) {
             }
             
         });
-        
+    }
+    
+    $scope.updateSearch = function (new_val){
+        $scope.search = new_val;
     }
     
     /*

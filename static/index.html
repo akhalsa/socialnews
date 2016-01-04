@@ -493,7 +493,7 @@
     <div id="p-handle">
     	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" ng-model="search" ng-change="runSearch()"/></div>
         <ul id="open-handle-list">
-          <li ng-repeat="handle in suggestion_list">@{{! handle.screen_name}}</li>
+          <li ng-repeat="handle in suggestion_list" ng-click="updateSearch(handle.screen_name);">@{{! handle.screen_name}}</li>
         </ul>
     </div>
     <!-- left box end -->
