@@ -211,7 +211,13 @@ class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("static/index.html")
         
+class IndexCategoryHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self, cat):
+        self.render("static/index.html", cat_name=cat)
+        
 app = tornado.web.Application([
+    (r'/c/(.*)', IndexCategoryHandler),
     (r'/', IndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),

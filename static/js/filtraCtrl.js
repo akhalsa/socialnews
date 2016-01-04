@@ -29,6 +29,10 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         loadHandles()
     });
     
+    $scope.$watch('category_name', function () {
+        console.log($scope.category_name); 
+    });
+    
     
     // Configure user selections
     
@@ -45,9 +49,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     }
     
     $scope.selectionChange = function(top, second, third) {
-        console.log("changing to: "+top);
-        console.log("changing to second: "+second);
-        console.log("changing to third: "+third);
         $scope.selected_top_index = top;
         $scope.selected_secondary_index = second;
         $scope.selected_third_index = third;
