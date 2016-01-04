@@ -1,4 +1,4 @@
-app.controller("filtraCtrl", function($scope, $http) {
+app.controller("filtraCtrl", function($scope, $http, $sce) {
     $scope.selected_top_index = 0;
     $scope.selected_secondary_index = -1;
     $scope.selected_third_index = -1;
@@ -15,7 +15,8 @@ app.controller("filtraCtrl", function($scope, $http) {
     //popup vars
     $scope.nomination_visible = false;
     $scope.suggestion_list = [];
-    $scope.handle_preview_list = [];
+    $scope.handle_preview_html = "";
+    $scope.handle_preview_html_safe = "";
     
     $http.get("/category")
     .then(function(response) {
@@ -141,7 +142,11 @@ app.controller("filtraCtrl", function($scope, $http) {
     function loadTweetPreviews() {
         $http.get("/twitter/timeline/"+$scope.search)
         .then(function(response) {
-            $scope.handle_preview_list = response.data;
+            $scope.handle_preview_html = "";
+            for(i=0; i< response.data.length; i++){
+                $scope.handle_preview_html += response.data[i];
+            }
+            $scope.handle_preview_html_safe = $sce.trustAsHtml($scope.handle_preview_html);
         });
     }
     function reloadCurrentPath(){
