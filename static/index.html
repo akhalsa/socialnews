@@ -499,10 +499,10 @@
     <!-- left box end -->
     <!-- right box start -->
     <div id="p-twit-list">
-      <p id="nothing">Nothing to Display</p>
-      <div class="twitter-tweet-wrap" id="p-tweet-container">
+      <p id="nothing" ng-show="handle_preview_list.length==0">Nothing to Display</p>
+      <div class="twitter-tweet-wrap" id="p-tweet-container" ng-hide="handle_preview_list.length == 0">
       </div>
-      <span id="button-container"><button class="p-bt-gray">Ok</button></span>
+      <span id="button-container" ng-hide="handle_preview_list.length == 0"><button class="p-bt-gray">Ok</button></span>
     </div>
     <!-- right box end -->
     <div class="clear"></div>
