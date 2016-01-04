@@ -121,6 +121,33 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         loadTweetPreviews();
     }
     
+    $scope.sendNomination = function(){
+        var patt = /^@(\w){1,15}$/;
+        if(patt.test($scope.search)){
+            $scope.togglePopup();
+            $scope.voteForHandle($scope.search, 1);
+        }else{
+            alert("Please enter a valid twitter handle");
+        }
+    }
+    
+     /*function nominateNewHandle() {
+ 
+            var handle_string = jq('#search_text').val().trim();
+            console.log("running check for: "+handle_string);
+            var patt = /^@(\w){1,15}$/;
+            if(patt.test(handle_string)){
+                console.log("valid twitter handle");
+                trackNomination(handle_string);
+                jq(document).post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/1", function( data ) {
+                  setTopState(false);
+                  loadHandles();
+                });
+                
+            }else{
+                
+            }
+        }*/
 
 
     //VIEW MODEL GENERATION ---- basically static methods for html
