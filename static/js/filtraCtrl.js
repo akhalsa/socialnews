@@ -101,7 +101,8 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
             $scope.suggestion_list = [];
             return;
         }
-        
+        $scope.handle_preview_html = "";
+        $scope.handle_preview_html_safe = "";
         $http.get("/twitter/search/"+$scope.search)
         .then(function(response) {
             if (response.data.search == $scope.search) {
