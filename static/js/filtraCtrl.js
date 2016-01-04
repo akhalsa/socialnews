@@ -96,7 +96,6 @@ app.controller("filtraCtrl", function($scope, $http) {
     }
     
     $scope.runSearch = function(){
-        console.log("search val: "+$scope.search);
         if (($scope.search == "@") || ($scope.search == "")) {
             $scope.suggestion_list = [];
             return;
@@ -106,6 +105,11 @@ app.controller("filtraCtrl", function($scope, $http) {
         .then(function(response) {
             if (response.data.search == $scope.search) {
                 $scope.suggestion_list = response.data.handles;
+                for (i=0; i<$scope.suggestion_list.length; i++) {
+                    if (("@"+$scope.suggestion_list[i].screen_name) == $scope.search) {
+                        loadTweetPreviews();
+                    }
+                }
             }
             
         });
@@ -113,7 +117,9 @@ app.controller("filtraCtrl", function($scope, $http) {
     
     $scope.updateSearch = function (new_val){
         $scope.search = new_val;
+        loadTweetPreviews();
     }
+    
 
 
     //VIEW MODEL GENERATION ---- basically static methods for html
@@ -132,6 +138,12 @@ app.controller("filtraCtrl", function($scope, $http) {
     
     
     // LOCAL PRIVATE STUFF... DO NOT CALL FROM HTML DIRECTLY
+    function loadTweetPreviews() {
+        $http.get("/twitter/timeline/"+$scope.search)
+        .then(function(response) {
+            $scope.handle_preview_list = response.data;
+        });
+    }
     function reloadCurrentPath(){
         if ($scope.selected_secondary_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
