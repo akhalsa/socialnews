@@ -209,7 +209,7 @@ class TwitterTimeline(tornado.web.RequestHandler):
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
-        self.render("static/index.html")
+        self.render("static/index.html", cat_name = "")
         
 class IndexCategoryHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
