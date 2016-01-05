@@ -147,10 +147,7 @@
   </script>
 </head>
 
-<body ng-app="filtraApp" ng-controller="filtraCtrl"
-      
-        ng-init="category_name: {{ cat_name }}"
->
+<body ng-app="filtraApp" ng-controller="filtraCtrl" ng-init="category_name: {{ cat_name }}">
 <!-- popup overlay start -->
 <div class="overlay" id="overlay_id" ng-show="nomination_visible" ng-click="togglePopup();"></div>
 <div class="wrap-popup" id="popup_id" ng-show="nomination_visible">
