@@ -214,6 +214,7 @@ class IndexHandler(tornado.web.RequestHandler):
 class IndexCategoryHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, cat):
+        print "injecting cat: "+cat
         self.render("static/index.html", cat_name=cat)
 
 settings = {
