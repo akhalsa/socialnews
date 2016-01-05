@@ -148,11 +148,8 @@
 </head>
 
 <body ng-app="filtraApp" ng-controller="filtraCtrl"
-      {% if 'cat_name' in locals() %}
+      
         ng-init="{{ cat_name }}"
-      {% else %}
-        ng-init="default"
-      {% end %}
 >
 <!-- popup overlay start -->
 <div class="overlay" id="overlay_id" ng-show="nomination_visible" ng-click="togglePopup();"></div>
