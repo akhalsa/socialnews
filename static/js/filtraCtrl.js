@@ -215,68 +215,32 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         });
     }
     
-    function checkForCatMatch(i, j, k, name) {
-        //do check this round
-        pos_name = getCatNameWithPositionVals(i, j, k);
-        console.log("eval  i: "+i+" j: "+j+" k: "+k+" yields name: "+pos_name);
-        if (name.toUpperCase() === pos_name.toUpperCase() ) {
-            return (i, j, k)
+    function checkForCatMatch(name) {
+        for(i = 0; i<$scope.category_structure.length; i++){
+            pos_name = getCatNameWithPositionVals(i, -1, -1);
+            if (name.toUpperCase() === pos_name.toUpperCase() ) {
+                return (i, -1, -1)
+            }
+            if (!$scope.category_structure[i].children) {
+                continue;
+            }
+            
+            for(j = 0; j<$scope.category_structure[i].children.length; j++){
+                pos_name = getCatNameWithPositionVals(i, j, -1);
+                if (name.toUpperCase() === pos_name.toUpperCase() ) {
+                    return (i, j, -1)
+                }
+                if (!$scope.category_structure[i].children[j].children) {
+                    continue;
+                }
+                for(k = 0; k < $scope.category_structure[i].children[j].children.length; k++){
+                    pos_name = getCatNameWithPositionVals(i, j, k);
+                    if (name.toUpperCase() === pos_name.toUpperCase() ) {
+                        return (i, j, k)
+                    }
+                }
+            }
         }
-        //assume check failed.
-        //whats the next position
-        finished = true;
-        if (i < ($scope.category_structure.length - 1) ){
-            finished = false;
-        } else if ($scope.category_structure[i].children && ( j < ($scope.category_structure[i].children.legnth -1) )) {
-            finished = false;
-        } else if ($scope.category_structure[i].children && $scope.category_structure[i].children[j] && (k < ($scope.category_structure[i].children[j].children.length -1))) {
-            finished = false;
-        }
-        
-        if (finished) {
-            return null;
-        }
-        
-        
-        //ok not finished
-        //now what?
-        //is it time to increment i
-        increment_i = true;
-        if ($scope.category_structure[i].children && (j < ($scope.category_structure[i].children.length -1))) {
-            increment_i = false;
-        }else if ($scope.category_structure[i].children && $scope.category_structure[i].children[j].children &&  (k < ($scope.category_structure[i].children[j].children.length -1))  ) {
-            increment_i = false;
-        }
-        
-        if (increment_i) {
-            return checkForCatMatch(i+1, -1, -1, name);
-        }
-        
-        
-        
-        //ok not finished and not time to increment i, is it time to increment j
-        increment_j = true;
-        if ($scope.category_structure[i].children) {
-            console.log("i has kids");
-        }
-        if ($scope.category_structure[i].children[j].children) {
-            console.log("j has kids");
-        }
-        
-        if ($scope.category_structure[i].children && $scope.category_structure[i].children[j].children &&  (k < ($scope.category_structure[i].children[j].children.length -1))  ) {
-            increment_j = false;
-        }
-        
-        if (increment_j) {
-            return checkForCatMatch(i, j+1, -1, name);
-        }
-        
-        //not finished, not increment i, not increment j -> increment k!
-        
-        return checkForCatMatch(i, j, k+1, name);
-        
+        return null;
     }
-    
-
-    
 });
