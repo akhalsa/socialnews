@@ -25,7 +25,10 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
             console.log(response.data[index].name);
         }
         if (typeof $scope.category_name != 'undefined' ) {
-            console.log("found: "+checkForCatMatch( $scope.category_name));
+            starting = checkForCatMatch( $scope.category_name);
+            $scope.selected_top_index = starting[0];
+            $scope.selected_secondary_index = starting[1];
+            $scope.selected_third_index = starting[2];
         }
         reloadCurrentPath();
         loadTweets();
