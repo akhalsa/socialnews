@@ -26,11 +26,13 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         }
         reloadCurrentPath();
         loadTweets();
-        loadHandles()
+        loadHandles();
+        
     });
     
     $scope.$watch('category_name', function () {
-        console.log($scope.category_name); 
+        console.log($scope.category_name);
+        console.log("found: "+checkForCatMatch(0, -1, -1, $scope.category_name));
     });
     
     
@@ -178,13 +180,16 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     }
     
     function currentCatName() {
+        return getCatNameWithPositionVals($scope.selected_top_index, $scope.selected_secondary_index, $scope.selected_third_index)
+    }
+    function getCatNameWithPositionVals(i, j, k) {
         var cat_name = ""
-        if (($scope.selected_secondary_index != -1) &&($scope.selected_third_index != -1)){
-            cat_name = String($scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children[$scope.selected_third_index].name);
-        }else if ($scope.selected_secondary_index != -1) {
-            cat_name = String($scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name);
+        if ((j != -1) &&(k != -1)){
+            cat_name = String($scope.category_structure[i].children[j].children[k].name);
+        }else if (j != -1) {
+            cat_name = String($scope.category_structure[i].children[j].name);
         }else {
-            cat_name= String($scope.category_structure[$scope.selected_top_index].name);
+            cat_name= String($scope.category_structure[i].name);
         }
         return cat_name;
     }
@@ -206,5 +211,62 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
             $scope.remaining_votes = response.data.remaining_votes;
         });
     }
+    
+    function checkForCatMatch(i, j, k, name) {
+        //do check this round
+        pos_name = getCatNameWithPositionVals(i, j, k);
+        console.log("eval  i: "+i+" j: "+j+" k: "+k+" yields name: "+pos_name);
+        if (name.toUpperCase() === pos_name.toUpperCase() ) {
+            return (i, j, k)
+        }
+        //assume check failed.
+        //whats the next position
+        finished = true;
+        if (i < ($scope.category_structure.length - 1) ){
+            finished = false;
+        } else if ($scope.category_structure[i].children && ( j < ($scope.category_structure[i].children.legnth -1) )) {
+            finished = false;
+        } else if ($scope.category_structure[i].children && $scope.category_structure[i].children[j] && (k < ($scope.category_structure[i].children[j].children.length -1))) {
+            finished = false;
+        }
+        
+        if (finished) {
+            return null;
+        }
+        
+        
+        //ok not finished
+        //now what?
+        //is it time to increment i
+        increment_i = true;
+        if ($scope.category_structure[i].children && (j < ($scope.category_structure[i].children.length -1))) {
+            increment_i = false;
+        }else if ($scope.category_structure[i].children && $scope.category_structure[i].children[j].children &&  (k < ($scope.category_structure[i].children[j].children.length -1))  ) {
+            increment_i = false;
+        }
+        
+        if (increment_i) {
+            return checkForCatMatch(i+1, -1, -1, name);
+        }
+        
+        
+        
+        //ok not finished and not time to increment i, is it time to increment j
+        increment_j = true;
+        if ($scope.category_structure[i].children && $scope.category_structure[i].children[j].children &&  (k < ($scope.category_structure[i].children[j].children.length -1))  ) {
+            increment_j = false;
+        }
+        
+        if (increment_j) {
+            return checkForCatMatch(i, j+1, -1, name);
+        }
+        
+        //not finished, not increment i, not increment j -> increment k!
+        
+        return checkForCatMatch(i, j, k+1, name);
+        
+    }
+    
+
     
 });
