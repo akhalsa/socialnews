@@ -256,6 +256,13 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         
         //ok not finished and not time to increment i, is it time to increment j
         increment_j = true;
+        if ($scope.category_structure[i].children) {
+            console.log("i has kids");
+        }
+        if ($scope.category_structure[i].children[j].children) {
+            console.log("j has kids");
+        }
+        
         if ($scope.category_structure[i].children && $scope.category_structure[i].children[j].children &&  (k < ($scope.category_structure[i].children[j].children.length -1))  ) {
             increment_j = false;
         }
