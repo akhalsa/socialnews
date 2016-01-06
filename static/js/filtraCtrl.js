@@ -24,6 +24,9 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         for (index = 0; index < response.data.length; ++index) {
             console.log(response.data[index].name);
         }
+        if (typeof $scope.category_name != 'undefined' ) {
+            console.log("found: "+checkForCatMatch(0, -1, -1, $scope.category_name));
+        }
         reloadCurrentPath();
         loadTweets();
         loadHandles();
@@ -32,9 +35,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     
     $scope.$watch('category_name', function () {
         console.log($scope.category_name);
-        if (typeof $scope.category_name != 'undefined' ) {
-            console.log("found: "+checkForCatMatch(0, -1, -1, $scope.category_name));
-        }
         
     });
     
