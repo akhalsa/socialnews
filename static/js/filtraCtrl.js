@@ -219,7 +219,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         for(i = 0; i<$scope.category_structure.length; i++){
             pos_name = getCatNameWithPositionVals(i, -1, -1);
             if (name.toUpperCase() === pos_name.toUpperCase() ) {
-                return (i, -1, -1)
+                return [i, -1, -1];
             }
             if (!$scope.category_structure[i].children) {
                 continue;
@@ -228,7 +228,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
             for(j = 0; j<$scope.category_structure[i].children.length; j++){
                 pos_name = getCatNameWithPositionVals(i, j, -1);
                 if (name.toUpperCase() === pos_name.toUpperCase() ) {
-                    return (i, j, -1)
+                    return [i, j, -1];
                 }
                 if (!$scope.category_structure[i].children[j].children) {
                     continue;
@@ -236,7 +236,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
                 for(k = 0; k < $scope.category_structure[i].children[j].children.length; k++){
                     pos_name = getCatNameWithPositionVals(i, j, k);
                     if (name.toUpperCase() === pos_name.toUpperCase() ) {
-                        return (i, j, k)
+                        return [i, j, k];
                     }
                 }
             }
