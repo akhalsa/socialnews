@@ -287,7 +287,16 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
       }
     }
     
-    
+    $scope.trackOutboundPreviewLink = function(url) {
+        console.log("calling outbound: "+url);
+        if( (typeof tracking == 'undefined')){
+            ga('send', 'event', 'outbound-preview', 'click', url, {'hitCallback':
+                function () {
+                }
+            });
+        }
+       
+    }
    
     
     var trackCategorySelection = function(cat_name){

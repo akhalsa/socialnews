@@ -184,8 +184,8 @@
                 <div class="span8">
                     	<img src="{{! tweet.img_url}}" ng-show="tweet.img_url" width="150"/>
                         
-                    	<a href="{{! tweet.link_url }}"  onclick="trackOutboundLink('dummy')" target="_blank" ng-show="tweet.title">{{! tweet.title }}</a>
-                        <a href="{{! tweet.link_url }}" ng-hide="tweet.title" ng-bind-html="tweet.text | unsafeLink"></a>
+                    	<a href="{{! tweet.link_url }}"  ng-click="trackOutboundPreviewLink(tweet.link_url)" target="_blank" ng-show="tweet.title">{{! tweet.title }}</a>
+                        <a href="{{! tweet.link_url }}" ng-click="trackOutboundPreviewLink(tweet.link_url)" ng-hide="tweet.title" ng-bind-html="tweet.text | unsafeLink"></a>
                         
                         
                     	<p ng-show="tweet.blurb">{{! tweet.blurb }}</p>
