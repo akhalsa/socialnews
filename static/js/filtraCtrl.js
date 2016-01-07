@@ -295,7 +295,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     var trackOutboundLink = function(url) {
         console.log("calling outbound: "+url);
         if( (typeof tracking == 'undefined')){
-            window.ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+            $window.ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
                 function () {
                 }
             });
@@ -306,7 +306,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     var trackCategorySelection = function(cat_name){
         if((typeof tracking == 'undefined')){
             console.log("triggering a change event with: "+cat_name);
-            window.ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+            $window.ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
              function () {
              }
            });
@@ -316,7 +316,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     var trackVote = function(){
       console.log("vote track trigger");
       if( (typeof tracking == 'undefined')){
-        window.ga('send', {
+        $window.ga('send', {
           hitType: 'event',
           eventCategory: 'Vote',
           eventAction: 'Vote'
@@ -326,7 +326,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     var trackNomination = function(handle){
       if( (typeof tracking == 'undefined')){
-        window.ga('send', {
+        $window.ga('send', {
           hitType: 'event',
           eventCategory: 'Vote',
           eventAction: 'Nomination',
@@ -338,7 +338,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     var trackTimeRangeSelection = function(seconds){
         if( (typeof tracking == 'undefined')){
-            window.ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
+            $window.ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
              function () {
              }
            });
