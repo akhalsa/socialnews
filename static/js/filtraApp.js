@@ -1,4 +1,7 @@
-var app = angular.module("filtraApp", ['angulartics', 'angulartics.google.analytics']);
+require('angulartics')
+
+
+var app = angular.module("filtraApp", ['angulartics',require('angulartics-google-analytics')]);
 
 app.filter('unsafeLink', function($sce) {
     return function(text) {
