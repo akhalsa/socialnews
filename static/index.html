@@ -27,7 +27,7 @@
     trackOutboundLink = function(url) {
         console.log("calling outbound: "+url);
         if( (typeof tracking == 'undefined')){
-            $window.ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+            ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
                 function () {
                 }
             });
