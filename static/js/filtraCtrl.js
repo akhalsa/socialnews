@@ -252,20 +252,16 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     
 
     // GOOGLE ANALYTICS COPY AND PASTE
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+    
     var tracking = getUrlParameter("tracking");
-    if((typeof tracking_temp == 'undefined')){
+    if((typeof tracking == 'undefined')){
         ext_string = (window.location.href.indexOf("filtra.io") > -1) ? "1" : "2";
         console.log("setting up with ext string: "+ext_string);
         //ga('create', 'UA-70081756-'+ext_string, 'auto');
-        ga('create', 'UA-70081756-2', 'auto');
-        ga('send', 'pageview');
+        window.ga('create', 'UA-70081756-2', 'auto');
+        window.ga('send', 'pageview');
     }
-    
-
 
         
     var url_time_frame = getUrlParameter("time");
@@ -273,7 +269,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
       time_frame_index = url_time_frame;
     }
     
-    var tracking = getUrlParameter("tracking");
     
     
     function getUrlParameter(sParam) {
@@ -300,7 +295,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     var trackOutboundLink = function(url) {
         console.log("calling outbound: "+url);
         if( (typeof tracking == 'undefined')){
-            ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+            window.ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
                 function () {
                 }
             });
@@ -311,7 +306,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     var trackCategorySelection = function(cat_name){
         if((typeof tracking == 'undefined')){
             console.log("triggering a change event with: "+cat_name);
-            ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+            window.ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
              function () {
              }
            });
@@ -321,7 +316,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     var trackVote = function(){
       console.log("vote track trigger");
       if( (typeof tracking == 'undefined')){
-        ga('send', {
+        window.ga('send', {
           hitType: 'event',
           eventCategory: 'Vote',
           eventAction: 'Vote'
@@ -331,7 +326,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     
     var trackNomination = function(handle){
       if( (typeof tracking == 'undefined')){
-        ga('send', {
+        window.ga('send', {
           hitType: 'event',
           eventCategory: 'Vote',
           eventAction: 'Nomination',
@@ -343,7 +338,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
     
     var trackTimeRangeSelection = function(seconds){
         if( (typeof tracking == 'undefined')){
-            ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
+            window.ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
              function () {
              }
            });
