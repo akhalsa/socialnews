@@ -60,6 +60,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         $scope.selected_top_index = top;
         $scope.selected_secondary_index = second;
         $scope.selected_third_index = third;
+        trackCategorySelection(currentCatName());
         reloadCurrentPath();
         loadTweets();
         loadHandles();
