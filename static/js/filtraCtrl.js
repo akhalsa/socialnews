@@ -69,6 +69,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.timeChange = function(new_time_index){
         $scope.selected_time = new_time_index;
+        trackTimeRangeSelection($scope.time_frames[new_time_index].seconds)
         loadTweets();
     }
     
@@ -292,7 +293,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     * This function takes a valid URL string as an argument, and uses that URL string
     * as the event label.
     */
-    var trackOutboundLink = function(url) {
+    $scope.trackOutboundLink = function(url) {
         console.log("calling outbound: "+url);
         if( (typeof tracking == 'undefined')){
             $window.ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
