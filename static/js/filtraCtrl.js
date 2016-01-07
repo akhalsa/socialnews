@@ -288,21 +288,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     }
     
     
-    /**
-    * Function that tracks a click on an outbound link in Google Analytics.
-    * This function takes a valid URL string as an argument, and uses that URL string
-    * as the event label.
-    */
-    $scope.trackOutboundLink = function(url) {
-        console.log("calling outbound: "+url);
-        if( (typeof tracking == 'undefined')){
-            $window.ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
-                function () {
-                }
-            });
-        }
-       
-    }
+   
     
     var trackCategorySelection = function(cat_name){
         if((typeof tracking == 'undefined')){
