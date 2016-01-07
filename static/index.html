@@ -61,7 +61,7 @@
 <div class="overlay" id="overlay_id" ng-show="nomination_visible" ng-click="togglePopup();"></div>
 <div class="wrap-popup" id="popup_id" ng-show="nomination_visible">
 	<div id="bt-close" ng-click="togglePopup();"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
-	<h3 id="popup_title_label">Nominate a Handle For </h3>
+	<h3 id="popup_title_label">Nominate a Handle For {{! current_path[current_path.length-1] }} </h3>
     <!-- left box start -->
     <div id="p-handle">
     	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" ng-model="search" ng-change="runSearch()"/></div>
