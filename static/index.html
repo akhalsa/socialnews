@@ -184,8 +184,8 @@
                 <div class="span8">
                     	<img src="{{! tweet.img_url}}" ng-show="tweet.img_url" width="150"/>
                         
-                    	<a href="#" ng-show="tweet.title">{{! tweet.title }}</a>
-                        <a href="#" ng-hide="tweet.title" ng-bind-html="tweet.text | unsafeLink"></a>
+                    	<a href="{{! tweet.link_url }}" ng-show="tweet.title">{{! tweet.title }}</a>
+                        <a href="{{! tweet.link_url }}" onclick="hei" ng-hide="tweet.title" ng-bind-html="tweet.text | unsafeLink"></a>
                         
                         
                     	<p ng-show="tweet.blurb">{{! tweet.blurb }}</p>
