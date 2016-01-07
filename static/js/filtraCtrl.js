@@ -246,4 +246,100 @@ app.controller("filtraCtrl", function($scope, $http, $sce) {
         }
         return null;
     }
+    
+    
+    // GOOGLE ANALYTICS COPY AND PASTE
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    var tracking = getUrlParameter("tracking");
+    if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking_temp == 'undefined')){
+        ga('create', 'UA-70081756-1', 'auto');
+        ga('send', 'pageview');
+    }
+    
+
+
+        
+    var url_time_frame = getUrlParameter("time");
+    if (typeof url_time_frame != 'undefined') {
+      time_frame_index = url_time_frame;
+    }
+    
+    var tracking = getUrlParameter("tracking");
+    
+    
+    function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+  
+      for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+      }
+    }
+    
+    
+    /**
+    * Function that tracks a click on an outbound link in Google Analytics.
+    * This function takes a valid URL string as an argument, and uses that URL string
+    * as the event label.
+    */
+    var trackOutboundLink = function(url) {
+        console.log("calling outbound: "+url);
+        if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+            ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+                function () {
+                }
+            });
+        }
+       
+    }
+    
+    var trackCategorySelection = function(cat_name){
+        if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+            ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+             function () {
+             }
+           });
+        }
+    }
+    
+    var trackVote = function(){
+      console.log("vote track trigger");
+      if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Vote',
+          eventAction: 'Vote'
+          } );
+      }
+    }
+    
+    var trackNomination = function(handle){
+      if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Vote',
+          eventAction: 'Nomination',
+          eventLabel: handle
+          }
+        );
+      }
+    }
+    
+    var trackTimeRangeSelection = function(seconds){
+        if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
+            ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
+             function () {
+             }
+           });
+        }
+    }
 });
