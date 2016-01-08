@@ -52,6 +52,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
             $scope.selected_third_index = -1;
         }
         reloadCurrentPath();
+        trackCategorySelection(currentCatName());
         loadTweets();
         loadHandles();
     }
@@ -96,6 +97,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         if (handle.vote_val != 0) {
             return;
         }
+        trackVote(handle_string);
         handle.vote_val += value;
         
         if (value > 0) {
@@ -137,6 +139,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         var patt = /^@(\w){1,15}$/;
         if(patt.test($scope.search)){
             $scope.togglePopup();
+            trackNomination($scope.search)
             $http.post( "/handle/"+$scope.search+"/category/"+currentCatName()+"/upvote/"+1).then(function(response) {
                 loadHandles();
             });
@@ -309,13 +312,13 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         }
     }
     
-    var trackVote = function(){
+    var trackVote = function(handle){
       console.log("vote track trigger");
       if( (typeof tracking == 'undefined')){
         $window.ga('send', {
           hitType: 'event',
           eventCategory: 'Vote',
-          eventAction: 'Vote'
+          eventAction: handle
           } );
       }
     }
