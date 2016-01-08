@@ -1,4 +1,5 @@
-var app = angular.module("filtraApp", ['ui.bootstrap']);
+
+var app = angular.module("filtraApp", ['blah lbah']);
 
 
 app.filter('unsafeLink', function($sce) {
