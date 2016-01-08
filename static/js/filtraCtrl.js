@@ -299,7 +299,8 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     }
    
     
-    var trackCategorySelection = function(cat_name){
+    $scope.trackCategorySelection = function(cat_name){
+        console.log("track selection called");
         if((typeof tracking == 'undefined')){
             console.log("triggering a change event with: "+cat_name);
             $window.ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
