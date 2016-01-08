@@ -1,7 +1,5 @@
 var app = angular.module("filtraApp", []);
-$(function(){
-    $('button').popover()
-    });
+
 
 app.filter('unsafeLink', function($sce) {
     return function(text) {
