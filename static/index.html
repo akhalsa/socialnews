@@ -108,7 +108,7 @@
     <!-- nav start -->
     <ul class="nav navbar-nav" id="top_level_nav">
       <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
-        <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
+        <a href="#"  ng-click="selectionChange($index, -1, -1); trackCategorySelection(cat.name);">{{! cat.name }}</a>
       </li>
     </ul>
     <!-- nav end -->
@@ -120,7 +120,7 @@
   <div class="row">
     <div class="col-xs-2 wrap-sub-nav">
       <ul id="nav-category" class="sub">
-      	<li class="current-page" ng-click="selectionChange(selected_top_index, -1, -1)"><a href="#">{{! category_structure[selected_top_index].name }}</a></li>
+      	<li class="current-page" ng-click="selectionChange(selected_top_index, -1, -1); trackCategorySelection(cat.name);"><a href="#">{{! category_structure[selected_top_index].name }}</a></li>
         <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
           id="{{! $index==selected_secondary_index ? 'sub-nav2' : 'random_sub_id'+$index}}">
 
@@ -131,10 +131,10 @@
             <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
               <li ng-repeat="subcat in category_structure[selected_top_index].children[selected_secondary_index].children"
                   ng-class="{'current-sub': $index==selected_third_index}">
-                <a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" >{{! subcat.name}}</a>
+                <a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index); trackCategorySelection(cat.name);" >{{! subcat.name}}</a>
               </li>
             </ul>
-            <a href="#" ng-hide="$index==selected_secondary_index" ng-click="selectionChange(selected_top_index, $index, -1)">
+            <a href="#" ng-hide="$index==selected_secondary_index" ng-click="selectionChange(selected_top_index, $index, -1); trackCategorySelection(cat.name);">
               {{! cat.name }}</a>
             <a href="#" ng-hide="$index==selected_secondary_index"><span class="genericon genericon-expand"></span></a>
         </li>
