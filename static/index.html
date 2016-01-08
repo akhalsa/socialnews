@@ -125,7 +125,7 @@
           id="{{! $index==selected_secondary_index ? 'sub-nav2' : 'random_sub_id'+$index}}">
 
             <div id="wrap-pr" ng-show="$index==selected_secondary_index"  >
-              <a href="#" ng-click="selectionChange(selected_top_index, $index, -1)">{{! cat.name }}</a>
+              <a href="#" ng-click="selectionChange(selected_top_index, $index, -1); trackCategorySelection(cat.name);">{{! cat.name }}</a>
               <a href="#"><span class='genericon genericon-collapse'></span></a>
             </div>
             <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
