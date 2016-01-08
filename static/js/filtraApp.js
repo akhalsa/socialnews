@@ -1,6 +1,4 @@
-var uibs = require('angular-ui-bootstrap');
-
-var app = angular.module("filtraApp", [uibs]);
+var app = angular.module("filtraApp", ['ui.bootstrap']);
 
 
 app.filter('unsafeLink', function($sce) {
