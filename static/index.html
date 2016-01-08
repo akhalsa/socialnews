@@ -144,7 +144,7 @@
     	<!-- Breadcurmbs start -->
         <ol class="breadcrumb">
           <li ng-repeat="category in current_path" ng-class="{'active': $last}">
-            <a href="#" ng-hide="$last" ng-click="breadCrumbSelection($index)">
+            <a href="#" ng-hide="$last" ng-click="breadCrumbSelection($index); trackCategorySelection('breadcrumb')">
               <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
             </a>
             <span ng-show="$last">{{! category}}</span>
