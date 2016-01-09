@@ -4,21 +4,36 @@
 <meta charset="UTF-8">
 <title>Filtra</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="static/css/bootstrap.min.css">
-  <link rel="stylesheet" href="static/css/style.css">
-  <link rel="stylesheet" href="static/fonts/genericons/genericons.css">
-  <link rel="stylesheet" href="static/css/non-responsive.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="static/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{{static_url('css/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{static_url('css/style.css')}}">
+  <link rel="stylesheet" href="{{static_url('fonts/genericons/genericons.css')}}">
+  <link rel="stylesheet" href="{{static_url('css/non-responsive.css')}}">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js" type="text/javascript"></script>
+  
+  <script src="{{static_url('js/filtraApp.js')}}"></script>
+  <script src="{{static_url('js/filtraCtrl.js')}}"></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    var tracking_temp = getUrlParameter("tracking");
-    if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking_temp == 'undefined')){
-        ga('create', 'UA-70081756-1', 'auto');
-        ga('send', 'pageview');
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+    var tracking = getUrlParameter("tracking");
+     /**
+    * Function that tracks a click on an outbound link in Google Analytics.
+    * This function takes a valid URL string as an argument, and uses that URL string
+    * as the event label.
+    */
+    trackOutboundLink = function(url) {
+        console.log("calling outbound: "+url);
+        if( (typeof tracking == 'undefined')){
+            ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+                function () {
+                }
+            });
+        }
+       
     }
     
     function getUrlParameter(sParam) {
@@ -34,475 +49,34 @@
           return sParameterName[1] === undefined ? true : sParameterName[1];
         }
       }
-    };
-  </script>
-  <script>
-    
-  </script>
-  <script type="text/javascript">
-        /*
-         *  Start by loading the category structure
-         *
-         */
-        var selected_top_index = 0;
-        var selected_secondary_index = -1;
-        var selected_third_index = -1;
-        
-        var search_string_val;
-        
-        var time_frame_index = 0;
-        var time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
-                           {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
-        
-        var category_structure;
-        
-        var tweets;
-        
-        var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-        
-        var popupState;
-        
-        var remainingVotesString = " Votes Left";
-        
-        var cat_1 = getUrlParameter("cat1");
-        if (typeof cat_1 != 'undefined'){
-          selected_top_index = cat_1;
-        }
-        
-        var cat_2 = getUrlParameter("cat2");
-        if (typeof cat_2 != 'undefined'){
-          selected_secondary_index = cat_2;
-        }
-        
-        var cat_3 = getUrlParameter("cat3");
-        if (typeof cat_3 != 'undefined'){
-          selected_third_index = cat_3;
-        }
-        
-        var url_time_frame = getUrlParameter("time");
-        if (typeof url_time_frame != 'undefined') {
-          time_frame_index = url_time_frame;
-        }
-        
-        var tracking = getUrlParameter("tracking");
-        
-        $.getJSON("/category", function(result){
-            category_structure = result;
-            renderTopNav();
-            renderTimeFrame();
-            loadTweets();
-            loadHandles();
-            updatePreview()
-            setTopState(false);
-        });
-        
-        function getUrlParameter(sParam) {
-          var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-            sURLVariables = sPageURL.split('&'),
-            sParameterName,
-            i;
-      
-          for (i = 0; i < sURLVariables.length; i++) {
-            sParameterName = sURLVariables[i].split('=');
-    
-            if (sParameterName[0] === sParam) {
-              return sParameterName[1] === undefined ? true : sParameterName[1];
-            }
-          }
-        };
-        function triggerSearch(handle){
-          $.getJSON("/twitter/timeline/"+handle, function(result){
-            $('#p-tweet-container').html("");
-            var tweet_cont = "";
-            $.each(result, function(i, child){
-              tweet_cont+= child;
-            });
-            $('#p-tweet-container').html(tweet_cont);
-          });
-          
-        }
-        function searchHandleClicked(handle){
-          $('#search_text').val(handle);
-          triggerSearch(handle);
-          updatePreview();
-        }
-        
-        function updatePreview(){
-          if(search_string_val != $('#search_text').val()){
-            search_string_val = $('#search_text').val();
-            if ((search_string_val == "@")||(search_string_val == "")) {
-              $('#open-handle-list').html("");
-              $('#button-container').html("");
-              $('#nothing').show();
-              $('#p-tweet-container').hide();
-              return;
-            }
-            $.getJSON("/twitter/search/"+search_string_val, function(result){
-              if (result.search == $('#search_text').val()) {
-                var list_of_suggestions_html = "";
-                var text_match = "";
-                $.each(result.handles, function(i, child){
-                  if (("@"+child.screen_name) == $('#search_text').val()) {
-                    //button should be active
-                    text_match = "@"+child.screen_name
-                  }
-                  console.log("will list: @"+child.screen_name);
-                  list_of_suggestions_html += "<li onclick=\"searchHandleClicked('@"+child.screen_name+"')\">@"+child.screen_name+"</li>";
-                });
-                if (text_match != "") {
-                  $('#nothing').hide();
-                  $('#p-tweet-container').show();
-                  $('#button-container').html("<button class=\"p-bt-blue\" onclick=\"nominateNewHandle()\">Nominate: "+text_match+"</button>");
-                  triggerSearch($('#search_text').val());
-                }else{
-                  $('#button-container').html("");
-                  $('#nothing').show();
-                  $('#p-tweet-container').hide();
-                  
-                }
-                $('#open-handle-list').html(list_of_suggestions_html);
-                
-              }
-            });
-          }
-        }
-        
-        function setTopState(newState){
-          console.log("setTopState called with val: "+newState);
-          if (newState == false) {
-            $('#overlay_id').hide();
-            $('#popup_id').hide();
-            $('#search_text').unbind('keyup input paste');
-          }else if (newState == true) {
-            $('#overlay_id').show();
-            $('#popup_id').show();
-            search_string_val = "";
-            $('#open-handle-list').html("");
-            $('#search_text').val(search_string_val);
-            $('#popup_title_label').html("Nominate a Handle for "+currentCatName());
-            $('#search_text').bind("keyup input paste", function(event) {
-              updatePreview();
-            });
-          }
-          popupState = newState;
-        }
-        
-        function nominateNewHandle() {
- 
-            var handle_string = $('#search_text').val().trim();
-            console.log("running check for: "+handle_string);
-            var patt = /^@(\w){1,15}$/;
-            if(patt.test(handle_string)){
-                console.log("valid twitter handle");
-                trackNomination(handle_string);
-                $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/1", function( data ) {
-                  setTopState(false);
-                  loadHandles();
-                });
-                
-            }else{
-                alert("Please enter a valid twitter handle");
-            }
-        }
-        
-        function voteForHandle(handle_string, value, position, old_up, old_down) {
-          if ($("#remaining_vote_count").html() == ("0"+ remainingVotesString) ){
-            return;
-          }
-          trackVote();
-          $("#nomination_ul_"+position).removeClass("nominate");
-          html_string = "";
-          if (value==1) {
-            $("#nomination_ul_"+position).addClass("nominate done-up");
-            html_string += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+(old_up+1)+"</span></li>";
-            html_string += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+old_down+"</span></li>";
-          }else if (value == -1) {
-            $("#nomination_ul_"+position).addClass("nominate done-down");
-            html_string += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+old_up+"</span></li>";
-            html_string += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+(old_down-1)+"</span></li>";
-            
-          }
-          $("#nomination_ul_"+position).html(html_string);
-          $.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, function( data ) {
-            $.getJSON("/category/"+cat_name, function(result){
-              vote_count = result.remaining_votes;
-              console.log("got remaining votes: "+vote_count);
-              $("#remaining_vote_count").html(vote_count+remainingVotesString);
-            });
-          });
-        }
-        
-        function currentCatName() {
-            var cat_name = ""
-            if ((selected_secondary_index != -1) &&(selected_third_index != -1)){
-                cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].children[selected_third_index].name);
-            }else if (selected_secondary_index != -1) {
-                cat_name = String(category_structure[selected_top_index].children[selected_secondary_index].name);
-            }else {
-                cat_name= String(category_structure[selected_top_index].name);
-            }
-            return cat_name;
-        }
-        
-        function loadHandles() {
-          cat_name = currentCatName()
-          console.log("refreshing handles for category: "+cat_name);
-          $.getJSON("/category/"+cat_name, function(result){
-              var list_elements = "";
-              console.log("response handles for "+cat_name);
-              cats = result.handles;
-              vote_count = result.remaining_votes;
-              console.log("got remaining votes: "+vote_count);
-              $("#remaining_vote_count").html(vote_count+" Votes Left");
-              $.each(cats, function(i, child){
-                  console.log("populating handle: "+child.handle);
-                  list_elements += "<li ";
-                  list_elements += (child.tracked == 1) ? "class=\"active\"" : "class=\"none-active\"";
-                  list_elements += "<div class=\"handle\">";
-                  list_elements += "<img src=\""+child.profile_pic+"\" alt=\""+child.handle+"\" />"+child.handle+"</div>";
-                  list_elements += "<ul id='nomination_ul_"+i+"' ";
-                  if (child.vote_val == 0) {
-                    list_elements += "class=\"nominate\">";
-                    list_elements += "<li class=\"up-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',   1, "+i+", "+child.upvotes+", "+child.downvotes+"); return false;\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                    list_elements += "<li class=\"down-v\"><a href=\"#\" onclick=\"voteForHandle('"+child.handle+"',-1, "+i+", "+child.upvotes+", "+child.downvotes+"); return false;\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
-                  }else if (child.vote_val==1) {
-                    list_elements += "class=\"nominate done-up\">";
-                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
-                  }else if (child.vote_val == -1) {
-                    list_elements += "class=\"nominate done-down\">";
-                    list_elements += "<li class=\"up-v\"><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a> <span>"+child.upvotes+"</span></li>";
-                    list_elements += "<li class=\"down-v\"><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a> <span>"+child.downvotes+"</span></li>";
-                    
-                  }
-                  list_elements += "</ul>";
-                  list_elements += "<div class=\"clear\"></div></li>";
-              });
-              console.log("done loading handles");
-              $('#list-vote').html(list_elements);
-             
-          });
-        }
-        function renderTweets(){
-          $("#time").nextAll().remove();
-          tweet_html = "";
-          $.each(tweets, function(i, child){
-            tweet_html += "<div class=\"con-tw\">";
-            tweet_html += "<div class=\"wrap-user\">";
-            tweet_html += "<div class=\"user\"><img src=\""+child.pic+"\"  alt=\""+child.name+"\" />"+child.name+"</div>";
-            tweet_html += "<div class=\"time-tw\"><span class=\"genericon genericon-time\"></span>"+child.tweet_count+"</div>";
-            tweet_html += "<div class=\"clear\"></div></div>";
-            
-            tweet_html += "<div class=\"wrap-con-tw\" >";
-            tweet_html += child.text.replace(urlRegEx,"<a href='$1' target=\"_blank\" onclick=\"trackOutboundLink('$1')\">$1</a>");
-            tweet_html += "<div class=\"preview-tw\">";
-            if (child.blurb || child.img_url || child.title) {
-              tweet_html += "<div class=\"ic-pr\"><span class=\"genericon genericon-show\"></span> Preview</div>";
-              tweet_html += "<div class=\"span8\">";
-              if (child.img_url) {
-                tweet_html += "<img src=\""+child.img_url+"\" width=\"150\"/>";
-              }
-              if (child.title)  {
-                tweet_html += "<a href=\""+child.link_url+"\" target=\"_blank\" onclick=\"trackOutboundLink('"+child.link_url+"')\">"+child.title+"</a>";
-              }else{
-                console.log(child.text +" has no title");
-              }
-              if (child.blurb) {
-                tweet_html += "<p>"+child.blurb+"</p>";
-              }else{
-                console.log(child.text +" has no blurb");
-              }
-              tweet_html += "<div class=\"clear\"></div></div></div>";
-            }
-            tweet_html += "</div></div>";
-          });
-          $("#time").after(tweet_html);
-        }
-        function loadTweets() {
-            cat_name = currentCatName();
-            tweets = [];
-            $.getJSON("/reader/"+cat_name+"/time/"+time_frames[time_frame_index].seconds, function(result){
-                tweets = result;
-                renderTweets();
-            });
-        }
-        
-        
-        function renderTopNav() {
-            top_nav_container = document.getElementById("top_level_nav");
-            var top_options_string = "";
-            
-            $.each(category_structure, function(i, child){
-                
-                top_options_string += "<li";
-                if (selected_top_index == i) {
-                    top_options_string += " class=\"active\""
-                    $( ".current-page" ).children("a").html(child.name);
-                    //TODO: all neighbor elements get populated by child.chilren categories
-                    $(".current-page").nextAll().remove();
-                    var list_string = "";
-                    //var reverseable = child.children.slice();
-                    $.each(child.children, function(j, second_level){
-                        if (j == selected_secondary_index) {
-                            list_string += "<li id=\"sub-nav2\" ><div id=\"wrap-pr\" onclick=\"topChooser("+i+","+j+",-1)\"><a href=\"#\">"
-                            list_string += second_level.name + "</a><a href=\"#\"><span class=\"genericon genericon-collapse\"></span></a></div>";
-                            if (second_level.children.length>0) {
-                                list_string += "<ul>"
-                            }
-                            $.each(second_level.children, function(k, third_level){
-                                if (k == selected_third_index) {
-                                    list_string += "<li class=\"current-sub\" onclick=\"topChooser("+i+","+j+","+k+")\"><a href=\"#\">"+third_level.name+"</a></li>";
-                                }else{
-                                    list_string += "<li><a href=\"#\" onclick=\"topChooser("+i+","+j+","+k+")\">"+third_level.name+"</a></li>";
-                                }
-                            });
-                            if (second_level.children.length>0) {
-                                list_string += "</ul>";
-                            }
-                            list_string += "</li>";
-                        
-                        } else{
-                            list_string += "<li onclick=\"topChooser("+i+","+j+",-1)\"><a href=\"#\">"+second_level.name+"</a><a href=\"#\"><span class=\"genericon genericon-expand\"></span></a></li>";
-
-                        }
-                    });
-                    $(".current-page").after(list_string);
-                    
-                    
-                }
-                top_options_string += " id=\"top_level_id_"+i+"\"><a href=\"#\">"+child.name+"</a></li>";
-                
-            });
-            top_nav_container.innerHTML = top_options_string;
-            
-            $.each(category_structure, function(i, child){
-               $("#top_level_id_"+i).click(function(){ topChooser(i, -1, -1); return false; }); 
-            });
-            
-            
-        }
-
-        function topChooser(i, j, k) {
-            console.log("UPDATING TOP");
-            selected_secondary_index = j;
-            selected_third_index = k;
-            selected_top_index = i;
-            renderTopNav();
-            loadTweets();
-            loadHandles();
-            trackCategorySelection(currentCatName());
-        }
-        
-        function renderTimeFrame() {
-            $("#time").empty();
-            time_options_string = "";
-            $.each(time_frames, function(i, time_frame){
-                if (i == time_frame_index) {
-                    time_options_string += "<li class=\"current\" onclick=\"selectTimeFrameIndex("+i+")\"><a href=\"#\"><span class=\"genericon genericon-time\"></span>"+time_frame.text
-                    +"</a><br/><span class=\"genericon genericon-downarrow\"></span></li>";
-            
-                }else{
-                    time_options_string += "<li onclick=\"selectTimeFrameIndex("+i+")\"><a href=\"#\"><span class=\"genericon genericon-time\"></span>"+time_frame.text+"</a></li>";
-                }
-            });
-            time_options_string += "<div class=\"clear\"></div>";
-            $("#time").html(time_options_string);
-            
-        }
-        function selectTimeFrameIndex(new_index) {
-            time_frame_index = new_index;
-            renderTimeFrame();
-            loadTweets();
-            trackTimeRangeSelection(time_frames[time_frame_index].seconds);
-        }
-        $(function () {
-		$('[data-toggle="popover"]').popover();
-	  })
-        
-        /**
-        * Function that tracks a click on an outbound link in Google Analytics.
-        * This function takes a valid URL string as an argument, and uses that URL string
-        * as the event label.
-        */
-        var trackOutboundLink = function(url) {
-            console.log("calling outbound: "+url);
-            if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
-                ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
-                    function () {
-                    }
-                });
-            }
-           
-        }
-        
-        var trackCategorySelection = function(cat_name){
-            if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
-                ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
-                 function () {
-                 }
-               });
-            }
-        }
-        
-        var trackVote = function(){
-          if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
-            ga('send', {
-              hitType: 'event',
-              eventCategory: 'Vote',
-              eventAction: 'Vote'
-              } );
-          }
-        }
-        
-        var trackNomination = function(handle){
-          if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
-            ga('send', {
-              hitType: 'event',
-              eventCategory: 'Vote',
-              eventAction: 'Nomination',
-              eventLabel: handle
-              }
-            );
-          }
-        }
-        
-        var trackTimeRangeSelection = function(seconds){
-            if((window.location.href.indexOf("filtra.io") > -1) && (typeof tracking == 'undefined')){
-                ga('send', 'event', 'configuration change', 'change time frame', seconds, {'hitCallback':
-                 function () {
-                 }
-               });
-            }
-        }
-
+    }
   </script>
 </head>
 
-<body>
+<body ng-app="filtraApp" ng-controller="filtraCtrl"
+  {% if 'cat_name' in globals() %}
+      ng-init="category_name='{{cat_name}}'"
+  {% end %}
+>
 <!-- popup overlay start -->
-<div class="overlay" id="overlay_id"></div>
-<div class="wrap-popup" id="popup_id">
-	<div id="bt-close" onclick="setTopState(false)"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
-	<h3 id="popup_title_label">Nominate a Handle For </h3>
+<div class="overlay" id="overlay_id" ng-show="nomination_visible" ng-click="togglePopup();"></div>
+<div class="wrap-popup" id="popup_id" ng-show="nomination_visible">
+	<div id="bt-close" ng-click="togglePopup();"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
+	<h3 id="popup_title_label">Nominate a Handle For {{! current_path[current_path.length-1] }} </h3>
     <!-- left box start -->
     <div id="p-handle">
-    	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" id="search_text"/></div>
+    	<div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" ng-model="search" ng-change="runSearch()"/></div>
         <ul id="open-handle-list">
-            <li>@Con</li>
-            <li>@CNN_BreakingNews</li>
-            <li>@CNN_International</li>
-            <li>@Con_prime</li>
-            <li>@Last_Con</li>
-            <li>@News_Con</li>
+          <li ng-repeat="handle in suggestion_list" ng-click="updateSearch('@'+handle.screen_name);">@{{! handle.screen_name}}</li>
         </ul>
     </div>
     <!-- left box end -->
     <!-- right box start -->
     <div id="p-twit-list">
-      <p id="nothing">Nothing to Display</p>
-      <div class="twitter-tweet-wrap" id="p-tweet-container">
+      <p id="nothing" ng-show="handle_preview_html.length==0">Nothing to Display</p>
+      <div class="twitter-tweet-wrap" id="p-tweet-container" ng-hide="handle_preview_html.length == 0" ng-bind-html="handle_preview_html_safe">
       </div>
-      <span id="button-container"><button class="p-bt-gray">Ok</button></span>
+      <span id="button-container" ng-hide="handle_preview_html.length == 0" ng-click="sendNomination()"><button class="p-bt-blue">Nominate {{! search }}</button></span>
     </div>
     <!-- right box end -->
     <div class="clear"></div>
@@ -518,7 +92,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#"><img src="static/images/logo.png" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+      <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
       <div class="clear"></div>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
@@ -527,19 +101,16 @@
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
       </ul>
       <ul id="bt-top-nominate"  >
-      	<li id="bt-nom" onclick="setTopState(true)"><a href="#"><span class="genericon genericon-search"></span> Nominate</a><a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="Know a Twitter handle we should be following? Add it here!"><span class="genericon genericon-help"></span></a></li>
-        <li><span class="genericon genericon-checkmark"></span>  <span id="remaining_vote_count">5 Votes left</span> </li>
+      	<li id="bt-nom" ng-click="togglePopup();"><a href="#"><span class="genericon genericon-search"></span> Nominate</a><a tabindex="0" role="button" popover-trigger="mouseenter" popover-placement="bottom" uib-popover="Know a Twitter handle we should be following? Add it here!"><span class="genericon genericon-help"></span></a></li>
+        <li><span class="genericon genericon-checkmark"></span>  <span id="remaining_vote_count">{{! remaining_votes}} Votes left</span> </li>
         <div class="clear"></div>
       </ul>
     </div>
     <!-- nav start -->
     <ul class="nav navbar-nav" id="top_level_nav">
-      <li class="active"><a href="#">Front Page</a></li>
-      <li><a href="#">Technology</a></li>
-      <li><a href="#">Sports</a></li>
-      <li><a href="#">Travel</a></li>
-      <li><a href="#">Politics</a></li>
-      <li><a href="#">Travel</a></li>
+      <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
+        <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
+      </li>
     </ul>
     <!-- nav end -->
   </div>
@@ -550,183 +121,110 @@
   <div class="row">
     <div class="col-xs-2 wrap-sub-nav">
       <ul id="nav-category" class="sub">
-      	<li class="current-page"><a href="#">Sports</a></li>
-        <li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></div>
-        	<ul>
-            	<li><a href="#">iOS</a></li>
-                <li class="current-sub"><a href="#">OS X</a></li>
-                <li><a href="#">Watch</a></li>
-                <li><a href="#">TV</a></li>
-                <li><a href="#">iPhone</a></li>
-            </ul>
-        </li>
-        
-        <li><a href="#">Google</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-        <li><a href="#">Microsoft</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-        <li><a href="#">Mobile</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-        <li><a href="#">Game</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-        <li><a href="#">Home</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-        <li class="last-sub"><a href="#">Apps</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+      	<li class="current-page" ng-click="selectionChange(selected_top_index, -1, -1)"><a href="#">{{! category_structure[selected_top_index].name }}</a></li>
+        <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
+          id="{{! $index==selected_secondary_index ? 'sub-nav2' : 'random_sub_id'+$index}}">
 
+            <div id="wrap-pr" ng-show="$index==selected_secondary_index"  >
+              <a href="#" ng-click="selectionChange(selected_top_index, $index, -1)">{{! cat.name }}</a>
+              <a href="#"><span class='genericon genericon-collapse'></span></a>
+            </div>
+            <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
+              <li ng-repeat="subcat in category_structure[selected_top_index].children[selected_secondary_index].children"
+                  ng-class="{'current-sub': $index==selected_third_index}">
+                <a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" >{{! subcat.name}}</a>
+              </li>
+            </ul>
+            <a href="#" ng-hide="$index==selected_secondary_index" ng-click="selectionChange(selected_top_index, $index, -1)">
+              {{! cat.name }}</a>
+            <a href="#" ng-hide="$index==selected_secondary_index"><span class="genericon genericon-expand"></span></a>
+        </li>
       </ul>
     </div>
     <div class="col-xs-7 wrap-con-main">
     	<!-- Breadcurmbs start -->
-        <ol class="breadcrumb" style="visibility: hidden">
-          <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
-          <li><a href="#">Library</a></li>
-          <li class="active">Data</li>
+        <ol class="breadcrumb">
+          <li ng-repeat="category in current_path" ng-class="{'active': $last}">
+            <a href="#" ng-hide="$last" ng-click="breadCrumbSelection($index)">
+              <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
+            </a>
+            <span ng-show="$last">{{! category}}</span>
+          </li>
         </ol>
     	<!-- Breadcurmbs end -->
     	<!-- time start -->
     	<ul id="time">
-        	<li class="current"><a href="#"><span class="genericon genericon-time"></span> Past 15 Minutes</a><br/><span class="genericon genericon-downarrow"></span></li>
-            <li><a href="#"><span class="genericon genericon-time"></span> Past Hour</a></li>
-            <li><a href="#"><span class="genericon genericon-time"></span> Past 3 Hours</a></li>
-            <li><a href="#"><span class="genericon genericon-time"></span> Today</a></li>
-            <div class="clear"></div>
+          <li ng-repeat="time_block in time_frames" ng-class="{'current': $index==selected_time}" ng-click="timeChange($index)">
+            <a href="#"><span class="genericon genericon-time"></span>{{! time_block.text}}</a>
+            <br ng-show="$index==selected_time"><span class="genericon genericon-downarrow" ng-show="$index==selected_time"></span>            
+          </li>
+          <div class="clear"></div>
         </ul>
     	<!-- time end -->
         <!-- tweets start -->
-        <div class="con-tw">
+        <button id="bt-loadmore">Refresh</button>
+        <div class="con-tw" ng-repeat="tweet in tweet_array">
         	<div class="wrap-user">
             	<div class="user">
-                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
-                	<ul class="nominate done-up">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                  <div class="handle-main"><img src="{{! tweet.pic}}" alt="{{! tweet.name}}"/></div>
+                    <ul class="nominate" ng-repeat="handle in handle_list | matchTwitterName : tweet.name"
+                        ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}">
+                      <li class="up-v" ng-click="voteForHandle(handle.handle, 1);"><a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a> <span>{{! handle.upvotes }}</span></li>
+                      <li class="down-v" ng-click="voteForHandle(handle.handle, -1);"><a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a> <span>{{! handle.downvotes }}</span></li>
                     </ul>
-                    <div class="clear"></div>
+                    <div class="handle-name"> {{! tweet.name}} </div>
+                  <div class="clear"></div>
                 </div>
-                <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
+                <div class="time-tw"><span class="genericon genericon-twitter"></span> {{! tweet.tweet_count }} <span class="genericon genericon-time"></span>
+                {{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}</div>
                 <div class="clear"></div>
             </div>
-            <div class="wrap-con-tw">
-            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
-            </div>
-        </div>
-        <!-- tweets end -->
-        <!-- tweets start -->
-        <div class="con-tw">
-        	<div class="wrap-user">
-            	<div class="user">
-                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
-                	<ul class="nominate">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
-                <div class="clear"></div>
-            </div>
-            <div class="wrap-con-tw">
-            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
-                <div class="preview-tw">
-                	<img src="static/images/ic-load.GIF" class="imgpd"/>
-                </div>
-            </div>
-        </div>
-        <!-- tweets end -->
-        <!-- tweets start -->
-        <div class="con-tw">
-        	<div class="wrap-user">
-            	<div class="user">
-                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
-                	<ul class="nominate done-down">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
-                <div class="clear"></div>
-            </div>
-            <div class="wrap-con-tw">
-            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
-                <div class="preview-tw">
-                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
-					<div class="span8">
-                    	<img src="static/images/img-sp.png"/>
-                    	<a href="#">SportsCenter on Twitter</a>
-                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper. </p>
+            <div class="wrap-con-tw" >
+              <span ng-bind-html="tweet.text | unsafeLink"></span>
+              <div class="preview-tw" ng-show="tweet.blurb || tweet.img_url || tweet.title" >
+                <div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+                <div class="span8">
+                    	<img src="{{! tweet.img_url}}" ng-show="tweet.img_url" width="150"/>
+                        
+                    	<a href="{{! tweet.link_url }}"  ng-click="trackOutboundPreviewLink(tweet.link_url)" target="_blank" ng-show="tweet.title">{{! tweet.title }}</a>
+                        <a href="{{! tweet.link_url }}" ng-click="trackOutboundPreviewLink(tweet.link_url)" ng-hide="tweet.title" ng-bind-html="tweet.text | unsafeLink"></a>
+                        
+                        
+                    	<p ng-show="tweet.blurb">{{! tweet.blurb }}</p>
+                        <p ng-hide="tweet.blurb" ng-bind-html="tweet.text | unsafeLink"></p>
+                        
                         <div class="clear"></div>
-                    </div>
                 </div>
+              </div>
             </div>
         </div>
         <!-- tweets end -->
-        <!-- tweets start -->
-        <div class="con-tw">
-        	<div class="wrap-user">
-            	<div class="user">
-                	<div class="handle-main"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> Tech Crunch</div>
-                	<ul class="nominate">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                <div class="time-tw"><span class="genericon genericon-time"></span> 5 min</div>
-                <div class="clear"></div>
-            </div>
-            <div class="wrap-con-tw">
-            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
-                <div class="preview-tw">
-                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
-					<div class="span8">
-                    	<img src="static/images/img-sp.png"/>
-                    	<a href="#">SportsCenter on Twitter</a>
-                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper.</p>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- tweets end -->
-        <button id="bt-loadmore">Load More</button>
+        
     </div>
     <!-- sidebar start -->
     <div class="col-xs-3">
     	<!-- vote start -->
         <div class="box-side vote-wrap">
-        	<h3>Vote <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="Cast your vote to see more or less from the nominated handles below"><span class="genericon genericon-help"></span></a></h3>
+        	<h3>Vote <a tabindex="0" role="button" popover-trigger="mouseenter" popover-placement="right" uib-popover="Cast your vote to see more or less from the nominated handles below"><span class="genericon genericon-help"></span></a></h3>
             <ul id="list-vote">
-            	<li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
-                	<ul class="nominate done-up">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                <li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Bleacher Report LFL</div>
-                	<ul class="nominate done-up">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                <li class="active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
-                	<ul class="nominate done-down">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                <li class="none-active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
-                	<ul class="nominate new-vote">
-                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
-                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                <li class="none-active"><div class="handle"><img src="static/images/ic-twitter.png" alt="TechCrunch" /> @Tech Crunch</div>
-                	<ul class="nominate new-vote">
-                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
-                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
+              <li ng-repeat="handle in handle_list" ng-class="{'active': handle.tracked, 'none-active': !handle.tracked}" >
+                <div class="handle">
+                  <img src="{{! handle.profile_pic }}"/>
+                  {{! handle.handle }}
+                </div>
+                
+                <ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}" >
+                  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, 1); ">
+                    <a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a>
+                    <span >{{! handle.upvotes}}</span>
+                  </li>
+                  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, -1);">
+                    <a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a>
+                    <span >{{! handle.downvotes}}</span>
+                  </li>
+                </ul>
+                <div class="clear"></div>
+              </li>
             </ul>
         </div>
     	<!-- vote end -->

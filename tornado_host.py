@@ -211,7 +211,17 @@ class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("static/index.html")
         
+class IndexCategoryHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self, cat):
+        print "injecting cat: "+cat
+        self.render("static/index.html", cat_name=cat)
+
+settings = {
+    "static_path": os.path.join(os.path.dirname(__file__), "static"),
+}
 app = tornado.web.Application([
+    (r'/c/(.*)', IndexCategoryHandler),
     (r'/', IndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
@@ -221,7 +231,7 @@ app = tornado.web.Application([
     (r'/page_load/twitter_id/(.*)',  PageLoad),
     (r'/twitter/search/(.*)', Twitter),
     (r'/twitter/timeline/(.*)', TwitterTimeline)
-])
+], **settings)
 
 if __name__ == '__main__':
     
