@@ -147,6 +147,10 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
             alert("Please enter a valid twitter handle");
         }
     }
+    
+    $scope.refreshButton = function(){
+        loadTweets();
+    }
 
 
     //VIEW MODEL GENERATION ---- basically static methods for html
@@ -262,8 +266,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     if((typeof tracking == 'undefined')){
         ext_string = (window.location.href.indexOf("filtra.io") > -1) ? "1" : "2";
         console.log("setting up with ext string: "+ext_string);
-        //ga('create', 'UA-70081756-'+ext_string, 'auto');
-        $window.ga('create', 'UA-70081756-2', 'auto');
+        ga('create', 'UA-70081756-'+ext_string, 'auto');
         $window.ga('send', 'pageview');
     }
 
@@ -321,6 +324,18 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
           eventAction: handle
           } );
       }
+    }
+    
+    var trackRefresh = function(){
+        if( (typeof tracking == 'undefined')){
+            $window.ga('send', {
+            hitType: 'refresh',
+            eventCategory: 'refresh',
+            eventAction: 'refresh',
+            eventLabel: handle
+          }
+        );
+        }
     }
     
     var trackNomination = function(handle){
