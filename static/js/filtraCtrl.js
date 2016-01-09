@@ -328,7 +328,9 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     }
     
     var trackRefresh = function(){
+        console.log("refreshing");
         if( (typeof tracking == 'undefined')){
+            console.log("refreshing2");
             $window.ga('send', {
             hitType: 'refresh',
             eventCategory: 'refresh',
