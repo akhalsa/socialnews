@@ -150,6 +150,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.refreshButton = function(){
         loadTweets();
+        console.log("calling refresh");
         trackRefresh();
     }
 
@@ -328,13 +329,15 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     }
     
     var trackRefresh = function(){
+        console.log("refreshing");
         if( (typeof tracking == 'undefined')){
+            console.log("refreshing2");
             $window.ga('send', {
-            hitType: 'refresh',
-            eventCategory: 'refresh',
-            eventAction: 'refresh',
-            eventLabel: 'refresh'
-                });
+                hitType: 'event',
+                eventCategory: 'refresh',
+                eventAction: 'refresh',
+                eventLabel: 'refresh'
+                    });
         }
     }
     
