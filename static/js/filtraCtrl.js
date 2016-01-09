@@ -150,6 +150,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.refreshButton = function(){
         loadTweets();
+        trackRefresh();
     }
 
 
