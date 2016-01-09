@@ -166,15 +166,13 @@
         <div class="con-tw" ng-repeat="tweet in tweet_array">
         	<div class="wrap-user">
             	<div class="user">
-                  <div class="handle-main"><img src="{{! tweet.pic}}" alt="{{! tweet.name}}"/>
+                  <div class="handle-main"><img src="{{! tweet.pic}}" alt="{{! tweet.name}}"/></div>
                     <ul class="nominate" ng-repeat="handle in handle_list | matchTwitterName : tweet.name"
                         ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}">
                       <li class="up-v" ng-click="voteForHandle(handle.handle, 1);"><a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a> <span>{{! handle.upvotes }}</span></li>
                       <li class="down-v" ng-click="voteForHandle(handle.handle, -1);"><a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a> <span>{{! handle.downvotes }}</span></li>
                     </ul>
                     <div class="handle-name"> {{! tweet.name}} </div>
-                  </div>
-                  
                   <div class="clear"></div>
                 </div>
                 <div class="time-tw"><span class="genericon genericon-twitter"></span> {{! tweet.tweet_count }} <span class="genericon genericon-time"></span>
