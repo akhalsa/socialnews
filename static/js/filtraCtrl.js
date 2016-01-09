@@ -147,6 +147,10 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
             alert("Please enter a valid twitter handle");
         }
     }
+    
+    $scope.refreshButton = function(){
+        loadTweets();
+    }
 
 
     //VIEW MODEL GENERATION ---- basically static methods for html
@@ -321,6 +325,18 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
           eventAction: handle
           } );
       }
+    }
+    
+    var trackRefresh = function(){
+        if( (typeof tracking == 'undefined')){
+            $window.ga('send', {
+            hitType: 'refresh',
+            eventCategory: 'refresh',
+            eventAction: 'refresh',
+            eventLabel: handle
+          }
+        );
+        }
     }
     
     var trackNomination = function(handle){
