@@ -266,8 +266,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     if((typeof tracking == 'undefined')){
         ext_string = (window.location.href.indexOf("filtra.io") > -1) ? "1" : "2";
         console.log("setting up with ext string: "+ext_string);
-        //ga('create', 'UA-70081756-'+ext_string, 'auto');
-        $window.ga('create', 'UA-70081756-2', 'auto');
+        ga('create', 'UA-70081756-'+ext_string, 'auto');
         $window.ga('send', 'pageview');
     }
 
