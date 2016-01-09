@@ -333,9 +333,8 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
             hitType: 'refresh',
             eventCategory: 'refresh',
             eventAction: 'refresh',
-            eventLabel: handle
-          }
-        );
+            eventLabel: 'refresh'
+                });
         }
     }
     
