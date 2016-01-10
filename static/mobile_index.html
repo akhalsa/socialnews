@@ -143,41 +143,6 @@
 	
 	
 	
-	<!-- Breadcurmbs start -->
-        <ol class="breadcrumb">
-          <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
-          <li><a href="#">Library</a></li>
-          <li class="active sc-desktop">Data</li>
-          <li class="dropdown active sc-mobile">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Data 
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#">Sub 1</a></li>
-                <li><a href="#">Sub 2</a></li>
-                <li><a href="#">Sub 3</a></li>
-              </ul>
-           </li>
-        </ol>
-    	<!-- Breadcurmbs end -->
-	
-	
-	
-	<!-- Breadcurmbs start -->
-        <ol class="breadcrumb">
-          <li ng-repeat="category in current_path" ng-class="{'active': $last}">
-            <a href="#" ng-hide="$last" ng-click="breadCrumbSelection($index)">
-              <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
-            </a>
-            <span ng-show="$last">{{! category}}</span>
-          </li>
-        </ol>
-    	<!-- Breadcurmbs end -->
-	
-	
-	
-	
         <!-- Mobile time start -->
         <div class="wrap-drop-refresh">
             <div class="dropdown">
