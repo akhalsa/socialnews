@@ -128,8 +128,8 @@
               <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
             </a>
           </li>
-	  <li class="active sc-desktop" ng-show="(current_path.length -1) > 0">{{! current_path[current_path.length -1 ] }}</li>
-	  <li class="dropdown active sc-mobile" ng-show="(current_path.length -1) > 0">
+	  <li class="active sc-desktop" ng-show="current_path.length > 0">{{! current_path[current_path.length -1 ] }}</li>
+	  <li class="dropdown active sc-mobile" ng-show="current_path.length > 0">
 		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 			{{! current_path[current_path.length -1 ] }}
 			<span class="caret"></span>
