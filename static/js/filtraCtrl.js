@@ -200,6 +200,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
             $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children;
         }
         console.log("current path: "+$scope.current_path);
+        console.log("current path length: "+$scope.current_path.length);
     }
     
     function currentCatName() {
