@@ -129,11 +129,11 @@
             </a>
 	  </li>
 	  <li class="dropdown active sc-mobile" ng-show="current_path.length > 0">
-		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" uib-dropdown-toggle>
 			{{! current_path[current_path.length -1 ] }}
 			<span class="caret"></span>
 		</button>
-		<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		<ul class="dropdown-menu" aria-labelledby="single-button">
 			<li ng-repeat="cat in peer_categories"><a href="#">{{! cat.name }}</a></li>
 		</ul>
 	  </li>
