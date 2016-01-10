@@ -24,6 +24,7 @@ app.filter('matchTwitterName', function(){
 
 app.filter('skipLastBreadcrumb', function(){
     return function(current_path){
+        console.log("runninf skip filter");
         var out = [];
         for(i=0; i<current_path.length; i++){
             if (i != current_path.length-1) {
