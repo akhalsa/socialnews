@@ -21,3 +21,16 @@ app.filter('matchTwitterName', function(){
         return out;
     }
 });
+
+app.filter('skipLastBreadcrumb', function(){
+    return function(current_path){
+        var out = [];
+        for(i=0; i<current_path.length; i++){
+            if (i != current_path.length-1) {
+                out.push(current_path[i]);
+            }
+        }
+        console.log("out is: "+out);
+        return out;
+    }
+});

@@ -123,7 +123,7 @@
     </div>
     <div class="col-xs-12 col-md-7 wrap-con-main">
 	<ol class="breadcrumb">
-	  <li ng-repeat="category in current_path|filter:$index != (current_path.length-1)">
+	  <li ng-repeat="category in current_path | filter : skipLastBreadcrumb">
             <a href="#"  ng-click="breadCrumbSelection($index)">
               <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
             </a>
