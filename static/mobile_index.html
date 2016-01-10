@@ -123,12 +123,12 @@
     </div>
     <div class="col-xs-12 col-md-7 wrap-con-main">
 	<ol class="breadcrumb">
-          <li ng-repeat="category in current_path">
-            <a href="#" ng-hide="$last" ng-click="breadCrumbSelection($index)">
+          <li ng-repeat="category in current_path" ng-hide="$last">
+            <a href="#"  ng-click="breadCrumbSelection($index)">
               <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
             </a>
           </li>
-	  <li class="sc-desktop" ng-show="current_path.length > 0">{{! current_path[current_path.length -1 ] }}</li>
+	  <li class="active sc-desktop" ng-show="current_path.length > 0">{{! current_path[current_path.length -1 ] }}</li>
 	  <li class="dropdown active sc-mobile" ng-show="current_path.length > 0">
 		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 			{{! current_path[current_path.length -1 ] }}
