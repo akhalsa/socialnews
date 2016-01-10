@@ -128,20 +128,20 @@
               <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
             </a>
 	  </li>
-	  <li class="dropdown active sc-mobile" ng-show="current_path.length > 0">
+	  <li class="dropdown active sc-mobile" uib-dropdown ng-show="current_path.length > 0">
+
 		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" uib-dropdown-toggle>
 			{{! current_path[current_path.length -1 ] }}
 			<span class="caret"></span>
 		</button>
-		<ul class="dropdown-menu" aria-labelledby="single-button">
+		<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="dropdownMenu1">
 			<li ng-repeat="cat in peer_categories"><a href="#">{{! cat.name }}</a></li>
 		</ul>
+		
 	  </li>
 	  <li class="active sc-desktop" ng-show="current_path.length > 0">{{! current_path[current_path.length -1 ] }}</li>
         </ol>
     	<!-- Breadcurmbs end -->
-	
-	
 	
         <!-- Mobile time start -->
         <div class="wrap-drop-refresh">
