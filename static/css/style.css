@@ -178,7 +178,7 @@ input {border:none;}
 @media (max-width: 991px) {
 	body {overflow-x:hidden;}
 	/* content */
-	#bt-top-nominate, .breadcrumb .sc-desktop {display:none;}
+	#bt-top-nominate {display:none;}
 	#bt-vote-top a {float:right; width: 64px; height: 50px; background-color: #8ac249; padding: 15px 0 0; color:#fff; text-align: center; text-decoration:none;}
 	#bt-vote-top a:hover {background-color:#75a938;}
 	
@@ -203,32 +203,9 @@ input {border:none;}
 	#p-search {border:0; margin-bottom:10px;}
 	.box-side {background-color:#fff; padding-top:15px;}
 	.box-side h3 {font-size:24px; font-weight:500; text-align:center;}
-	
-	.sub li {border-left:none; border-bottom:none !important;}
-	.sub li a {text-decoration:none;}
-	.sub li span {float:none; padding:6px 0 0 5px;}
-	
-	.sub-toggle {float:none; width: 30px; height: 30px; padding:0; background:none; line-height:17px;}
-	.sub-toggle .genericon-menu {font-size:16px; padding:0; color:#33429a;}
-	
-	.breadcrumb .dropdown-toggle {border:none; padding:0; color:#777; font-size:16px; background-color:#fff !important;}
-	.breadcrumb .dropdown-toggle:hover, .breadcrumb .dropdown-toggle:focus {background-color:#fff; color:#333;}
-	.breadcrumb .open>.dropdown-menu {margin-left:20px;}
-	
-	#sub-nav2 {background:none; border-left:none;}
-	#sub-nav2 #wrap-pr {display:inline; background-color:#fff;}
-	#sub-nav2 #wrap-pr .genericon-collapse {display:none;}
-	#sub-nav2 ul {display:inline;}
-	#sub-nav2 ul li {background-color:#fff; padding:0px !important;}
-	
-	.sub-c-box {background-color:#fff;}
-	
-	#nav-category {background:none; margin-bottom: 3px;}
-	#nav-category li {margin-right:0; line-height: 30px;}
-	#nav-category .current-page {border-left:none;}
 }
 @media (min-width: 992px) {
-	#bt-vote-top, .wrap-drop-refresh, #vote-popup, .vote-pp-title, .breadcrumb .sc-mobile {display:none;}
+	#bt-vote-top, .wrap-drop-refresh, #vote-popup, .vote-pp-title {display:none;}
 }
 @media (max-width: 767px) {
 	body {padding-top: 80px;}
@@ -253,7 +230,6 @@ input {border:none;}
 }
 @media (max-width: 400px) {
 	.navbar-toggle, #bt-vote-top a {width: 54px;}
-	.sub-toggle {width: 30px;}
 	.navbar-header #slogan {font-size:12px;}
 	.navbar-brand>img {padding-top: 12px;}
 }
