@@ -1,0 +1,274 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Filtra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="fonts/genericons/genericons.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script>
+	  $(function () {
+		$('[data-toggle="popover"]').popover()
+	  })
+  </script>
+  <style>
+  	.vote-wrap {display:none;}
+  </style>
+</head>
+
+<body>
+<!-- header start -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid top-nav">
+  	<!-- mobile button start -->
+    <div id="bt-vote-top">
+    	<a href="#">Vote</a>
+    </div>
+    <!-- mobile button end -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="genericon genericon-menu"></span>                     
+      </button>
+      <a class="navbar-brand" href="#"><img src="images/logo.png" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+      <div class="clear"></div>
+    </div>
+       <ul id="bt-top-nominate">
+      	<li id="bt-nom"><a href="#"><span class="genericon genericon-search"></span> Nominate</a></li>
+        <li><span class="genericon genericon-checkmark"></span>  5 Votes left <a tabindex="0" class="box-popup-info" role="button" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy"><span class="genericon genericon-help"></span></a></li>
+        <div class="clear"></div>
+      </ul>
+      <div class="clear"></div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+    <!-- nav start -->
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Front Page</a></li>
+      <li><a href="#">Technology</a></li>
+      <li><a href="#">Sports</a></li>
+      <li><a href="#">Travel</a></li>
+      <li><a href="#">Politics</a></li>
+      <li><a href="#">Travel</a></li>
+    </ul>
+    </div>
+    <!-- nav end -->
+  </div>
+</nav>
+<!-- header end -->
+<!-- contents start -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-md-2 wrap-sub-nav">    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+          <ul id="nav-category" class="sub">
+            <li class="current-page"><a href="#">Technology</a></li>
+            <li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+            <li><a href="#">Google</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+            <li><a href="#">Microsoft</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+            <li><a href="#">Home</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+            <li class="last-sub"><a href="#">Apps</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+          </ul>
+    </div>
+    <div class="col-xs-12 col-md-7 wrap-con-main">
+    	<!-- Breadcurmbs start -->
+        <ol class="breadcrumb">
+          <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
+          <li><a href="#">Library</a></li>
+          <li class="active sc-desktop">Data</li>
+          <li class="dropdown active sc-mobile">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Data 
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a href="#">Sub 1</a></li>
+                <li><a href="#">Sub 2</a></li>
+                <li><a href="#">Sub 3</a></li>
+              </ul>
+           </li>
+        </ol>
+    	<!-- Breadcurmbs end -->
+        <!-- Mobile time start -->
+        <div class="wrap-drop-refresh">
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="genericon genericon-time"></span> Past 15 Minutes
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a href="#"><span class="genericon genericon-time"></span> Past Hour</a></li>
+                <li><a href="#"><span class="genericon genericon-time"></span> Past 3 Hours</a></li>
+                <li><a href="#"><span class="genericon genericon-time"></span> Today</a></li>
+              </ul>
+            </div>
+            <div id="bt-refresh">
+            	<a href="#"><span class="genericon genericon-refresh"></span> Refresh</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!-- Mobile time end -->
+    	<!-- time start -->
+    	<ul id="time">
+        	<li class="current"><a href="#"><span class="genericon genericon-time"></span> Past 15 Minutes</a><br/><span class="genericon genericon-downarrow"></span></li>
+            <li><a href="#"><span class="genericon genericon-time"></span> Past Hour</a></li>
+            <li><a href="#"><span class="genericon genericon-time"></span> Past 3 Hours</a></li>
+            <li><a href="#"><span class="genericon genericon-time"></span> Today</a></li>
+            <div class="clear"></div>
+        </ul>
+    	<!-- time end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user">
+                	<div class="handle-main"><img src="images/ic-twitter.png" alt="TechCrunch" /></div>
+                	<ul class="nominate">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="handle-name"> Tech Crunch</div>
+                    <div class="clear"></div>
+                </div>
+                <div class="time-tw"><span class="genericon genericon-activity"></span> 265 <span class="genericon genericon-time"></span> 5 min</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+            </div>
+        </div>
+        <!-- tweets end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user">
+                	<div class="handle-main"><img src="images/ic-twitter.png" alt="TechCrunch" /></div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="handle-name"> Tech Crunch</div>
+                    <div class="clear"></div>
+                </div>
+                <div class="time-tw"><span class="genericon genericon-activity"></span> 265 <span class="genericon genericon-time"></span> 5 min</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                <div class="preview-tw">
+                	<img src="images/ic-load.GIF" class="imgpd"/>
+                </div>
+            </div>
+        </div>
+        <!-- tweets end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user">
+                	<div class="handle-main"><img src="images/ic-twitter.png" alt="TechCrunch" /></div>
+                	<ul class="nominate done-down">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="handle-name"> Tech Crunch</div>
+                    <div class="clear"></div>
+                </div>
+                <div class="time-tw"><span class="genericon genericon-activity"></span> 265 <span class="genericon genericon-time"></span> 5 min</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                <div class="preview-tw">
+                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+					<div class="span8">
+                    	<img src="images/img-sp.png"/>
+                    	<a href="#">SportsCenter on Twitter</a>
+                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper. </p>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- tweets end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user">
+                	<div class="handle-main"><img src="images/ic-twitter.png" alt="TechCrunch" /></div>
+                	<ul class="nominate">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="handle-name"> Tech Crunch</div>
+                    <div class="clear"></div>
+                </div>
+                <div class="time-tw"><span class="genericon genericon-activity"></span> 265 <span class="genericon genericon-time"></span> 5 min</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                <div class="preview-tw">
+                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+					<div class="span8">
+                    	<img src="images/img-sp.png"/>
+                    	<a href="#">SportsCenter on Twitter</a>
+                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper.</p>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- tweets end -->
+        <button id="bt-loadmore">Load More</button>
+    </div>
+    <!-- sidebar start -->
+    <div class="col-xs-12 col-md-3 vote-wrap">
+    	<!-- vote start -->
+        <div class="box-side">
+        	<h3>Vote <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy"><span class="genericon genericon-help"></span></a></h3>
+            <ul id="list-vote">
+            	<li class="active"><div class="handle"><img src="images/ic-twitter.png" alt="TechCrunch" />@Tech Crunch</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>153</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="active"><div class="handle"><img src="images/ic-twitter.png" alt="TechCrunch" />@Bleacher Report LFL</div>
+                	<ul class="nominate done-up">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>-7</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="active"><div class="handle"><img src="images/ic-twitter.png" alt="TechCrunch" />@Tech Crunch</div>
+                	<ul class="nominate done-down">
+                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>13</span></li>
+                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>27</span></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="none-active"><div class="handle"><img src="images/ic-twitter.png" alt="TechCrunch" />@Tech Crunch</div>
+                	<ul class="nominate new-vote">
+                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+                <li class="none-active"><div class="handle"><img src="images/ic-twitter.png" alt="TechCrunch" />@Tech Crunch</div>
+                	<ul class="nominate new-vote">
+                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </div>
+    	<!-- vote end -->
+    </div>
+    <!-- sidebar end -->
+  </div>
+</div>
+<!-- contents end -->
+</body>
+</html>
