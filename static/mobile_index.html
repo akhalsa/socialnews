@@ -20,7 +20,11 @@
   </style>
 </head>
 
-<body>
+<body ng-app="filtraApp" ng-controller="filtraCtrl"
+  {% if 'cat_name' in globals() %}
+      ng-init="category_name='{{cat_name}}'"
+  {% end %}
+>
 <!-- header start -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid top-nav">
@@ -38,19 +42,16 @@
     </div>
        <ul id="bt-top-nominate">
       	<li id="bt-nom"><a href="#"><span class="genericon genericon-search"></span> Nominate</a></li>
-        <li><span class="genericon genericon-checkmark"></span>  5 Votes left <a tabindex="0" class="box-popup-info" role="button" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy"><span class="genericon genericon-help"></span></a></li>
+        <li><span class="genericon genericon-checkmark"></span>{{! remaining_votes}} Votes left <a tabindex="0" class="box-popup-info" role="button" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy"><span class="genericon genericon-help"></span></a></li>
         <div class="clear"></div>
       </ul>
       <div class="clear"></div>
     <div class="collapse navbar-collapse" id="myNavbar">
     <!-- nav start -->
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Front Page</a></li>
-      <li><a href="#">Technology</a></li>
-      <li><a href="#">Sports</a></li>
-      <li><a href="#">Travel</a></li>
-      <li><a href="#">Politics</a></li>
-      <li><a href="#">Travel</a></li>
+      <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
+        <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
+      </li>
     </ul>
     </div>
     <!-- nav end -->
@@ -63,33 +64,46 @@
     <div class="col-xs-12 col-md-2 wrap-sub-nav">    
         <!-- Collect the nav links, forms, and other content for toggling -->
           <ul id="nav-category" class="sub">
-            <li class="current-page"><a href="#">Technology</a></li>
-            <li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></li>
-            <li><a href="#">Google</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-            <li><a href="#">Microsoft</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-            <li><a href="#">Home</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-            <li class="last-sub"><a href="#">Apps</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+		<li class="current-page" ng-click="selectionChange(selected_top_index, -1, -1)"><a href="#">{{! category_structure[selected_top_index].name }}</a></li>
+		<li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
+		  id="{{! $index==selected_secondary_index ? 'sub-nav2' : 'random_sub_id'+$index}}">
+		
+		    <div id="wrap-pr" ng-show="$index==selected_secondary_index"  >
+		      <a href="#" ng-click="selectionChange(selected_top_index, $index, -1)">{{! cat.name }}</a>
+		      <a href="#"><span class='genericon genericon-collapse'></span></a>
+		    </div>
+		    <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
+		      <li ng-repeat="subcat in category_structure[selected_top_index].children[selected_secondary_index].children"
+			  ng-class="{'current-sub': $index==selected_third_index}">
+			<a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" >{{! subcat.name}}</a>
+		      </li>
+		    </ul>
+		    <a href="#" ng-hide="$index==selected_secondary_index" ng-click="selectionChange(selected_top_index, $index, -1)">
+		      {{! cat.name }}</a>
+		    <a href="#" ng-hide="$index==selected_secondary_index"><span class="genericon genericon-expand"></span></a>
+		</li>
           </ul>
     </div>
     <div class="col-xs-12 col-md-7 wrap-con-main">
-    	<!-- Breadcurmbs start -->
-        <ol class="breadcrumb">
-          <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
-          <li><a href="#">Library</a></li>
-          <li class="active sc-desktop">Data</li>
-          <li class="dropdown active sc-mobile">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Data 
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#">Sub 1</a></li>
-                <li><a href="#">Sub 2</a></li>
-                <li><a href="#">Sub 3</a></li>
-              </ul>
-           </li>
+	<ol class="breadcrumb">
+          <li ng-repeat="category in current_path">
+            <a href="#" ng-hide="$last" ng-click="breadCrumbSelection($index)">
+              <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
+            </a>
+          </li>
+	  <li class="active sc-desktop" ng-show="(current_path.length -1) > 0">{{! current_path[current_path.length -1 ] }}</li>
+	  <li class="dropdown active sc-mobile" ng-show="(current_path.length -1) > 0">
+		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+			{{! current_path[current_path.length -1 ] }}
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+			<li ng-repeat="cat in peer_categories"><a href="#">{{! cat.name }}</a></li>
+		</ul>
+	  </li>
         </ol>
     	<!-- Breadcurmbs end -->
+	
         <!-- Mobile time start -->
         <div class="wrap-drop-refresh">
             <div class="dropdown">

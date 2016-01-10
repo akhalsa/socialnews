@@ -18,6 +18,8 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.handle_preview_html = "";
     $scope.handle_preview_html_safe = "";
     
+    $scope.peer_categories = [];
+    
     $http.get("/category")
     .then(function(response) {
         $scope.category_structure = response.data;
@@ -185,14 +187,17 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     function reloadCurrentPath(){
         if ($scope.selected_secondary_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
+            $scope.peer_categories = $scope.category_structure;
             
         } else if ($scope.selected_third_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
-                                   $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name ]
+                                   $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name ];
+            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children;
         } else{
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children[$scope.selected_third_index].name ]
+            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children;
         }
     }
     
