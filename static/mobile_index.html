@@ -99,10 +99,10 @@
       <div class="clear"></div>
     </div>
        <ul id="bt-top-nominate">
-      	<li id="bt-nom"><a href="#"><span class="genericon genericon-search"></span> Nominate</a></li>
-        <li><span class="genericon genericon-checkmark"></span>{{! remaining_votes}} Votes left <a tabindex="0" class="box-popup-info" role="button" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy"><span class="genericon genericon-help"></span></a></li>
-        <div class="clear"></div>
-      </ul>
+	<li id="bt-nom" ng-click="togglePopup();"><a href="#"><span class="genericon genericon-search"></span> Nominate</a><a tabindex="0" role="button" popover-trigger="mouseenter" popover-placement="bottom" uib-popover="Know a Twitter handle we should be following? Add it here!"><span class="genericon genericon-help"></span></a></li>
+	<li><span class="genericon genericon-checkmark"></span>  </span>  <span id="remaining_vote_count">{{! remaining_votes}} Votes left</span> </li>
+	<div class="clear"></div>
+       </ul>
       <div class="clear"></div>
     <div class="collapse navbar-collapse" uib-collapse="navCollapsed">
     <!-- nav start -->
