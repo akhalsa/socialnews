@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="{{static_url('fonts/genericons/genericons.css')}}">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js" type="text/javascript"></script>
-  
+  <script src="{{static_url('js/angular-pageslide-directive.js')}}"></script>
   <script src="{{static_url('js/filtraApp.js')}}"></script>
   <script src="{{static_url('js/filtraCtrl.js')}}"></script>
 
@@ -64,7 +64,15 @@
   <div class="container-fluid top-nav">
   	<!-- mobile button start -->
     <div id="bt-vote-top">
-    	<a href="#">Vote</a>
+    	<a href="#" ng-click="toggleVotes()">Vote</a>
+	<div pageslide ps-open="showVotes">
+		<div style="padding:20px" id="demo-right">
+		    <h2>Hello Pageslide</h2>
+		    <p>Put here whatever you want</p>
+		    <a ng-click="toggle()" class="button" >Close</a>
+		</div>
+	</div>
+
     </div>
     <!-- mobile button end -->
     <div class="navbar-header">

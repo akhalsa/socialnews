@@ -19,6 +19,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.handle_preview_html_safe = "";
     
     $scope.peer_categories = [];
+    $scope.showVotes = false;
     
     $http.get("/category")
     .then(function(response) {
@@ -90,6 +91,10 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.togglePopup = function(){
         console.log("toggle popup");
         $scope.nomination_visible = !$scope.nomination_visible;
+    }
+    
+    $scope.toggleVotes = function(){
+        $scope.showVotes = !$scope.showVotes();
     }
     
     $scope.voteForHandle = function(handle_string, value){
