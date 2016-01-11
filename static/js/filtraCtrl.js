@@ -231,8 +231,9 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         var endPoint = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
         $http.get(endPoint)
         .then(function(response) {
-            console.log("got a solid response");
+            
             $scope.tweet_array = response.data;
+            console.log("tweet array length: "+$scope.tweet_array.length);
         });
     }
     
