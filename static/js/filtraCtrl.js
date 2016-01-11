@@ -94,7 +94,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     }
     
     $scope.toggleVotes = function(){
-        $scope.showVotes = !$scope.showVotes();
+        $scope.showVotes = !$scope.showVotes;
     }
     
     $scope.voteForHandle = function(handle_string, value){
