@@ -187,7 +187,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     function reloadCurrentPath(){
         if ($scope.selected_secondary_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
-            $scope.peer_categories = $scope.category_structure.children;
+            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children;
             
         } else if ($scope.selected_third_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
