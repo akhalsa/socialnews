@@ -187,17 +187,17 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     function reloadCurrentPath(){
         if ($scope.selected_secondary_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
-            $scope.peer_categories = $scope.category_structure;
+            $scope.peer_categories = $scope.category_structure.children;
             
         } else if ($scope.selected_third_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name ];
-            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children;
+            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children.children[$scope.selected_secondary_index];
         } else{
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children[$scope.selected_third_index].name ]
-            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children;
+            $scope.peer_categories = [];
         }
         console.log("current path: "+$scope.current_path);
         console.log("current path length: "+$scope.current_path.length);
