@@ -163,6 +163,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
             $scope.togglePopup();
             trackNomination($scope.search)
             $http.post( "/handle/"+$scope.search+"/category/"+currentCatName()+"/upvote/"+1).then(function(response) {
+                console.log("reloading the handles");
                 loadHandles();
             });
         }else{
