@@ -38,6 +38,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         loadHandles();
         
     });
+    console.log("window booted with width: "+$window.innerWidth);
     
     $scope.$watch('category_name', function () {
         console.log($scope.category_name);
