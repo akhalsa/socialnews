@@ -19,7 +19,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.handle_preview_html_safe = "";
     
     $scope.peer_categories = [];
-    $scope.showVotes = true;
+    $scope.showVotes = false;
     
     $http.get("/category")
     .then(function(response) {
@@ -38,21 +38,14 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         loadHandles();
         
     });
-    console.log("window booted with width: "+$window.innerWidth);
+    if($window.innerWidth > 992){
+        $scope.showVotes = true;
+    }
     
     $scope.$watch('category_name', function () {
         console.log($scope.category_name);
         
     });
-    
-
-    $scope.$watch(
-        function(){
-            return $window.innerWidth;
-        }, function(value) {
-            console.log(value);
-        }
-    );
     
     
     // Configure user selections
