@@ -71,7 +71,7 @@
     </div>
     <!-- mobile button end -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+      <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed" >
         <span class="genericon genericon-menu"></span>                     
       </button>
       <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
@@ -83,7 +83,7 @@
         <div class="clear"></div>
       </ul>
       <div class="clear"></div>
-    <div class="collapse navbar-collapse" id="myNavbar">
+    <div class="collapse navbar-collapse" uib-collapse="navCollapsed">
     <!-- nav start -->
     <ul class="nav navbar-nav">
       <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
