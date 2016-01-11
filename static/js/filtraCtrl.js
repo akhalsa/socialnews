@@ -44,6 +44,15 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         
     });
     
+
+    $scope.$watch(
+        function(){
+            return $window.innerWidth;
+        }, function(value) {
+            console.log(value);
+        }
+    );
+    
     
     // Configure user selections
     
