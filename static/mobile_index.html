@@ -52,10 +52,6 @@
       }
     }
   </script>
-  <style>
-  	.vote-wrap {display:none;}
-   </style>
-
 </head>
 
 <body ng-app="filtraApp" ng-controller="filtraCtrl"
@@ -213,7 +209,7 @@
         <!-- tweets end -->
     </div>
     <!-- sidebar start -->
-    <div class="col-xs-12 col-md-3 vote-wrap">
+    <div class="col-xs-12 col-md-3 vote-wrap" pageslide ps-open="showVotes">
 	<div class="vote-pp-title">
             <div id="bt-close"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
             <h3>Nominate a Handle</h3>
@@ -231,7 +227,7 @@
         </div>
     	<!-- vote start -->
 	
-        <div class="box-side" pageslide ps-open="showVotes">
+        <div class="box-side">
         	<h3>Vote <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy"><span class="genericon genericon-help"></span></a></h3>
             <ul id="list-vote">
             	<li class="active"><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div>
