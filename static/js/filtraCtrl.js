@@ -192,7 +192,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         } else if ($scope.selected_third_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name ];
-            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children.children[$scope.selected_secondary_index];
+            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children;
         } else{
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name,
