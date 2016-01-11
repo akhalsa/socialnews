@@ -62,7 +62,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid top-nav">
   	<!-- mobile button start -->
-    <div id="bt-vote-top">
+    <div id="bt-vote-top" ng-click="toggleVotes()">
     	<a href="#" ng-click="toggleVotes()">Vote</a>
     </div>
     <!-- mobile button end -->
@@ -208,7 +208,7 @@
         <!-- tweets end -->
     </div>
     <!-- sidebar start -->
-    <div class="col-xs-12 col-md-3 vote-wrap">
+    <div class="col-xs-12 col-md-3 vote-wrap" ng-show="showVotes">
         <div class="vote-pp-title">
             <div id="bt-close"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
             <h3>Nominate a Handle</h3>

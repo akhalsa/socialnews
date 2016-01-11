@@ -19,7 +19,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.handle_preview_html_safe = "";
     
     $scope.peer_categories = [];
-    $scope.showVotes = false;
+    $scope.showVotes = true;
     
     $http.get("/category")
     .then(function(response) {
