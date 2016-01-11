@@ -94,6 +94,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     }
     
     $scope.toggleVotes = function(){
+        console.log("flipping");
         $scope.showVotes = !$scope.showVotes;
     }
     
