@@ -135,7 +135,7 @@
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="dropdownMenu1">
-			<li ng-repeat="cat in peer_categories"><a href="#">{{! cat.name }}</a></li>
+			<li ng-repeat="cat in peer_categories" ng-click="breadCrumbSubSelect($index);"><a href="#">{{! cat.name }}</a></li>
 		</ul>
 		
 	  </li>

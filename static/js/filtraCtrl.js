@@ -59,6 +59,17 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         loadHandles();
     }
     
+    $scope.breadCrumbSubSelect = function(bc_sub_index){
+        if  ($scope.selected_secondary_index == -1) { 
+            $scope.selected_secondary_index = bc_sub_index;
+        } else if ($scope.selected_third_index == -1) {
+            $scope.selected_third_index = bc_sub_index;
+        }
+        reloadCurrentPath();
+        loadTweets();
+        loadHandles();
+    }
+    
     $scope.selectionChange = function(top, second, third) {
         $scope.selected_top_index = top;
         $scope.selected_secondary_index = second;
@@ -199,8 +210,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children[$scope.selected_third_index].name ]
             $scope.peer_categories = [];
         }
-        console.log("current path: "+$scope.current_path);
-        console.log("current path length: "+$scope.current_path.length);
     }
     
     function currentCatName() {
