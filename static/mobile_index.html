@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="{{static_url('fonts/genericons/genericons.css')}}">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js" type="text/javascript"></script>
-  <script src="{{static_url('js/angular-pageslide-directive.js')}}"></script>
   <script src="{{static_url('js/filtraApp.js')}}"></script>
   <script src="{{static_url('js/filtraCtrl.js')}}"></script>
 
@@ -94,6 +93,10 @@
 <!-- header end -->
 <!-- contents start -->
 <div class="container-fluid">
+	<nav class="pure-drawer" data-position="left">
+		<p style="padding: 100px 20px; margin: 0;">Insert your off-canvas content here</p>
+	</nav>
+	
   <div class="row">
     <div class="col-xs-12 col-md-2 hidden-xs hidden-sm wrap-sub-nav">    
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -118,7 +121,7 @@
 		</li>
           </ul>
     </div>
-    <div class="col-xs-12 col-md-7 wrap-con-main">
+    <div class="col-xs-12 col-md-7 wrap-con-main pure-container" data-effect="pure-effect-push"">
 	<ol class="breadcrumb">
 	  <li ng-repeat="category in current_path | skipLastBreadcrumb">
             <a href="#"  ng-click="breadCrumbSelection($index)">
@@ -209,50 +212,44 @@
         <!-- tweets end -->
     </div>
     <!-- sidebar start -->
-    <div class="col-xs-12 col-md-3 vote-wrap" pageslide ps-open="showVotes">
-	<div class="vote-pp-title">
+    <div class="col-xs-12 col-md-3 vote-wrap">
+        <div class="vote-pp-title">
             <div id="bt-close"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
+            <h3>Nominate a Handle</h3>
+            <div id="p-handle">
+                <div id="p-search"><span class="genericon genericon-search"></span> <input type="text" class="p-in-search" /></div>
+                <!-- ul id="open-handle-list">
+                    <li>@Con</li>
+                    <li>@CNN_BreakingNews</li>
+                    <li>@CNN_International</li>
+                    <li>@Con_prime</li>
+                    <li>@Last_Con</li>
+                    <li>@News_Con</li>
+                </ul -->
+            </div>
         </div>
     	<!-- vote start -->
-	
         <div class="box-side">
-        	<h3>Vote <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy"><span class="genericon genericon-help"></span></a></h3>
-            <ul id="list-vote">
-            	<li class="active"><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div>
-                	<ul class="nominate done-up">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>153</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                <li class="active"><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Bleacher Report LFL</div>
-                	<ul class="nominate done-up">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>53</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>-7</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                <li class="active"><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div>
-                	<ul class="nominate done-down">
-                    	<li class="up-v"><a href="#"><span class="genericon genericon-collapse"></span></a> <span>13</span></li>
-                        <li class="down-v"><a href="#"><span class="genericon genericon-expand"></span></a> <span>27</span></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                <li class="none-active"><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div>
-                	<ul class="nominate new-vote">
-                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
-                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
-                <li class="none-active"><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div>
-                	<ul class="nominate new-vote">
-                    	<li><a href="#"><span class="genericon genericon-collapse"></span></a></li>
-                        <li><a href="#"><span class="genericon genericon-expand"></span></a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </li>
+        	<h3>Vote <a tabindex="0" role="button" popover-trigger="mouseenter" popover-placement="right" uib-popover="Cast your vote to see more or less from the nominated handles below"><span class="genericon genericon-help"></span></a></h3>
+		<ul id="list-vote">
+			<li ng-repeat="handle in handle_list" ng-class="{'active': handle.tracked, 'none-active': !handle.tracked}" >
+				<div class="handle">
+				  <img src="{{! handle.profile_pic }}"/>
+				  {{! handle.handle }}
+				</div>
+				
+				<ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}" >
+				  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, 1); ">
+				    <a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a>
+				    <span >{{! handle.upvotes}}</span>
+				  </li>
+				  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, -1);">
+				    <a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a>
+				    <span >{{! handle.downvotes}}</span>
+				  </li>
+				</ul>
+				<div class="clear"></div>
+			</li>
             </ul>
         </div>
     	<!-- vote end -->

@@ -102,7 +102,7 @@ input {border:none;}
 #list-vote .active {background-color:#fff; border-bottom:1px solid #e1e1e1;}
 #list-vote .handle {float:left;}
 #list-vote img {width:35px; margin-right:5px;}
-#list-vote .nominate {float:right; width:100px;}
+#list-vote .nominate {float:right; width:110px;}
 #list-vote .nominate li {padding:0;}
 #list-vote .none-active { border-bottom:1px solid #e1e1e1;}
 #list-vote .none-active img {opacity: 0.4; filter: alpha(opacity=40); /* For IE8 and earlier */}
@@ -120,8 +120,6 @@ input {border:none;}
 .done-up .down-v, .done-down .up-v {background-color:#fff !important; color:#e1e1e1 !important;}
 .done-up .genericon-expand, .done-down .genericon-collapse {background-color:#fff !important; color:#e1e1e1; margin-right: 0; padding-right:0;}
 .done-up a .genericon-expand, .done-down a .genericon-collapse {color:#e1e1e1 !important;}
-
-#list-vote .new-vote {width:60px;}
 
 /* popup */
 .overlay{
@@ -196,9 +194,9 @@ input {border:none;}
 	.wrap-drop-refresh #bt-refresh a:hover {background-color:#eee;}
 	.wrap-drop-refresh #bt-refresh .genericon-refresh {margin-top:3px; color:#8ac249;}
 	
-	.vote-wrap {position:absolute; width:100%; height:100%; top:0; z-index:9999; background-color: #8ac249;}
+	.vote-wrap {position:absolute; width:50%; height:100%; top:50px; right:0; z-index:9999; background-color: #8ac249;}
 	.vote-pp-title {padding-top:20px;}
-	.vote-pp-title h3 {text-align:center;}
+	.vote-pp-title h3 {text-align:center; margin-top:0;}
 	
 	#p-search {border:0; margin-bottom:10px;}
 	.box-side {background-color:#fff; padding-top:15px;}
@@ -247,9 +245,16 @@ input {border:none;}
 	.nav li:hover {background-color:#222;}
 	.navbar-nav {margin:0;}
 	#myNavbar {border-top:0px;}
+	
+	.vote-wrap {width:70%; top:64px;}
+	.box-side #list-vote .nominate {width:60px;}
+	.box-side #list-vote .nominate .num-vote {display:none;}
+	.box-side .nominate li span {margin-right:0;}
 }
 @media (max-width: 480px) {
 	.handle-name {display:none;}
+	#p-search .p-in-search {width:80%;}
+	.vote-pp-title h3 {font-size:20px;}
 }
 @media (max-width: 400px) {
 	.navbar-toggle, #bt-vote-top a {width: 54px;}

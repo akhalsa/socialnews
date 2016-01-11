@@ -1,5 +1,5 @@
 
-var app = angular.module("filtraApp", ['ui.bootstrap', 'pageslide-directive']);
+var app = angular.module("filtraApp", ['ui.bootstrap']);
 
 
 app.filter('unsafeLink', function($sce) {
