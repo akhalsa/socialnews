@@ -69,14 +69,6 @@
   	<!-- mobile button start -->
     <div id="bt-vote-top">
     	<a href="#" ng-click="toggleVotes()">Vote</a>
-	<div pageslide ps-open="showVotes">
-		<div style="padding:20px" id="demo-right">
-		    <h2>Hello Pageslide</h2>
-		    <p>Put here whatever you want</p>
-		    <a ng-click="toggle()" class="button" >Close</a>
-		</div>
-	</div>
-
     </div>
     <!-- mobile button end -->
     <div class="navbar-header">
@@ -238,7 +230,8 @@
             </div>
         </div>
     	<!-- vote start -->
-        <div class="box-side">
+	
+        <div class="box-side" pageslide ps-open="showVotes">
         	<h3>Vote <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy"><span class="genericon genericon-help"></span></a></h3>
             <ul id="list-vote">
             	<li class="active"><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div>
