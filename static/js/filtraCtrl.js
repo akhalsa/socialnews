@@ -69,6 +69,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         } else if ($scope.selected_third_index == -1) {
             $scope.selected_third_index = bc_sub_index;
         }
+        trackBreadCrumbCategorySelection(currentCatName());
         reloadCurrentPath();
         loadTweets();
         loadHandles();
@@ -338,6 +339,15 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         if((typeof tracking == 'undefined')){
             console.log("triggering a change event with: "+cat_name);
             $window.ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+             function () {
+             }
+           });
+        }
+    }
+    var trackBreadCrumbCategorySelection = function(cat_name){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a bread crumb change with name: "+cat_name);
+            $window.ga('send', 'event', 'configuration change', 'breadcrumb change category', cat_name, {'hitCallback':
              function () {
              }
            });
