@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
 <head>
@@ -7,12 +8,11 @@
   <link rel="stylesheet" href="{{static_url('css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{static_url('css/style.css')}}">
   <link rel="stylesheet" href="{{static_url('fonts/genericons/genericons.css')}}">
-  <link rel="stylesheet" href="{{static_url('css/non-responsive.css')}}">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js" type="text/javascript"></script>
-  
   <script src="{{static_url('js/filtraApp.js')}}"></script>
   <script src="{{static_url('js/filtraCtrl.js')}}"></script>
+
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -81,98 +81,128 @@
     <!-- right box end -->
     <div class="clear"></div>
 </div>
-
-
-
 <!-- popup overlay end -->
+
 <!-- header start -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid top-nav">
-    <!-- mobile button start -->
-    <div id="bt-vote-top">
-    	<a href="#">Vote</a>
+  	<!-- mobile button start -->
+    <div id="bt-vote-top" ng-click="toggleVotes();">
+    	<a href="#" >Vote</a>
     </div>
     <!-- mobile button end -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" >
+      <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed" >
         <span class="genericon genericon-menu"></span>                     
       </button>
       <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
       <div class="clear"></div>
     </div>
-    <ul id="bt-top-nominate">
-      <li id="bt-nom" ng-click="togglePopup();"><a href="#"><span class="genericon genericon-search"></span> Nominate</a><a tabindex="0" role="button" popover-trigger="mouseenter" popover-placement="bottom" uib-popover="Know a Twitter handle we should be following? Add it here!"><span class="genericon genericon-help"></span></a></li>
-      <li><span class="genericon genericon-checkmark"></span>  </span>  <span id="remaining_vote_count">{{! remaining_votes}} Votes left</span> </li>
+       <ul id="bt-top-nominate">
+	<li id="bt-nom" ng-click="togglePopup();"><a href="#"><span class="genericon genericon-search"></span> Nominate</a><a tabindex="0" role="button" popover-trigger="mouseenter" popover-placement="bottom" uib-popover="Know a Twitter handle we should be following? Add it here!"><span class="genericon genericon-help"></span></a></li>
+	<li><span class="genericon genericon-checkmark"></span>  </span>  <span id="remaining_vote_count">{{! remaining_votes}} Votes left</span> </li>
+	<div class="clear"></div>
+       </ul>
       <div class="clear"></div>
-    </ul>
-    <div class="clear"></div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <!-- nav start -->
-    <ul class="nav navbar-nav" id="top_level_nav">
+    <div class="collapse navbar-collapse" uib-collapse="navCollapsed">
+    <!-- nav start -->
+    <ul class="nav navbar-nav">
       <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
         <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
       </li>
     </ul>
-    <!-- nav end -->
     </div>
+    <!-- nav end -->
   </div>
 </nav>
 <!-- header end -->
 <!-- contents start -->
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-2 wrap-sub-nav">
-      <ul id="nav-category" class="sub">
-      	<li class="current-page" ng-click="selectionChange(selected_top_index, -1, -1)"><a href="#">{{! category_structure[selected_top_index].name }}</a></li>
-        <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
-          id="{{! $index==selected_secondary_index ? 'sub-nav2' : 'random_sub_id'+$index}}">
-
-            <div id="wrap-pr" ng-show="$index==selected_secondary_index"  >
-              <a href="#" ng-click="selectionChange(selected_top_index, $index, -1)">{{! cat.name }}</a>
-              <a href="#"><span class='genericon genericon-collapse'></span></a>
-            </div>
-            <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
-              <li ng-repeat="subcat in category_structure[selected_top_index].children[selected_secondary_index].children"
-                  ng-class="{'current-sub': $index==selected_third_index}">
-                <a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" >{{! subcat.name}}</a>
-              </li>
-            </ul>
-            <a href="#" ng-hide="$index==selected_secondary_index" ng-click="selectionChange(selected_top_index, $index, -1)">
-              {{! cat.name }}</a>
-            <a href="#" ng-hide="$index==selected_secondary_index"><span class="genericon genericon-expand"></span></a>
-        </li>
-      </ul>
+    <div class="col-xs-12 col-md-2 hidden-xs hidden-sm wrap-sub-nav">    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+          <ul id="nav-category" class="sub">
+		<li class="current-page" ng-click="selectionChange(selected_top_index, -1, -1)"><a href="#">{{! category_structure[selected_top_index].name }}</a></li>
+		<li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
+		  id="{{! $index==selected_secondary_index ? 'sub-nav2' : 'random_sub_id'+$index}}">
+		
+		    <div id="wrap-pr" ng-show="$index==selected_secondary_index"  >
+		      <a href="#" ng-click="selectionChange(selected_top_index, $index, -1)">{{! cat.name }}</a>
+		      <a href="#"><span class='genericon genericon-collapse'></span></a>
+		    </div>
+		    <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
+		      <li ng-repeat="subcat in category_structure[selected_top_index].children[selected_secondary_index].children"
+			  ng-class="{'current-sub': $index==selected_third_index}">
+			<a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" >{{! subcat.name}}</a>
+		      </li>
+		    </ul>
+		    <a href="#" ng-hide="$index==selected_secondary_index" ng-click="selectionChange(selected_top_index, $index, -1)">
+		      {{! cat.name }}</a>
+		    <a href="#" ng-hide="$index==selected_secondary_index"><span class="genericon genericon-expand"></span></a>
+		</li>
+          </ul>
     </div>
-    <div class="col-xs-7 wrap-con-main">
-    	<!-- Breadcurmbs start -->
-        <ol class="breadcrumb">
-          <li ng-repeat="category in current_path" ng-class="{'active': $last}">
-            <a href="#" ng-hide="$last" ng-click="breadCrumbSelection($index)">
+    <div class="col-xs-12 col-md-7 wrap-con-main pure-container" data-effect="pure-effect-push"">
+	<ol class="breadcrumb">
+	  <li ng-repeat="category in current_path | skipLastBreadcrumb">
+            <a href="#"  ng-click="breadCrumbSelection($index)">
               <span ng-class="{'genericon genericon-home': $index==0}"></span>{{! category}}
             </a>
-            <span ng-show="$last">{{! category}}</span>
-          </li>
+	  </li>
+	  <li class="dropdown active sc-mobile" uib-dropdown ng-show="current_path.length > 0">
+
+		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" uib-dropdown-toggle>
+			{{! current_path[current_path.length -1 ] }}
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="dropdownMenu1">
+			<li ng-repeat="cat in peer_categories" ng-click="breadCrumbSubSelect($index);"><a href="#">{{! cat.name }}</a></li>
+		</ul>
+		
+	  </li>
+	  <li class="active sc-desktop" ng-show="current_path.length > 0">{{! current_path[current_path.length -1 ] }}</li>
         </ol>
     	<!-- Breadcurmbs end -->
-    	<!-- time start -->
-    	<ul id="time">
+	
+        <!-- Mobile time start -->
+        <div class="wrap-drop-refresh">
+            <div class="dropdown" uib-dropdown>
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" uib-dropdown-toggle>
+                <span class="genericon genericon-time"></span> {{! time_frames[selected_time].text }}
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="dropdownMenu1">
+		<li ng-repeat="time_frame in time_frames" ng-click="timeChange($index);">
+			<a href="#"><span class="genericon genericon-time"></span> {{! time_frame.text }}</a>
+		</li>
+              </ul>
+            </div>
+            <div id="bt-refresh">
+            	<a href="#"><span class="genericon genericon-refresh"></span> Refresh</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!-- Mobile time end -->
+	
+	<!-- time start -->
+	<ul id="time">
           <li ng-repeat="time_block in time_frames" ng-class="{'current': $index==selected_time}" ng-click="timeChange($index)">
             <a href="#"><span class="genericon genericon-time"></span>{{! time_block.text}}</a>
             <br ng-show="$index==selected_time"><span class="genericon genericon-downarrow" ng-show="$index==selected_time"></span>            
           </li>
           <div class="clear"></div>
         </ul>
-    	<!-- time end -->
-        <!-- tweets start -->
-        <button id="bt-loadmore" ng-click="refreshButton()">Refresh</button>
-        <div class="con-tw" ng-repeat="tweet in tweet_array">
+	<!-- time end -->
+	
+	<!-- tweets start -->
+	<div class="con-tw" ng-repeat="tweet in tweet_array">
         	<div class="wrap-user">
             	<div class="user">
                   <div class="handle-main"><img src="{{! tweet.pic}}" alt="{{! tweet.name}}"/></div>
                     <ul class="nominate" ng-repeat="handle in handle_list | matchTwitterName : tweet.name"
                         ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}">
-                      <li class="up-v" ng-click="voteForHandle(handle.handle, 1);"><a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a> <span>{{! handle.upvotes }}</span></li>
-                      <li class="down-v" ng-click="voteForHandle(handle.handle, -1);"><a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a> <span>{{! handle.downvotes }}</span></li>
+                      <li class="up-v" ng-click="voteForHandle(handle.handle, 1);"><a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a> <span class="num-vote">{{! handle.upvotes }}</span></li>
+                      <li class="down-v" ng-click="voteForHandle(handle.handle, -1);"><a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a> <span class="num-vote">{{! handle.downvotes }}</span></li>
                     </ul>
                     <div class="handle-name"> {{! tweet.name}} </div>
                   <div class="clear"></div>
@@ -201,33 +231,37 @@
             </div>
         </div>
         <!-- tweets end -->
-        
     </div>
     <!-- sidebar start -->
-    <div class="col-xs-3">
+    <div class="col-xs-12 col-md-3 vote-wrap" ng-show="showVotes">
+        <div class="vote-pp-title">
+            <div id="bt-close"><a href="#"><span class="genericon genericon-close-alt" ng-click="toggleVotes();"></span></a></div>
+	    <h3>Pick the Handles for {{! current_path[current_path.length-1] }}   </h3>
+
+        </div>
     	<!-- vote start -->
-        <div class="box-side vote-wrap">
+        <div class="box-side">
         	<h3>Vote <a tabindex="0" role="button" popover-trigger="mouseenter" popover-placement="right" uib-popover="Cast your vote to see more or less from the nominated handles below"><span class="genericon genericon-help"></span></a></h3>
-            <ul id="list-vote">
-              <li ng-repeat="handle in handle_list" ng-class="{'active': handle.tracked, 'none-active': !handle.tracked}" >
-                <div class="handle">
-                  <img src="{{! handle.profile_pic }}"/>
-                  {{! handle.handle }}
-                </div>
-                
-                <ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}" >
-                  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, 1); ">
-                    <a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a>
-                    <span >{{! handle.upvotes}}</span>
-                  </li>
-                  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, -1);">
-                    <a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a>
-                    <span >{{! handle.downvotes}}</span>
-                  </li>
+		<ul id="list-vote">
+			<li ng-repeat="handle in handle_list" ng-class="{'active': handle.tracked, 'none-active': !handle.tracked}" >
+				<div class="handle">
+				  <img src="{{! handle.profile_pic }}"/>
+				  {{! handle.handle }}
+				</div>
+				
+				<ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}">
+				  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, 1); ">
+				    <a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a>
+				    <span  class="num-vote">{{! handle.upvotes}}</span>
+				  </li>
+				  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, -1);">
+				    <a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a>
+				    <span  class="num-vote">{{! handle.downvotes}}</span>
+				  </li>
+				</ul>
+				<div class="clear"></div>
+			</li>
                 </ul>
-                <div class="clear"></div>
-              </li>
-            </ul>
         </div>
     	<!-- vote end -->
     </div>

@@ -209,13 +209,13 @@ class TwitterTimeline(tornado.web.RequestHandler):
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
-        self.render("static/mobile_index.html")
+        self.render("static/index.html")
         
 class IndexCategoryHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, cat):
         print "injecting cat: "+cat
-        self.render("static/mobile_index.html", cat_name=cat)
+        self.render("static/index.html", cat_name=cat)
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
