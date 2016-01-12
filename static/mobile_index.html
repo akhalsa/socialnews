@@ -252,11 +252,11 @@
 				<ul class="nominate" ng-class="{'done-up': handle.vote_val > 0, 'done-down':handle.vote_val < 0}" >
 				  <li ng-class="{'up-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, 1); ">
 				    <a href="#" onclick="return false;"><span class="genericon genericon-collapse"></span></a>
-				    <span >{{! handle.upvotes}}</span>
+				    <span  class="num-vote">{{! handle.upvotes}}</span>
 				  </li>
 				  <li ng-class="{'down-v': handle.vote_val !=0}" ng-click="voteForHandle(handle.handle, -1);">
 				    <a href="#" onclick="return false;"><span class="genericon genericon-expand"></span></a>
-				    <span >{{! handle.downvotes}}</span>
+				    <span  class="num-vote">{{! handle.downvotes}}</span>
 				  </li>
 				</ul>
 				<div class="clear"></div>
