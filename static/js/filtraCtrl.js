@@ -18,6 +18,9 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.handle_preview_html = "";
     $scope.handle_preview_html_safe = "";
     
+    $scope.peer_categories = [];
+    $scope.showVotes = false;
+    
     $http.get("/category")
     .then(function(response) {
         $scope.category_structure = response.data;
@@ -35,6 +38,9 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         loadHandles();
         
     });
+    if($window.innerWidth > 992){
+        $scope.showVotes = true;
+    }
     
     $scope.$watch('category_name', function () {
         console.log($scope.category_name);
@@ -53,6 +59,18 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         }
         reloadCurrentPath();
         trackCategorySelection(currentCatName());
+        loadTweets();
+        loadHandles();
+    }
+    
+    $scope.breadCrumbSubSelect = function(bc_sub_index){
+        if  ($scope.selected_secondary_index == -1) { 
+            $scope.selected_secondary_index = bc_sub_index;
+        } else if ($scope.selected_third_index == -1) {
+            $scope.selected_third_index = bc_sub_index;
+        }
+        trackBreadCrumbCategorySelection(currentCatName());
+        reloadCurrentPath();
         loadTweets();
         loadHandles();
     }
@@ -77,6 +95,11 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.togglePopup = function(){
         console.log("toggle popup");
         $scope.nomination_visible = !$scope.nomination_visible;
+    }
+    
+    $scope.toggleVotes = function(){
+        console.log("flipping");
+        $scope.showVotes = !$scope.showVotes;
     }
     
     $scope.voteForHandle = function(handle_string, value){
@@ -141,6 +164,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
             $scope.togglePopup();
             trackNomination($scope.search)
             $http.post( "/handle/"+$scope.search+"/category/"+currentCatName()+"/upvote/"+1).then(function(response) {
+                console.log("reloading the handles");
                 loadHandles();
             });
         }else{
@@ -185,14 +209,17 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     function reloadCurrentPath(){
         if ($scope.selected_secondary_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name];
+            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children;
             
         } else if ($scope.selected_third_index == -1) {
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
-                                   $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name ]
+                                   $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name ];
+            $scope.peer_categories = $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children;
         } else{
             $scope.current_path = [$scope.category_structure[$scope.selected_top_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].name,
                                    $scope.category_structure[$scope.selected_top_index].children[$scope.selected_secondary_index].children[$scope.selected_third_index].name ]
+            $scope.peer_categories = [];
         }
     }
     
@@ -215,8 +242,9 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         var endPoint = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
         $http.get(endPoint)
         .then(function(response) {
-            console.log("got a solid response");
+            
             $scope.tweet_array = response.data;
+            console.log("tweet array length: "+$scope.tweet_array.length);
         });
     }
     
@@ -311,6 +339,15 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         if((typeof tracking == 'undefined')){
             console.log("triggering a change event with: "+cat_name);
             $window.ga('send', 'event', 'configuration change', 'change category', cat_name, {'hitCallback':
+             function () {
+             }
+           });
+        }
+    }
+    var trackBreadCrumbCategorySelection = function(cat_name){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a bread crumb change with name: "+cat_name);
+            $window.ga('send', 'event', 'configuration change', 'breadcrumb change category', cat_name, {'hitCallback':
              function () {
              }
            });
