@@ -78,7 +78,7 @@ input {border:none;}
 .nominate li a .genericon {color:#fff;}
 .nominate li .genericon-collapse {background-color:#8ac249;}
 .nominate li .genericon-expand {background-color:#33429a;}
-.con-tw .nominate {float:left; width:110px;}
+.con-tw .nominate {float:left; width:110px; margin-bottom:0;}
 .con-tw .handle-name {margin-top:6px;}
 
 .wrap-user .time-tw {float:right; width: 39%; text-align:right; color:#33429a; padding-right:10px; margin-top: 7px;}
@@ -194,7 +194,7 @@ input {border:none;}
 	.wrap-drop-refresh #bt-refresh a:hover {background-color:#eee;}
 	.wrap-drop-refresh #bt-refresh .genericon-refresh {margin-top:3px; color:#8ac249;}
 	
-	.vote-wrap {position:absolute; width:50%; height:100%; top:50px; right:0; z-index:9999; background-color: #8ac249;}
+	.vote-wrap {position:absolute; width:50%; top:50px; right:0; z-index:9999; background-color: #8ac249;}
 	.vote-pp-title {padding-top:20px;}
 	.vote-pp-title h3 {text-align:center; margin-top:0;}
 	
@@ -247,14 +247,26 @@ input {border:none;}
 	#myNavbar {border-top:0px;}
 	
 	.vote-wrap {width:70%; top:64px;}
-	.box-side #list-vote .nominate {width:60px;}
-	.box-side #list-vote .nominate .num-vote {display:none;}
-	.box-side .nominate li span {margin-right:0;}
+	.con-tw .nominate {width:60px;}
+	.con-tw .nominate .num-vote {display:none;}
+	.con-tw .nominate li span {margin-right:0;}
 }
 @media (max-width: 480px) {
-	.handle-name {display:none;}
+	.wrap-con-main {padding:15px 10px;}
 	#p-search .p-in-search {width:80%;}
 	.vote-pp-title h3 {font-size:20px;}
+	.wrap-user .time-tw span {font-size:12px;}
+	.nominate li span {margin-right:0; padding:0;}
+	.box-side .nominate .num-vote {display:none;}
+	.con-tw .nominate {width:23px; margin-top:0;}
+	.con-tw .handle-name {font-size:13px;}
+	.done-up .up-v span, .done-down .down-v span {padding:0 !important;}
+	.done-up a .genericon-expand, .done-down a .genericon-collapse {padding: 0 2px;}
+	.done-up .down-v, .done-down .up-v {margin:0;}
+	
+	.box-side #list-vote .nominate {width:50px;}
+	.wrap-user .user {width:67%;}
+	.wrap-user .time-tw {width:32%; font-size:13px; padding-right:0;}
 }
 @media (max-width: 400px) {
 	.navbar-toggle, #bt-vote-top a {width: 54px;}
