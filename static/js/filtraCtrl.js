@@ -47,10 +47,10 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window, $interval) {
         
     });
     
-    /*$interval(function(){
+    $interval(function(){
         console.log("loading tweets!");
         loadTweets();
-    },10000);*/
+    },10000);
             
     
     // Configure user selections
