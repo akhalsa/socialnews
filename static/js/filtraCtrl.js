@@ -1,4 +1,4 @@
-app.controller("filtraCtrl", function($scope, $http, $sce, $window, $timeout) {
+app.controller("filtraCtrl", function($scope, $http, $sce, $window, $interval) {
     $scope.selected_top_index = 0;
     $scope.selected_secondary_index = -1;
     $scope.selected_third_index = -1;
@@ -47,20 +47,14 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window, $timeout) {
         
     });
     
-    // Function to replicate setInterval using $timeout service.
-    $scope.intervalFunction = function(){
-      console.log("interval function called");
-      $timeout(function() {
-          console.log("loading tweets!");
-          loadTweets();
-          $scope.intervalFunction();
-      }, 30000);
-    };
+    $interval(
+        function(){
+            console.log("loading tweets!");
+            loadTweets();
 
-    
-    // Kick off the interval
-    $scope.intervalFunction();
-    
+        },1000);
+    });
+            
     
     // Configure user selections
     
