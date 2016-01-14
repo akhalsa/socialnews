@@ -20,6 +20,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window, $interval) {
     
     $scope.peer_categories = [];
     $scope.showVotes = false;
+    $scope.idle = false;
     
     $http.get("/category")
     .then(function(response) {
@@ -48,11 +49,25 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window, $interval) {
     });
     
     $interval(function(){
-        console.log("loading tweets!");
-        loadTweets();
+        if ($scope.idle == false) {
+            console.log("loading tweets!");
+            loadTweets();
+        }else{
+            console.log("we were idle so skipping");
+        }
     },10000);
             
+    //Idle checking
+    $scope.$on('IdleStart', function() {
+        console.log("idling");
+        $scope.idle = true;
+    });
     
+    $scope.$on('IdleEnd', function() {
+        console.log("idle end");
+        $scope.idle = false;
+    });
+
     // Configure user selections
     
     $scope.breadCrumbSelection = function(bc_index){
