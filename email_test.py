@@ -10,8 +10,7 @@ username = 'filtrasports'
 password = 'filtra123'
 
 # The actual mail send
-server = smtplib.SMTP('smtp.gmail.com:587')
-server.starttls()
+server = smtplib.SMTP_SSL('smtp.googlemail.com', 465)
 server.login(username,password)
 server.sendmail(fromaddr, toaddrs, msg)
 server.quit()
