@@ -1,18 +1,17 @@
 import smtplib
 
-sender = 'avtar@filtra.io'
-receivers = ['akhalsa43@gmail.com']
+fromaddr = 'akhalsa43@gmail.com'
+toaddrs  = 'akhalsa43@gmail.com'
+msg = 'There was a terrible error that occured and I wanted you to know!'
 
-message = """From: From Person <from@fromdomain.com>
-To: To Person <to@todomain.com>
-Subject: SMTP e-mail test
 
-This is a test e-mail message.
-"""
+# Credentials (if needed)
+username = 'akhalsa43'
+password = 'sophiesChoice1'
 
-try:
-   smtpObj = smtplib.SMTP('localhost')
-   smtpObj.sendmail(sender, receivers, message)         
-   print "Successfully sent email"
-except smtplib.SMTPException:
-   print "Error: unable to send email"
+# The actual mail send
+server = smtplib.SMTP_SSL('smtp.gmail.com:465')
+server.starttls()
+server.login(username,password)
+server.sendmail(fromaddr, toaddrs, msg)
+server.quit()
