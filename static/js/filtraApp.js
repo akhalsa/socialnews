@@ -37,8 +37,6 @@ app.filter('skipLastBreadcrumb', function(){
 app.config(function(IdleProvider, KeepaliveProvider) {
     // configure Idle settings
     IdleProvider.idle(5); // in seconds
-    IdleProvider.timeout(5); // in seconds
-    KeepaliveProvider.interval(2); // in seconds
 })
 
 app.run(function(Idle){
