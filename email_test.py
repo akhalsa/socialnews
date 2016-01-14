@@ -1,13 +1,13 @@
 import smtplib
 
-fromaddr = 'akhalsa43@gmail.com'
+fromaddr = 'filtrasports@gmail.com'
 toaddrs  = 'akhalsa43@gmail.com'
 msg = 'There was a terrible error that occured and I wanted you to know!'
 
 
 # Credentials (if needed)
-username = 'akhalsa43'
-password = 'sophiesChoice1'
+username = 'filtrasports'
+password = 'filtra123'
 
 # The actual mail send
 server = smtplib.SMTP('smtp.gmail.com:587')
