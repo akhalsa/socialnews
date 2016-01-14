@@ -1,5 +1,5 @@
 
-var app = angular.module("filtraApp", ['ui.bootstrap']);
+var app = angular.module("filtraApp", ['ui.bootstrap', 'ngIdle']);
 
 
 app.filter('unsafeLink', function($sce) {
@@ -32,4 +32,14 @@ app.filter('skipLastBreadcrumb', function(){
         }
         return out;
     }
+});
+
+app.config(function(IdleProvider, KeepaliveProvider) {
+    // configure Idle settings
+    IdleProvider.idle(5); // in seconds
+})
+
+app.run(function(Idle){
+    // start watching when the app runs. also starts the Keepalive service by default.
+    Idle.watch();
 });

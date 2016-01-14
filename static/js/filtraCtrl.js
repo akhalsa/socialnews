@@ -1,4 +1,4 @@
-app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
+app.controller("filtraCtrl", function($scope, $http, $sce, $window, $interval) {
     $scope.selected_top_index = 0;
     $scope.selected_secondary_index = -1;
     $scope.selected_third_index = -1;
@@ -20,6 +20,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.peer_categories = [];
     $scope.showVotes = false;
+    $scope.idle = false;
     
     $http.get("/category")
     .then(function(response) {
@@ -47,7 +48,26 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         
     });
     
+    $interval(function(){
+        if ($scope.idle == false) {
+            console.log("loading tweets!");
+            loadTweets();
+        }else{
+            console.log("we were idle so skipping");
+        }
+    },10000);
+            
+    //Idle checking
+    $scope.$on('IdleStart', function() {
+        console.log("idling");
+        $scope.idle = true;
+    });
     
+    $scope.$on('IdleEnd', function() {
+        console.log("idle end");
+        $scope.idle = false;
+    });
+
     // Configure user selections
     
     $scope.breadCrumbSelection = function(bc_index){
@@ -398,4 +418,8 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
            });
         }
     }
+    
+    
+  
+  
 });
