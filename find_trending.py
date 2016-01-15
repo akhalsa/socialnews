@@ -55,3 +55,7 @@ if __name__ == '__main__':
    
    print(dictionary.token2id)
    
+   corpus = [dictionary.doc2bow(text) for text in texts]
+   
+   print(corpus)
+   
