@@ -1,6 +1,8 @@
 import MySQLdb
 from tornado.options import define, options, parse_command_line
 from gensim import corpora, models, similarities
+from collections import defaultdict
+from pprint import pprint
 from src.DBWrapper import *
 
 define("mysql_host", default="0", help="Just need the end point", type=int)
@@ -36,5 +38,13 @@ if __name__ == '__main__':
       
    print tweet_array
 
-   #texts = [[word for word in document.lower().split() if word not in stoplist]
-   #for document in documents]
+   texts = [[word for word in document.lower().split() if word not in stoplist] for document in tweet_array]
+      
+   frequency = defaultdict(int)
+   for text in texts:
+      for token in text:
+         frequency[token] += 1
+         
+   texts = [[token for token in text if frequency[token] > 1] for text in texts]
+   
+   pprint(texts)
