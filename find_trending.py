@@ -29,7 +29,7 @@ if __name__ == '__main__':
    
    stoplist = set('for a of the and to in'.split())
 
-   tweets = getTweetOccurances(90, 1, local_db_tweets)
+   tweets = getTweetOccurances(90, 1, local_db)
    tweet_array = []
    for tweet in tweets:
       tweet_array.append(tweet["text"])
