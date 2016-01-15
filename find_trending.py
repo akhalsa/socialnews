@@ -59,3 +59,4 @@ if __name__ == '__main__':
    
    print(corpus)
    
+   tfidf = models.TfidfModel(corpus)
