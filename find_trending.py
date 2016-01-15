@@ -60,3 +60,9 @@ if __name__ == '__main__':
    print(corpus)
    
    tfidf = models.TfidfModel(corpus)
+   
+   lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=2)
+   
+   corpus_lsi = lsi[corpus_tfidf]
+   
+   lsi.print_topics(2)
