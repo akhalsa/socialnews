@@ -31,7 +31,7 @@ if __name__ == '__main__':
    
    stoplist = set('for a of the and to in at an is he her see has'.split())
 
-   tweets = getTweetOccurances(90, 1, local_db)
+   tweets = getTweetOccurances(900, 1, local_db)
    tweet_array = []
    for tweet in tweets:
       tweet_array.append(tweet["text"])
@@ -48,3 +48,10 @@ if __name__ == '__main__':
    texts = [[token for token in text if frequency[token] > 1] for text in texts]
    
    pprint(texts)
+   
+   dictionary = corpora.Dictionary(texts)
+   
+   print(dictionary)
+   
+   print(dictionary.token2id)
+   
