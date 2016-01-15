@@ -67,7 +67,7 @@ if __name__ == '__main__':
    
    corpus_lsi = lsi[corpus_tfidf]
    
-   lsi.print_topics(4)
+   lsi.print_topics(1)
    
    for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
       print(doc)
