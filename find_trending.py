@@ -1,5 +1,6 @@
 import MySQLdb
 from tornado.options import define, options, parse_command_line
+from gensim import corpora, models, similarities
 
 define("mysql_host", default="0", help="Just need the end point", type=int)
 
