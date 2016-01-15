@@ -29,7 +29,7 @@ if __name__ == '__main__':
                 charset='utf8',
                 port=3306)
    
-   stoplist = set('for a of the and to in'.split())
+   stoplist = set('for a of the and to in at an is he her see has'.split())
 
    tweets = getTweetOccurances(90, 1, local_db)
    tweet_array = []
