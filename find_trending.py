@@ -61,6 +61,8 @@ if __name__ == '__main__':
    
    tfidf = models.TfidfModel(corpus)
    
+   corpus_tfidf = tfidf[corpus]
+   
    lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=2)
    
    corpus_lsi = lsi[corpus_tfidf]
