@@ -68,8 +68,8 @@ if __name__ == '__main__':
    print lsi.projection.s
    corpus_lsi = lsi[corpus_tfidf]
 
-   for idx, val in lsi.projection.s:
-      print "index "+idx+" has val: "+val
+   for val in lsi.projection.s:
+      print  "has val: "+val
       
    for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
       for thing in doc:
