@@ -70,8 +70,8 @@ if __name__ == '__main__':
             for tweet_index, doc in enumerate(corpus_lsi): # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
                for score_tuple in doc:
                   if(score_tuple[0] == index):
-                     print score_tuple
-                     print tweet_array[tweet_index]
+                     if(score_tuple[1] > .8):
+                        print tweet_array[tweet_index]
             
          
       
