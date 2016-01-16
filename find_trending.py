@@ -36,10 +36,9 @@ if __name__ == '__main__':
       tweet_array = []
       for tweet in tweets:
          tweet_array.append(tweet["text"])
-         print "appending: "+tweet["name"]
          
          
-      if len(tweet_array) == 0:
+      if len(tweet_array) < 10:
          continue
       texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
          
@@ -58,8 +57,8 @@ if __name__ == '__main__':
       
       corpus_tfidf = tfidf[corpus]
       
-      topic_num = min(len(tweet_array), 4)
-      lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=topic_num)
+      
+      lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=4)
       
       corpus_lsi = lsi[corpus_tfidf]
    
@@ -67,7 +66,7 @@ if __name__ == '__main__':
       for index, elem in enumerate(lsi.projection.s):
          print index
          if(elem > 2):
-            print "in category: "+cat_id+" we had a trending category at index: "+index
+            print "in category: "+str(cat_id)+" we had a trending category at index: "+index
             for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
                for thing in doc:
                   print thing
