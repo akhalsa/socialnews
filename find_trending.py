@@ -84,11 +84,11 @@ if __name__ == '__main__':
                            
                
             
-            if((trend_count / float(total_count)) > .5):
-               finished = True
-               print "in category: "+str(cat_id)
-               print "we had a tweet cluster: "
-               print included_tweets
+               if((trend_count / float(total_count)) > .5):
+                  finished = True
+                  print "in category: "+str(cat_id)
+                  print "we had a tweet cluster: "
+                  print included_tweets
                
                
          if(finished):
