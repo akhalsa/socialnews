@@ -82,7 +82,7 @@ if __name__ == '__main__':
                         if(score_tuple[1] > .8):
                            trend_count += tweets[tweet_index]["tweet_count"]
                            included_tweets.append(tweets[tweet_index])
-                           if(tweets[tweet_index]["tweet_count"] > max_tweet["tweet_count"]):
+                           if(max_tweet == None) or (tweets[tweet_index]["tweet_count"] > max_tweet["tweet_count"]):
                               max_tweet = tweets[tweet_index]
                            
                
