@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
    all_ids = getAllCategoryIds(local_db_cats)
    for cat_id in all_ids:
+      print "checking cat_id "+cat_id
       tweets = getTweetOccurances(900, cat_id, local_db_cats)
       tweet_array = []
       for tweet in tweets:
