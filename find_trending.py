@@ -87,7 +87,7 @@ if __name__ == '__main__':
                            
                
             
-               if((trend_count / float(total_count)) > .5):
+               if((trend_count / float(total_count)) > .5) and (trend_count > 50):
                   finished = True
                   print "in category: "+str(cat_id)
                   print "representative tweet: "
