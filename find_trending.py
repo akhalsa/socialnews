@@ -66,7 +66,7 @@ if __name__ == '__main__':
       for index, elem in enumerate(lsi.projection.s):
          print index
          if(elem > 2):
-            print "in category: "+str(cat_id)+" we had a trending category at index: "+index
+            print "in category: "+str(cat_id)+" we had a trending category at index: "+str(index)
             for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
                for thing in doc:
                   print thing
