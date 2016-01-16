@@ -160,7 +160,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
 
     #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
     sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 30;"
-    print "loading with sql: "+sql
+    #print "loading with sql: "+sql
     cursor.execute(sql)
     results = {}
     twitter_ids = []
@@ -193,7 +193,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
             sql += t_id
             
     sql += ");"
-    print "append with sql: "+sql
+    #print "append with sql: "+sql
     cursor.execute(sql)
     for row in cursor.fetchall():
         for tweet_dict in top_tweets:
@@ -209,7 +209,7 @@ def getTweetOccurances(seconds, cat_id, local_db):
                 tweet_dict["seconds_since_posted"] = row[9]
                 break
     cursor.close()
-    print top_tweets
+    #print top_tweets
     return top_tweets
 
 def findCategoryIdWithName(cat_name, local_db):

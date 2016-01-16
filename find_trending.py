@@ -47,8 +47,6 @@ if __name__ == '__main__':
             
       texts = [[token for token in text if frequency[token] > 1] for text in texts]
       
-      pprint(texts)
-      
       dictionary = corpora.Dictionary(texts)
 
       corpus = [dictionary.doc2bow(text) for text in texts]
