@@ -41,7 +41,6 @@ if __name__ == '__main__':
       if len(tweet_array) < 10:
          continue
       
-      print "checking cat_id "+str(cat_id)
       texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
          
       frequency = defaultdict(int)
@@ -67,13 +66,14 @@ if __name__ == '__main__':
       
       for index, elem in enumerate(lsi.projection.s):
          print index
-         if(elem > 2):
+         if(elem > 1.9):
             print "in category: "+str(cat_id)+" we had a trending topic at index: "+str(index)
             for tweet_index, doc in enumerate(corpus_lsi): # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
                for score_tuple in doc:
                   if(score_tuple[0] == index):
                      if(score_tuple[1] > .8):
-                        print tweet_array[tweet_index]
+                        print tweets[tweet_index]
+                        
             
          
       
