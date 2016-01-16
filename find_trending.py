@@ -68,8 +68,10 @@ if __name__ == '__main__':
    print lsi.projection.s
    corpus_lsi = lsi[corpus_tfidf]
 
-   for indx, val in lsi.projection.s:
-      print val
+   for index, elem in enumerate(lsi.projection.s):
+      print index
+      print " space "
+      print elem
       
    for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
       for thing in doc:
