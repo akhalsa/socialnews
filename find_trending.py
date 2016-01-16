@@ -21,7 +21,7 @@ if __name__ == '__main__':
        
    
    
-   local_db = MySQLdb.connect(
+   local_db_cats = MySQLdb.connect(
                 host=host_target,
                 user="akhalsa",
                 passwd="sophiesChoice1",
@@ -29,54 +29,49 @@ if __name__ == '__main__':
                 charset='utf8',
                 port=3306)
 
-
-   tweets = getTweetOccurances(900, 1, local_db)
-   tweet_array = []
-   for tweet in tweets:
-      tweet_array.append(tweet["text"])
-      
-   print tweet_array
-
-   texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
-      
-   frequency = defaultdict(int)
-   for text in texts:
-      for token in text:
-         frequency[token] += 1
+   all_ids = getAllCategoryIds(local_db_cats)
+   for cat_id in all_ids:
+      tweets = getTweetOccurances(900, cat_id, local_db_cats)
+      tweet_array = []
+      for tweet in tweets:
+         tweet_array.append(tweet["text"])
          
-   texts = [[token for token in text if frequency[token] > 1] for text in texts]
+      print tweet_array
    
-   pprint(texts)
-   
-   dictionary = corpora.Dictionary(texts)
-   
-   print(dictionary)
-   
-   print(dictionary.token2id)
-   
-   corpus = [dictionary.doc2bow(text) for text in texts]
-   
-   print(corpus)
-   
-   tfidf = models.TfidfModel(corpus)
-   
-   corpus_tfidf = tfidf[corpus]
-   
-   lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=4)
-   
-
-   print lsi.projection.s
-   corpus_lsi = lsi[corpus_tfidf]
-
-   for index, elem in enumerate(lsi.projection.s):
-      print index
-      print " space "
-      print elem
+      texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
+         
+      frequency = defaultdict(int)
+      for text in texts:
+         for token in text:
+            frequency[token] += 1
+            
+      texts = [[token for token in text if frequency[token] > 1] for text in texts]
       
-   for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
-      for thing in doc:
-         print thing
-      print("moing on to: \n")
+      pprint(texts)
+      
+      dictionary = corpora.Dictionary(texts)
+
+      corpus = [dictionary.doc2bow(text) for text in texts]
+
+      tfidf = models.TfidfModel(corpus)
+      
+      corpus_tfidf = tfidf[corpus]
+      
+      lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=4)
+      
+      corpus_lsi = lsi[corpus_tfidf]
+   
+      
+      for index, elem in enumerate(lsi.projection.s):
+         print index
+         if(elem > 2):
+            print "in category: "+cat_id+" we had a trending category at index: "+index
+            for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
+               for thing in doc:
+                  print thing
+            
+         
+      
       
       
       
