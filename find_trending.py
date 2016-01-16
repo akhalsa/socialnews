@@ -64,7 +64,13 @@ if __name__ == '__main__':
    
    lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=4)
    
+   print "lsi: "
+   print lsi
+   
    corpus_lsi = lsi[corpus_tfidf]
+   
+   print "corpus lsi"
+   print corpus_lsi
    
    for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
       for thing in doc:
