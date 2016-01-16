@@ -34,7 +34,7 @@ if __name__ == '__main__':
       all_ids = getAllCategoryIds(local_db_cats)
       for cat_id in all_ids:
          
-         tweets = getTweetOccurances(900, cat_id, local_db_cats)
+         tweets = getTweetOccurances(1800, cat_id, local_db_cats)
          tweet_array = []
          total_count = 0
          for tweet in tweets:
