@@ -28,8 +28,7 @@ if __name__ == '__main__':
                 db="newsdb",
                 charset='utf8',
                 port=3306)
-   
-   stoplist = set('for a of the and to in at an is he her see has'.split())
+
 
    tweets = getTweetOccurances(900, 1, local_db)
    tweet_array = []
@@ -67,7 +66,11 @@ if __name__ == '__main__':
    
    corpus_lsi = lsi[corpus_tfidf]
    
-   lsi.print_topics(1)
-   
    for doc in corpus_lsi: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
-      print(doc)
+      for thing in doc:
+         print thing
+      print("moing on to: \n")
+      
+      
+      
+      
