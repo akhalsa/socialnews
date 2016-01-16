@@ -55,7 +55,8 @@ if __name__ == '__main__':
       
       corpus_tfidf = tfidf[corpus]
       
-      lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=4)
+      topic_num = min(len(tweet_array), 4)
+      lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=topic_num)
       
       corpus_lsi = lsi[corpus_tfidf]
    
