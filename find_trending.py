@@ -95,10 +95,7 @@ if __name__ == '__main__':
                   
                   print "it was in cluster: "
                   print included_tweets
-               
-               
-         if(finished):
-            break
+              
    
             
    
