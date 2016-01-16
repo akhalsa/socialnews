@@ -75,19 +75,25 @@ if __name__ == '__main__':
                print "in category: "+str(cat_id)+" we had a trending topic at index: "+str(index)
                trend_count = 0
                included_tweets = []
+               max_tweet = None
                for tweet_index, doc in enumerate(corpus_lsi): # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
                   for score_tuple in doc:
                      if(score_tuple[0] == index):
                         if(score_tuple[1] > .8):
                            trend_count += tweets[tweet_index]["tweet_count"]
                            included_tweets.append(tweets[tweet_index])
+                           if(tweets[tweet_index]["tweet_count"] > max_tweet["tweet_count"]):
+                              max_tweet = tweets[tweet_index]
                            
                
             
                if((trend_count / float(total_count)) > .5):
                   finished = True
                   print "in category: "+str(cat_id)
-                  print "we had a tweet cluster: "
+                  print "representative tweet: "
+                  print max_tweet
+                  
+                  print "it was in cluster: "
                   print included_tweets
                
                
