@@ -67,7 +67,10 @@ if __name__ == '__main__':
    print "lsi: "
    print lsi
    
-   print "projection? "
+   print "left proj"
+   print lsi.projection.u
+   
+   print "right proj"
    print lsi.projection.s
    corpus_lsi = lsi[corpus_tfidf]
    
