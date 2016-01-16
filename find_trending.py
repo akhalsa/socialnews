@@ -76,18 +76,21 @@ if __name__ == '__main__':
                trend_count = 0
                included_tweets = []
                max_tweet = None
+               handles = {}
                for tweet_index, doc in enumerate(corpus_lsi): # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
                   for score_tuple in doc:
                      if(score_tuple[0] == index):
                         if(score_tuple[1] > .8):
                            trend_count += tweets[tweet_index]["tweet_count"]
                            included_tweets.append(tweets[tweet_index])
+                           handles[tweets[tweet_index]["name"]] = True
+                           
                            if(max_tweet == None) or (tweets[tweet_index]["tweet_count"] > max_tweet["tweet_count"]):
                               max_tweet = tweets[tweet_index]
                            
                
             
-               if((trend_count / float(total_count)) > .25) and (trend_count > 50):
+               if((trend_count / float(total_count)) > .25) and (trend_count > 50) and (len(handles) > 2):
                   finished = True
                   print "in category: "+str(cat_id)
                   print "representative tweet: "
