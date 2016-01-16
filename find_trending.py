@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
    all_ids = getAllCategoryIds(local_db_cats)
    for cat_id in all_ids:
-      print "checking cat_id "+str(cat_id)
+      
       tweets = getTweetOccurances(900, cat_id, local_db_cats)
       tweet_array = []
       for tweet in tweets:
@@ -40,6 +40,8 @@ if __name__ == '__main__':
          
       if len(tweet_array) < 10:
          continue
+      
+      print "checking cat_id "+str(cat_id)
       texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
          
       frequency = defaultdict(int)
