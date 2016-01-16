@@ -36,8 +36,8 @@ if __name__ == '__main__':
       for tweet in tweets:
          tweet_array.append(tweet["text"])
          
-      print tweet_array
-   
+      if len(tweet_array) == 0:
+         continue
       texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
          
       frequency = defaultdict(int)
