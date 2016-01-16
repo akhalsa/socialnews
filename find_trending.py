@@ -36,6 +36,8 @@ if __name__ == '__main__':
       tweet_array = []
       for tweet in tweets:
          tweet_array.append(tweet["text"])
+         print "appending: "+tweet["name"]
+         
          
       if len(tweet_array) == 0:
          continue
