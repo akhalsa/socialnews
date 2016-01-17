@@ -48,9 +48,6 @@ if __name__ == '__main__':
             continue
          
          texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
-            
-         if len(texts) < 6:
-            continue
          
          frequency = defaultdict(int)
          for text in texts:
@@ -58,6 +55,9 @@ if __name__ == '__main__':
                frequency[token] += 1
                
          texts = [[token for token in text if frequency[token] > 1] for text in texts]
+         
+         if len(texts) < 6:
+            continue
          
          dictionary = corpora.Dictionary(texts)
    
