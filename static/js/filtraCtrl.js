@@ -47,18 +47,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         
     });
     
-    // Function to replicate setInterval using $timeout service.
-    $scope.intervalFunction = function(){
-      $timeout(function() {
-          console.log("loading tweets!");
-          loadTweets();
-          $scope.intervalFunction();
-      }, 30000);
-    };
-    
-    // Kick off the interval
-    $scope.intervalFunction();
-    
     
     // Configure user selections
     
