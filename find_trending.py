@@ -99,7 +99,7 @@ if __name__ == '__main__':
                            
                
             
-               if((trend_count / float(total_count)) > .1) and (trend_count > 50) and (len(handles) > 2):
+               if((trend_count / float(total_count)) > .2) and (len(handles) > 2):
                   print "in category: "+str(cat_id)
                   print "representative tweet: "
                   print max_tweet

@@ -2,6 +2,7 @@ app.controller("ConversationCtrl", function($scope, $http, $sce, $window) {
     
     $scope.conversations = []
     
+    
     $http.get("/api/conversations")
     .then(function(response) {
         $scope.conversations = response.data;
