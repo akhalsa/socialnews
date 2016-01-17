@@ -4,6 +4,7 @@ from gensim import corpora, models, similarities
 from collections import defaultdict
 from pprint import pprint
 from src.DBWrapper import *
+from src.TrendingWrapper import *
 
 define("mysql_host", default="0", help="Just need the end point", type=int)
 
@@ -93,7 +94,7 @@ if __name__ == '__main__':
                            
                
             
-               if((trend_count / float(total_count)) > .25) and (trend_count > 50) and (len(handles) > 2):
+               if((trend_count / float(total_count)) > .1) and (trend_count > 50) and (len(handles) > 2):
                   finished = True
                   print "in category: "+str(cat_id)
                   print "representative tweet: "
@@ -101,6 +102,9 @@ if __name__ == '__main__':
                   
                   print "it was in cluster: "
                   print included_tweets
+                  clearConversationsForCategoryId(local_db_cats, cat_id)
+                  insertConversationForCategory(local_db_cats, cat_id, included_tweets)
+                  
               
    
             
