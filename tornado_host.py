@@ -216,6 +216,11 @@ class IndexCategoryHandler(tornado.web.RequestHandler):
     def get(self, cat):
         print "injecting cat: "+cat
         self.render("static/index.html", cat_name=cat)
+        
+class ConversationHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self):
+        self.render("static/conversations.html")
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
@@ -223,6 +228,7 @@ settings = {
 app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
     (r'/', IndexHandler),
+    (r'/conversations', ConversationHandler)
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
@@ -234,8 +240,6 @@ app = tornado.web.Application([
 ], **settings)
 
 if __name__ == '__main__':
-    
-    
     parse_command_line()
     if(options.mysql_host == 0):
         host_target = host_live
