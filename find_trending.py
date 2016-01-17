@@ -48,6 +48,9 @@ if __name__ == '__main__':
          
          texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
             
+         if len(texts) < 6:
+            continue
+         
          frequency = defaultdict(int)
          for text in texts:
             for token in text:
