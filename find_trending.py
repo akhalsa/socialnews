@@ -56,10 +56,15 @@ if __name__ == '__main__':
                
          texts = [[token for token in text if frequency[token] > 1] for text in texts]
          
+         print "checking texts length it was: "+str(len(texts))
          if len(texts) < 6:
             continue
          
          dictionary = corpora.Dictionary(texts)
+         
+         print "checking dictionary length it was: "+str(len(dictionary))
+         if len(dictionary) < 6:
+            continue
    
          corpus = [dictionary.doc2bow(text) for text in texts]
    
