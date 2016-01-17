@@ -74,5 +74,59 @@ def insertConversationForCategory(db, category_id, tweets):
     
     cursor.close()
     
+def getConversations(db):
+    cursor = db.cursor()
+    sql = "SELECT * From Conversation;"
+    cursor.execute(sql)
+    conversations = []
+    for row in cursor.fetchall():
+        conversation_id = row[0]
+        category_id = row[1]
+        representative_tweet = row[2]
+        secondary_cursor = db.cursor()
+        conversation = {}
+        #get category name
+        sql = "SELECT name From Category where ID like "+str(category_id)
+        secondary_cursor.execute(sql)
+
+        for row in secondary_cursor.fetchall():
+            conversation["category_name"] = row[0]
+        secondary_cursor.close()
+        
+        #get representative tweet
+        secondary_cursor = db.cursor()
+        sql = "SELECT text From Tweet WHERE twitter_id like "+str(representative_tweet)+";"
+        secondary_cursor.execute(sql)
+        for row in secondary_cursor.fetchall():
+            conversation["representative_tweet"] = row[0]
+        secondary_cursor.close()
+        
+        #get all children tweets
+        secondary_cursor = db.cursor()
+        sql = "SELECT * From ConversationTweets where conversation_id like "+str(conversation_id)+";"
+        secondary_cursor.execute(sql)
+        tweets = []
+        for row in secondary_cursor.fetchall():
+            tweet = {}
+            third_cursor = db.cursor()
+            sql = "SELECT text FROM Tweet WHERE twitter_id like '"+row[1]+"';"
+            third_cursor.execute(sql)
+            for row in third_cursor.fetchall():
+                tweet["text"] = row[0]
+                
+            third_cursor.close()
+            tweets.append(tweet)
+        conversation["tweets"] = tweets
+        secondary_cursor.close()
+        conversations.append(conversation)
+    
+    cursor.close()
+    return conversations
+
+        
+        
+    
+    
+    
     
     

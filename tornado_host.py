@@ -20,6 +20,7 @@ from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
 from src.DBWrapper import *
+from src.TrendingWrapper import *
 
 
 define("port", default=8888, help="run on the given port", type=int)
@@ -205,6 +206,23 @@ class TwitterTimeline(tornado.web.RequestHandler):
             tweets.append(dictionary["html"])
             
         self.finish(json.dumps(tweets))
+        
+        
+class Conversations(tornado.web.RequestHandler):
+    def get(self):
+        db = MySQLdb.connect(
+                host=host_target,
+                user="akhalsa",
+                passwd="sophiesChoice1",
+                db="newsdb",
+                charset='utf8',
+                port=3306)
+        conversations = getConversations(db)
+        self.finish(json.dumps(conversations))
+        
+        
+        
+    
     
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -236,7 +254,8 @@ app = tornado.web.Application([
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/twitter_id/(.*)',  PageLoad),
     (r'/twitter/search/(.*)', Twitter),
-    (r'/twitter/timeline/(.*)', TwitterTimeline)
+    (r'/twitter/timeline/(.*)', TwitterTimeline),
+    (r'/api/conversations', Conversations)
 ], **settings)
 
 if __name__ == '__main__':
