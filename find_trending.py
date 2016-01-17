@@ -95,7 +95,6 @@ if __name__ == '__main__':
                
             
                if((trend_count / float(total_count)) > .1) and (trend_count > 50) and (len(handles) > 2):
-                  finished = True
                   print "in category: "+str(cat_id)
                   print "representative tweet: "
                   print max_tweet

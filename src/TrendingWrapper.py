@@ -2,6 +2,7 @@ import MySQLdb
 
 
 def clearConversationsForCategoryId(db, category_id):
+    conversation_id = None
     cursor = db.cursor()
     sql = "SELECT * FROM Conversation WHERE category_id like "+str(category_id)+";"
     cursor.execute(sql)
