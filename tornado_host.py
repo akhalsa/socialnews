@@ -228,7 +228,7 @@ settings = {
 app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
     (r'/', IndexHandler),
-    (r'/conversations', ConversationHandler)
+    (r'/conversations', ConversationHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
