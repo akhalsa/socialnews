@@ -13,6 +13,10 @@
   <script src="{{static_url('js/ConversationCtrl.js')}}"></script>
 </head>
 <body ng-app="ConversationApp" ng-controller="ConversationCtrl">
-    Ok this is where we'll be putting conversations
+    <div>
+        <ol>
+            <li ng-repeat="conversation in conversations">{{! conversation.category_name }} : {{! conversation.representative_tweet}}</li>
+        </ol>
+    </div>
 </body>
 </html>
