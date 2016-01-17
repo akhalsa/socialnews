@@ -15,7 +15,17 @@
 <body ng-app="ConversationApp" ng-controller="ConversationCtrl">
     <div>
         <ol>
-            <li ng-repeat="conversation in conversations">{{! conversation.category_name }} : {{! conversation.representative_tweet}}</li>
+            <li ng-repeat="conversation in conversations">
+                <div>
+                    {{! conversation.category_name }} : {{! conversation.representative_tweet}}</li>
+                </div>
+                <div>
+                    <ol>
+                        <li ng-repeat="tweet in conversation[$index]">
+                            {{! tweet.text}}
+                        </li>
+                    </ol>
+                </div>
         </ol>
     </div>
 </body>
