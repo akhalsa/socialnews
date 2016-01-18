@@ -64,9 +64,9 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
             b_total += b["tweets"][i].tweet_count;
         }
         
-        if (a_total < b_total)
+        if (a_total > b_total)
           return -1;
-        else if (a_total > b_total)
+        else if (a_total < b_total)
           return 1;
         else 
           return 0;
