@@ -32,6 +32,8 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
                 console.log("display sections: "+$scope.display_sections);
                 if (completion_count  == ($scope.category_structure.length-1) ) {
                     console.log("finished loading tweet sections");
+                }else{
+                    console.log("completion_count is now: "+completion_count);
                 }
             });
         }
