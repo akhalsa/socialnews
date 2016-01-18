@@ -108,6 +108,8 @@ if __name__ == '__main__':
                   print included_tweets
                   clearConversationsForCategoryId(local_db_cats, cat_id)
                   insertConversationForCategory(local_db_cats, cat_id, included_tweets)
+               else:
+                  print len(handles)+" in cat id: "+str(cat_id)
                   
               
    
