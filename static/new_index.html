@@ -136,7 +136,7 @@
                     <!-- title start -->
                 <div class="title">
                     <h3><a href="#">{{! section.category }}</a></h3>
-                    <div class="bt-more"><a href="/c/"+{{! section.category }}>More <span class="genericon genericon-rightarrow"></span></a></div>
+                    <div class="bt-more"><a  ng-href="/c/{{! section.category }}">More <span class="genericon genericon-rightarrow"></span></a></div>
                     <div class="clear"></div>
                 </div>
                 <!-- title end -->
@@ -156,7 +156,7 @@
                         <img src="{{! section.tweets[0].pic | dropProfileExtension}}" ng-hide="section.tweets[0].img_url" />
                     </div>
                     <ul class="news-list">
-                        <li ng-repeat="tweet in section.tweets" ng-class="{'first-news': $index == 1}" ng-hide="$index==0">
+                        <li ng-repeat="tweet in section.tweets" ng-class="{'first-news': $index == 1}" ng-hide="$index==>
                             <h4><a href="#">{{! tweet.text }}</a></h4>
                             <ul class="info">
                                 <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! tweet.name }}</a></li>
