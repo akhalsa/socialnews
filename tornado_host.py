@@ -138,6 +138,25 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
     
     
+class SizedReader(tornado.web.RequestHandler):
+    def get(self, cat, size, time_frame_seconds):
+        local_db = MySQLdb.connect(
+            host=host_target,
+            user="akhalsa",
+            passwd="sophiesChoice1",
+            db="newsdb",
+            charset='utf8',
+            port=3306)
+        print "cat: "+cat
+        print "seconds: "+time_frame_seconds
+        print "size: "+size
+        cat_id = findCategoryIdWithName(cat, local_db)
+        if(cat_id == 0):
+            self.finish("Category Error, Try Again")
+        print "found category id: "+str(cat_id)        
+        
+        lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, size)
+        self.finish(json.dumps(lookup))
 
     
 class Reader(tornado.web.RequestHandler):
@@ -156,7 +175,7 @@ class Reader(tornado.web.RequestHandler):
                         self.finish("Category Error, Try Again")
                 print "found category id: "+str(cat_id)        
                 
-                lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db)
+                lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, 30)
                 self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
@@ -237,7 +256,8 @@ app = tornado.web.Application([
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/twitter_id/(.*)',  PageLoad),
     (r'/twitter/search/(.*)', Twitter),
-    (r'/twitter/timeline/(.*)', TwitterTimeline)
+    (r'/twitter/timeline/(.*)', TwitterTimeline),
+    (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader)
 ], **settings)
 
 if __name__ == '__main__':

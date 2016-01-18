@@ -155,11 +155,11 @@ def setTweetIdToUnloadable(local_db, tweet_id):
             local_db.rollback()
     insertion_cursor.close()
     
-def getTweetOccurances(seconds, cat_id, local_db):
+def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
     cursor = local_db.cursor()
 
     #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
-    sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 30;"
+    sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT "+str(num_tweets)+";"
     print "loading with sql: "+sql
     cursor.execute(sql)
     results = {}

@@ -85,7 +85,7 @@ def scanPreviews():
                     db="newsdb",
                     charset='utf8',
                     port=3306)
-            tweets = getTweetOccurances(900, cat_id, local_db_tweets)
+            tweets = getTweetOccurances(900, cat_id, local_db_tweets, 10)
             for tweet in tweets:
                 if(tweet["checked"] == 0):
                     print "******** Updating: "+str(tweet["id"])+" *************"
