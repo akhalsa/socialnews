@@ -16,34 +16,39 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
     
     
     
-    
+    var completion_count;
     //private methods
     function loadTweets(){
         $scope.tweet_sections = [];
         //first iterate through category structure
-        var completion_count = 0;
+        completion_count = 0;
         for(i=0; i<$scope.category_structure.length; i++){
             //now what does the
-            var cat = $scope.category_structure[i];
-            var endPoint = "/api/reader/"+cat.name+"/size/4/time/3600";
-            console.log("fetching from: "+endPoint);
-            $http.get(endPoint)
-            .then(function(response) {
-                completion_count++;
-                section = {"category": cat.name, "tweets":response.data};
-                console.log(JSON.stringify(section));
-                $scope.tweet_sections.push(section);
-                if (completion_count  == ($scope.category_structure.length) ) {
-                    for (j = 0; j<$scope.tweet_sections.length; j++) {
-                        console.log("section: "+$scope.tweet_sections[j]["category"]);
-                    }
-                    $scope.tweet_sections.sort(compare);
-                    for (j = 0; j<$scope.tweet_sections.length; j++) {
-                        console.log("section: "+$scope.tweet_sections[j]["category"]);
-                    }
-                }
-            });
+            var category = $scope.category_structure[i];
+            loadCategory(category);
         }
+    }
+    
+    
+    function loadCategory(category){
+        var endPoint = "/api/reader/"+category.name+"/size/4/time/3600";
+        console.log("fetching from: "+endPoint);
+        $http.get(endPoint)
+        .then(function(response) {
+            completion_count++;
+            section = {"category": category.name, "tweets":response.data};
+            console.log(JSON.stringify(section));
+            $scope.tweet_sections.push(section);
+            if (completion_count  == ($scope.category_structure.length) ) {
+                for (j = 0; j<$scope.tweet_sections.length; j++) {
+                    console.log("section: "+$scope.tweet_sections[j]["category"]);
+                }
+                $scope.tweet_sections.sort(compare);
+                for (j = 0; j<$scope.tweet_sections.length; j++) {
+                    console.log("section: "+$scope.tweet_sections[j]["category"]);
+                }
+            }
+        });
     }
     //({category: Sports, tweets: [{tweet1}, {tweet2}]}, {category: Regional, tweets: [{tweet1}, {tweet2}]})
 
