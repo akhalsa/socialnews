@@ -153,7 +153,7 @@
                         </div>
                         <!-- txt-main-bn end -->
                         <img src="{{! section.tweets[0].img_url}}" ng-show="section.tweets[0].img_url" />
-                        <img src="{{! section.tweets[0].pic}}" ng-hide="section.tweets[0].img_url" style="width: auto;height: auto;" />
+                        <img src="{{! section.tweets[0].pic | dropProfileExtension}}" ng-hide="section.tweets[0].img_url" style="width: auto;height: auto;" />
                     </div>
                     <ul class="news-list">
                         <li ng-repeat="tweet in section.tweets" ng-class="{'first-news': $index == 1}">

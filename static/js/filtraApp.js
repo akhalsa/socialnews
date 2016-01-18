@@ -33,3 +33,10 @@ app.filter('skipLastBreadcrumb', function(){
         return out;
     }
 });
+
+app.filter('dropProfileExtension', function(){
+    return function(current_path){
+        var urlRegEx = /normal/g;
+        return current_path.replace(urlRegEx,"");
+    }
+});
