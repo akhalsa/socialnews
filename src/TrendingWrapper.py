@@ -184,6 +184,13 @@ def deleteConversationWithId(db, conversation_id):
     
     
     
+def inConversation(db, tweet):
+    cursor = db.cursor()
+    sql = "SELECT * FROM ConversationTweets WHERE tweet_id like '"+tweet["id"]+"';"
+    cursor.execute(sql)
+    matches = cursor.rowcount
+    return matches > 0
+    
     
 
 

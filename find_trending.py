@@ -44,20 +44,22 @@ if __name__ == '__main__':
          for tweet in tweets:
             ##first check if this works against any existing dictionary/corpus values
             matched = False
-            
-            for model in lsi_list:
-               vec_bow = model["dictionary"].doc2bow(tweet["text"].lower().split())
-               vec_lsi = model["lsi"][vec_bow]
-               for val_tuple in vec_lsi:
-                  if(val_tuple[0] == model["index"]):
-                     if(val_tuple[1] > 1.5):
-                        print "adding: "+tweet["text"]
-                        print "to conversation: "+str(model["conversation_id"])+" with score: "+str(val_tuple)
-                        addTweetToConversation(local_db_cats, tweet, model["conversation_id"])
-                        matched = True
-                        break
-               else:
-                  continue
+            if(inConversation(local_db_cats, tweet)):
+               matched = True
+            else:
+               for model in lsi_list:
+                  vec_bow = model["dictionary"].doc2bow(tweet["text"].lower().split())
+                  vec_lsi = model["lsi"][vec_bow]
+                  for val_tuple in vec_lsi:
+                     if(val_tuple[0] == model["index"]):
+                        if(val_tuple[1] > 1.5):
+                           print "adding: "+tweet["text"]
+                           print "to conversation: "+str(model["conversation_id"])+" with score: "+str(val_tuple)
+                           addTweetToConversation(local_db_cats, tweet, model["conversation_id"])
+                           matched = True
+                           break
+                  else:
+                     continue
             
             if(not matched):
                ##for now lets assume there are none, we will come back
