@@ -123,7 +123,78 @@ def getConversations(db):
     cursor.close()
     return conversations
 
-        
+
+
+
+
+def addNewConversation(db, primary_tweet):
+    cursor = db.cursor()
+    sql = "INSERT INTO Conversation (representative_tweet) VALUES ("+primary_tweet["id"]+");"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of flushing source"
+        print str(e)
+        db.rollback()
+    conversation_id = cursor.lastrowid
+    cursor.close()
+    return conversation_id
+
+def addTweetToConversation(db, tweet, conversation_id):
+    cursor = db.cursor()
+    sql = "INSERT INTO ConversationTweets (tweet_id, conversation_id) VALUES ('"+tweet["id"]+"', "+str(conversation_id)+");"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of flushing source"
+        print str(e)
+        db.rollback()
+    cursor.close()
+
+
+def deleteConversationWithId(db, conversation_id):
+    cursor = db.cursor()
+    sql = "DELETE FROM ConversationTweets WHERE conversation_id like "+str(conversation_id)+";"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of flushing source"
+        print str(e)
+        db.rollback()
+    cursor.close()
+    
+    
+    cursor = db.cursor()
+    sql = "DELETE FROM Conversation WHERE ID like "+str(conversation_id)+";"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of flushing source"
+        print str(e)
+        db.rollback()
+    cursor.close()
+    
+    
+    
+    
+
+
         
     
     

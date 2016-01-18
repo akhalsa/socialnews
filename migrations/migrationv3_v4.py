@@ -41,8 +41,8 @@ def forward():
     
     sql = "CREATE TABLE Conversation ("
     sql += "ID int(11) NOT NULL AUTO_INCREMENT, "
-    sql += "category_id int(11), "
     sql += "representative_tweet varchar(255), "
+    sql += "insertion_time timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
     sql += "PRIMARY KEY (ID));"
     
     executeSql(db, sql)

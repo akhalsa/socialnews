@@ -23,6 +23,9 @@ if __name__ == '__main__':
    
    finished = False
    
+   lsi_list = []
+   
+   
    while(not finished):
       local_db_cats = MySQLdb.connect(
                    host=host_target,
@@ -39,8 +42,24 @@ if __name__ == '__main__':
          tweet_array = []
          total_count = 0
          for tweet in tweets:
-            tweet_array.append(tweet["text"])
-            total_count += tweet["tweet_count"]
+            ##first check if this works against any existing dictionary/corpus values
+            matched = False
+            
+            for model in lsi_list:
+               vec_bow = model["dictionary"].doc2bow(tweet["text"].lower().split())
+               vec_lsi = model["lsi"][vec_bow]
+               for val_tuple in vec_lsi:
+                  if(val_tuple[0] == model["index"]):
+                     if(val_tuple[1] > .7):
+                        addTweetToConversation(local_db_cats, tweet, model["conversation_id"])
+                        matched = True
+                        break
+               else:
+                  continue
+            
+            if(not matched):
+               ##for now lets assume there are none, we will come back
+               tweet_array.append(tweet["text"])
             
             
             
@@ -81,6 +100,7 @@ if __name__ == '__main__':
          for index, elem in enumerate(lsi.projection.s):
             print index
             if(elem > 2):
+               
                print "in category: "+str(cat_id)+" we had a trending topic at index: "+str(index)
                trend_count = 0
                included_tweets = []
@@ -106,8 +126,13 @@ if __name__ == '__main__':
                   
                   print "it was in cluster: "
                   print included_tweets
-                  clearConversationsForCategoryId(local_db_cats, cat_id)
-                  insertConversationForCategory(local_db_cats, cat_id, included_tweets)
+                  conversation_id = addNewConversation(local_db_cats, max_tweet)
+                  
+                  for tweet in included_tweets:
+                     addTweetToConversation(local_db_cats, tweet, conversation_id)
+                     
+                  lis_list.append({"lsi": lsi, "index": index, "conversation_id":conversation_id, "dictionary":dictionary})
+                  
                else:
                   print str(len(handles))+" in cat id: "+str(cat_id)
                   
