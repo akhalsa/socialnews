@@ -30,7 +30,7 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
                 completion_count++;
                 $scope.display_sections.push({"category": cat, "tweets":response.data});
                 console.log("display sections: "+$scope.display_sections);
-                if (completion_count  == ($scope.category_structure.length-1) ) {
+                if (completion_count  == ($scope.category_structure.length) ) {
                     console.log("finished loading tweet sections");
                 }else{
                     console.log("completion_count is now: "+completion_count);
