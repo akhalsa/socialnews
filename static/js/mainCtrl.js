@@ -26,7 +26,7 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
             console.log("fetching from: "+endPoint);
             $http.get(endPoint)
             .then(function(response) {
-                $scope.display_sections.append({"category": cat, "tweets":response.data});
+                $scope.display_sections.push({"category": cat, "tweets":response.data});
                 console.log("display sections: "+$scope.display_sections);
             });
         }
