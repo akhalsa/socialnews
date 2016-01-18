@@ -147,8 +147,8 @@
                         <div class="txt-main-bn">
                             <h3><a href="#">{{! section.tweets[0].text }}</a></h3>
                             <ul class="info">
-                                <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">Sports Center</a></li>
-                                <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">5 min</a></li>
+                                <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! section.tweets[0].name }}</a></li>
+                                <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">{{! convertSecondsToDeltaTime(section.tweets[0].seconds_since_posted) }}</a></li>
                             </ul>
                         </div>
                         <!-- txt-main-bn end -->
