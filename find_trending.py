@@ -131,7 +131,7 @@ if __name__ == '__main__':
                   for tweet in included_tweets:
                      addTweetToConversation(local_db_cats, tweet, conversation_id)
                      
-                  lis_list.append({"lsi": lsi, "index": index, "conversation_id":conversation_id, "dictionary":dictionary})
+                  lsi_list.append({"lsi": lsi, "index": index, "conversation_id":conversation_id, "dictionary":dictionary})
                   
                else:
                   print str(len(handles))+" in cat id: "+str(cat_id)
