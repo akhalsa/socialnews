@@ -80,7 +80,7 @@ if __name__ == '__main__':
          
          for index, elem in enumerate(lsi.projection.s):
             print index
-            if(elem > 1.9):
+            if(elem > 2):
                print "in category: "+str(cat_id)+" we had a trending topic at index: "+str(index)
                trend_count = 0
                included_tweets = []
@@ -99,7 +99,7 @@ if __name__ == '__main__':
                            
                
             
-               if((trend_count / float(total_count)) > .1) and (len(handles) > 2):
+               if( len(handles) > 3):
                   print "in category: "+str(cat_id)
                   print "representative tweet: "
                   print max_tweet
