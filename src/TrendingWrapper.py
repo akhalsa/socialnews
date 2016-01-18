@@ -81,17 +81,9 @@ def getConversations(db):
     conversations = []
     for row in cursor.fetchall():
         conversation_id = row[0]
-        category_id = row[1]
-        representative_tweet = row[2]
+        representative_tweet = row[1]
         secondary_cursor = db.cursor()
         conversation = {}
-        #get category name
-        sql = "SELECT name From Category where ID like "+str(category_id)
-        secondary_cursor.execute(sql)
-
-        for row in secondary_cursor.fetchall():
-            conversation["category_name"] = row[0]
-        secondary_cursor.close()
         
         #get representative tweet
         secondary_cursor = db.cursor()
