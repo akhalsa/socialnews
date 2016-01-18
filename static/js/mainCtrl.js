@@ -32,7 +32,7 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
                 completion_count++;
                 section = {"category": cat.name, "tweets":response.data};
                 console.log(JSON.stringify(section));
-                $scope.tweet_sections.push();
+                $scope.tweet_sections.push(section);
                 if (completion_count  == ($scope.category_structure.length) ) {
                     for (j = 0; j<$scope.tweet_sections.length; j++) {
                         console.log("section: "+$scope.tweet_sections[j]["category"]);
