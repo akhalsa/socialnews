@@ -50,9 +50,9 @@ if __name__ == '__main__':
                vec_lsi = model["lsi"][vec_bow]
                for val_tuple in vec_lsi:
                   if(val_tuple[0] == model["index"]):
-                     if(val_tuple[1] > .9):
+                     if(val_tuple[1] > 2):
                         print "adding: "+tweet["text"]
-                        print "to conversation: "+str(model["conversation_id"])+" with score: "+str(val_tuple[1])
+                        print "to conversation: "+str(model["conversation_id"])+" with score: "+str(val_tuple)
                         addTweetToConversation(local_db_cats, tweet, model["conversation_id"])
                         matched = True
                         break
