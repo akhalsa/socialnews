@@ -216,6 +216,12 @@ class IndexCategoryHandler(tornado.web.RequestHandler):
     def get(self, cat):
         print "injecting cat: "+cat
         self.render("static/index.html", cat_name=cat)
+        
+class NewIndexHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self):
+        self.render("static/new_index.html")
+        
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
@@ -223,6 +229,7 @@ settings = {
 app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
     (r'/', IndexHandler),
+    (r'/newhome', NewIndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
