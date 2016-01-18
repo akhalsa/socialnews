@@ -13,9 +13,13 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
     });
     
     
+    //
+    $scope.transform_link = function(cat_name){
+        return "/c/"+cat_name;
+        
+    }
     
-    
-    
+    //private stuff
     var completion_count;
     //private methods
     function loadTweets(){
