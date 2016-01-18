@@ -51,6 +51,8 @@ if __name__ == '__main__':
                for val_tuple in vec_lsi:
                   if(val_tuple[0] == model["index"]):
                      if(val_tuple[1] > .9):
+                        print "adding: "+tweet["text"]
+                        print "to conversation: "+model["conversation_id"]+" with score: "+val_tuple[1]
                         addTweetToConversation(local_db_cats, tweet, model["conversation_id"])
                         matched = True
                         break
