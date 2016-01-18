@@ -50,7 +50,7 @@ if __name__ == '__main__':
                vec_lsi = model["lsi"][vec_bow]
                for val_tuple in vec_lsi:
                   if(val_tuple[0] == model["index"]):
-                     if(val_tuple[1] > .7):
+                     if(val_tuple[1] > .9):
                         addTweetToConversation(local_db_cats, tweet, model["conversation_id"])
                         matched = True
                         break
@@ -99,7 +99,7 @@ if __name__ == '__main__':
          
          for index, elem in enumerate(lsi.projection.s):
             print index
-            if(elem > 2):
+            if(elem > 1.8):
                
                print "in category: "+str(cat_id)+" we had a trending topic at index: "+str(index)
                trend_count = 0
@@ -109,7 +109,7 @@ if __name__ == '__main__':
                for tweet_index, doc in enumerate(corpus_lsi): # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
                   for score_tuple in doc:
                      if(score_tuple[0] == index):
-                        if(score_tuple[1] > .7):
+                        if(score_tuple[1] > .9):
                            trend_count += tweet_array[tweet_index]["tweet_count"]
                            included_tweets.append(tweet_array[tweet_index])
                            handles[tweet_array[tweet_index]["name"]] = True
