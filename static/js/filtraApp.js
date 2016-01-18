@@ -36,7 +36,7 @@ app.filter('skipLastBreadcrumb', function(){
 
 app.filter('dropProfileExtension', function(){
     return function(current_path){
-        var urlRegEx = /normal/g;
+        var urlRegEx = /_normal/g;
         return current_path.replace(urlRegEx,"");
     }
 });
