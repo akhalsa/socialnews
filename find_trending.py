@@ -99,7 +99,7 @@ if __name__ == '__main__':
                            
                
             
-               if( len(handles) > 3):
+               if( len(handles) >= 3):
                   print "in category: "+str(cat_id)
                   print "representative tweet: "
                   print max_tweet
