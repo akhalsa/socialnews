@@ -40,10 +40,3 @@ app.filter('dropProfileExtension', function(){
         return current_path.replace(urlRegEx,"");
     }
 });
-
-app.filter('nameToLink', function(){
-    return function(name){
-        
-        return "/c/"+name;
-    }
-});
