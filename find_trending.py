@@ -59,14 +59,14 @@ if __name__ == '__main__':
             
             if(not matched):
                ##for now lets assume there are none, we will come back
-               tweet_array.append(tweet["text"])
+               tweet_array.append(tweet)
             
             
             
          if len(tweet_array) < 10:
             continue
          
-         texts = [[word for word in document.lower().split() if len(word) > 4] for document in tweet_array]
+         texts = [[word for word in document["text"].lower().split() if len(word) > 4] for document in tweet_array]
          
          frequency = defaultdict(int)
          for text in texts:
@@ -110,12 +110,12 @@ if __name__ == '__main__':
                   for score_tuple in doc:
                      if(score_tuple[0] == index):
                         if(score_tuple[1] > .7):
-                           trend_count += tweets[tweet_index]["tweet_count"]
-                           included_tweets.append(tweets[tweet_index])
-                           handles[tweets[tweet_index]["name"]] = True
+                           trend_count += tweet_array[tweet_index]["tweet_count"]
+                           included_tweets.append(tweet_array[tweet_index])
+                           handles[tweet_array[tweet_index]["name"]] = True
                            
-                           if(max_tweet == None) or (tweets[tweet_index]["tweet_count"] > max_tweet["tweet_count"]):
-                              max_tweet = tweets[tweet_index]
+                           if(max_tweet == None) or (tweet_array[tweet_index]["tweet_count"] > max_tweet["tweet_count"]):
+                              max_tweet = tweet_array[tweet_index]
                            
                
             
