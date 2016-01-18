@@ -30,16 +30,16 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
             $http.get(endPoint)
             .then(function(response) {
                 completion_count++;
-                section = {"category": cat, "tweets":response.data};
+                section = {"category": cat.name, "tweets":response.data};
                 console.log(JSON.stringify(section));
                 $scope.tweet_sections.push();
                 if (completion_count  == ($scope.category_structure.length) ) {
                     for (j = 0; j<$scope.tweet_sections.length; j++) {
-                        console.log("section: "+$scope.tweet_sections[j].name);
+                        console.log("section: "+$scope.tweet_sections[j]["category"]);
                     }
                     $scope.tweet_sections.sort(compare);
                     for (j = 0; j<$scope.tweet_sections.length; j++) {
-                        console.log("section: "+$scope.tweet_sections[j].name);
+                        console.log("section: "+$scope.tweet_sections[j]["category"]);
                     }
                 }
             });
