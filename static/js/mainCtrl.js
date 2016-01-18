@@ -30,8 +30,9 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
             $http.get(endPoint)
             .then(function(response) {
                 completion_count++;
-                $scope.tweet_sections.push({"category": cat, "tweets":response.data});
-                console.log("display sections: "+$scope.tweet_sections);
+                section = {"category": cat, "tweets":response.data};
+                console.log(JSON.stringify(section));
+                $scope.tweet_sections.push();
                 if (completion_count  == ($scope.category_structure.length) ) {
                     for (j = 0; j<$scope.tweet_sections.length; j++) {
                         console.log("section: "+$scope.tweet_sections[j].name);
@@ -44,7 +45,7 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
             });
         }
     }
-    
+    //({category: Sports, tweets: [{tweet1}, {tweet2}]}, {category: Regional, tweets: [{tweet1}, {tweet2}]})
 
     
     function compare(a,b) {
