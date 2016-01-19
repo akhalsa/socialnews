@@ -98,14 +98,20 @@ input {border:none;}
 .news-box .title .bt-more a .genericon-rightarrow {font-size:12px; margin:3px 0 0 3px;}
 .news-box .title .bt-more a:hover {color:#8ac249;}
 .news-box .news-list {padding:15px;}
+.news-box .txt-main-bn {position:relative; background:#333;}
 
 .news-top-bx {position:relative; overflow:hidden;}
+.news-top-bx .img-wrap-news {height:170px; overflow:hidden;}
 .news-top-bx img {width:100%;}
 .news-top-bx .txt-main-bn {padding:15px;}
 .news-top-bx .txt-main-bn h3 {font-size:16px; font-weight:700; margin:0 0 5px; line-height:22px;}
 .news-top-bx .txt-main-bn h3 a {color:#fff;}
 .news-top-bx .txt-main-bn h3 a:hover {color:#ddd;}
 .news-top-bx .txt-main-bn .info {margin-bottom:0;}
+
+@media (max-width: 1199px) {
+	.news-top-bx .img-wrap-news {height:129px;}
+}
 
 @media (max-width: 1059px) {
 	body {padding-top:90px;}
@@ -115,6 +121,9 @@ input {border:none;}
 	.nav>li>a {font-size:14px; padding: 25px 10px;}
 	.navbar-nav>li>a {padding-top:25px;}
 	.navbar-brand {height:auto; padding: 15px 15px 3px;}
+}
+@media (max-width: 991px) {
+	.news-top-bx .img-wrap-news {height:100px;}
 }
 @media (max-width: 767px) {
 	body {padding-top:70px;}
@@ -130,6 +139,7 @@ input {border:none;}
 	.navbar-collapse {box-shadow:none;}
 	.wrap-top .col-md-8, .wrap-top .col-md-4 {padding:0;}
 	.wrap-top, .news-box {margin-bottom: 20px;}
+	.news-top-bx .img-wrap-news {height:auto;}
 }
 @media (max-width: 520px) {
 	.navbar-header #slogan {padding-top:0; float:left;}
