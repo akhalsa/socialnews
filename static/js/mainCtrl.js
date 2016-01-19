@@ -3,7 +3,7 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
     
     $scope.tweet_sections = [];
     
-    $scope.display_sections = [];
+    $scope.all_tweets = [];
     
     $http.get("/category")
     .then(function(response) {
@@ -38,21 +38,30 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
             section = {"category": category.name, "tweets":response.data};
             console.log(JSON.stringify(section));
             $scope.tweet_sections.push(section);
+            for(i=0; i<response.data.length; i++){
+                tweet = response.data[i];
+                $scope.all_tweets.push(tweet);
+            }
             if (completion_count  == ($scope.category_structure.length) ) {
-                for (j = 0; j<$scope.tweet_sections.length; j++) {
-                    console.log("section: "+$scope.tweet_sections[j]["category"]);
-                }
-                $scope.tweet_sections.sort(compare);
-                for (j = 0; j<$scope.tweet_sections.length; j++) {
-                    console.log("section: "+$scope.tweet_sections[j]["category"]);
-                }
+                $scope.tweet_sections.sort(compareSections);
+                $scope.all_tweets.sort(compareTweets);
             }
         });
     }
     //({category: Sports, tweets: [{tweet1}, {tweet2}]}, {category: Regional, tweets: [{tweet1}, {tweet2}]})
 
     
-    function compare(a,b) {
+    function compareTweets(a, b) {
+        if (a.tweet_count > b.tweet_count) {
+            return -1;
+        }else if (b.tweet_count > a.tweet_count) {
+            return 1;
+        } else{
+            return 0;
+        }
+        
+    }
+    function compareSections(a,b) {
         a_total = 0;
         b_total = 0;
         for (i=0; i<a["tweets"].length; i++){
