@@ -176,6 +176,10 @@
                 <!-- list-con start -->
                 <div class="list-con">
                     <div class="news-top-bx">
+                        <div class="img-wrap-news">
+                            <img src="{{! section.tweets[0].img_url}}" ng-show="section.tweets[0].img_url && section.tweets[0].img_url!= '#'" />
+                            <img src="{{! section.tweets[0].pic | dropProfileExtension}}" ng-hide="section.tweets[0].img_url && section.tweets[0].img_url!= '#'" />
+                        </div>
                             <!-- txt-main-bn start -->
                         <div class="txt-main-bn">
                             <h3><a href="#">{{! section.tweets[0].text }}</a></h3>
@@ -185,8 +189,6 @@
                             </ul>
                         </div>
                         <!-- txt-main-bn end -->
-                        <img src="{{! section.tweets[0].img_url}}" ng-show="section.tweets[0].img_url && section.tweets[0].img_url!= '#'" />
-                        <img src="{{! section.tweets[0].pic | dropProfileExtension}}" ng-hide="section.tweets[0].img_url && section.tweets[0].img_url!= '#'" />
                     </div>
                     <ul class="news-list">
                         <li ng-repeat="tweet in section.tweets" ng-class="{'first-news': $index == 1}" ng-hide="$index==0">
