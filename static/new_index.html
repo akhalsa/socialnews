@@ -93,7 +93,8 @@
                 </ul>
             </div>
             <!-- txt-main-bn end -->
-        	<img src="{{static_url('images/bn-1.jpg')}}" alt="main-bn" />
+                <img src="{{! all_tweets[0].img_url}}" ng-show="all_tweets[0].img_url && all_tweets[0].img_url!= '#'" />
+                <img src="{{! all_tweets[0].pic | dropProfileExtension}}" ng-hide="all_tweets[0].img_url && all_tweets[0].img_url!= '#'" />
         </div>
         <!-- main-banner end -->
     </div>
