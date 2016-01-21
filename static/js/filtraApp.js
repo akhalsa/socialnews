@@ -9,10 +9,15 @@ app.filter('unsafeLink', function($sce) {
     };
 });
 
-app.filter('eliminateLink', function() {
+app.filter('eliminateLink', function($sce) {
     return function(text) {
         var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-        return text.replace(urlRegEx,"");
+        //return $sce.trustAsHtml(text.replace(urlRegEx, ))
+        var res = str.match(urlRegEx);
+        text = text.replace(urlRegEx,"");
+        text = "<a href='"+res[0]+"'>"+text+"</a>";
+        return $sce.trustAsHtml(text);
+        
     };
 });
 
