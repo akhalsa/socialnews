@@ -20,7 +20,7 @@ app.filter('eliminateLink', function($sce) {
             return $sce.trustAsHtml("<span style=\"color:white;\">"+text+"</span>");
         }
         text = text.replace(urlRegEx,"");
-        text = "<a href=\""+res[0]+"\" target=\"_blank\" onclick=\"trackOutboundLink('"+res[0]+"');>"+text+"</a>";
+        text = "<a href=\""+res[0]+"\" target=\"_blank\" onclick=\"trackOutboundLink(\""+res[0]+"\");>"+text+"</a>";
         return $sce.trustAsHtml(text);
         
     };
