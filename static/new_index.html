@@ -63,16 +63,16 @@
       </button>
       <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png') }}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
     </div>
+    
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Front Page</a></li>
-        <li><a href="#">Technology</a></li>
-        <li><a href="#">Sports</a></li>
-        <li><a href="#">Travel</a></li>
-        <li><a href="#">Politics</a></li>
-        <li><a href="#">Travel</a></li>
-      </ul>
+      <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
+        <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
+      </li>
+    </ul>
     </div>
+    
+    
   </div>
 </nav>
 <!-- header end -->

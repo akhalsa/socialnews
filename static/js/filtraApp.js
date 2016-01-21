@@ -12,18 +12,15 @@ app.filter('unsafeLink', function($sce) {
 app.filter('eliminateLink', function($sce) {
     return function(text) {
         var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
-        console.log("checking");
         if (typeof(text) == "undefined")  {
-            console.log("undefined text");
             return $sce.trustAsHtml(text);
         }
         var res = text.match(urlRegEx);
         if (res == null) {
-            console.log("res undefined: "+text);
             return $sce.trustAsHtml("<span style=\"color:white;\">"+text+"</span>");
         }
         text = text.replace(urlRegEx,"");
-        text = "<a href=\""+res[0]+"\" target=\"_blank\">"+text+"</a>";
+        text = "<a href=\""+res[0]+"\" target=\"_blank\" onclick=\"trackOutboundLink('$1');>"+text+"</a>";
         return $sce.trustAsHtml(text);
         
     };
