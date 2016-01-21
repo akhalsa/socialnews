@@ -59,8 +59,6 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
             }
         });
     }
-    //({category: Sports, tweets: [{tweet1}, {tweet2}]}, {category: Regional, tweets: [{tweet1}, {tweet2}]})
-
     
     function compareTweets(a, b) {
         if (a.tweet_count > b.tweet_count) {
