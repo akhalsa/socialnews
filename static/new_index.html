@@ -66,10 +66,11 @@
     
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-       
-      <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" >
-        <a ng-href="/c/{{!cat.name}}" >{{! cat.name }}</a>
-      </li>
+        <li class="active"><a href="#">Front Page</a></li>
+
+        <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" >
+            <a ng-href="/c/{{!cat.name}}" >{{! cat.name }}</a>
+        </li>
     </ul>
     </div>
     
