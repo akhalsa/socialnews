@@ -19,6 +19,7 @@ app.filter('eliminateLink', function($sce) {
         }
         var res = text.match(urlRegEx);
         if (typeof(res) == "undefined") {
+            console.log("res undefined: "+text);
             return $sce.trustAsHtml(text);
         }
         text = text.replace(urlRegEx,"");
