@@ -5,6 +5,8 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
     
     $scope.all_tweets = [];
     
+    $scope.current_category_name = "";
+    
     $http.get("/category")
     .then(function(response) {
         $scope.category_structure = response.data;
@@ -43,9 +45,15 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
     function loadCategory(category){
         var endPoint = "/api/reader/"+category.name+"/size/4/time/3600";
         console.log("fetching from: "+endPoint);
+        $scope.current_category_name = "";
+        $scope.current_category_score = 0;
         $http.get(endPoint)
         .then(function(response) {
             completion_count++;
+            if (response.data[0].tweet_count > $scope.current_category_score ) {
+                $scope.current_category_name = category.name;
+                $scope.current_category_score = response.data[0].tweet_count;
+            }
             section = {"category": category.name, "tweets":response.data};
             console.log(JSON.stringify(section));
             $scope.tweet_sections.push(section);
@@ -55,6 +63,7 @@ app.controller("mainCtrl", function($scope, $http, $sce, $window) {
             }
             if (completion_count  == ($scope.category_structure.length) ) {
                 $scope.tweet_sections.sort(compareSections);
+                
                 $scope.all_tweets.sort(compareTweets);
             }
         });

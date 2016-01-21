@@ -89,7 +89,7 @@
             <div class="txt-main-bn">
             	<h1 ng-bind-html="all_tweets[0].text | eliminateLink"> </h1>
                 <ul class="info">
-                	<li class="ic-category"><a href="#">Sports</a></li>
+                	<li class="ic-category"><a href="#">{{! current_category_name }}</a></li>
                     <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! all_tweets[0].name }}</a></li>
                     <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">{{! convertSecondsToDeltaTime(all_tweets[0].seconds_since_posted) }}</a></li>
                 </ul>
