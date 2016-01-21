@@ -20,7 +20,7 @@ app.filter('eliminateLink', function($sce) {
         var res = text.match(urlRegEx);
         if (res == null) {
             console.log("res undefined: "+text);
-            return $sce.trustAsHtml(text);
+            return $sce.trustAsHtml("<span style=\"color:white;\">"+text+"</span>");
         }
         text = text.replace(urlRegEx,"");
         text = "<a href=\""+res[0]+"\" target=\"_blank\">"+text+"</a>";
