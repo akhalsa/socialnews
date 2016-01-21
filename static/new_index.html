@@ -85,7 +85,7 @@
     	<div id="main-bn">
         	<!-- txt-main-bn start -->
             <div class="txt-main-bn">
-            	<h1><span ng-bind-html="all_tweets[0].text | unsafeLink"></span></h1>
+            	<h1><a href="#">{{! all_tweets[0].text | eliminateLink }} </a></h1>
                 <ul class="info">
                 	<li class="ic-category"><a href="#">Sports</a></li>
                     <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! all_tweets[0].name }}</a></li>
@@ -137,7 +137,7 @@
                         </div>
                             <!-- txt-main-bn start -->
                         <div class="txt-main-bn">
-                            <h3><span ng-bind-html="section.tweets[0].text | unsafeLink"></span></h3>
+                            <h3><a href="#">{{! section.tweets[0].text | eliminateLink }}</a></h3>
                             <ul class="info">
                                 <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! section.tweets[0].name }}</a></li>
                                 <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">{{! convertSecondsToDeltaTime(section.tweets[0].seconds_since_posted) }}</a></li>
@@ -183,7 +183,7 @@
                         </div>
                             <!-- txt-main-bn start -->
                         <div class="txt-main-bn">
-                            <h3><span ng-bind-html="section.tweets[0].text | unsafeLink"></span></h3>
+                            <h3><a href="#">{{! section.tweets[0].text | eliminateLink }}</a></h3>
                             <ul class="info">
                                 <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! section.tweets[0].name }}</a></li>
                                 <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">{{! convertSecondsToDeltaTime(section.tweets[0].seconds_since_posted) }}</a></li>
