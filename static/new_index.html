@@ -104,7 +104,7 @@
         	<h2>Top Stories</h2>
             <ul class="news-list">
                 <li ng-repeat="tweet in all_tweets" ng-class="{'first-news': $index == 1}" ng-hide="$index==0 || $index > 4">
-                    <h4><a href="#">{{! tweet.text | eliminateLink }}</a></h4>
+                    <h4><span ng-bind-html="tweet.text | unsafeLink"></span></h4>
                     <ul class="info">
                         <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! tweet.name }}</a></li>
                         <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">{{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}</a></li>
@@ -147,7 +147,7 @@
                     </div>
                     <ul class="news-list">
                         <li ng-repeat="tweet in section.tweets" ng-class="{'first-news': $index == 1}" ng-hide="$index==0">
-                            <h4><a href="#">{{! tweet.text | eliminateLink }}</a></h4>
+                            <h4><span ng-bind-html="tweet.text | unsafeLink"></span></h4>
                             <ul class="info">
                                 <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! tweet.name }}</a></li>
                                 <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">{{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}</a></li>
@@ -193,7 +193,7 @@
                     </div>
                     <ul class="news-list">
                         <li ng-repeat="tweet in section.tweets" ng-class="{'first-news': $index == 1}" ng-hide="$index==0">
-                            <h4><a href="#">{{! tweet.text  | eliminateLink }}</a></h4>
+                            <h4><span ng-bind-html="tweet.text | unsafeLink"></span></h4>
                             <ul class="info">
                                 <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! tweet.name }}</a></li>
                                 <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">{{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}</a></li>
