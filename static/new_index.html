@@ -89,7 +89,7 @@
                 <ul class="info">
                 	<li class="ic-category"><a href="#">Sports</a></li>
                     <li class="ic-name"><span class="genericon genericon-twitter"></span> <a href="#">{{! all_tweets[0].name }}</a></li>
-                    <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">5 min</a></li>
+                    <li class="ic-time"><span class="genericon genericon-time"></span> <a href="#">{{! convertSecondsToDeltaTime(all_tweets[0].seconds_since_posted) }}</a></li>
                 </ul>
             </div>
             <!-- txt-main-bn end -->
