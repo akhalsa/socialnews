@@ -47,7 +47,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         
     });
     
-    
     // Configure user selections
     
     $scope.breadCrumbSelection = function(bc_index){
@@ -398,4 +397,8 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
            });
         }
     }
+    
+    
+
+  
 });
