@@ -9,6 +9,23 @@ app.filter('unsafeLink', function($sce) {
     };
 });
 
+app.filter('eliminateLink', function($sce) {
+    return function(text) {
+        var urlRegEx = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
+        if (typeof(text) == "undefined")  {
+            return $sce.trustAsHtml(text);
+        }
+        var res = text.match(urlRegEx);
+        if (res == null) {
+            return $sce.trustAsHtml("<span style=\"color:white;\">"+text+"</span>");
+        }
+        text = text.replace(urlRegEx,"");
+        text = "<a href=\""+res[0]+"\" target=\"_blank\" onclick=\"trackOutboundLink(\""+res[0]+"\");>"+text+"</a>";
+        return $sce.trustAsHtml(text);
+        
+    };
+});
+
 
 app.filter('matchTwitterName', function(){
     return function(handles, name){
@@ -31,5 +48,15 @@ app.filter('skipLastBreadcrumb', function(){
             }
         }
         return out;
+    }
+});
+
+app.filter('dropProfileExtension', function(){
+    return function(current_path){
+        if (current_path) {
+            var urlRegEx = /_normal/g;
+            return current_path.replace(urlRegEx,"");
+        }
+        
     }
 });
