@@ -60,12 +60,12 @@ input {border:none;}
 .wrap-top {margin-bottom:30px;}
 #main-bn {position:relative; text-align: center; background-color: #fff; overflow:hidden;}
 #main-bn img { height: 400px;}
-.txt-main-bn {position:absolute; bottom:0; padding:25px 30px; width:100%; text-align:left; background: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.9) 100%);
+.txt-main-bn { bottom:0; padding:25px 30px; width:100%; text-align:left; background-color:#333; /* position:absolute; background: -moz-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.9) 100%);
     background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,rgba(0,0,0,0)),color-stop(100%,rgba(0,0,0,.9)));
     background: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.9) 100%);
     background: -ms-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.9) 100%);
     background: linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.9) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#a6000000', GradientType=0);}
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#a6000000', GradientType=0);*/}
 #main-bn .txt-main-bn h1 {font-size:32px; font-weight:700; margin-top:0;}
 #main-bn .txt-main-bn h1 a {color:#fff;}
 #main-bn .txt-main-bn h1 a:hover {color:#8ac249;}
@@ -83,9 +83,9 @@ input {border:none;}
 .box-top-stories h2 {margin-top:0; font-size:18px; font-weight:700; color:#33429a;}
 .news-list li {padding:10px 0; border-top:1px solid #ebebeb;}
 .news-list .first-news {border-top:0; padding-top:0;}
-.news-list li h4 {font-size:15px; line-height:22px; margin:0;}
-.news-list li h4 a {color:#333;}
-.news-list li h4 a:hover {color:#8ac249;}
+.news-list li h4 {font-size:15px; line-height:22px; margin:0; color:#333;}
+.news-list li h4 a {color:#8ac249;}
+.news-list li h4 a:hover {color:#33429a;}
 .news-list .info li {padding:0; border-top:0;}
 
 /* news-con */
@@ -140,4 +140,5 @@ input {border:none;}
 	.txt-main-bn {padding:10px 15px;}
 	#main-bn .txt-main-bn h1 {font-size:24px;}
 	.info li {margin-right:0;}
+	.news-top-bx img {width:100%;}
 }
