@@ -86,6 +86,11 @@
     	<!-- main-banner start -->
     	<div id="main-bn">
         	<!-- txt-main-bn start -->
+                
+            <img src="{{! all_tweets[0].img_url}}" ng-show="all_tweets[0].img_url && all_tweets[0].img_url!= '#'" />
+            <img src="{{! all_tweets[0].pic | dropProfileExtension}}" ng-hide="all_tweets[0].img_url && all_tweets[0].img_url!= '#'" />
+                
+                
             <div class="txt-main-bn">
             	<h1 ng-bind-html="all_tweets[0].text | eliminateLink"> </h1>
                 <ul class="info">
@@ -95,8 +100,7 @@
                 </ul>
             </div>
             <!-- txt-main-bn end -->
-                <img src="{{! all_tweets[0].img_url}}" ng-show="all_tweets[0].img_url && all_tweets[0].img_url!= '#'" />
-                <img src="{{! all_tweets[0].pic | dropProfileExtension}}" ng-hide="all_tweets[0].img_url && all_tweets[0].img_url!= '#'" />
+                
         </div>
         <!-- main-banner end -->
     </div>
