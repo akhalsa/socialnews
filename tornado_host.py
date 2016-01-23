@@ -139,6 +139,25 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
     
     
+class SizedReader(tornado.web.RequestHandler):
+    def get(self, cat, size, time_frame_seconds):
+        local_db = MySQLdb.connect(
+            host=host_target,
+            user="akhalsa",
+            passwd="sophiesChoice1",
+            db="newsdb",
+            charset='utf8',
+            port=3306)
+        print "cat: "+cat
+        print "seconds: "+time_frame_seconds
+        print "size: "+size
+        cat_id = findCategoryIdWithName(cat, local_db)
+        if(cat_id == 0):
+            self.finish("Category Error, Try Again")
+        print "found category id: "+str(cat_id)        
+        
+        lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, size)
+        self.finish(json.dumps(lookup))
 
     
 class Reader(tornado.web.RequestHandler):
@@ -157,7 +176,7 @@ class Reader(tornado.web.RequestHandler):
                         self.finish("Category Error, Try Again")
                 print "found category id: "+str(cat_id)        
                 
-                lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db)
+                lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, 30)
                 self.finish(json.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
@@ -233,20 +252,27 @@ class IndexCategoryHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, cat):
         print "injecting cat: "+cat
-        self.render("static/index.html", cat_name=cat)
+        self.render("static/cat_index.html", cat_name=cat)
         
 class ConversationHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
         self.render("static/conversations.html")
+        
+class NewIndexHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self):
+        self.render("static/index.html")
+
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
 }
 app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
-    (r'/', IndexHandler),
+
     (r'/conversations', ConversationHandler),
+    (r'/', NewIndexHandler)
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
@@ -256,6 +282,7 @@ app = tornado.web.Application([
     (r'/twitter/search/(.*)', Twitter),
     (r'/twitter/timeline/(.*)', TwitterTimeline),
     (r'/api/conversations', Conversations)
+    (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader)
 ], **settings)
 
 if __name__ == '__main__':

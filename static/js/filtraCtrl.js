@@ -6,7 +6,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.current_path = [];
     $scope.time_frames = [{seconds:900, text:"Past 15 Minutes"}, {seconds:3600, text:"Past Hour"},
                            {seconds:10800, text:"Past 3 Hours"}, {seconds:43200, text:"Today"}];
-    $scope.selected_time = 0;
+    $scope.selected_time = 1;
     $scope.tweet_array = [];
     $scope.handle_list = [];
     
@@ -47,7 +47,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         
     });
     
-    
+
     // Configure user selections
     
     $scope.breadCrumbSelection = function(bc_index){
@@ -400,7 +400,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     }
     
     
-  
 
   
 });
