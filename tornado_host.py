@@ -242,12 +242,7 @@ class Conversations(tornado.web.RequestHandler):
         
         
     
-    
-class IndexHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
-    def get(self):
-        self.render("static/index.html")
-        
+
 class IndexCategoryHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, cat):
