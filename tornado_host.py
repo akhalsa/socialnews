@@ -267,7 +267,7 @@ app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
 
     (r'/conversations', ConversationHandler),
-    (r'/', NewIndexHandler)
+    (r'/', NewIndexHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
@@ -276,7 +276,7 @@ app = tornado.web.Application([
     (r'/page_load/twitter_id/(.*)',  PageLoad),
     (r'/twitter/search/(.*)', Twitter),
     (r'/twitter/timeline/(.*)', TwitterTimeline),
-    (r'/api/conversations', Conversations)
+    (r'/api/conversations', Conversations),
     (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader)
 ], **settings)
 
