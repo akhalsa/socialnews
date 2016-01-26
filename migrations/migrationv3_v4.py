@@ -23,6 +23,7 @@ def executeSql(db, sql):
                 db.rollback()
         lastRow = cursor.lastrowid
         cursor.close()
+        return lastRow
         
         
 def forward():
