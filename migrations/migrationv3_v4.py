@@ -100,7 +100,7 @@ def backward():
         cursor = db.cursor()
         cursor.execute(sql)
         for row in cursor.fetchall():
-                sql = "UPDATE VoteHistory set ip_address='"+row[1]+"' WHERE user_id="+row[0]+";"
+                sql = "UPDATE VoteHistory set ip_address='"+row[1]+"' WHERE user_id="+str(row[0])+";"
                 executeSql(db, sql)
         cursor.close()
         
