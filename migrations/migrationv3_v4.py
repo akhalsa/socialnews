@@ -26,35 +26,42 @@ def executeSql(db, sql):
         
         
 def forward():
-    if(sys.argv[1] == "0"):
-        host_target = host_live
-    elif(sys.argv[1] == "1"):
-        host_target = host_dev
-    
-    db = MySQLdb.connect(
-        host=host_target,
-        user="akhalsa",
-        passwd="sophiesChoice1",
-        db="newsdb",
-        charset='utf8',
-        port=3306)
+        if(sys.argv[1] == "0"):
+            host_target = host_live
+        elif(sys.argv[1] == "1"):
+            host_target = host_dev
+        
+        db = MySQLdb.connect(
+            host=host_target,
+            user="akhalsa",
+            passwd="sophiesChoice1",
+            db="newsdb",
+            charset='utf8',
+            port=3306)
+        
+        
+        sql = "CREATE TABLE User"
+        sql += "(ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+        sql += "username varchar(255) NOT NULL, "
+        sql += "password_hash varchar(255) NOT NULL, "
+        sql += "email varchar(255) NOT NULL, "
+        sql += "promotion_ip_address varchar(255), "
+        sql += "UNIQUE INDEX (username), "
+        sql += "UNIQUE INDEX (email)"
+        sql += ");"
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory ADD user_id varchar(255);"
+        executeSql(db, sql)
+        
+        #find each unique ip address in VoteHistory
+        sql = "SELECT DISTINCT ip_address from VoteHistory;"
+        cursor = db.cursor()
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+                if(row[0] != None):
+                        print row[0]
 
-    
-    sql = "CREATE TABLE User"
-    sql += "(ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
-    sql += "username varchar(255) NOT NULL, "
-    sql += "password_hash varchar(255) NOT NULL, "
-    sql += "email varchar(255) NOT NULL, "
-    sql += "promotion_ip_address varchar(255), "
-    sql += "UNIQUE INDEX (username), "
-    sql += "UNIQUE INDEX (email)"
-    sql += ");"
-    executeSql(db, sql)
-    
-    
-    
-    sql = "ALTER TABLE VoteHistory ADD user_id varchar(255);"
-    executeSql(db, sql)
     
     
     
