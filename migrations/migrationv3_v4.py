@@ -68,7 +68,10 @@ def forward():
                         sql = "UPDATE VoteHistory set user_id="+str(new_id)+" WHERE ip_address like '"+row[0]+"';"
                         executeSql(db, sql)
                         
-        print "Done updating"
+        cursor.close()
+        sql = "ALTER TABLE VoteHistory DROP COLUMN ip_address;"
+        executeSql(db, sql)
+        
                         
 
     
@@ -77,23 +80,36 @@ def forward():
     
     
 def backward():
-    if(sys.argv[1] == "0"):
-        host_target = host_live
-    elif(sys.argv[1] == "1"):
-        host_target = host_dev
-    
-    db = MySQLdb.connect(
-        host=host_target,
-        user="akhalsa",
-        passwd="sophiesChoice1",
-        db="newsdb",
-        charset='utf8',
-        port=3306)
-
-    sql = "Drop TABLE User;";
-    executeSql(db, sql)
-    
-    sql = "ALTER TABLE VoteHistory DROP COLUMN user_id;"
-    executeSql(db, sql)
+        if(sys.argv[1] == "0"):
+            host_target = host_live
+        elif(sys.argv[1] == "1"):
+            host_target = host_dev
+        
+        db = MySQLdb.connect(
+            host=host_target,
+            user="akhalsa",
+            passwd="sophiesChoice1",
+            db="newsdb",
+            charset='utf8',
+            port=3306)
+        
+        sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
+        executeSql(db, sql)
+        
+        sql = "SELECT ID, promotion_ip_address FROM User;"
+        cursor = db.cursor()
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+                sql = "UPDATE VoteHistory set ip_address='"+row[1]+"' WHERE user_id="+row[0]+";"
+                executeSql(db, sql)
+        cursor.close()
+        
+                
+        
+        sql = "Drop TABLE User;";
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory DROP COLUMN user_id;"
+        executeSql(db, sql)
     
     
