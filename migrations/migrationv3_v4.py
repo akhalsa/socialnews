@@ -42,16 +42,17 @@ def forward():
         
         sql = "CREATE TABLE User"
         sql += "(ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
-        sql += "username varchar(255) NOT NULL, "
-        sql += "password_hash varchar(255) NOT NULL, "
-        sql += "email varchar(255) NOT NULL, "
+        sql += "username varchar(255), "
+        sql += "password_hash varchar(255), "
+        sql += "email varchar(255), "
         sql += "promotion_ip_address varchar(255), "
         sql += "UNIQUE INDEX (username), "
-        sql += "UNIQUE INDEX (email)"
+        sql += "UNIQUE INDEX (email), "
+        sql += "UNIQUE INDEX (promotion_ip_address)"
         sql += ");"
         executeSql(db, sql)
         
-        sql = "ALTER TABLE VoteHistory ADD user_id varchar(255);"
+        sql = "ALTER TABLE VoteHistory ADD user_id INT;"
         executeSql(db, sql)
         
         #find each unique ip address in VoteHistory
@@ -60,7 +61,14 @@ def forward():
         cursor.execute(sql)
         for row in cursor.fetchall():
                 if(row[0] != None):
-                        print row[0]
+                        #ok we need to create a new user for each of these
+                        sql = "INSERT INTO User (promotion_ip_address) VALUES ('"+row[0]+"');"
+                        new_id = executeSql(db, sql)
+                        sql = "UPDATE VoteHistory set user_id="+new_id+" WHERE ip_address like '"+row[0]+"';"
+                        executeSql(db, sql)
+                        
+        print "Done updating"
+                        
 
     
     
