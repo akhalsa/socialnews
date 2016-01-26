@@ -65,7 +65,7 @@ def forward():
                         #ok we need to create a new user for each of these
                         sql = "INSERT INTO User (promotion_ip_address) VALUES ('"+row[0]+"');"
                         new_id = executeSql(db, sql)
-                        sql = "UPDATE VoteHistory set user_id="+new_id+" WHERE ip_address like '"+row[0]+"';"
+                        sql = "UPDATE VoteHistory set user_id="+str(new_id)+" WHERE ip_address like '"+row[0]+"';"
                         executeSql(db, sql)
                         
         print "Done updating"
