@@ -77,7 +77,7 @@ def backward():
     sql = "Drop TABLE User;";
     executeSql(db, sql)
     
-    sql = "ALTER TABLE VoteHistory DROP COLUMN user_id varchar(255);"
+    sql = "ALTER TABLE VoteHistory DROP COLUMN user_id;"
     executeSql(db, sql)
     
     
