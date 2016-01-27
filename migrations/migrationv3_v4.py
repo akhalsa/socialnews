@@ -46,10 +46,10 @@ def forward():
         sql += "username varchar(255), "
         sql += "password_hash varchar(255), "
         sql += "email varchar(255), "
-        sql += "promotion_ip_address varchar(255), "
+        sql += "ip_address varchar(255), "
         sql += "UNIQUE INDEX (username), "
         sql += "UNIQUE INDEX (email), "
-        sql += "UNIQUE INDEX (promotion_ip_address)"
+        sql += "UNIQUE INDEX (ip_address)"
         sql += ");"
         executeSql(db, sql)
         
@@ -63,7 +63,7 @@ def forward():
         for row in cursor.fetchall():
                 if(row[0] != None):
                         #ok we need to create a new user for each of these
-                        sql = "INSERT INTO User (promotion_ip_address) VALUES ('"+row[0]+"');"
+                        sql = "INSERT INTO User (ip_address) VALUES ('"+row[0]+"');"
                         new_id = executeSql(db, sql)
                         sql = "UPDATE VoteHistory set user_id="+str(new_id)+" WHERE ip_address like '"+row[0]+"';"
                         executeSql(db, sql)
@@ -96,7 +96,7 @@ def backward():
         sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
         executeSql(db, sql)
         
-        sql = "SELECT ID, promotion_ip_address FROM User;"
+        sql = "SELECT ID, ip_address FROM User;"
         cursor = db.cursor()
         cursor.execute(sql)
         for row in cursor.fetchall():
