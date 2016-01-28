@@ -228,6 +228,16 @@ class TwitterTimeline(tornado.web.RequestHandler):
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        x_real_ip = self.request.headers.get("X-Real-IP")
+        remote_ip = x_real_ip or self.request.remote_ip
+        print "IP Address" + str(getUserIdWithIpAddressCreds(local_db, remote_ip, None, None))
         self.render("static/index.html")
         
 class IndexCategoryHandler(tornado.web.RequestHandler):
