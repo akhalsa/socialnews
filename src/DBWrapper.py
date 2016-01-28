@@ -765,7 +765,7 @@ def getUserIdWithIpAddressCreds(local_db, ip_address, email, passhash):
         return return_id
     cursor.close()
     cursor = local_db.cursor()
-    sql = "INSERT INTO USER WHERE (ip_address) VALUES ('"+ip_address+"')"
+    sql = "INSERT INTO USER (ip_address) VALUES ('"+ip_address+"')"
     try:
         # Execute the SQL command
         cursor.execute(sql)
