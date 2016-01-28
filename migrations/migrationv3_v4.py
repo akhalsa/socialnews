@@ -96,7 +96,7 @@ def backward():
         sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
         executeSql(db, sql)
         
-        sql = "SELECT ID, promotion_ip_address FROM User;"
+        sql = "SELECT ID, ip_address FROM User;"
         cursor = db.cursor()
         cursor.execute(sql)
         for row in cursor.fetchall():
