@@ -248,7 +248,15 @@ class NewIndexHandler(tornado.web.RequestHandler):
                         port=3306)
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
-        print "IP Address" + str(getUserIdWithIpAddressCreds(local_db, remote_ip, None, None))
+        
+        user_name = self.get_secure_cookie("user")
+        password_hash = self.get_secure_cookie("pass_hash")
+        if not user_name:
+            print "no username"
+        if not password_hash:
+            print "no password"
+            
+        print "IP Address" + str(getUserIdWithIpAddressCreds(local_db, remote_ip, user_name, password_hash))
         self.render("static/index.html")
         
 
