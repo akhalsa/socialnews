@@ -262,6 +262,7 @@ class NewIndexHandler(tornado.web.RequestHandler):
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
+    "cookie_secret": "ePbbBygvlUDmoiOCBVuy"
 }
 app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
