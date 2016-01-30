@@ -742,6 +742,47 @@ def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twit
     cursor.close()
     return
 
+def getUserIdWithCredentials(local_db, email, passhash):
+    cursor = local_db.cursor()
+    sql = "SELECT ID From User WHERE password_hash like '"+passhash+"' and email like '"+email+"';"
+    cursor.execute(sql)
+    if cursor.rowcount > 0:
+        row = cursor.fetchone()
+        return_id = row[0]
+        cursor.close()
+        return return_id
+    cursor.close()
+    return None
+
+def checkForExistingEmail(local_db, email):
+    cursor = local_db.cursor()
+    sql = "SELECT ID From User WHERE email like '"+email+"';"
+    cursor.execute(sql)
+    if cursor.rowcount > 0:
+        cursor.close()
+        return True
+    else:
+        cursor.close()
+        return False
+    
+def insertUserWithValues(local_db, email, passhash, username ):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO User (email, password_hash, username) VALUES ('"+email+"', '"+passhash+"', '"+username+"');";
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of source cat relationship"
+        print "sql: "+sql
+        print str(e)
+        local_db.rollback()
+    cursor.close()
+    
+    
+    
 
 def getUserIdWithIpAddressCreds(local_db, ip_address, email, passhash):
     if(email is not None) and (passhash is not None):

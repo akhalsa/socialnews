@@ -248,19 +248,19 @@ class NewIndexHandler(tornado.web.RequestHandler):
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
         
-        user_name = self.get_secure_cookie("user")
+        email = self.get_secure_cookie("email")
         password_hash = self.get_secure_cookie("password_hash")
-        if not user_name:
-            print "no username"
+        if not email:
+            print "no email"
         if not password_hash:
             print "no password"
         
-        if(user_name):
-            print user_name
+        if(email):
+            print email
         if(password_hash):
             print password_hash
             
-        print "IP Address" + str(getUserIdWithIpAddressCreds(local_db, remote_ip, user_name, password_hash))
+        print "IP Address" + str(getUserIdWithIpAddressCreds(local_db, remote_ip, email, password_hash))
         self.render("static/index.html")
         
 class LoginHandler(tornado.web.RequestHandler):
@@ -272,8 +272,31 @@ class LoginAPI(tornado.web.RequestHandler):
     def post(self):
         #find username and password 
         data = json.loads(self.request.body)
-        self.set_secure_cookie("user", data["username"])
         pw_hash = sha256_crypt.encrypt(data["password"])
+        email = re.escape(data["email"])
+        username = re.escape(data["username"])
+        
+        #need to check if this is a valid user already
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        user_id = getUserIdWithCredentials(local_db, email, pw_hash)
+        if(user_id is None):
+            if(checkForExistingEmail(local_db, email)):
+                print "found existing user with different creds"
+                self.finish(json.dumps({"error": "Invalid token"}))
+                return
+            
+            #ok no existing user
+            #lets create one
+            insertUserWithValues(local_db, email, pw_hash, username)
+
+        
+        self.set_secure_cookie("email", email)
         self.set_secure_cookie("password_hash",pw_hash)
         self.finish(json.dumps({"token": pw_hash}))
         

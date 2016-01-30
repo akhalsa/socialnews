@@ -1,11 +1,11 @@
 app.controller("loginCtrl", function($scope, $http, $sce, $window) {
-    $scope.username = "";
+    $scope.email = "";
     $scope.password = "";
-    $scope.createAccount = function(username, password){
-        console.log("username: "+username);
+    $scope.createAccount = function(email, password){
+        console.log("email: "+email);
         console.log("password: "+password);
         var data = {};
-        data["username"] = username;
+        data["email"] = email;
         data["password"] = password;
         $http.post('/api/login', data).then(function(response) {
             console.log("successful response");
