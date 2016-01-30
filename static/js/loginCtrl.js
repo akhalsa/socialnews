@@ -14,4 +14,14 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
             console.log("response token:" + response.data.token);
         });
     }
+    
+    
+    $http.get("/api/login")
+    .then(function(response) {
+        if (response.data.user_email != null) {
+            console.log("valid user!");
+        }else{
+            console.log("no valid user");
+        }
+    });
 });

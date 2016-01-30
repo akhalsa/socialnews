@@ -300,6 +300,16 @@ class LoginHandler(tornado.web.RequestHandler):
         self.render("static/login.html")
     
 class LoginAPI(tornado.web.RequestHandler):
+    def get(self):
+        email = self.get_secure_cookie("email")
+        password_hash = self.get_secure_cookie("password_hash")
+        if not email or not password_hash:
+            print "no password"
+            self.finish(json.dumps({"user_email":None }))
+            return
+        self.finish(json.dumps({"user_email":email}))
+        return
+
     def post(self):
         #find username and password 
         data = json.loads(self.request.body)
