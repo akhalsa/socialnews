@@ -310,9 +310,10 @@ class LoginAPI(tornado.web.RequestHandler):
         #this is a logout mechanism
         #find username and password 
         data = json.loads(self.request.body)
-        if(not data["logout"]):
-           self.finish({"success":False})
-           return
+        if(not "logout" in data):
+            print "log out failure"
+            self.finish({"success":False})
+            return
         
         self.clear_cookie("email")
         self.clear_cookie("password_hash")
