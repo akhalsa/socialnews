@@ -26,6 +26,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
     
     $scope.logout = function(){
         var data = {};
+        console.log("logging out");
         data["logout"] = true;
         $http.put("/api/login", data).then(function(response){
             if(response.data.success){
