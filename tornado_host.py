@@ -264,9 +264,9 @@ class LoginHandler(tornado.web.RequestHandler):
 class LoginAPI(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def post(self):
-        #find username and password hash
+        #find username and password 
         data = self.get_argument('data', 'No data received')
-        print data["username"] 
+        print data["username"]
         self.finish()
         
         
@@ -287,7 +287,7 @@ app = tornado.web.Application([
     (r'/twitter/search/(.*)', Twitter),
     (r'/twitter/timeline/(.*)', TwitterTimeline),
     (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader),
-    (r"/api/login/*", LoginAPI)
+    (r"/api/login", LoginAPI)
 ], **settings)
 
 if __name__ == '__main__':
