@@ -19,6 +19,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         data["username"] = username;
         $http.post('/api/signup', data).then(function(response) {
             console.log("successful response");
+            $scope.logged_in = true;
             $scope.logged_in_username = response.data.username;
         });
     }
@@ -28,7 +29,9 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         data["logout"] = true;
         $http.put("/api/login", data).then(function(response){
             if(response.data.success){
-                console.log("logout success");    
+                console.log("logout success");
+                $scope.logged_in = false;
+                $scope.logged_in_username = null;
             }else{
                 console.log("logout fail");
             }
@@ -40,8 +43,8 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         data["email"] = $scope.login_email;
         data["password"] = $scope.login_password;
         $http.put("/api/login", data).then(function(response){
+            $scope.logged_in = true;
             $scope.logged_in_username = response.data.username;
-            console.log("login success");
         });    
     }
     
