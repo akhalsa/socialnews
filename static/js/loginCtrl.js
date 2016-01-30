@@ -2,7 +2,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
     $scope.email = "";
     $scope.password = "";
     $scope.username="";
-    $scope.createAccount = function(email, password){
+    $scope.createAccount = function(email, password, username){
         console.log("email: "+email);
         console.log("password: "+password);
         var data = {};
