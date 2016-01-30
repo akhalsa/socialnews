@@ -298,7 +298,7 @@ class LoginAPI(tornado.web.RequestHandler):
             print "no password"
             self.finish(json.dumps({"username":None }))
             return
-        user = getUserWithCredentials(local_db, email, pw_hash)
+        user = getUserWithCredentials(local_db, email, password_hash)
         
         self.finish(json.dumps({"username": user["username"]}))
         return
