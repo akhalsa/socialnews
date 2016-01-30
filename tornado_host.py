@@ -20,6 +20,7 @@ from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
 from src.DBWrapper import *
+from passlib.hash import sha256_crypt
 
 
 define("port", default=8888, help="run on the given port", type=int)
@@ -248,7 +249,7 @@ class NewIndexHandler(tornado.web.RequestHandler):
         remote_ip = x_real_ip or self.request.remote_ip
         
         user_name = self.get_secure_cookie("user")
-        password_hash = self.get_secure_cookie("pass_hash")
+        password_hash = self.get_secure_cookie("password_hash")
         if not user_name:
             print "no username"
         if not password_hash:
@@ -266,7 +267,10 @@ class LoginAPI(tornado.web.RequestHandler):
     def post(self):
         #find username and password 
         data = json.loads(self.request.body)
-        print data["username"]
+        #self.set_secure_cookie("user", data["username"])
+        pw_hash = sha256_crypt.encrypt(data["password"])
+        print "password hash: "+pw_hash
+        #self.set_secure_cookie("user", data["password"])
         print data["password"]
         self.finish()
         
