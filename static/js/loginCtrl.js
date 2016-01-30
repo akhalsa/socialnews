@@ -46,6 +46,8 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         $http.post("/api/login", data).then(function(response){
             $scope.logged_in = true;
             $scope.logged_in_username = response.data.username;
+            console.log("username updated to: "+$scope.logged_in_username );
+            
         });    
     }
     
