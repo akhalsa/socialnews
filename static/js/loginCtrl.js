@@ -2,8 +2,14 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
     $scope.email = "";
     $scope.password = "";
     $scope.username="";
+    
+    $scope.login_email = "";
+    $scope.login_password = "";
+    
     $scope.logged_in = false;
-    $scope.log_in_email = null;
+    $scope.logged_in_username = null;
+    
+    
     $scope.createAccount = function(email, password, username){
         console.log("email: "+email);
         console.log("password: "+password);
@@ -13,7 +19,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         data["username"] = username;
         $http.post('/api/signup', data).then(function(response) {
             console.log("successful response");
-            console.log("response token:" + response.data.token);
+            $scope.logged_in_username = data.response.username;
         });
     }
     
@@ -29,15 +35,24 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         });
     }
     
+    $scope.login = function(){
+        var data = {};
+        data["email"] = login_email;
+        data["password"] = login_password;
+        $http.put("/api/login", data).then(function(response){
+            $scope.logged_in_username = data.response.username;
+            console.log("login success");
+        });    
+    }
     
     $http.get("/api/login")
     .then(function(response) {
         if (response.data.user_email != null) {
             $scope.logged_in = true;
-            $scope.log_in_email = response.data.user_email;
+            $scope.logged_in_username = data.response.username;
         }else{
             $scope.logged_in = false;
-            $scope.log_in_email = null;
+            $scope.logged_in_username = null;
         }
     });
 });

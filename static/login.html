@@ -14,10 +14,10 @@
   
     <body ng-app="filtraApp" ng-controller="loginCtrl">
         <div ng-show="logged_in">
-            <span> Logged In With Email: {{! log_in_email }}</span>
+            <span> Logged In as: {{! logged_in_username }}</span>
             <input type="button" ng-click="logout()" value="Log Out">
         </div>
-        <div>
+        <div ng-hide="logged_in">
             <div>
                 <span> Email: </span>
                 <input type="text" ng-model="email">
@@ -32,8 +32,26 @@
             </div>
             <div>
                 <input type="button" ng-click="createAccount(email, password, username)" value="Create Account">
-                
             </div>
+            
+            
+            <br><br><br><br><br>
+            
+            
+            <div>
+                <span> Email: </span>
+                <input type="text" ng-model="login_email">
+            </div>
+            <div>
+                <span> Password: </span>
+                <input type="text" ng-model="login_password">
+            </div>
+            <div>
+                <input type="button" ng-click="login()" value="Login">
+            </div>
+            
+            
+            
         </div>
     </body>
 </html>

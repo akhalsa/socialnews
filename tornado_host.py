@@ -289,9 +289,11 @@ class LoginAPI(tornado.web.RequestHandler):
         password_hash = self.get_secure_cookie("password_hash")
         if not email or not password_hash:
             print "no password"
-            self.finish(json.dumps({"user_email":None }))
+            self.finish(json.dumps({"username":None }))
             return
-        self.finish(json.dumps({"user_email":email}))
+        user = getUserWithCredentials(local_db, email, pw_hash)
+        
+        self.finish(json.dumps({"username": user["username"]}))
         return
     
     def put(self):
@@ -318,8 +320,11 @@ class LoginAPI(tornado.web.RequestHandler):
             self.finish({"result": "Invalid Credentials"})
             return
         else:
-            self.finish({"user_id":user["ID"], "username":user["username"]})
+            self.set_secure_cookie("email", email)
+            self.set_secure_cookie("password_hash",pw_hash)
+            self.finish(json.dumps({"username": user["username"]}))
             return
+        
         
         
     
@@ -356,7 +361,7 @@ class signupAPI(tornado.web.RequestHandler):
         
         self.set_secure_cookie("email", email)
         self.set_secure_cookie("password_hash",pw_hash)
-        self.finish(json.dumps({"token": pw_hash}))
+        self.finish(json.dumps({"username": user["username"]}))
         
     
         
