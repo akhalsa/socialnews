@@ -164,7 +164,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             self.finish("{'message': 'you already voted for this handle'}")
             return
         
-        insertVote(local_db, remote_ip, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
+        insertVote(local_db, user_id, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
         
         self.finish("200")
         
