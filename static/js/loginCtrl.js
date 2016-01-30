@@ -9,6 +9,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         data["password"] = password;
         $http.post('/api/login', data).then(function(response) {
             console.log("successful response");
+            console.log("response token:" + response.data.token);
         });
     }
 });

@@ -275,7 +275,7 @@ class LoginAPI(tornado.web.RequestHandler):
         self.set_secure_cookie("user", data["username"])
         pw_hash = sha256_crypt.encrypt(data["password"])
         self.set_secure_cookie("password_hash",pw_hash)
-        self.finish()
+        self.finish(json.dumps({"token": pw_hash}))
         
         
 settings = {
