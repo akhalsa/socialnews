@@ -335,9 +335,11 @@ class LoginAPI(tornado.web.RequestHandler):
         email = re.escape(data["email"])
         user = getUserWithCredentials(local_db, email, pw_hash)
         if(user is None):
-            self.finish({"result": "Invalid Credentials"})
+            print "user was none :/"
+            self.finish(json.dumps({"result": "Invalid Credentials"}))
             return
         else:
+            print "logged in man"
             self.set_secure_cookie("email", email)
             self.set_secure_cookie("password_hash",pw_hash)
             self.finish(json.dumps({"username": user["username"]}))
