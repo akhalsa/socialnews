@@ -301,8 +301,10 @@ class LoginAPI(tornado.web.RequestHandler):
         if(not data["logout"]):
            self.finish({"success":False})
            return
-        self.set_secure_cookie("email", None)
-        self.set_secure_cookie("password_hash",None)
+        
+        self.clear_cookie("email")
+        self.clear_cookie("password_hash")
+        
         self.finish({"success":True})
         
         
