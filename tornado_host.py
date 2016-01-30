@@ -226,18 +226,16 @@ class TwitterTimeline(tornado.web.RequestHandler):
         self.finish(json.dumps(tweets))
     
 class IndexHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
     def get(self):
         self.render("static/index.html")
         
 class IndexCategoryHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
     def get(self, cat):
         print "injecting cat: "+cat
         self.render("static/cat_index.html", cat_name=cat)
         
+        
 class NewIndexHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
     def get(self):
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -259,7 +257,19 @@ class NewIndexHandler(tornado.web.RequestHandler):
         print "IP Address" + str(getUserIdWithIpAddressCreds(local_db, remote_ip, user_name, password_hash))
         self.render("static/index.html")
         
-
+class LoginHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("static/login.html")
+    
+class LoginAPI(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def post(self):
+        #find username and password hash
+        data = self.get_argument('data', 'No data received')
+        print data["username"] 
+        self.finish()
+        
+        
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
     "cookie_secret": "ePbbBygvlUDmoiOCBVuy"
@@ -267,6 +277,7 @@ settings = {
 app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
     (r'/', NewIndexHandler),
+    (r'/login', LoginHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
@@ -275,7 +286,8 @@ app = tornado.web.Application([
     (r'/page_load/twitter_id/(.*)',  PageLoad),
     (r'/twitter/search/(.*)', Twitter),
     (r'/twitter/timeline/(.*)', TwitterTimeline),
-    (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader)
+    (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader),
+    (r"/api/login/*", LoginAPI)
 ], **settings)
 
 if __name__ == '__main__':
