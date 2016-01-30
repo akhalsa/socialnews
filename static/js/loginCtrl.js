@@ -37,8 +37,8 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
     
     $scope.login = function(){
         var data = {};
-        data["email"] = login_email;
-        data["password"] = login_password;
+        data["email"] = $scope.login_email;
+        data["password"] = $scope.login_password;
         $http.put("/api/login", data).then(function(response){
             $scope.logged_in_username = data.response.username;
             console.log("login success");
