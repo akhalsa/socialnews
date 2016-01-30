@@ -267,13 +267,12 @@ class LoginAPI(tornado.web.RequestHandler):
     def post(self):
         #find username and password 
         data = json.loads(self.request.body)
-        #self.set_secure_cookie("user", data["username"])
+        self.set_secure_cookie("user", data["username"])
         pw_hash = sha256_crypt.encrypt(data["password"])
-        print type(pw_hash)
-        print "password hash: "+pw_hash
+        #print type(pw_hash)
+        #print "password hash: "+pw_hash
         
-        #self.set_secure_cookie("user", data["password"])
-        print data["password"]
+        self.set_secure_cookie("password_hash",pw_hash)
         self.finish()
         
         
