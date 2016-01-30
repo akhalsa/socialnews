@@ -254,6 +254,11 @@ class NewIndexHandler(tornado.web.RequestHandler):
             print "no username"
         if not password_hash:
             print "no password"
+        
+        if(user_name):
+            print user_name
+        if(password_hash):
+            print password_hash
             
         print "IP Address" + str(getUserIdWithIpAddressCreds(local_db, remote_ip, user_name, password_hash))
         self.render("static/index.html")
@@ -269,9 +274,6 @@ class LoginAPI(tornado.web.RequestHandler):
         data = json.loads(self.request.body)
         self.set_secure_cookie("user", data["username"])
         pw_hash = sha256_crypt.encrypt(data["password"])
-        #print type(pw_hash)
-        #print "password hash: "+pw_hash
-        
         self.set_secure_cookie("password_hash",pw_hash)
         self.finish()
         
