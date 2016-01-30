@@ -790,6 +790,7 @@ def getUserIdWithIpAddressCreds(local_db, ip_address, email, passhash):
         sql = "SELECT ID From User WHERE password_hash like '"+passhash+"' and email like '"+email+"';"
         cursor.execute(sql)
         if cursor.rowcount > 0:
+            print "found a user!"
             row = cursor.fetchone()
             return_id = row[0]
             cursor.close()
