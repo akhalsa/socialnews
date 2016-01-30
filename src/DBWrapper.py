@@ -723,6 +723,7 @@ def alreadyVoted(local_db, user_id, category_id, twitter_id):
 
 def insertVote(local_db, user_id, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
+    print "inserting for user_id"+str(user_id)
     sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ("
     sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", '"
     sql += twitter_handle+"', '"+twitter_name+"', "
