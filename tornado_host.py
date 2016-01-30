@@ -301,8 +301,9 @@ class LoginAPI(tornado.web.RequestHandler):
         print "checking email: "+email+" with pw hash: "+password_hash
         
         user = getUserWithCredentials(local_db, email, password_hash)
-        
-        self.finish(json.dumps({"username": user["username"]}))
+        output = json.dumps({"username": user["username"]})
+        print "sending: "+output
+        self.finish(output)
         return
     
     def put(self):
