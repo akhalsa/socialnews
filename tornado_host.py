@@ -285,6 +285,13 @@ class LoginHandler(tornado.web.RequestHandler):
     
 class LoginAPI(tornado.web.RequestHandler):
     def get(self):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
         email = self.get_secure_cookie("email")
         password_hash = self.get_secure_cookie("password_hash")
         if not email or not password_hash:
