@@ -322,6 +322,7 @@ class LoginAPI(tornado.web.RequestHandler):
         
         
     def post(self):
+        #this is a login mechanism
         local_db = MySQLdb.connect(
                         host=host_target,
                         user="akhalsa",
@@ -329,10 +330,11 @@ class LoginAPI(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        #this is a login mechanism
+        
         data = json.loads(self.request.body)
         pw_hash = sha256_crypt.encrypt(data["password"])
         email = re.escape(data["email"])
+        print "searching w hash: "+pw_hash
         user = getUserWithCredentials(local_db, email, pw_hash)
         if(user is None):
             print "user was none :/"
