@@ -266,7 +266,8 @@ class LoginAPI(tornado.web.RequestHandler):
     def post(self):
         #find username and password 
         data = self.request.body
-        print data
+        print data["username"]
+        print data["password"]
         self.finish()
         
         
