@@ -47,7 +47,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
     
     $http.get("/api/login")
     .then(function(response) {
-        if (response.data.user_email != null) {
+        if (response.data.username != null) {
             $scope.logged_in = true;
             $scope.logged_in_username = response.data.username;
         }else{
