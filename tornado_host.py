@@ -265,7 +265,7 @@ class LoginAPI(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def post(self):
         #find username and password 
-        data = self.request.body
+        data = json.loads(self.request.body)
         print data["username"]
         print data["password"]
         self.finish()
