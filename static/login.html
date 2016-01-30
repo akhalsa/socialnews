@@ -1,6 +1,19 @@
 <html>
-    <body>
+    <body ng-app="filtraApp" ng-controller="loginCtrl">
+        <div>
+            <div>
+                <span> Username: </span>
+                <input type="text" ng-model="username">
+            </div>
+            <div>
+                <span> Password: </span>
+                <input type="text" ng-model="password">
+            </div>
+            <div>
+                <input type="button" ng-click="createAccount(username, password)" name="Create Account">
+                
+            </div>
+        </div>
         This is your index page
     </body>
-    
 </html>
