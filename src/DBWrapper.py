@@ -561,7 +561,7 @@ def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
 
 def getVoteCountByIpForTimeFrame(local_db, user_id, seconds):
     cursor = local_db.cursor()
-    sql = "SELECT * From VoteHistory WHERE user_id like "+user_id+" and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
+    sql = "SELECT * From VoteHistory WHERE user_id like "+str(user_id)+" and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
     cursor.execute(sql)
     votes = cursor.rowcount
     cursor.close()
