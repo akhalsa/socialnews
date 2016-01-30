@@ -743,15 +743,16 @@ def insertVote(local_db, user_id, category_id, twitter_id, twitter_name, twitter
     cursor.close()
     return
 
-def getUserIdWithCredentials(local_db, email, passhash):
+def getUserWithCredentials(local_db, email, passhash):
     cursor = local_db.cursor()
-    sql = "SELECT ID From User WHERE password_hash like '"+passhash+"' and email like '"+email+"';"
+    sql = "SELECT ID, username From User WHERE password_hash like '"+passhash+"' and email like '"+email+"';"
     cursor.execute(sql)
     if cursor.rowcount > 0:
         row = cursor.fetchone()
-        return_id = row[0]
+        user_id = row[0]
+        user_name = row[1]
         cursor.close()
-        return return_id
+        return {"ID":user_id, "username":user_name}
     cursor.close()
     return None
 

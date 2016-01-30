@@ -144,11 +144,11 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             try:
                 user = api.get_user(screen_name = twitter_handle)
                 twitter_handle = "@"+user.screen_name
-                user_id = re.escape(str(user.id))
+                twitter_user_id = re.escape(str(user.id))
                 username = re.escape(user.name)
                 profile_link = user.profile_image_url
-                if(user_id != None):
-                    createHandle(local_db,user_id, username, twitter_handle, profile_link )
+                if(twitter_user_id != None):
+                    createHandle(local_db,twitter_user_id, username, twitter_handle, profile_link )
                     table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
                 else:
                     print "couldnt find: "+twitter_handle
@@ -277,22 +277,6 @@ class NewIndexHandler(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        x_real_ip = self.request.headers.get("X-Real-IP")
-        remote_ip = x_real_ip or self.request.remote_ip
-        
-        email = self.get_secure_cookie("email")
-        password_hash = self.get_secure_cookie("password_hash")
-        if not email:
-            print "no email"
-        if not password_hash:
-            print "no password"
-        
-        if(email):
-            print email
-        if(password_hash):
-            print password_hash
-            
-        print "IP Address" + str(getUserIdWithIpAddressCreds(local_db, remote_ip, email, password_hash))
         self.render("static/index.html")
         
 class LoginHandler(tornado.web.RequestHandler):
@@ -309,6 +293,36 @@ class LoginAPI(tornado.web.RequestHandler):
             return
         self.finish(json.dumps({"user_email":email}))
         return
+    
+    def put(self):
+        #this is a logout mechanism
+        #find username and password 
+        data = json.loads(self.request.body)
+        if(not data["logout"]):
+           self.finish({"success":False})
+           return
+        self.set_secure_cookie("email", None)
+        self.set_secure_cookie("password_hash",None)
+        self.finish({"success":True})
+        
+        
+    def post(self):
+        #this is a login mechanism
+        data = json.loads(self.request.body)
+        pw_hash = sha256_crypt.encrypt(data["password"])
+        email = re.escape(data["email"])
+        user = getUserWithCredentials(local_db, email, pw_hash)
+        if(user is None):
+            self.finish({"result": "Invalid Credentials"})
+            return
+        else:
+            self.finish({"user_id":user["ID"], "username":user["username"]})
+            return
+        
+        
+    
+class signupAPI(tornado.web.RequestHandler):
+    
 
     def post(self):
         #find username and password 
@@ -325,8 +339,8 @@ class LoginAPI(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        user_id = getUserIdWithCredentials(local_db, email, pw_hash)
-        if(user_id is None):
+        user = getUserWithCredentials(local_db, email, pw_hash)
+        if(user is None):
             if(checkForExistingEmail(local_db, email)):
                 print "found existing user with different creds"
                 self.finish(json.dumps({"error": "Invalid token"}))
@@ -340,6 +354,8 @@ class LoginAPI(tornado.web.RequestHandler):
         self.set_secure_cookie("email", email)
         self.set_secure_cookie("password_hash",pw_hash)
         self.finish(json.dumps({"token": pw_hash}))
+        
+    
         
         
 settings = {
@@ -359,6 +375,7 @@ app = tornado.web.Application([
     (r'/twitter/search/(.*)', Twitter),
     (r'/twitter/timeline/(.*)', TwitterTimeline),
     (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader),
+    (r"/api/signup", signupAPI),
     (r"/api/login", LoginAPI)
 ], **settings)
 

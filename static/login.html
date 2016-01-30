@@ -13,6 +13,10 @@
     </head>
   
     <body ng-app="filtraApp" ng-controller="loginCtrl">
+        <div ng-show="logged_in">
+            <span> Logged In With Email: {{! log_in_email }}</span>
+            <input type="button" ng-click="logout()" value="Log Out">
+        </div>
         <div>
             <div>
                 <span> Email: </span>
