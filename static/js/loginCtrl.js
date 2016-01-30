@@ -19,7 +19,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         data["username"] = username;
         $http.post('/api/signup', data).then(function(response) {
             console.log("successful response");
-            $scope.logged_in_username = data.response.username;
+            $scope.logged_in_username = response.data.username;
         });
     }
     
@@ -40,7 +40,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         data["email"] = $scope.login_email;
         data["password"] = $scope.login_password;
         $http.put("/api/login", data).then(function(response){
-            $scope.logged_in_username = data.response.username;
+            $scope.logged_in_username = response.data.username;
             console.log("login success");
         });    
     }
@@ -49,7 +49,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
     .then(function(response) {
         if (response.data.user_email != null) {
             $scope.logged_in = true;
-            $scope.logged_in_username = data.response.username;
+            $scope.logged_in_username = response.data.username;
         }else{
             $scope.logged_in = false;
             $scope.logged_in_username = null;
