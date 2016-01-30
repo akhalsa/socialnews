@@ -559,17 +559,17 @@ def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
 
 
 
-def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
+def getVoteCountByIpForTimeFrame(local_db, user_id, seconds):
     cursor = local_db.cursor()
-    sql = "SELECT * From VoteHistory WHERE ip_address like '"+ip_address+"' and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
+    sql = "SELECT * From VoteHistory WHERE user_id like "+user_id+" and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
     cursor.execute(sql)
     votes = cursor.rowcount
     cursor.close()
     return votes
 
-def getAllHandlesForCategory(local_db, category_id, ip_address):
+def getAllHandlesForCategory(local_db, category_id, user_id):
     cursor = local_db.cursor()
-    sql = "SELECT value, twitter_id From VoteHistory WHERE ip_address like '"+str(ip_address)+"' AND category_id like '"+str(category_id)+"';"
+    sql = "SELECT value, twitter_id From VoteHistory WHERE user_id like "+str(user_id)+" AND category_id like '"+str(category_id)+"';"
     cursor.execute(sql)
     user_vote_history = {}
     for row in cursor.fetchall():
@@ -709,9 +709,9 @@ def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor.close()
     return cats
     
-def alreadyVoted(local_db, ip_address, category_id, twitter_id):
+def alreadyVoted(local_db, user_id, category_id, twitter_id):
     cursor = local_db.cursor()
-    sql = "SELECT ID From VoteHistory WHERE ip_address like '"+str(ip_address)+"' and twitter_id like '"+twitter_id+"' and category_id like "+str(category_id)+";"
+    sql = "SELECT ID From VoteHistory WHERE user_id like "+str(user_id)+" and twitter_id like '"+twitter_id+"' and category_id like "+str(category_id)+";"
     print "sql: "+sql
     cursor.execute(sql)
     row_count = cursor.rowcount
@@ -721,10 +721,10 @@ def alreadyVoted(local_db, ip_address, category_id, twitter_id):
     
     
 
-def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
+def insertVote(local_db, user_id, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
     cursor = local_db.cursor()
-    sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
-    sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
+    sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ("
+    sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", '"
     sql += twitter_handle+"', '"+twitter_name+"', "
     sql += "1" if upvote else "-1"
     sql += ");"

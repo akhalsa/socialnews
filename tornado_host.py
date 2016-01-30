@@ -63,8 +63,23 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
         
-        handle_list = getAllHandlesForCategory(local_db, cat_id, remote_ip)
-        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, remote_ip, 3600)
+        email = self.get_secure_cookie("email")
+        password_hash = self.get_secure_cookie("password_hash")
+        if not email:
+            print "no email"
+        if not password_hash:
+            print "no password"
+        
+        if(email):
+            print email
+        if(password_hash):
+            print password_hash
+            
+        user_id = getUserIdWithIpAddressCreds(local_db, remote_ip, email, password_hash)
+        
+        
+        handle_list = getAllHandlesForCategory(local_db, cat_id, user_id)
+        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, user_id, 3600)
         print "got handle list:"
         self.finish(json.dumps({"handles":handle_list, "remaining_votes":(10 - votes_this_hour)}))
         
@@ -82,7 +97,23 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                         port=3306)
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
-        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, remote_ip, 3600)
+        
+        email = self.get_secure_cookie("email")
+        password_hash = self.get_secure_cookie("password_hash")
+        if not email:
+            print "no email"
+        if not password_hash:
+            print "no password"
+        
+        if(email):
+            print email
+        if(password_hash):
+            print password_hash
+            
+        user_id = getUserIdWithIpAddressCreds(local_db, remote_ip, email, password_hash)
+        
+        
+        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, user_id, 3600)
         print "found votes this hour of: "+str(votes_this_hour)
         if(votes_this_hour >= 10):
             self.finish("{'message':'you are out of votes, please wait for them to recharge}")
@@ -128,10 +159,11 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 return
         
         
-        if(alreadyVoted(local_db, remote_ip,  cat_id, table_info["twitter_id"])):
+        if(alreadyVoted(local_db, user_id,  cat_id, table_info["twitter_id"])):
             print "already voted returned true"
             self.finish("{'message': 'you already voted for this handle'}")
             return
+        
         insertVote(local_db, remote_ip, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
         
         self.finish("200")
@@ -268,7 +300,6 @@ class LoginHandler(tornado.web.RequestHandler):
         self.render("static/login.html")
     
 class LoginAPI(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
     def post(self):
         #find username and password 
         data = json.loads(self.request.body)
