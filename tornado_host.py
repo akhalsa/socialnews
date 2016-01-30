@@ -322,6 +322,13 @@ class LoginAPI(tornado.web.RequestHandler):
         
         
     def post(self):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
         #this is a login mechanism
         data = json.loads(self.request.body)
         pw_hash = sha256_crypt.encrypt(data["password"])
