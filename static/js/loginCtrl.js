@@ -43,7 +43,7 @@ app.controller("loginCtrl", function($scope, $http, $sce, $window) {
         var data = {};
         data["email"] = $scope.login_email;
         data["password"] = $scope.login_password;
-        $http.get("/api/login", data).then(function(response){
+        $http.post("/api/login", data).then(function(response){
             $scope.logged_in = true;
             $scope.logged_in_username = response.data.username;
         });    
