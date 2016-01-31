@@ -4,7 +4,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
-import settings
+import settings as settings
 
 from tornado.options import define, options
 
