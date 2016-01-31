@@ -14,7 +14,7 @@ import datetime
 import requests
 import argparse
 import re
-import hashlib, binascii
+import hashlib
 
 
 from tornado.options import define, options, parse_command_line
@@ -334,8 +334,9 @@ class LoginAPI(tornado.web.RequestHandler):
         
         data = json.loads(self.request.body)
         #pw_hash = sha256_crypt.encrypt(data["password"])
-        hashlib.pbkdf2_hmac('sha256', data["password"], b'VIYaNmkNXpESdpPdeAdi', 100000)
-        pw_hash = str(binascii.hexlify(dk))
+        #hashlib.pbkdf2_hmac('sha256', data["password"], b'VIYaNmkNXpESdpPdeAdi', 100000)
+        #pw_hash = str(binascii.hexlify(dk))
+        pw_hash = hashlib.sha224(data["password"]).hexdigest()
         print "generated hash: "+pw_hash
         email = re.escape(data["email"])
         user = getUserWithCredentials(local_db, email, pw_hash)
@@ -360,8 +361,9 @@ class signupAPI(tornado.web.RequestHandler):
         #find username and password 
         data = json.loads(self.request.body)
         #pw_hash = sha256_crypt.encrypt(data["password"])
-        hashlib.pbkdf2_hmac('sha256', data["password"], b'VIYaNmkNXpESdpPdeAdi', 100000)
-        pw_hash = str(binascii.hexlify(dk))
+        #hashlib.pbkdf2_hmac('sha256', data["password"], b'VIYaNmkNXpESdpPdeAdi', 100000)
+        #pw_hash = str(binascii.hexlify(dk))
+        pw_hash = hashlib.sha224(data["password"]).hexdigest()
         print "generated hash: "+pw_hash
         email = re.escape(data["email"])
         username = re.escape(data["username"])
