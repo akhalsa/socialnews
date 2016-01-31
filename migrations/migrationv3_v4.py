@@ -72,13 +72,31 @@ def forward():
         sql = "ALTER TABLE VoteHistory DROP COLUMN ip_address;"
         executeSql(db, sql)
         
-        sql = "CREATE TABLE Comments("
+        sql = "CREATE TABLE Comment("
         sql += "ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
         sql += "user_id int(11), "
         sql += "text varchar(255), "
         sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
         sql += "tweet_id int(11), "
         sql += "score int(11), "
+        sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE, "
+        sql += "FOREIGN KEY (tweet_id) REFERENCES Tweet(ID) ON DELETE CASCADE);"
+        
+        
+        executeSql(db, sql)
+        
+        sql = "CREATE TABLE CommentVoteHistory("
+        sql += "ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+        sql += "comment_id int(11), "
+        sql += "user_id int(11), "
+        sql += "value int(11), "
+        sql += "FOREIGN KEY (comment_id) REFERENCES Comment(ID) ON DELETE CASCADE, "
+        sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE);"
+        
+        executeSql(db, sql)
+        
+        
+        
         
                         
 
@@ -101,6 +119,12 @@ def backward():
             charset='utf8',
             port=3306)
         
+        sql = "Drop TABLE Comment;"
+        executeSql(db, sql)
+        
+        sql = "Drop TABLE CommentVoteHistory;"
+        executeSql(db, sql)
+        
         sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
         executeSql(db, sql)
         
@@ -119,5 +143,8 @@ def backward():
         
         sql = "ALTER TABLE VoteHistory DROP COLUMN user_id;"
         executeSql(db, sql)
+        
+        
+        
     
     
