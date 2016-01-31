@@ -132,7 +132,7 @@ def backward():
         cursor = db.cursor()
         cursor.execute(sql)
         for row in cursor.fetchall():
-                if(row[0] is not None):
+                if(row[1] is not None):
                         sql = "UPDATE VoteHistory set ip_address='"+row[1]+"' WHERE user_id="+str(row[0])+";"
                         executeSql(db, sql)
                         
