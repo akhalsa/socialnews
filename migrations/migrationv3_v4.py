@@ -125,8 +125,8 @@ def backward():
         #sql = "Drop TABLE CommentVoteHistory;"
         #executeSql(db, sql)
         
-        sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
-        executeSql(db, sql)
+        #sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
+        #executeSql(db, sql)
         
         sql = "SELECT ID, ip_address FROM User;"
         cursor = db.cursor()
