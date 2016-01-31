@@ -346,8 +346,8 @@ class LoginAPI(tornado.web.RequestHandler):
             print "logged in man"
             self.set_secure_cookie("email", email)
             self.set_secure_cookie("password_hash",pw_hash)
-            username = re.sub(r'\\(.)', r'\1', username)
-            self.finish(json.dumps({"username": user["username"]}))
+            username = re.sub(r'\\(.)', r'\1', user["username"])
+            self.finish(json.dumps({"username": username}))
             return
         
         
