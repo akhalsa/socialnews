@@ -63,8 +63,8 @@ class Application(tornado.web.Application):
             (r"/auth/logout/", AuthLogoutHandler),
         ]
         settings = {
-            "template_path":os.path.join(DIRNAME, 'template'),
-            "static_path":os.path.join(DIRNAME, 'static'),
+            "template_path":os.path.join(os.path.dirname(__file__), 'template'),
+            "static_path":os.path.join(os.path.dirname(__file__), 'static'),
             "debug":True,
             "cookie_secret": 'L8LwECiNRxq2N0N2eGxx9MZlrpmuMEimlydNX/vt1LM=',
             "login_url": "/auth/login/"
