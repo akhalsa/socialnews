@@ -388,6 +388,7 @@ class signupAPI(tornado.web.RequestHandler):
         self.set_secure_cookie("email", email)
         self.set_secure_cookie("password_hash",pw_hash)
         username = re.sub(r'\\(.)', r'\1', username)
+        print "outputting username: "+username
         self.finish(json.dumps({"username": username}))
         
     
