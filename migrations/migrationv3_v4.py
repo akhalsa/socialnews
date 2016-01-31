@@ -119,11 +119,11 @@ def backward():
             charset='utf8',
             port=3306)
         
-        sql = "Drop TABLE Comment;"
-        executeSql(db, sql)
+        #sql = "Drop TABLE Comment;"
+        #executeSql(db, sql)
         
-        sql = "Drop TABLE CommentVoteHistory;"
-        executeSql(db, sql)
+        #sql = "Drop TABLE CommentVoteHistory;"
+        #executeSql(db, sql)
         
         sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
         executeSql(db, sql)
@@ -132,8 +132,10 @@ def backward():
         cursor = db.cursor()
         cursor.execute(sql)
         for row in cursor.fetchall():
-                sql = "UPDATE VoteHistory set ip_address='"+row[1]+"' WHERE user_id="+str(row[0])+";"
-                executeSql(db, sql)
+                if(row[0] is not null):
+                        sql = "UPDATE VoteHistory set ip_address='"+row[1]+"' WHERE user_id="+str(row[0])+";"
+                        executeSql(db, sql)
+                        
         cursor.close()
         
                 
