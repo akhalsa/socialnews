@@ -72,6 +72,14 @@ def forward():
         sql = "ALTER TABLE VoteHistory DROP COLUMN ip_address;"
         executeSql(db, sql)
         
+        sql = "CREATE TABLE Comments("
+        sql += "ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+        sql += "user_id int(11), "
+        sql += "text varchar(255), "
+        sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
+        sql += "tweet_id int(11), "
+        sql += "score int(11), "
+        
                         
 
     
