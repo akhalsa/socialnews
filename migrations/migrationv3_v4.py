@@ -121,11 +121,11 @@ def backward():
         
         
         
-        #sql = "Drop TABLE CommentVoteHistory;"
-        #executeSql(db, sql)
+        sql = "Drop TABLE CommentVoteHistory;"
+        executeSql(db, sql)
         
-        #sql = "Drop TABLE Comment;"
-        #executeSql(db, sql)
+        sql = "Drop TABLE Comment;"
+        executeSql(db, sql)
         
         sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
         executeSql(db, sql)
