@@ -4,7 +4,6 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
-import Settings
 
 from tornado.options import define, options
 
@@ -63,10 +62,10 @@ class Application(tornado.web.Application):
             (r"/auth/logout/", AuthLogoutHandler),
         ]
         settings = {
-            "template_path":Settings.TEMPLATE_PATH,
-            "static_path":Settings.STATIC_PATH,
-            "debug":Settings.DEBUG,
-            "cookie_secret": Settings.COOKIE_SECRET,
+            "template_path":os.path.join(DIRNAME, 'template'),
+            "static_path":os.path.join(DIRNAME, 'static'),
+            "debug":True,
+            "cookie_secret": 'L8LwECiNRxq2N0N2eGxx9MZlrpmuMEimlydNX/vt1LM=',
             "login_url": "/auth/login/"
         }
         tornado.web.Application.__init__(self, handlers, **settings)
