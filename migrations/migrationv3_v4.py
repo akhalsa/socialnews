@@ -119,14 +119,14 @@ def backward():
             charset='utf8',
             port=3306)
         
-        #sql = "Drop TABLE Comment;"
-        #executeSql(db, sql)
+        sql = "Drop TABLE Comment;"
+        executeSql(db, sql)
         
-        #sql = "Drop TABLE CommentVoteHistory;"
-        #executeSql(db, sql)
+        sql = "Drop TABLE CommentVoteHistory;"
+        executeSql(db, sql)
         
-        #sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
-        #executeSql(db, sql)
+        sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
+        executeSql(db, sql)
         
         sql = "SELECT ID, ip_address FROM User;"
         cursor = db.cursor()
