@@ -302,7 +302,8 @@ class LoginAPI(tornado.web.RequestHandler):
         print "checking email: "+email+" with pw hash: "+password_hash
         
         user = getUserWithCredentials(local_db, email, password_hash)
-        output = json.dumps({"username": user["username"]})
+        username = re.sub(r'\\(.)', r'\1', user["username"])
+        output = json.dumps({"username": username})
         print "sending: "+output
         self.finish(output)
         return
@@ -333,9 +334,6 @@ class LoginAPI(tornado.web.RequestHandler):
                         port=3306)
         
         data = json.loads(self.request.body)
-        #pw_hash = sha256_crypt.encrypt(data["password"])
-        #hashlib.pbkdf2_hmac('sha256', data["password"], b'VIYaNmkNXpESdpPdeAdi', 100000)
-        #pw_hash = str(binascii.hexlify(dk))
         pw_hash = hashlib.sha224(data["password"]).hexdigest()
         print "generated hash: "+pw_hash
         email = re.escape(data["email"])
@@ -348,6 +346,7 @@ class LoginAPI(tornado.web.RequestHandler):
             print "logged in man"
             self.set_secure_cookie("email", email)
             self.set_secure_cookie("password_hash",pw_hash)
+            username = re.sub(r'\\(.)', r'\1', username)
             self.finish(json.dumps({"username": user["username"]}))
             return
         
@@ -360,9 +359,6 @@ class signupAPI(tornado.web.RequestHandler):
     def post(self):
         #find username and password 
         data = json.loads(self.request.body)
-        #pw_hash = sha256_crypt.encrypt(data["password"])
-        #hashlib.pbkdf2_hmac('sha256', data["password"], b'VIYaNmkNXpESdpPdeAdi', 100000)
-        #pw_hash = str(binascii.hexlify(dk))
         pw_hash = hashlib.sha224(data["password"]).hexdigest()
         print "generated hash: "+pw_hash
         email = re.escape(data["email"])
@@ -391,6 +387,7 @@ class signupAPI(tornado.web.RequestHandler):
         
         self.set_secure_cookie("email", email)
         self.set_secure_cookie("password_hash",pw_hash)
+        username = re.sub(r'\\(.)', r'\1', username)
         self.finish(json.dumps({"username": username}))
         
     
