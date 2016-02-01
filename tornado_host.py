@@ -288,7 +288,18 @@ class TweetHandler(tornado.web.RequestHandler):
     def get(self, tweet_id):
         self.render("static/tweet.html")
     
-    
+class TweetAPI(tornado.web.RequestHandler):
+    def get(self, tweet_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        getTweetWithId(local_db, tweet_id)
+
+        
 class LoginAPI(tornado.web.RequestHandler):
     def get(self):
         local_db = MySQLdb.connect(
@@ -418,7 +429,8 @@ app = tornado.web.Application([
     (r'/twitter/timeline/(.*)', TwitterTimeline),
     (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader),
     (r"/api/signup", signupAPI),
-    (r"/api/login", LoginAPI)
+    (r"/api/login", LoginAPI),
+    (r"/api/tweet/(.*)", TweetAPI)
 ], **settings)
 
 if __name__ == '__main__':
