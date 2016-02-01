@@ -286,7 +286,7 @@ class LoginHandler(tornado.web.RequestHandler):
         
 class TweetHandler(tornado.web.RequestHandler):
     def get(self, tweet_id):
-        self.render("static/tweet.html",  tweet_id=tweet_id)
+        self.render("static/tweet.html",  t_id=tweet_id)
     
 class TweetAPI(tornado.web.RequestHandler):
     def get(self, tweet_id):

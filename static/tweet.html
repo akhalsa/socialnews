@@ -13,8 +13,8 @@
     </head>
     
     <body ng-app="filtraApp" ng-controller="tweetCtrl"
-        {% if 'tweet_id' in globals() %}
-            ng-init="tweet_id='{{tweet_id}}'"
+        {% if 't_id' in globals() %}
+            ng-init="tweet_id='{{t_id}}'"
         {% end %}
     >
         <div>
