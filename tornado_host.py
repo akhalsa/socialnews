@@ -283,6 +283,11 @@ class NewIndexHandler(tornado.web.RequestHandler):
 class LoginHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("static/login.html")
+        
+class TweetHandler(tornado.web.RequestHandler):
+    def get(self, tweet_id):
+        self.render("static/tweet.html")
+    
     
 class LoginAPI(tornado.web.RequestHandler):
     def get(self):
@@ -402,6 +407,7 @@ app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
     (r'/', NewIndexHandler),
     (r'/login', LoginHandler),
+    (r'/tweet/(.*)', TweetHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
