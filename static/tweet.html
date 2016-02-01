@@ -12,7 +12,11 @@
         <script src="{{static_url('js/tweetCtrl.js')}}"></script>
     </head>
     
-    <body ng-app="filtraApp" ng-controller="tweetCtrl">
+    <body ng-app="filtraApp" ng-controller="tweetCtrl"
+        {% if 'tweet_id' in globals() %}
+            ng-init="tweet_id='{{tweet_id}}'"
+        {% end %}
+    >
         <div>
             <span>ESPN: </span><span>This is the tweet text</span>
         </div>
