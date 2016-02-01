@@ -787,6 +787,8 @@ def insertUserWithValues(local_db, email, passhash, username ):
 def getTweetWithId(local_db, tweet_id):
     cursor = local_db.cursor()
     sql ="SELECT Tweet.text, TwitterSource.name, TwitterSource.twitter_handle, TwitterSource.profile_image From Tweet WHERE ID = "+str(tweet_id)+" INNER JOIN TwitterSource ON Tweet.source_twitter_id = TwitterSource.twitter_id;"
+    print "loading w sql: "
+    print sql
     cursor.execute(sql)
     if cursor.rowcount > 0:
             row = cursor.fetchone()
