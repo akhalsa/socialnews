@@ -1,7 +1,7 @@
 import MySQLdb
 import subprocess
 import sys
-
+import time
 from tornado.options import define, options, parse_command_line
 
 
@@ -47,7 +47,9 @@ if __name__ == '__main__':
             if(tweet_since > MAX_SECONDS_TO_REBOOT):
                 print "MUST REBOOT"
                 process = subprocess.Popen([sys.executable,"tweepy_listener.py","--mysql_host=1"])
-                print "******** THIS IS THE SCANNER SPEAKING... MY PID is"+str(process.pid)+"***********"
+                time.sleep(30)
+                process.terminate()
+                print "******** THIS IS THE SCANNER SPEAKING... WE HAVE TERMINATED!**********"
             break
         
         
