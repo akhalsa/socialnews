@@ -32,13 +32,16 @@ if __name__ == '__main__':
     while True:
         #ok we need to check to make sure the most recent tweet is within the past hour
         cursor =db.cursor()
-        sql = "SELECT ID, timestamp FROM Tweet ORDER BY timestamp DESC LIMIT 10;"
+        sql = "SELECT ID, timestamp, TIMEDIFF(NOW() - timestamp) FROM Tweet ORDER BY timestamp DESC LIMIT 10;"
         cursor.execute(sql)
         shouldReboot = True        
         if cursor.rowcount > 0:
             row = cursor.fetchone()
             tweet_id = row[0]
             tweet_timestamp = row[1]
+            tweet_since = row[2]
             print tweet_timestamp
+            print tweet_since
+            
             break
         
