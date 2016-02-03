@@ -47,6 +47,7 @@ if __name__ == '__main__':
             if(tweet_since > MAX_SECONDS_TO_REBOOT):
                 print "MUST REBOOT"
                 subprocess.Popen([sys.executable,"tweepy_listener.py","--mysql_host=1"])
+                print "******** THIS IS THE SCANNER SPEAKING***********"
             break
         
         
