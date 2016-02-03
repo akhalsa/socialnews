@@ -25,6 +25,9 @@ if __name__ == '__main__':
         
     global db
 
+    global process
+    process = None
+    
     db = MySQLdb.connect(
         host=host_target,
         user="akhalsa",
@@ -44,12 +47,20 @@ if __name__ == '__main__':
             tweet_id = row[0]
             tweet_timestamp = row[1]
             tweet_since = row[2]
-            if(tweet_since > MAX_SECONDS_TO_REBOOT):
-                print "MUST REBOOT"
-                process = subprocess.Popen([sys.executable,"tweepy_listener.py","--mysql_host=1"])
-                time.sleep(30)
+            if(tweet_since < MAX_SECONDS_TO_REBOOT):
+                shouldReboot = False
+                
+                
+        if(shouldReboot):
+            if(process is not None):
                 process.terminate()
-                print "******** THIS IS THE SCANNER SPEAKING... WE HAVE TERMINATED!**********"
-            break
+            print "MUST REBOOT"
+            process = subprocess.Popen([sys.executable,"tweepy_listener.py","--mysql_host=1"])
+            
+        time.sleep(60)
+        
+                    
+            
+        
         
         
