@@ -55,7 +55,7 @@ if __name__ == '__main__':
             if(process is not None):
                 process.terminate()
             print "MUST REBOOT"
-            process = subprocess.Popen([sys.executable,"tweepy_listener.py","--mysql_host=1"])
+            process = subprocess.Popen([sys.executable,"tweepy_listener.py","--mysql_host="+str(options.mysql_host)])
             
         time.sleep(60)
         
