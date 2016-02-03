@@ -8,7 +8,9 @@ define("mysql_host", default="0", help="Just need the end point", type=int)
 host_live = "avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
 host_dev = "avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
 host_target = host_live
-    
+
+MAX_SECONDS_TO_REBOOT = 60
+
     
     
 if __name__ == '__main__':
@@ -40,8 +42,8 @@ if __name__ == '__main__':
             tweet_id = row[0]
             tweet_timestamp = row[1]
             tweet_since = row[2]
-            print tweet_timestamp
-            print tweet_since
+            if(tweet_since > MAX_SECONDS_TO_REBOOT):
+                print "MUST REBOOT"
             
             break
         
