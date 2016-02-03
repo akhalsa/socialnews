@@ -1,4 +1,6 @@
 import MySQLdb
+import subprocess
+
 
 from tornado.options import define, options, parse_command_line
 
@@ -44,6 +46,7 @@ if __name__ == '__main__':
             tweet_since = row[2]
             if(tweet_since > MAX_SECONDS_TO_REBOOT):
                 print "MUST REBOOT"
-            
+                subprocess.Popen([sys.executable,"tweepy_listener.py","--mysql_host=1"])
             break
+        
         
