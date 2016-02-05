@@ -18,18 +18,15 @@
         {% end %}
     >
         <div>
-            <span>ESPN: </span><span>This is the tweet text</span>
+            <span>{{! handle }}: </span><span>{{! text }} </span>
         </div>
         
         <div>
             <span>Comments</span>
         </div>
-        <ul>
-            <li>
-                <span>comment text - user3123 - 2 hours ago - +52</div>  
-            </li>
-            <li>
-                <span>comment text - user323 - 2 hours ago - +21</div>  
+        <ul >
+            <li ng-repeat="comment in comments">
+                <span>{{! comment.text }} - {{! comment.username}} - 2 hours ago - +52</div>  
             </li>
         </ul>
         <div>
