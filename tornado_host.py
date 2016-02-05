@@ -37,7 +37,7 @@ auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6z
 api = tweepy.API(auth)
 
 class AuthBase(tornado.web.RequestHandler):
-    def getUserId(self):
+    def getUserId(self, db):
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
         
@@ -53,7 +53,7 @@ class AuthBase(tornado.web.RequestHandler):
         if(password_hash):
             print password_hash
             
-        user_id = getUserIdWithIpAddressCreds(local_db, remote_ip, email, password_hash)
+        user_id = getUserIdWithIpAddressCreds(db, remote_ip, email, password_hash)
         return user_id
 
 
@@ -330,7 +330,7 @@ class TweetAPI(AuthBase):
         #get comment structure from post body
         data = json.loads(self.request.body)
         #get user id
-        user_id = self.getUserId()
+        user_id = self.getUserId(local_db)
         print "got user_id: "+str(user_id)
         print "got data: "+str(data)
         
