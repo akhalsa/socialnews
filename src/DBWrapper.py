@@ -789,12 +789,22 @@ def getTweetWithId(local_db, tweet_id):
     sql ="SELECT Tweet.text, TwitterSource.name, TwitterSource.twitter_handle, TwitterSource.profile_image From Tweet INNER JOIN TwitterSource ON Tweet.source_twitter_id = TwitterSource.twitter_id AND Tweet.ID = "+str(tweet_id)+";"
     print "loading w sql: "
     print sql
+    tweet = {}
     cursor.execute(sql)
     if cursor.rowcount > 0:
             row = cursor.fetchone()
             cursor.close()
             print row
+            #(u'Heartbreaking video.  The confusion.  The dysfunctional people. HELP! https://t.co/EYOAmuCn75',
+            #u'MATT DRUDGE', u'@DRUDGE', u'http://pbs.twimg.com/profile_images/604066294237892609/FhsFS8CB_normal.jpg')
+            tweet["text"] = row[0]
+            tweet["name"] = row[1]
+            tweet["twitter_handle"] = row[2]
+            tweet["profile_image"] = row[3]
             
+            
+            sql = "SELECT Comment.text, Comment.timestamp, Comment.score, User.username From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+";"
+            print sql
     else:
         cursor.close()
         return None
