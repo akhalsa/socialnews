@@ -321,7 +321,7 @@ class TweetVoteAPI(AuthBase):
         data = json.loads(self.request.body)
         comment_id = data["comment_id"]
         value = data["vote_val"]
-        if(value):
+        if(value == 1):
             value = 1
         else:
             value = -1
