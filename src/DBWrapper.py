@@ -794,7 +794,7 @@ def getTweetWithId(local_db, tweet_id):
     if cursor.rowcount > 0:
             row = cursor.fetchone()
             cursor.close()
-            print row
+            #print row
             #(u'Heartbreaking video.  The confusion.  The dysfunctional people. HELP! https://t.co/EYOAmuCn75',
             #u'MATT DRUDGE', u'@DRUDGE', u'http://pbs.twimg.com/profile_images/604066294237892609/FhsFS8CB_normal.jpg')
             tweet["text"] = row[0]
@@ -802,9 +802,23 @@ def getTweetWithId(local_db, tweet_id):
             tweet["twitter_handle"] = row[2]
             tweet["profile_image"] = row[3]
             
+            tweet["comments"] = []
+            sql = "SELECT Comment.text, Comment.timestamp, Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+";"
+            cursor.execute(sql)
+            for row in cursor.fetchall():
+                comment = {}
+                comment["text"] = row[0]
+                comment["timestamp"] = row[1]
+                comment["score"] = row[2]
+                if(row[3] is None):
+                    comment["username"] = "user"+str(row[4])
+                else:
+                    comment["username"] = row[3]
+                tweet["comments"].append(comment)    
+            cursor.close()
+            print tweet
+            return tweet
             
-            sql = "SELECT Comment.text, Comment.timestamp, Comment.score, User.username From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+";"
-            print sql
     else:
         cursor.close()
         return None
