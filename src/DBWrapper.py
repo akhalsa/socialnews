@@ -842,6 +842,22 @@ def insertCommentVote(local_db, user_id, comment_id, value):
         local_db.rollback()
     cursor.close()
     
+    cursor = local_db.cursor()
+    sql = "UPDATE COMMENT SET score = score + "+str(value)+" WHERE ID="+str(comment_id)+";"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of source cat relationship"
+        print "sql: "+sql
+        print str(e)
+        local_db.rollback()
+    cursor.close()
+    
+    
     
 def insertComment(local_db, tweet_id, user_id, text):
     cursor = local_db.cursor()
