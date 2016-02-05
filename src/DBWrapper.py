@@ -829,7 +829,18 @@ def getTweetWithId(local_db, tweet_id):
 def insertCommentVote(local_db, user_id, comment_id, value):
     cursor = local_db.cursor()
     sql = "INSERT INTO CommentVoteHistory(user_id, comment_id, value) VALUES ("+str(user_id)+", "+str(comment_id)+", "+str(value)+");"
-    print sql
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of source cat relationship"
+        print "sql: "+sql
+        print str(e)
+        local_db.rollback()
+    cursor.close()
     
     
 def insertComment(local_db, tweet_id, user_id, text):

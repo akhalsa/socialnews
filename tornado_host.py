@@ -319,7 +319,7 @@ class TweetVoteAPI(AuthBase):
                         port=3306)
         user_id = self.getUserId(local_db)
         data = json.loads(self.request.body)
-        comment_id = data["comment_id"]
+        comment_id = re.escape(data["comment_id"])
         value = data["vote_val"]
         if(value == 1):
             value = 1
