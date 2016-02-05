@@ -24,7 +24,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         console.log("sending");
         
         var data = {};
-        data["comment_text"] = "Hi I'm a comment!!!";
+        data["comment_text"] = "Hi I'm a DIFFERENT comment!!!";
         $http.post("/api/tweet/"+$scope.tweet_id, data).then(function(response){
             console.log("post successful");
             console.log(response.data.result);
