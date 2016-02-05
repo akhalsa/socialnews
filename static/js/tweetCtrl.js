@@ -13,5 +13,12 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     $scope.sendComment = function(){
         console.log("sending");
+        
+        var data = {};
+        data["comment_text"] = "Hi I'm a comment!!!";
+        $http.post("/api/tweet/"+$scope.tweet_id, data).then(function(response){
+            console.log("post successful");
+        });
+        
     }
 });
