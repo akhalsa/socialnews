@@ -37,7 +37,7 @@ auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6z
 api = tweepy.API(auth)
 
 class AuthBase(tornado.web.RequestHandler):
-    def getUserId():
+    def getUserId(self):
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
         
