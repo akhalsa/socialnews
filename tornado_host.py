@@ -317,7 +317,8 @@ class TweetAPI(AuthBase):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        getTweetWithId(local_db, tweet_id)
+        self.finish(json.dumps(getTweetWithId(local_db, tweet_id)))
+        
         
     def post(self, tweet_id):
         local_db = MySQLdb.connect(
@@ -332,7 +333,7 @@ class TweetAPI(AuthBase):
         #get user id
         user_id = self.getUserId(local_db)
         insertComment(local_db, tweet_id, user_id, re.escape(data["comment_text"]))
-        
+        self.finish(json.dumps({"result":200}))
         
         
 

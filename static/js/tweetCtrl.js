@@ -4,7 +4,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             console.log($scope.tweet_id);
             $http.get("/api/tweet/"+$scope.tweet_id)
             .then(function(response) {
-              console.log("successfully called");  
+              console.log("successfully called");
+              console.log(response.data.text);
             });
         }
         
@@ -18,6 +19,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         data["comment_text"] = "Hi I'm a comment!!!";
         $http.post("/api/tweet/"+$scope.tweet_id, data).then(function(response){
             console.log("post successful");
+            console.log(response.data.result);
         });
         
     }
