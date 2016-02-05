@@ -843,7 +843,7 @@ def insertCommentVote(local_db, user_id, comment_id, value):
     cursor.close()
     
     cursor = local_db.cursor()
-    sql = "UPDATE COMMENT SET score = score + "+str(value)+" WHERE ID="+str(comment_id)+";"
+    sql = "UPDATE Comment SET score = score + "+str(value)+" WHERE ID="+str(comment_id)+";"
     try:
         # Execute the SQL command
         cursor.execute(sql)
