@@ -10,4 +10,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
         
     });
+    
+    $scope.sendComment = function(){
+        console.log("sending");
+    }
 });

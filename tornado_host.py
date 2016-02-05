@@ -36,6 +36,26 @@ auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UN
 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
 api = tweepy.API(auth)
 
+class AuthBase(tornado.web.RequestHandler):
+    def getUserId():
+        x_real_ip = self.request.headers.get("X-Real-IP")
+        remote_ip = x_real_ip or self.request.remote_ip
+        
+        email = self.get_secure_cookie("email")
+        password_hash = self.get_secure_cookie("password_hash")
+        if not email:
+            print "no email"
+        if not password_hash:
+            print "no password"
+        
+        if(email):
+            print email
+        if(password_hash):
+            print password_hash
+            
+        user_id = getUserIdWithIpAddressCreds(local_db, remote_ip, email, password_hash)
+        return user_id
+
 
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
@@ -288,7 +308,7 @@ class TweetHandler(tornado.web.RequestHandler):
     def get(self, tweet_id):
         self.render("static/tweet.html",  t_id=tweet_id)
     
-class TweetAPI(tornado.web.RequestHandler):
+class TweetAPI(AuthBase):
     def get(self, tweet_id):
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -298,6 +318,23 @@ class TweetAPI(tornado.web.RequestHandler):
                         charset='utf8',
                         port=3306)
         getTweetWithId(local_db, tweet_id)
+        
+    def post(self, tweet_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        #get comment structure from post body
+        data = json.loads(self.request.body)
+        #get user id
+        user_id = self.getUserId()
+        print "got user_id: "+str(user_id)
+        print "got data: "+str(data)
+        
+        
 
         
 class LoginAPI(tornado.web.RequestHandler):
@@ -408,7 +445,7 @@ class signupAPI(tornado.web.RequestHandler):
         self.finish(json.dumps({"username": username}))
         
     
-        
+
         
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
