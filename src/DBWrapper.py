@@ -799,6 +799,22 @@ def getTweetWithId(local_db, tweet_id):
         cursor.close()
         return None
     
+def insertComment(local_db, tweet_id, user_id, text):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO Comment(user_id, text, tweet_id, score) VALUES ("+str(user_id)+", '"+text+"', "+str(tweet_id)+", 0);"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of source cat relationship"
+        print "sql: "+sql
+        print str(e)
+        local_db.rollback()
+    cursor.close()
+    
 
 def getUserIdWithIpAddressCreds(local_db, ip_address, email, passhash):
     if(email is not None) and (passhash is not None):

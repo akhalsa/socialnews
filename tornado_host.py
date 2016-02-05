@@ -333,6 +333,8 @@ class TweetAPI(AuthBase):
         user_id = self.getUserId(local_db)
         print "got user_id: "+str(user_id)
         print "got data: "+str(data)
+        insertComment(local_db, tweet_id, user_id, data["comment_text"])
+        
         
         
 
