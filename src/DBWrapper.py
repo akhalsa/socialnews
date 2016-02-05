@@ -804,7 +804,7 @@ def getTweetWithId(local_db, tweet_id):
             
             tweet["comments"] = []
             #TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW())
-            sql = "SELECT Comment.ID, Comment.text, TIMESTAMPDIFF(SECOND,  Comment.timestamp, NOW()), Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+";"
+            sql = "SELECT Comment.ID, Comment.text, TIMESTAMPDIFF(SECOND,  Comment.timestamp, NOW()), Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+" ORDER BY Comment.score DESC;"
             cursor = local_db.cursor()
             cursor.execute(sql)
             for row in cursor.fetchall():
