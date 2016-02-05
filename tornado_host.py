@@ -490,8 +490,9 @@ app = tornado.web.Application([
     (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader),
     (r"/api/signup", signupAPI),
     (r"/api/login", LoginAPI),
-    (r"/api/tweet/(.*)", TweetAPI),
-    (r"/api/tweet/(.*)/vote", TweetVoteAPI)
+    (r"/api/tweet/(.*)/vote", TweetVoteAPI),
+    (r"/api/tweet/(.*)", TweetAPI)
+    
 ], **settings)
 
 if __name__ == '__main__':
