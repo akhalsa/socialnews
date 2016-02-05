@@ -803,7 +803,8 @@ def getTweetWithId(local_db, tweet_id):
             tweet["profile_image"] = row[3]
             
             tweet["comments"] = []
-            sql = "SELECT Comment.text, Comment.timestamp, Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+";"
+            #TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW())
+            sql = "SELECT Comment.text, TIMESTAMPDIFF(SECOND,  Comment.timestamp, NOW()), Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+";"
             cursor = local_db.cursor()
             cursor.execute(sql)
             for row in cursor.fetchall():
