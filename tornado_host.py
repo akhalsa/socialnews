@@ -307,6 +307,28 @@ class LoginHandler(tornado.web.RequestHandler):
 class TweetHandler(tornado.web.RequestHandler):
     def get(self, tweet_id):
         self.render("static/tweet.html",  t_id=tweet_id)
+
+class TweetVoteAPI(AuthBase):
+    def post(self, tweet_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        user_id = self.getUserId(local_db)
+        data = json.loads(self.request.body)
+        comment_id = data["comment_id"]
+        value = data["vote_val"]
+        if(value):
+            value = 1
+        else:
+            value = -1
+            
+        #do some rate checking
+        insertCommentVote(local_db, user_id, comment_id, value)
+        self.finish(json.dumps({"result":200}))
     
 class TweetAPI(AuthBase):
     def get(self, tweet_id):
@@ -468,7 +490,8 @@ app = tornado.web.Application([
     (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader),
     (r"/api/signup", signupAPI),
     (r"/api/login", LoginAPI),
-    (r"/api/tweet/(.*)", TweetAPI)
+    (r"/api/tweet/(.*)", TweetAPI),
+    (r"/api/tweet/(.*)/vote", TweetVoteAPI)
 ], **settings)
 
 if __name__ == '__main__':

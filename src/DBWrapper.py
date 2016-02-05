@@ -804,18 +804,19 @@ def getTweetWithId(local_db, tweet_id):
             
             tweet["comments"] = []
             #TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW())
-            sql = "SELECT Comment.text, TIMESTAMPDIFF(SECOND,  Comment.timestamp, NOW()), Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+";"
+            sql = "SELECT Comment.ID, Comment.text, TIMESTAMPDIFF(SECOND,  Comment.timestamp, NOW()), Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+";"
             cursor = local_db.cursor()
             cursor.execute(sql)
             for row in cursor.fetchall():
                 comment = {}
-                comment["text"] = row[0]
-                comment["timestamp"] = row[1]
-                comment["score"] = row[2]
-                if(row[3] is None):
-                    comment["username"] = "user"+str(row[4])
+                comment["ID"] = row[0]
+                comment["text"] = row[1]
+                comment["timestamp"] = row[2]
+                comment["score"] = row[3]
+                if(row[4] is None):
+                    comment["username"] = "user"+str(row[5])
                 else:
-                    comment["username"] = row[3]
+                    comment["username"] = row[4]
                 tweet["comments"].append(comment)    
             cursor.close()
             print tweet
@@ -824,6 +825,12 @@ def getTweetWithId(local_db, tweet_id):
     else:
         cursor.close()
         return None
+    
+def insertCommentVote(local_db, user_id, comment_id, value):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO CommentVoteHistory(user_id, comment_id, value) VALUES ("+str(user_id)+", "+str(comment_id)+", "+str(value)+");"
+    print sql
+    
     
 def insertComment(local_db, tweet_id, user_id, text):
     cursor = local_db.cursor()

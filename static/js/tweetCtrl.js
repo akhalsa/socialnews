@@ -31,4 +31,15 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         });
         
     }
+    
+    $scope.sendCommentVote = function(comment_id, value){
+        var data = {};
+        data["comment_id"] = comment_id;
+        data["vote_val"] = value;
+        $http.post("/api/tweet/"+$scope.tweet_id+"/vote", data).then(function(response){
+            console.log("post successful");
+            console.log(response.data.result);
+        });
+        
+    }
 });
