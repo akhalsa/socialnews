@@ -107,6 +107,7 @@
     <div class="collapse navbar-collapse" uib-collapse="navCollapsed">
     <!-- nav start -->
     <ul class="nav navbar-nav">
+      <li><a href="#" ng-click="redirectHome()">Front Page</a></li>
       <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
         <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
       </li>
