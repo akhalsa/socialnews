@@ -89,6 +89,7 @@ def forward():
         sql += "ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
         sql += "comment_id int(11), "
         sql += "user_id int(11), "
+        sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
         sql += "value int(11), "
         sql += "FOREIGN KEY (comment_id) REFERENCES Comment(ID) ON DELETE CASCADE, "
         sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE);"

@@ -308,8 +308,8 @@ class TweetHandler(tornado.web.RequestHandler):
     def get(self, tweet_id):
         self.render("static/tweet.html",  t_id=tweet_id)
 
-class TweetVoteAPI(AuthBase):
-    def post(self, tweet_id):
+class CommentVoteAPI(AuthBase):
+    def post(self, comment_id):
         local_db = MySQLdb.connect(
                         host=host_target,
                         user="akhalsa",
@@ -327,8 +327,27 @@ class TweetVoteAPI(AuthBase):
             value = -1
             
         #do some rate checking
+        
+        if(alreadyVotedForComment(local_db, user_id, comment_id)):
+            response = {}
+            response["success"] = False
+            response["msg"] = "Already Voted"
+            self.finish(json.dumps(response))
+            return
+        if(getCommentVoteCountByIpForTimeFrame(local_db, user_id, 3600) > 10):
+            response = {}
+            response["success"] = False
+            response["msg"] = "Vote Limit Reached"
+            self.finish(json.dumps(response))
+            return
+                        
+        
         insertCommentVote(local_db, user_id, comment_id, value)
-        self.finish(json.dumps({"result":200}))
+        response = {}
+        response["success"] = True
+        response["msg"] = None
+        
+        self.finish(json.dumps(response))
     
 class TweetAPI(AuthBase):
     def get(self, tweet_id):
@@ -490,7 +509,7 @@ app = tornado.web.Application([
     (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader),
     (r"/api/signup", signupAPI),
     (r"/api/login", LoginAPI),
-    (r"/api/tweet/(.*)/vote", TweetVoteAPI),
+    (r"/api/tweet/(.*)/vote", CommentVoteAPI),
     (r"/api/tweet/(.*)", TweetAPI)
     
 ], **settings)

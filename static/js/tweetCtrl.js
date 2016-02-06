@@ -38,7 +38,9 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         data["vote_val"] = value;
         $http.post("/api/tweet/"+$scope.tweet_id+"/vote", data).then(function(response){
             console.log("post successful");
-            console.log(response.data.result);
+            console.log(response.data.success);
+            console.log(response.data.msg);
+            
         });
         
     }

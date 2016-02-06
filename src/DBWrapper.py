@@ -826,6 +826,30 @@ def getTweetWithId(local_db, tweet_id):
         cursor.close()
         return None
     
+def getCommentVoteCountByIpForTimeFrame(local_db, user_id, seconds):
+    cursor = local_db.cursor()
+    sql = "SELECT * From CommentVoteHistory WHERE user_id like "+str(user_id)+" and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
+    cursor.execute(sql)
+    votes = cursor.rowcount
+    cursor.close()
+    return votes
+
+def alreadyVotedForComment(local_db, user_id, comment_id):
+    cursor = local_db.cursor()
+    #has this user votes for this comment before?
+    sql = "SELECT ID From CommentVoteHistory WHERE user_id="+str(user_id)+" AND comment_id="+str(comment_id)+";"
+    cursor.execute(sql)
+    if cursor.rowcount > 0:
+        #ok this user has already voted
+        cursor.close()
+        return True
+    else:
+        cursor.close()
+        return False
+    
+    
+    
+    
 def insertCommentVote(local_db, user_id, comment_id, value):
     cursor = local_db.cursor()
     sql = "INSERT INTO CommentVoteHistory(user_id, comment_id, value) VALUES ("+str(user_id)+", "+str(comment_id)+", "+str(value)+");"
