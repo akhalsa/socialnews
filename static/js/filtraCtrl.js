@@ -180,6 +180,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     }
     
     $scope.redirectHome = function(){
+        trackHomeLink();
         if( (typeof tracking == 'undefined')){
             document.location = "/";
         }else{
@@ -408,7 +409,16 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         }
     }
     
-    
+    var trackHomeLink = function(){
+        if( (typeof tracking == 'undefined')){
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Home Button',
+                eventAction: 'Home Clicked',
+                eventLabel: 'Home Clicked'
+                    });
+        }
+    }
 
   
 });
