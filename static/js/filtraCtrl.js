@@ -21,6 +21,8 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.peer_categories = [];
     $scope.showVotes = false;
     
+    
+    
     $http.get("/category")
     .then(function(response) {
         $scope.category_structure = response.data;
@@ -175,6 +177,14 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         loadTweets();
         console.log("calling refresh");
         trackRefresh();
+    }
+    
+    $scope.redirectHome = function(){
+        if( (typeof tracking == 'undefined')){
+            document.location = "/";
+        }else{
+            document.location = "/?tracking=0"
+        }
     }
 
 
