@@ -95,7 +95,7 @@
       <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed" >
         <span class="genericon genericon-menu"></span>                     
       </button>
-      <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+      <a class="navbar-brand" href="#" ng-click="redirectHome()"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
       <div class="clear"></div>
     </div>
        <ul id="bt-top-nominate">
@@ -107,6 +107,7 @@
     <div class="collapse navbar-collapse" uib-collapse="navCollapsed">
     <!-- nav start -->
     <ul class="nav navbar-nav">
+      <li><a href="#" ng-click="redirectHome()">Front Page</a></li>
       <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
         <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
       </li>
