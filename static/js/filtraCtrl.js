@@ -95,8 +95,11 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.togglePopup = function(){
         console.log("toggle popup");
-        trackNominate();
+        
         $scope.nomination_visible = !$scope.nomination_visible;
+        if ($scope.nomination_visible) {
+            trackNominate();
+        }
     }
     
     $scope.toggleVotes = function(){
