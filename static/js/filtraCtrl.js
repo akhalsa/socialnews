@@ -95,6 +95,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.togglePopup = function(){
         console.log("toggle popup");
+        trackNominate();
         $scope.nomination_visible = !$scope.nomination_visible;
     }
     
@@ -416,6 +417,17 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
                 eventCategory: 'Home Button',
                 eventAction: 'Home Clicked',
                 eventLabel: 'Home Clicked'
+                    });
+        }
+    }
+    
+    var trackNominate = function(){
+        if( (typeof tracking == 'undefined')){
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Nominate Button',
+                eventAction: 'Nominate Clicked',
+                eventLabel: 'Nominate Clicked'
                     });
         }
     }
