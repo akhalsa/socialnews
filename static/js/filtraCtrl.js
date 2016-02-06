@@ -21,6 +21,8 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     $scope.peer_categories = [];
     $scope.showVotes = false;
     
+    
+    
     $http.get("/category")
     .then(function(response) {
         $scope.category_structure = response.data;
@@ -93,7 +95,11 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.togglePopup = function(){
         console.log("toggle popup");
+        
         $scope.nomination_visible = !$scope.nomination_visible;
+        if ($scope.nomination_visible) {
+            trackNominate();
+        }
     }
     
     $scope.toggleVotes = function(){
@@ -175,6 +181,15 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         loadTweets();
         console.log("calling refresh");
         trackRefresh();
+    }
+    
+    $scope.redirectHome = function(){
+        trackHomeLink();
+        if( (typeof tracking == 'undefined')){
+            document.location = "/";
+        }else{
+            document.location = "/?tracking=0"
+        }
     }
 
 
@@ -398,7 +413,27 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         }
     }
     
+    var trackHomeLink = function(){
+        if( (typeof tracking == 'undefined')){
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Home Button',
+                eventAction: 'Home Clicked',
+                eventLabel: 'Home Clicked'
+                    });
+        }
+    }
     
+    var trackNominate = function(){
+        if( (typeof tracking == 'undefined')){
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Nominate Button',
+                eventAction: 'Nominate Clicked',
+                eventLabel: 'Nominate Clicked'
+                    });
+        }
+    }
 
   
 });
