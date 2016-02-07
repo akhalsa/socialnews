@@ -107,6 +107,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
         print "table info for that handle is: "+str(table_info)
+        new_handle = False
         
         if(table_info == None):
             try:
@@ -118,6 +119,8 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 if(user_id != None):
                     createHandle(local_db,user_id, username, twitter_handle, profile_link )
                     table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
+                    new_handle = True
+ 
                 else:
                     print "couldnt find: "+twitter_handle
             except Exception, e:
@@ -131,7 +134,14 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             print "already voted returned true"
             self.finish("{'message': 'you already voted for this handle'}")
             return
-        insertVote(local_db, remote_ip, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
+        
+        if(new_handle):
+            #select all the categorys above this one for the vote
+            chain = categoryChainForCategory(local_db, category_id)
+            cascadeInsertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote)
+        else:
+            insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
+        
         
         self.finish("200")
         

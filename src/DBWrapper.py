@@ -721,29 +721,50 @@ def alreadyVoted(local_db, ip_address, category_id, twitter_id):
     
     
 
-def insertVote(local_db, ip_address, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
-    cursor = local_db.cursor()
-    sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
-    sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
-    sql += twitter_handle+"', '"+twitter_name+"', "
-    sql += "1" if upvote else "-1"
-    sql += ");"
-    
-    try:
-            # Execute the SQL command
-            cursor.execute(sql)
-            # Commit your changes in the database
-            local_db.commit()
-    except Exception,e:
-            # Rollback in case there is any error
-            print "error on insertion of vote"
-            print str(e)
-            local_db.rollback()
-    cursor.close()
+def insertVote(local_db, ip_address, category_ids, twitter_id, twitter_name, twitter_handle, upvote ):
+    for category_id in category_ids:
+        cursor = local_db.cursor()
+        sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
+        sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
+        sql += twitter_handle+"', '"+twitter_name+"', "
+        sql += "1" if upvote else "-1"
+        sql += ");"
+        
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                local_db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on insertion of vote"
+                print str(e)
+                local_db.rollback()
+        cursor.close()
+        
     return
 
+def categoryChainForCategory(local_db, category_id):
+    return_chain = [category_id]
+    current_cat_id = category_id
+    while True:
+        parent_id = getCategoryParentIdForCategoryChildId(local_db, current_cat_id)
+        if(parent_id == None):
+            break
+        return_chain.append(parent_id)
+        current_cat_id = parent_id
+        
+    return return_chain
     
-
+def getCategoryParentIdForCategoryChildId(local_db, category_id):
+    return_id = None
+    cursor = local_db.cursor()
+    sql = "SELECT parent_category_id From CategoryParentRelationship WHERE child_category_id="+str(category_id)+";"
+    cursor.execute(sql)
+    if(cursor.rowcount > 0):
+        return_id = cursor.fetchone()[0]
+    cursor.close()
+    return return_id
 
 
 
