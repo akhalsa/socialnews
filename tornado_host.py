@@ -139,7 +139,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             #select all the categorys above this one for the vote
             chain = categoryChainForCategory(local_db, cat_id)
             print "Inserting Chain: "+str(chain)
-            cascadeInsertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote)
+            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote)
         else:
             print "Inserting non Chain"+str([cat_id])
             insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
