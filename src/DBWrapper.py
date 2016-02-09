@@ -657,7 +657,7 @@ def reloadSourceCategoryRelationship(local_db):
         votes_records = cursor.fetchall()
         cursor.close()
         cursor = local_db.cursor()
-        sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
+        sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id, event_multiplier) VALUES "
         handle_index = 0
         for vote_record in votes_records:
             if(vote_record[1] <= 0):
@@ -667,7 +667,7 @@ def reloadSourceCategoryRelationship(local_db):
                 print "repro: "+sql_votes
                 continue
                 
-            sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
+            sql += "("+str(vote_record[0])+", "+str(cat_id)+", "+str(vote_record[1])+"), "
             
             if vote_record[0] not in mapping:
                 mapping[vote_record[0]] = []
