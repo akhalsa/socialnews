@@ -144,7 +144,7 @@ class HandleListener(tweepy.StreamListener):
                                 if cat not in batchDictionary:
                                         batchDictionary[cat] = []
                                 
-                                batchDictionary[cat].append((json_object['id']), categories[cat])
+                                batchDictionary[cat].append((json_object['id'], categories[cat]))
                                                 
                         unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
                         return True
