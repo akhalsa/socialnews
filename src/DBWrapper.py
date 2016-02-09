@@ -730,7 +730,7 @@ def insertVote(local_db, ip_address, category_ids, twitter_id, twitter_name, twi
         sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
         sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
         sql += twitter_handle+"', '"+twitter_name+"', "
-        sql += "1" if upvote else "-1"
+        sql += str(upvote)
         sql += ");"
         
         try:

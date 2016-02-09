@@ -140,10 +140,11 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             #select all the categorys above this one for the vote
             chain = categoryChainForCategory(local_db, cat_id)
             print "Inserting Chain: "+str(chain)
-            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote)
+            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , 20)
         else:
             print "Inserting non Chain"+str([cat_id])
-            insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
+            vote_val = 1 if upvote else -1
+            insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_val )
         
         
         self.finish("200")
@@ -169,7 +170,7 @@ class SizedReader(tornado.web.RequestHandler):
         print "found category id: "+str(cat_id)        
         
         lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, size)
-        self.finish(json.dumps(lookup))
+        self.finish(simplejson.dumps(lookup))
 
     
 class Reader(tornado.web.RequestHandler):
