@@ -167,7 +167,7 @@ def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
     top_tweets = []
     for row in cursor.fetchall():
             twitter_ids.append(row[0])
-            results[row[0]] = {"tweet_count":str(row[1]) }
+            results[row[0]] = {"tweet_count":row[1] }
             top_tweets.append({"id":row[0], "tweet_count":row[1]})
             
             
