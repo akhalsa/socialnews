@@ -369,12 +369,15 @@ def getAllTwitterIds(local_db):
 
 def insertBatch(insertion_map, local_db):
     ##insertion_map = {category_id: [tweet_id,...]}
+    print "inserting with dictionary"
+    print str(insertion_map)
+    
     cursor = local_db.cursor()
     try:
         for cat in insertion_map:
-            sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id) VALUES "
+            sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id, occurrence_value) VALUES "
             for tweet_id in insertion_map[cat]:
-                sql += "('"+str(tweet_id)+"'), "
+                sql += "('"+str(tweet_id[0])+"', "+str(tweet_id[1])+"), "
             sql = sql[:-2]
             sql+="; "
             cursor.execute(sql)
@@ -670,8 +673,8 @@ def reloadSourceCategoryRelationship(local_db):
             sql += "("+str(vote_record[0])+", "+str(cat_id)+", "+str(vote_record[1])+"), "
             
             if vote_record[0] not in mapping:
-                mapping[vote_record[0]] = []
-            mapping[vote_record[0]].append(cat_id)
+                mapping[vote_record[0]] = {}
+            mapping[vote_record[0]][cat_id] = vote_record[1]
             handle_index += 1
             
             
