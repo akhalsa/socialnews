@@ -6,9 +6,9 @@ case "$1" in
     echo "**************Filtra Deployment Start"
     # run application you want to start
     cd /home/ubuntu/socialnews/
-    python tornado_host.py --mysql_host=1 &
-    python tweepy_scanner.py --mysql_host=1 &
-    python data_processing.py --mysql_host=1 &
+    python tornado_host.py &
+    python tweepy_scanner.py &
+    python data_processing.py &
     echo "******************Filtra DEPLOYED"
     ;;
   stop)
