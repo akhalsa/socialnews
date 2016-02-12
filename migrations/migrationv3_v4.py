@@ -50,6 +50,14 @@ def forward():
         for row in rows:
                 sql = "ALTER TABLE "+str(row[0])+" ADD occurrence_value INT;"
                 executeSql(db, sql)
+        cur = db.cursor()
+        sql = "select * from VoteHistory Group By twitter_handle, category_id ;"
+        rows = cur.fetchall()
+        cur.close()
+        for row in rows:
+                sql = "INSERT INTO VoteHistory(category_id,twitter_id, twitter_name, value) VALUES("+row[1]+", '"+row[2]+"', '"+row[3]+"', 19);"
+                executeSql(db, sql)
+                
         
     
     
@@ -78,3 +86,8 @@ def backward():
         for row in rows:
                 sql = "ALTER TABLE "+str(row[0])+" DROP occurrence_value;"
                 executeSql(db, sql)
+                
+        cur = db.cursor()
+        sql = "DELETE FROM VoteHistory WHERE value=19;"
+        xecuteSql(db, sql)
+        
