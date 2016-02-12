@@ -52,6 +52,7 @@ def forward():
                 executeSql(db, sql)
         cur = db.cursor()
         sql = "select * from VoteHistory Group By twitter_handle, category_id ;"
+        cur.execute(sql)
         rows = cur.fetchall()
         cur.close()
         for row in rows:
