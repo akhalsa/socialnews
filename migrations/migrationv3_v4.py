@@ -89,5 +89,5 @@ def backward():
                 
         cur = db.cursor()
         sql = "DELETE FROM VoteHistory WHERE value=19;"
-        xecuteSql(db, sql)
+        executeSql(db, sql)
         
