@@ -144,7 +144,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             print "Inserting Chain: "+str(chain)
             vote_array = []
             for index, val in enumerate(chain):
-                vote_array[index]=20/(index+1)
+                vote_array.append(20/(index+1))
                     
             print "will vote with chain: "+str(chain)
             print "will vote with vote_Array: "+str(vote_array)
