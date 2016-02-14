@@ -130,7 +130,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 return
 
             
-        new_handle = not checkForFirstVote(local_db, category_id, twitter_id)
+        new_handle = not checkForFirstVote(local_db, cat_id, table_info["twitter_id"])
         
         
         if(alreadyVoted(local_db, remote_ip,  cat_id, table_info["twitter_id"])):
