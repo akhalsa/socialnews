@@ -108,7 +108,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
         print "table info for that handle is: "+str(table_info)
-        new_handle = False
+
         
         if(table_info == None):
             try:
@@ -120,7 +120,6 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 if(user_id != None):
                     createHandle(local_db,user_id, username, twitter_handle, profile_link )
                     table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
-                    new_handle = True
  
                 else:
                     print "couldnt find: "+twitter_handle
@@ -129,6 +128,9 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 print e
                 self.finish("bad handle/insertion")
                 return
+
+            
+        new_handle = not checkForFirstVote(local_db, category_id, twitter_id)
         
         
         if(alreadyVoted(local_db, remote_ip,  cat_id, table_info["twitter_id"])):
@@ -140,11 +142,21 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             #select all the categorys above this one for the vote
             chain = categoryChainForCategory(local_db, cat_id)
             print "Inserting Chain: "+str(chain)
-            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , 20)
+            vote_array = []
+            for index, val in enumerate(chain):
+                if(index == 0):
+                    vote_array[index]=20
+                else:
+                    vote_array[index] = 1
+                    
+            print "will vote with chain: "+str(chain)
+            print "will vote with vote_Array: "+str(vote_array)
+            
+            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_array)
         else:
             print "Inserting non Chain"+str([cat_id])
             vote_val = 1 if upvote else -1
-            insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_val )
+            insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , [vote_val] )
         
         
         self.finish("200")
