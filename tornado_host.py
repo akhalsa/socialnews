@@ -144,15 +144,12 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             print "Inserting Chain: "+str(chain)
             vote_array = []
             for index, val in enumerate(chain):
-                if(index == 0):
-                    vote_array[index]=20
-                else:
-                    vote_array[index] = 1
+                vote_array[index]=20/(index+1)
                     
             print "will vote with chain: "+str(chain)
             print "will vote with vote_Array: "+str(vote_array)
             
-            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_array)
+            #insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_array)
         else:
             print "Inserting non Chain"+str([cat_id])
             vote_val = 1 if upvote else -1
