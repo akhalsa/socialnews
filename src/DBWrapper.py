@@ -930,7 +930,8 @@ def insertVote(local_db, user_id, category_ids, twitter_id, twitter_name, twitte
         sql += twitter_handle+"', '"+twitter_name+"', "
         sql += str(upvote[index])
         sql += ");"
-        
+        print "will insert with sql: "
+        print sql
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
