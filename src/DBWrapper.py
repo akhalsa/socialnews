@@ -159,7 +159,7 @@ def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
     cursor = local_db.cursor()
 
     #sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM TweetOccurrence WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) AND category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT 10;"
-    sql = "SELECT twitter_id as t_id, COUNT(twitter_id) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT "+str(num_tweets)+";"
+    sql = "SELECT twitter_id as t_id, SUM(occurrence_value) as tweet_occurrence_count FROM Occurrence_"+str(cat_id)+" WHERE timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND) GROUP BY twitter_id ORDER BY tweet_occurrence_count DESC LIMIT "+str(num_tweets)+";"
     print "loading with sql: "+sql
     cursor.execute(sql)
     results = {}
@@ -369,12 +369,15 @@ def getAllTwitterIds(local_db):
 
 def insertBatch(insertion_map, local_db):
     ##insertion_map = {category_id: [tweet_id,...]}
+    print "inserting with dictionary"
+    print str(insertion_map)
+    
     cursor = local_db.cursor()
     try:
         for cat in insertion_map:
-            sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id) VALUES "
+            sql = "INSERT INTO Occurrence_"+str(cat)+" (twitter_id, occurrence_value) VALUES "
             for tweet_id in insertion_map[cat]:
-                sql += "('"+str(tweet_id)+"'), "
+                sql += "('"+str(tweet_id[0])+"', "+str(tweet_id[1])+"), "
             sql = sql[:-2]
             sql+="; "
             cursor.execute(sql)
@@ -657,7 +660,7 @@ def reloadSourceCategoryRelationship(local_db):
         votes_records = cursor.fetchall()
         cursor.close()
         cursor = local_db.cursor()
-        sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id) VALUES "
+        sql = "INSERT INTO SourceCategoryRelationship (source_twitter_id, category_id, event_multiplier) VALUES "
         handle_index = 0
         for vote_record in votes_records:
             if(vote_record[1] <= 0):
@@ -667,11 +670,11 @@ def reloadSourceCategoryRelationship(local_db):
                 print "repro: "+sql_votes
                 continue
                 
-            sql += "("+str(vote_record[0])+", "+str(cat_id)+"), "
+            sql += "("+str(vote_record[0])+", "+str(cat_id)+", "+str(vote_record[1])+"), "
             
             if vote_record[0] not in mapping:
-                mapping[vote_record[0]] = []
-            mapping[vote_record[0]].append(cat_id)
+                mapping[vote_record[0]] = {}
+            mapping[vote_record[0]][cat_id] = vote_record[1]
             handle_index += 1
             
             
@@ -720,28 +723,6 @@ def alreadyVoted(local_db, user_id, category_id, twitter_id):
 
     
     
-
-def insertVote(local_db, user_id, category_id, twitter_id, twitter_name, twitter_handle, upvote ):
-    cursor = local_db.cursor()
-    print "inserting for user_id"+str(user_id)
-    sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ("
-    sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", '"
-    sql += twitter_handle+"', '"+twitter_name+"', "
-    sql += "1" if upvote else "-1"
-    sql += ");"
-    
-    try:
-            # Execute the SQL command
-            cursor.execute(sql)
-            # Commit your changes in the database
-            local_db.commit()
-    except Exception,e:
-            # Rollback in case there is any error
-            print "error on insertion of vote"
-            print str(e)
-            local_db.rollback()
-    cursor.close()
-    return
 
 def getUserWithCredentials(local_db, email, passhash):
     cursor = local_db.cursor()
@@ -939,10 +920,59 @@ def getUserIdWithIpAddressCreds(local_db, ip_address, email, passhash):
     cursor.close()
     return return_id
     
+     
+def insertVote(local_db, user_id, category_ids, twitter_id, twitter_name, twitter_handle, upvote ):
+
+    for index, category_id in enumerate(category_ids):
+        cursor = local_db.cursor()
+        sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ("
+        sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", '"
+        sql += twitter_handle+"', '"+twitter_name+"', "
+        sql += str(upvote[index])
+        sql += ");"
         
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                local_db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on insertion of vote"
+                print str(e)
+                local_db.rollback()
+        cursor.close()
+        
+    return
 
+def categoryChainForCategory(local_db, category_id):
+    return_chain = [category_id]
+    current_cat_id = category_id
+    while True:
+        parent_id = getCategoryParentIdForCategoryChildId(local_db, current_cat_id)
+        if(parent_id == None):
+            break
+        return_chain.append(parent_id)
+        current_cat_id = parent_id
+        
+    return return_chain
     
+def getCategoryParentIdForCategoryChildId(local_db, category_id):
+    return_id = None
+    cursor = local_db.cursor()
+    sql = "SELECT parent_category_id From CategoryParentRelationship WHERE child_category_id="+str(category_id)+";"
+    cursor.execute(sql)
+    if(cursor.rowcount > 0):
+        return_id = cursor.fetchone()[0]
+    cursor.close()
+    return return_id
 
-
-
+def checkForFirstVote(local_db, category_id, twitter_id):
+    cursor = local_db.cursor()
+    sql = "SELECT * From VoteHistory WHERE category_id = "+str(category_id)+" AND twitter_id like '"+str(twitter_id)+"';"
+    cursor.execute(sql)
+    count = cursor.rowcount
+    cursor.close()
+    return (count > 0)
+    
 

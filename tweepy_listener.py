@@ -61,6 +61,8 @@ class HandleListener(tweepy.StreamListener):
                                 charset='utf8',
                                 port=3306)
                         self.mapping = reloadSourceCategoryRelationship(db)
+                
+                print "got mapping "+str(self.mapping) 
                 time.sleep(delay)
                 print "starting to set up socket listen on new thread"
                 self.kickoff_time = datetime.datetime.now()
@@ -137,10 +139,12 @@ class HandleListener(tweepy.StreamListener):
                 if(str(json_object['user']['id']) in self.mapping):
                         categories = self.mapping[str(json_object['user']['id'])]
                         for cat in categories:
-                            if cat not in batchDictionary:
-                                batchDictionary[cat] = []
+                                #cat is now the key in the categories dict
                                 
-                            batchDictionary[cat].append(json_object['id'])
+                                if cat not in batchDictionary:
+                                        batchDictionary[cat] = []
+                                
+                                batchDictionary[cat].append((json_object['id'], categories[cat]))
                                                 
                         unique_ids[json_object['id']] = {"twitter_user_id":json_object['user']['id'], "text":json_object['text']}
                         return True

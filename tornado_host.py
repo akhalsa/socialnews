@@ -15,6 +15,7 @@ import requests
 import argparse
 import re
 import hashlib
+import simplejson
 
 
 from tornado.options import define, options, parse_command_line
@@ -160,6 +161,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         table_info = findTableInfoWithTwitterHandle( re.escape(twitter_handle), local_db)
         print "table info for that handle is: "+str(table_info)
+
         
         if(table_info == None):
             try:
@@ -171,6 +173,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 if(twitter_user_id != None):
                     createHandle(local_db,twitter_user_id, username, twitter_handle, profile_link )
                     table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
+ 
                 else:
                     print "couldnt find: "+twitter_handle
             except Exception, e:
@@ -178,6 +181,9 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 print e
                 self.finish("bad handle/insertion")
                 return
+
+            
+        new_handle = not checkForFirstVote(local_db, cat_id, table_info["twitter_id"])
         
         
         if(alreadyVoted(local_db, user_id,  cat_id, table_info["twitter_id"])):
@@ -185,8 +191,24 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             self.finish("{'message': 'you already voted for this handle'}")
             return
         
-        insertVote(local_db, user_id, cat_id, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , upvote )
-        
+
+        if(new_handle):
+            #select all the categorys above this one for the vote
+            chain = categoryChainForCategory(local_db, cat_id)
+            print "Inserting Chain: "+str(chain)
+            vote_array = []
+            for index, val in enumerate(chain):
+                vote_array.append(20/(index+1))
+                    
+            print "will vote with chain: "+str(chain)
+            print "will vote with vote_Array: "+str(vote_array)
+            
+            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_array)
+        else:
+            print "Inserting non Chain"+str([cat_id])
+            vote_val = 1 if upvote else -1
+            insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , [vote_val] )
+    
         self.finish("200")
         
         
@@ -210,7 +232,7 @@ class SizedReader(tornado.web.RequestHandler):
         print "found category id: "+str(cat_id)        
         
         lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, size)
-        self.finish(json.dumps(lookup))
+        self.finish(simplejson.dumps(lookup))
 
     
 class Reader(tornado.web.RequestHandler):
@@ -230,7 +252,7 @@ class Reader(tornado.web.RequestHandler):
                 print "found category id: "+str(cat_id)        
                 
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, 30)
-                self.finish(json.dumps(lookup))
+                self.finish(simplejson.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
     def get(self, twitter_id):
