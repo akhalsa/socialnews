@@ -59,6 +59,65 @@ def forward():
                 sql = "INSERT INTO VoteHistory(category_id,twitter_id, twitter_name, value) VALUES("+str(row[1])+", '"+str(row[2])+"', '"+row[3]+"', 19);"
                 executeSql(db, sql)
                 
+                
+                
+        
+        
+        sql = "CREATE TABLE User"
+        sql += "(ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+        sql += "username varchar(255), "
+        sql += "password_hash varchar(255), "
+        sql += "email varchar(255), "
+        sql += "ip_address varchar(255), "
+        sql += "UNIQUE INDEX (username), "
+        sql += "UNIQUE INDEX (email), "
+        sql += "UNIQUE INDEX (ip_address)"
+        sql += ");"
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory ADD user_id INT;"
+        executeSql(db, sql)
+        
+        #find each unique ip address in VoteHistory
+        sql = "SELECT DISTINCT ip_address from VoteHistory;"
+        cursor = db.cursor()
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+                if(row[0] != None):
+                        #ok we need to create a new user for each of these
+                        sql = "INSERT INTO User (ip_address) VALUES ('"+row[0]+"');"
+                        new_id = executeSql(db, sql)
+                        sql = "UPDATE VoteHistory set user_id="+str(new_id)+" WHERE ip_address like '"+row[0]+"';"
+                        executeSql(db, sql)
+                        
+        cursor.close()
+        sql = "ALTER TABLE VoteHistory DROP COLUMN ip_address;"
+        executeSql(db, sql)
+        
+        sql = "CREATE TABLE Comment("
+        sql += "ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+        sql += "user_id int(11), "
+        sql += "text varchar(255), "
+        sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
+        sql += "tweet_id int(11), "
+        sql += "score int(11), "
+        sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE, "
+        sql += "FOREIGN KEY (tweet_id) REFERENCES Tweet(ID) ON DELETE CASCADE);"
+        
+        
+        executeSql(db, sql)
+        
+        sql = "CREATE TABLE CommentVoteHistory("
+        sql += "ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+        sql += "comment_id int(11), "
+        sql += "user_id int(11), "
+        sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
+        sql += "value int(11), "
+        sql += "FOREIGN KEY (comment_id) REFERENCES Comment(ID) ON DELETE CASCADE, "
+        sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE);"
+        
+        executeSql(db, sql)
+                
         
     
     
@@ -90,5 +149,36 @@ def backward():
                 
         cur = db.cursor()
         sql = "DELETE FROM VoteHistory WHERE value>5;"
+        executeSql(db, sql)
+        
+        
+        
+        
+        
+        sql = "Drop TABLE CommentVoteHistory;"
+        executeSql(db, sql)
+        
+        sql = "Drop TABLE Comment;"
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory ADD ip_address varchar(255);"
+        executeSql(db, sql)
+        
+        sql = "SELECT ID, ip_address FROM User;"
+        cursor = db.cursor()
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+                if(row[1] is not None):
+                        sql = "UPDATE VoteHistory set ip_address='"+row[1]+"' WHERE user_id="+str(row[0])+";"
+                        executeSql(db, sql)
+                        
+        cursor.close()
+        
+                
+        
+        sql = "Drop TABLE User;";
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory DROP COLUMN user_id;"
         executeSql(db, sql)
         
