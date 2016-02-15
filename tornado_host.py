@@ -203,11 +203,11 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             print "will vote with chain: "+str(chain)
             print "will vote with vote_Array: "+str(vote_array)
             
-            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_array)
+            insertVote(local_db, user_id, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_array)
         else:
             print "Inserting non Chain"+str([cat_id])
             vote_val = 1 if upvote else -1
-            insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , [vote_val] )
+            insertVote(local_db, user_id, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , [vote_val] )
     
         self.finish("200")
         
