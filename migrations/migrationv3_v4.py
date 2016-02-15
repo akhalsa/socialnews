@@ -135,26 +135,6 @@ def backward():
             charset='utf8',
             port=3306)
         
-        sql = "ALTER TABLE SourceCategoryRelationship DROP event_multiplier;"
-        executeSql(db, sql)
-        
-        sql = "select table_name FROM information_schema.tables  WHERE table_name LIKE 'Occurrence_%';"
-        cur = db.cursor()
-        cur.execute(sql)
-        rows = cur.fetchall()
-        cur.close()
-        for row in rows:
-                sql = "ALTER TABLE "+str(row[0])+" DROP occurrence_value;"
-                executeSql(db, sql)
-                
-        cur = db.cursor()
-        sql = "DELETE FROM VoteHistory WHERE value>5;"
-        executeSql(db, sql)
-        
-        
-        
-        
-        
         sql = "Drop TABLE CommentVoteHistory;"
         executeSql(db, sql)
         
@@ -181,4 +161,26 @@ def backward():
         
         sql = "ALTER TABLE VoteHistory DROP COLUMN user_id;"
         executeSql(db, sql)
+        
+        
+        
+        
+        
+        sql = "ALTER TABLE SourceCategoryRelationship DROP event_multiplier;"
+        executeSql(db, sql)
+        
+        sql = "select table_name FROM information_schema.tables  WHERE table_name LIKE 'Occurrence_%';"
+        cur = db.cursor()
+        cur.execute(sql)
+        rows = cur.fetchall()
+        cur.close()
+        for row in rows:
+                sql = "ALTER TABLE "+str(row[0])+" DROP occurrence_value;"
+                executeSql(db, sql)
+                
+        cur = db.cursor()
+        sql = "DELETE FROM VoteHistory WHERE value>5;"
+        executeSql(db, sql)
+        
+        
         
