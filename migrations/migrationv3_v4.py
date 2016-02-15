@@ -61,7 +61,7 @@ def forward():
                 
                 
                 
-        
+        print "Finished algorithm updates"
         
         sql = "CREATE TABLE User"
         sql += "(ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
@@ -74,6 +74,8 @@ def forward():
         sql += "UNIQUE INDEX (ip_address)"
         sql += ");"
         executeSql(db, sql)
+        
+        print "Finished creating user"
         
         sql = "ALTER TABLE VoteHistory ADD user_id INT;"
         executeSql(db, sql)
@@ -91,8 +93,12 @@ def forward():
                         executeSql(db, sql)
                         
         cursor.close()
+        
+        print "Finished upating vote history to mvoe to user_id"
+        
         sql = "ALTER TABLE VoteHistory DROP COLUMN ip_address;"
         executeSql(db, sql)
+        
         
         sql = "CREATE TABLE Comment("
         sql += "ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
@@ -104,8 +110,8 @@ def forward():
         sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE, "
         sql += "FOREIGN KEY (tweet_id) REFERENCES Tweet(ID) ON DELETE CASCADE);"
         
-        
         executeSql(db, sql)
+        print "Finished comment creation"
         
         sql = "CREATE TABLE CommentVoteHistory("
         sql += "ID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, "
@@ -117,7 +123,7 @@ def forward():
         sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE);"
         
         executeSql(db, sql)
-                
+        print "Finished all"
         
     
     
