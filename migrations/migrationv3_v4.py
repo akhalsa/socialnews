@@ -2,7 +2,7 @@
 import MySQLdb
 
 import sys
-
+import re
 
 
 host_live = "avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
