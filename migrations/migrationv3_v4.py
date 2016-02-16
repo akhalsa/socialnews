@@ -177,8 +177,7 @@ def backward():
                 cursor.close()
                 twitter_name = source[1]
                 twitter_handle = source[2]
-                sql = "UPDATE VoteHistory SET twitter_name='"+twitter_name+"', twitter_handle='"+twitter_handle+"' WHERE twitter_id LIKE '"+str(row[0])+"';"
-                print "updating vote history: "+sql
+                sql = "UPDATE VoteHistory SET twitter_name='"+re.escape(twitter_name)+"', twitter_handle='"+twitter_handle+"' WHERE twitter_id LIKE '"+str(row[0])+"';"
                 executeSql(db, sql)
         
         sql = "Drop TABLE CommentVoteHistory;"
