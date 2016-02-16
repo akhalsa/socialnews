@@ -123,6 +123,19 @@ def forward():
         sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE);"
         
         executeSql(db, sql)
+        
+        
+        sql = "ALTER TABLE VoteHistory DROP COLUMN twitter_handle;"
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory DROP COLUMN twitter_name;"
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory ADD tweet_id INT;"
+        executeSql(db, sql)
+        
+        
+        
         print "Finished all"
         
     
@@ -140,6 +153,33 @@ def backward():
             db="newsdb",
             charset='utf8',
             port=3306)
+        
+        sql = "ALTER TABLE VoteHistory ADD twitter_handle varchar(255);"
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory ADD twitter_name varchar(255);"
+        executeSql(db, sql)
+        
+        sql = "ALTER TABLE VoteHistory DROP tweet_id;"
+        executeSql(db, sql)
+        
+        sql = "SELECT twitter_id FROM VoteHistory"
+        cursor = db.cursor()
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        cursor.close()
+        
+        for row in rows:
+                sql = "SELECT * From TwitterSource WHERE twitter_id like '"+str(row[0])+"';"
+                cursor = db.cursor()
+                cursor.execute(sql)
+                source = cursor.fetchone()
+                cursor.close()
+                twitter_name = source[1]
+                twitter_handle = source[2]
+                sql = "UPDATE VoteHistory SET twitter_name='"+twitter_name+"', twitter_handle='"+twitter_handle+"' WHERE twitter_id LIKE '"+str(row[0])+"';"
+                print "updating vote history: "+sql
+                executeSql(db, sql)
         
         sql = "Drop TABLE CommentVoteHistory;"
         executeSql(db, sql)
