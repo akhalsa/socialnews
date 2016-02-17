@@ -23,6 +23,7 @@ def executeSql(db, sql):
                 db.rollback()
         lastRow = cursor.lastrowid
         cursor.close()
+        return lastRow
         
         
 def forward():
@@ -51,12 +52,12 @@ def forward():
                 sql = "ALTER TABLE "+str(row[0])+" ADD occurrence_value INT;"
                 executeSql(db, sql)
         cur = db.cursor()
-        sql = "select * from VoteHistory Group By twitter_handle, category_id ;"
+        sql = "select category_id,twitter_id, twitter_name from VoteHistory Group By twitter_handle, category_id ;"
         cur.execute(sql)
         rows = cur.fetchall()
         cur.close()
         for row in rows:
-                sql = "INSERT INTO VoteHistory(category_id,twitter_id, twitter_name, value) VALUES('"+str(row[1])+"', '"+str(row[2])+"', '"+row[3]+"', 19);"
+                sql = "INSERT INTO VoteHistory(category_id,twitter_id, twitter_name, value) VALUES('"+str(row[0])+"', '"+str(row[1])+"', '"+row[2]+"', 19);"
                 print sql
                 executeSql(db, sql)
                 
@@ -88,9 +89,15 @@ def forward():
         for row in cursor.fetchall():
                 if(row[0] != None):
                         #ok we need to create a new user for each of these
-                        sql = "INSERT INTO User (ip_address) VALUES ('"+row[0]+"');"
+                        if(row[0] == None):
+                                sql = "INSERT INTO User (ip_address) VALUES (NULL);"
+                        else:
+                                sql = "INSERT INTO User (ip_address) VALUES ('"+row[0]+"');"
+                                
+                        print sql
                         new_id = executeSql(db, sql)
                         sql = "UPDATE VoteHistory set user_id="+str(new_id)+" WHERE ip_address like '"+row[0]+"';"
+                        print sql
                         executeSql(db, sql)
                         
         cursor.close()
