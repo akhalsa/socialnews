@@ -57,7 +57,7 @@ def forward():
         rows = cur.fetchall()
         cur.close()
         for row in rows:
-                sql = "INSERT INTO VoteHistory(category_id,twitter_id, twitter_name, value) VALUES('"+str(row[0])+"', '"+str(row[1])+"', '"+row[2]+"', 19);"
+                sql = "INSERT INTO VoteHistory(category_id,twitter_id, twitter_name, value) VALUES('"+str(row[0])+"', '"+str(row[1])+"', '"+re.escape(row[2])+"', 19);"
                 print sql
                 executeSql(db, sql)
                 
