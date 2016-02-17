@@ -182,9 +182,7 @@ def backward():
         cursor.close()
         
         for row in rows:
-                print "processing: "+str(row[0])
                 sql = "SELECT * From TwitterSource WHERE twitter_id like '"+str(row[0])+"';"
-                print sql
                 cursor = db.cursor()
                 cursor.execute(sql)
                 source = cursor.fetchone()
