@@ -40,6 +40,9 @@ def forward():
             charset='utf8',
             port=3306)
         
+        sql = "DELETE FROM VoteHistory WHERE twitter_id NOT IN (SELECT t.twitter_id FROM TwitterSource t);"
+        executeSql(db, sql)
+        
         sql = "ALTER TABLE SourceCategoryRelationship ADD event_multiplier INT;"
         executeSql(db, sql)
         
@@ -144,6 +147,7 @@ def forward():
         
         
         
+        
         print "Finished all"
         
     
@@ -178,6 +182,7 @@ def backward():
         cursor.close()
         
         for row in rows:
+                print "processing: "+str(row[0])
                 sql = "SELECT * From TwitterSource WHERE twitter_id like '"+str(row[0])+"';"
                 print sql
                 cursor = db.cursor()
