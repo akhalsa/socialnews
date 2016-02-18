@@ -208,9 +208,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         if ($scope.remaining_votes == 0) {
             return;
         }
-        if (handle.vote_val != 0) {
-            return;
-        }
         trackVote(handle_string);
         handle.vote_val += value;
         
