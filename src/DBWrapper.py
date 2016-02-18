@@ -571,13 +571,6 @@ def getVoteCountByIpForTimeFrame(local_db, user_id, seconds):
     return votes
 
 def getAllHandlesForCategory(local_db, category_id, user_id):
-    cursor = local_db.cursor()
-    sql = "SELECT value, twitter_id From VoteHistory WHERE user_id like "+str(user_id)+" AND category_id like '"+str(category_id)+"';"
-    cursor.execute(sql)
-    user_vote_history = {}
-    for row in cursor.fetchall():
-        user_vote_history[row[1]] = row[0]
-    cursor.close()
     
     cursor = local_db.cursor()
     #note this will get all votes, up or down
@@ -598,11 +591,9 @@ def getAllHandlesForCategory(local_db, category_id, user_id):
         if (row[4] <= 0):
                 tracked = 0
         
-        vote_val = 0
-        if(row[0] in user_vote_history):
-            vote_val = user_vote_history[row[0]]
+
             
-        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "profile_pic":row[3], "score":str(row[4]),
+        return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "profile_pic":row[3], "score":str(row[4]),
                             "upvotes": str(row[5]), "downvotes":str(row[6]), "tracked":tracked})
         insertion_count += 1
         
