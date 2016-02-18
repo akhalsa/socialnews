@@ -942,8 +942,8 @@ def insertTweetVote(local_db, user_id, category_ids, twitter_id, tweet_id, upvot
     for index, category_id in enumerate(category_ids):
         cursor = local_db.cursor()
         sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, tweet_id, value) VALUES ("
-        sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", "
-        sql += str(tweet_id)+", "+str(upvote[index])
+        sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", '"
+        sql += str(tweet_id)+"', "+str(upvote[index])
         sql += ");"
         print "will insert with sql: "
         print sql
