@@ -255,6 +255,8 @@ class Reader(tornado.web.RequestHandler):
                 print "found category id: "+str(cat_id)        
                 
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, 30)
+                print "sending: "
+                print str(lookup)
                 self.finish(simplejson.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
