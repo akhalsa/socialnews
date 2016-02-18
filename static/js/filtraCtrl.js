@@ -194,6 +194,7 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     // LOCAL PRIVATE STUFF... DO NOT CALL FROM HTML DIRECTLY
     
     function voteForHandleWithPayload(handle_string, value, data){
+        console.log("calling vote w payload");
         handle = null;
         value = parseInt(value);
         for(i=0; i<$scope.handle_list.length; i++ ){
