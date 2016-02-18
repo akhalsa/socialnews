@@ -703,9 +703,10 @@ def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor.close()
     return cats
     
-def alreadyVoted(local_db, user_id, category_id, twitter_id):
+def alreadyVoted(local_db, user_id, tweet_id, category_id, twitter_id):
     cursor = local_db.cursor()
-    sql = "SELECT ID From VoteHistory WHERE user_id like "+str(user_id)+" and twitter_id like '"+twitter_id+"' and category_id like "+str(category_id)+";"
+    sql = "SELECT ID From VoteHistory WHERE user_id like "+str(user_id)+" and tweet_id like "+str(tweet_id)
+    sql += " and twitter_id like '"+twitter_id+"' and category_id like "+str(category_id)+";"
     print "sql: "+sql
     cursor.execute(sql)
     row_count = cursor.rowcount
@@ -912,14 +913,37 @@ def getUserIdWithIpAddressCreds(local_db, ip_address, email, passhash):
     return return_id
     
      
-def insertVote(local_db, user_id, category_ids, twitter_id, twitter_name, twitter_handle, upvote ):
+def insertVote(local_db, user_id, category_ids, twitter_id, upvote ):
 
     for index, category_id in enumerate(category_ids):
         cursor = local_db.cursor()
-        sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ("
-        sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", '"
-        sql += twitter_handle+"', '"+twitter_name+"', "
+        sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, value) VALUES ("
+        sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", "
         sql += str(upvote[index])
+        sql += ");"
+        print "will insert with sql: "
+        print sql
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                local_db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on insertion of vote"
+                print str(e)
+                local_db.rollback()
+        cursor.close()
+        
+    return
+
+def insertTweetVote(local_db, user_id, category_ids, twitter_id, tweet_id, upvote):
+    
+    for index, category_id in enumerate(category_ids):
+        cursor = local_db.cursor()
+        sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, tweet_id, value) VALUES ("
+        sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", "
+        sql += str(tweet_id)+", "+str(upvote[index])
         sql += ");"
         print "will insert with sql: "
         print sql

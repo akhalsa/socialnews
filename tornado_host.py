@@ -117,6 +117,11 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
+        
+        data = json.loads(self.request.body)
+        print "tweet_id"+data["tweet_id"]
+        tweet_id = re.escape(data["tweet_id"])
+        
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
         
@@ -184,13 +189,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
 
             
         new_handle = not checkForFirstVote(local_db, cat_id, table_info["twitter_id"])
-        
-        
-        if(alreadyVoted(local_db, user_id,  cat_id, table_info["twitter_id"])):
-            print "already voted returned true"
-            self.finish("{'message': 'you already voted for this handle'}")
-            return
-        
+
 
         if(new_handle):
             #select all the categorys above this one for the vote
@@ -203,11 +202,15 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             print "will vote with chain: "+str(chain)
             print "will vote with vote_Array: "+str(vote_array)
             
-            insertVote(local_db, user_id, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_array)
+            insertVote(local_db, user_id, chain, table_info["twitter_id"], vote_array)
         else:
+            if(alreadyVoted(local_db, user_id, tweet_id, cat_id, table_info["twitter_id"])):
+                print "already voted returned true"
+                self.finish("{'message': 'you already voted for this handle'}")
+                return
             print "Inserting non Chain"+str([cat_id])
             vote_val = 1 if upvote else -1
-            insertVote(local_db, user_id, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , [vote_val] )
+            insertTweetVote(local_db, user_id, [cat_id], table_info["twitter_id"] , [vote_val] )
     
         self.finish("200")
         
@@ -471,8 +474,6 @@ class LoginAPI(tornado.web.RequestHandler):
         
     
 class signupAPI(tornado.web.RequestHandler):
-    
-
     def post(self):
         #find username and password 
         data = json.loads(self.request.body)
