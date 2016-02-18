@@ -170,8 +170,8 @@ def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
             results[row[0]] = {"tweet_count":row[1] }
             top_tweets.append({"id":row[0], "tweet_count":row[1]})
             
-            
-
+    print "after first load we have: " 
+    print str(top_tweets)
     cursor.close()
     #add text
     if(len(twitter_ids)==0):
