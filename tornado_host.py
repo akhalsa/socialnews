@@ -210,7 +210,7 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                 return
             print "Inserting non Chain"+str([cat_id])
             vote_val = 1 if upvote else -1
-            insertTweetVote(local_db, user_id, [cat_id], table_info["twitter_id"] , [vote_val] )
+            insertTweetVote(local_db, user_id, [cat_id], table_info["twitter_id"] ,tweet_id, [vote_val] )
     
         self.finish("200")
         
