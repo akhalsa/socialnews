@@ -107,6 +107,10 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         $scope.showVotes = !$scope.showVotes;
     }
     
+    $scope.voteForTweet = function(handle_string, tweet_id, value){
+        console.log("sending handle: "+handle_string+"with tweet_id"+tweet_id);
+    }
+    
     $scope.voteForHandle = function(handle_string, value){
         handle = null;
         value = parseInt(value);

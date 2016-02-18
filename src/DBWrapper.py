@@ -581,7 +581,7 @@ def getAllHandlesForCategory(local_db, category_id, user_id):
     
     cursor = local_db.cursor()
     #note this will get all votes, up or down
-    sql = "SELECT VoteHistory.twitter_id, VoteHistory.twitter_handle, VoteHistory.twitter_name, TwitterSource.profile_image, "
+    sql = "SELECT VoteHistory.twitter_id, TwitterSource.twitter_handle, TwitterSource.twitter_name, TwitterSource.profile_image, "
     sql += "SUM(value) as vote_count, SUM(case when value >= 0 then value else 0 end) as positive, "
     sql += "SUM(case when value <= 0 then value else 0 end) as negative "
     sql += "From VoteHistory "
