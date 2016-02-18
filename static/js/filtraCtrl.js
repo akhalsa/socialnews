@@ -194,7 +194,6 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     // LOCAL PRIVATE STUFF... DO NOT CALL FROM HTML DIRECTLY
     
     function voteForHandleWithPayload(handle_string, value, data){
-        console.log("calling vote w payload");
         handle = null;
         value = parseInt(value);
         for(i=0; i<$scope.handle_list.length; i++ ){
@@ -222,7 +221,10 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         }
         $scope.remaining_votes -= 1;
         if (data != null) {
-            $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, data).then(function(response) {});
+            console.log("sending w not null");    
+            $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, data).then(function(response) {
+                console.log("got a response");    
+            });
         }else{
             $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value).then(function(response) {});
         }
