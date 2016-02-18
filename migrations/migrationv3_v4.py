@@ -142,7 +142,7 @@ def forward():
         sql = "ALTER TABLE VoteHistory DROP COLUMN twitter_name;"
         executeSql(db, sql)
         
-        sql = "ALTER TABLE VoteHistory ADD tweet_id INT;"
+        sql = "ALTER TABLE VoteHistory ADD tweet_id varchar(255);"
         executeSql(db, sql)
         
         
