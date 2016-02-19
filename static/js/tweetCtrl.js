@@ -5,6 +5,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.img_url = "";
     $scope.link_url = "";
     $scope.link_text = "";
+    $scope.profile_image = "";
     
     $scope.comments = [];
     
@@ -22,7 +23,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
               $scope.img_url = response.data.img_url;
               $scope.link_url = response.data.link_url;
               $scope.link_text = response.data.link_text;
-              
+              $scope.profile_image = response.data.profile_image;
             });
         }
         
