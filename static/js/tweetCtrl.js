@@ -1,6 +1,7 @@
 app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.text = "";
     $scope.handle = "";
+    $scope.name = "";
     $scope.blurb = "";
     $scope.img_url = "";
     $scope.link_url = "";
@@ -24,6 +25,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
               $scope.link_url = response.data.link_url;
               $scope.link_text = response.data.link_text;
               $scope.profile_image = response.data.profile_image;
+              $scope.name = response.data.name;
             });
         }
         
