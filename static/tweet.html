@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -11,28 +12,180 @@
         <script src="{{static_url('js/filtraApp.js')}}"></script>
         <script src="{{static_url('js/tweetCtrl.js')}}"></script>
     </head>
-    
-    <body ng-app="filtraApp" ng-controller="tweetCtrl"
+
+<body ng-app="filtraApp" ng-controller="tweetCtrl"
         {% if 't_id' in globals() %}
             ng-init="tweet_id='{{t_id}}'"
         {% end %}
     >
-        <div>
-            <span>{{! handle }}: </span><span>{{! text }} </span>
+<!-- header start -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid top-nav">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="genericon genericon-menu"></span>                     
+      </button>
+      <a class="navbar-brand" href="#"><img src="images/logo.png" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+      <div class="clear"></div>
+    </div>
+       
+    <div class="collapse navbar-collapse" id="myNavbar">
+    <ul class="nav navbar-nav navbar-right">
+       	<li id="after-login"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>Username</span></a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+      </ul>
+      <div class="clear"></div>
+    <!-- nav start -->
+    <ul class="nav navbar-nav">
+      <li><a href="#" ng-click="redirectHome()">Front Page</a></li>
+      <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
+        <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
+      </li>
+    </ul>
+    </div>
+    <!-- nav end -->
+  </div>
+</nav>
+<!-- header end -->
+<!-- contents start -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-md-2">    
+    </div>
+    <div class="col-xs-12 col-md-8 wrap-con-main">
+    	<!-- Breadcurmbs start -->
+        <ol class="breadcrumb">
+          <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
+          <li><a href="#">Library</a></li>
+          <li class="active sc-desktop">Data</li>
+          <li class="dropdown active sc-mobile">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Data 
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a href="#">Sub 1</a></li>
+                <li><a href="#">Sub 2</a></li>
+                <li><a href="#">Sub 3</a></li>
+              </ul>
+           </li>
+        </ol>
+    	<!-- Breadcurmbs end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user">
+                	<div class="handle-main"><img src="images/ic-twitter.png" alt="TechCrunch" /></div>
+                    <div class="handle-name"> Tech Crunch</div>
+                    <div class="clear"></div>
+                </div>
+                <div class="time-tw">
+                	<span class="genericon genericon-time"></span> 5 min
+                	<ul class="vote-tw">
+                        <li class="up-v"><a href="#"><img src="images/ic-thumbs-up.png" alt="thumbs-up" width="14"></a></li>
+                        <li class="down-v"><a href="#"><img src="images/ic-thumbs-down.png" alt="thumbs-down" width="14"></a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                <div class="preview-tw">
+                	<div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+					<div class="span8">
+                    	<img src="images/img-sp.png"/>
+                    	<a href="#">SportsCenter on Twitter</a>
+                    	<p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper. </p>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div>
-            <span>Comments</span>
+        <!-- tweets end -->
+        <div class="wrap-comment">
+            <!-- title start -->
+            <h4>Comments</h4>
+            <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">53</a></div>
+            <div class="clear"></div>
+            <!-- title end -->
+            <!-- comment form start -->
+            <form class="form-inline comment-form">
+              <div class="form-group">
+                <label for="exampleInputName2">Username</label>
+                <input type="text" class="form-control" id="exampleInputName2" placeholder="Username">
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <!-- comment form end -->
+            <!-- comment list start -->
+            <div class="comment-list">
+            	<!-- username start -->
+                <ul class="username-c">
+                	<li><a href="#"><span class="genericon genericon-uparrow"></span></a></li>
+                    <li class="txt-c pd-number">97</li>
+                    <li><a href="#"><span class="genericon genericon-downarrow"></span></a></li>
+                    <li class="txt-c">Username1</li>
+                </ul>
+            	<!-- username end -->
+                <div class="con-comment">
+                	<p class="txt-date">Feb 11, 2016 2:35 pm</p>
+                	<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- comment list end -->
+            <!-- comment list start -->
+            <div class="comment-list">
+            	<!-- username start -->
+                <ul class="username-c">
+                	<li><a href="#"><span class="genericon genericon-uparrow"></span></a></li>
+                    <li class="txt-c pd-number">97</li>
+                    <li><a href="#"><span class="genericon genericon-downarrow"></span></a></li>
+                    <li class="txt-c">Username2</li>
+                </ul>
+            	<!-- username end -->
+                <div class="con-comment">
+                	<p class="txt-date">Feb 11, 2016 2:35 pm</p>
+                	<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- comment list end -->
+            <!-- comment list start -->
+            <div class="comment-list">
+            	<!-- username start -->
+                <ul class="username-c">
+                	<li><a href="#"><span class="genericon genericon-uparrow"></span></a></li>
+                    <li class="txt-c pd-number">97</li>
+                    <li><a href="#"><span class="genericon genericon-downarrow"></span></a></li>
+                    <li class="txt-c">Username3</li>
+                </ul>
+            	<!-- username end -->
+                <div class="con-comment">
+                	<p class="txt-date">Feb 11, 2016 2:35 pm</p>
+                	<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- comment list end -->
         </div>
-        <ul >
-            <li ng-repeat="comment in comments">
-                <span>{{! comment.text }} - {{! comment.username}} - 2 hours ago - {{! comment.score }}</div>
-                <button type="button" ng-click="sendCommentVote(comment.ID, 1)">^</button>
-                <button type="button" ng-click="sendCommentVote(comment.ID, -1)">v</button>
-            </li>
-        </ul>
-        <div>
-            <button type="button" ng-click="sendComment()">Create Comment</button>
-        </div>
-    </body>
+    </div>
+    <!-- sidebar start -->
+    <div class="col-xs-12 col-md-2">
+    </div>
+    <!-- sidebar end -->
+  </div>
+</div>
+<!-- contents end -->
+<!-- footer start -->
+<footer>
+	<span class="copyright">? 2016 Filtra.io</span>  /  <a href="#">About</a>  /  <a href="#">Contact</a>  /  <a href="#">Terms</a>  /  <a href="#">Privacy</a>
+    <ul id="social-bt">
+    	<li id="fb-bt"><a href="#"><span class="genericon genericon-facebook"></span> Share on Facebook</a></li>
+        <li id="tw-bt"><a href="#"><span class="genericon genericon-twitter"></span> Tweet on Twitter</a></li>
+    </ul>
+</footer>
+<!-- footer end -->
+</body>
 </html>

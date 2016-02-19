@@ -20,6 +20,15 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
     });
     
+    $scope.redirectHome = function(){
+        trackHomeLink();
+        if( (typeof tracking == 'undefined')){
+            document.location = "/";
+        }else{
+            document.location = "/?tracking=0"
+        }
+    }
+    
     $scope.sendComment = function(){
         console.log("sending");
         
