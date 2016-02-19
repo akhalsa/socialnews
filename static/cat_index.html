@@ -210,8 +210,12 @@
                     <div class="handle-name"> {{! tweet.name}} </div>
                   <div class="clear"></div>
                 </div>
-                <div class="time-tw"><span class="genericon genericon-activity"></span> {{! tweet.tweet_count }} <span class="genericon genericon-time"></span>
-                {{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}</div>
+                <div class="time-tw">
+		  <a href="/tweet/{{! tweet.id }}">Comment</a>
+		  <span class="genericon genericon-activity"></span> {{! tweet.tweet_count }}
+		  <span class="genericon genericon-time"></span>
+		  {{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}
+	        </div>
                 <div class="clear"></div>
             </div>
             <div class="wrap-con-tw" >
