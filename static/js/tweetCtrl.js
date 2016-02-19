@@ -1,6 +1,11 @@
 app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.text = "";
     $scope.handle = "";
+    $scope.blurb = "";
+    $scope.img_url = "";
+    $scope.link_url = "";
+    $scope.link_text = "";
+    
     $scope.comments = [];
     
     
@@ -13,6 +18,10 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
               $scope.text = response.data.text;
               $scope.handle = response.data.twitter_handle;
               $scope.comments = response.data.comments;
+              $scope.blurb = response.data.blurb;
+              $scope.img_url = response.data.img_url;
+              $scope.link_url = response.data.link_url;
+              $scope.link_text = response.data.link_text;
               
             });
         }
