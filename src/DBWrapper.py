@@ -757,7 +757,7 @@ def insertUserWithValues(local_db, email, passhash, username ):
     
 def getTweetWithId(local_db, tweet_id, user_id):
     cursor = local_db.cursor()
-    sql ="SELECT Tweet.text, TwitterSource.name, TwitterSource.twitter_handle, TwitterSource.profile_image, Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, TIMESTAMPDIFF(SECOND,  Tweet.timestamp, NOW()) "
+    sql ="SELECT Tweet.text, TwitterSource.name, TwitterSource.twitter_handle, TwitterSource.profile_image, Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW()) "
     sql += "From Tweet INNER JOIN TwitterSource ON Tweet.source_twitter_id = TwitterSource.twitter_id AND Tweet.twitter_id = "+str(tweet_id)+";"
     print "loading w sql: "
     print sql
