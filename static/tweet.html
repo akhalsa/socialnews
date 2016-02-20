@@ -133,7 +133,7 @@
                 </ul>
             	<!-- username end -->
                 <div class="con-comment">
-                	<p class="txt-date">Feb 11, 2016 2:35 pm</p>
+                	<p class="txt-date">{{! comment.timestamp | convertSecondsToTimestamp }}</p>
                 	<p ng-bind-html="comment.text | unsafeLink"></p>
                 </div>
                 <div class="clear"></div>
