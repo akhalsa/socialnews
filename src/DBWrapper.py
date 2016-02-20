@@ -1022,7 +1022,7 @@ def getUserNameForId(local_db, user_id):
 
 def isValidCreds(local_db, email, password_hash):
     cursor = local_db.cursor()
-    sql = "SELECT ID, username From User WHERE password_hash like '"+passhash+"' and email like '"+email+"';"
+    sql = "SELECT ID, username From User WHERE password_hash like '"+password_hash+"' and email like '"+email+"';"
     cursor.execute(sql)
     row_num = cursor.rowcount
     cursor.close()
