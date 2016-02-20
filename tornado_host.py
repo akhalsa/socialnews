@@ -389,7 +389,7 @@ class TweetAPI(AuthBase):
         
         user_id = self.getUserId(local_db)
         print "loading tweet with id: "+str(user_id)
-        self.finish(json.dumps(getTweetWithId(local_db, tweet_id, user_id)))
+        self.finish(simplejson.dumps(getTweetWithId(local_db, tweet_id, user_id)))
         
         
     def post(self, tweet_id):
