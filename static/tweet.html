@@ -33,7 +33,7 @@
     <ul class="nav navbar-nav navbar-right">
        	<li id="after-login" ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>{{! username}}</span></a></li>
         <li ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
-        <li ng-hide="logged_in"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li ng-hide="logged_in" ng-click="showLoginPopup()" ><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
       </ul>
       <div class="clear"></div>
     <!-- nav start -->
@@ -50,8 +50,8 @@
 <!-- header end -->
 <!-- contents start -->
 <!-- popup overlay start -->
-<div class="wrap-popup pp-register">
-	<div id="bt-close"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
+<div class="wrap-popup pp-register" ng-show="showLogin">
+	<div id="bt-close"><a href="#" ng-click="dismissPopups()" ><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Login</h3>
     <div class="con-pp-inner">
     	<form>

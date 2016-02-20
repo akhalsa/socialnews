@@ -17,6 +17,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.logged_in = false;
     $scope.username = "";
     
+    $scope.showLogin = false;
+    
     
     $scope.$watch('tweet_id', function () {
         reloadPage();
@@ -73,6 +75,17 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             
         });
     }
+    
+    $scope.dismissPopups = function (){
+        $scope.showLogin = false;
+    }
+    
+    $scope.showLoginPopup = function(){
+        $scope.showLogin = true;
+    }
+    
+    
+    // PRIVATE METHODS...not to be called from html
     
     function reloadPage(){
         if (typeof $scope.tweet_id != 'undefined' ) {
