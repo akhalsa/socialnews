@@ -59,7 +59,7 @@ class AuthBase(tornado.web.RequestHandler):
     
     def getUserName(self, db):
         user_id = self.getUserId(db)
-        return getUserNameForId(local_db, user_id)
+        return getUserNameForId(db, user_id)
         
     def isLoggedIn(self, db):
         x_real_ip = self.request.headers.get("X-Real-IP")
