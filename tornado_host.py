@@ -71,12 +71,12 @@ class AuthBase(tornado.web.RequestHandler):
             print "no email"
         if not password_hash:
             print "no password"
+
         
-        if(email):
-            print email
-        if(password_hash):
-            print password_hash
-        return isValidCreds(db, email, password_hash)
+        if(email and password_hash):
+            return isValidCreds(db, email, password_hash)
+        else:
+            return False
 
 
 class Category(tornado.web.RequestHandler):    
