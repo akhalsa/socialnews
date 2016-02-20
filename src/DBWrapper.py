@@ -755,7 +755,7 @@ def insertUserWithValues(local_db, email, passhash, username ):
     cursor.close()
     
     
-def getTweetWithId(local_db, tweet_id):
+def getTweetWithId(local_db, tweet_id, user_id):
     cursor = local_db.cursor()
     sql ="SELECT Tweet.text, TwitterSource.name, TwitterSource.twitter_handle, TwitterSource.profile_image, Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url "
     sql += "From Tweet INNER JOIN TwitterSource ON Tweet.source_twitter_id = TwitterSource.twitter_id AND Tweet.twitter_id = "+str(tweet_id)+";"
@@ -780,6 +780,17 @@ def getTweetWithId(local_db, tweet_id):
             
             tweet["comments"] = []
             #TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW())
+            
+            #find any votes for this user
+            sql = "SELECT comment_id, value From CommentVoteHistory WHERE user_id="+str(user_id)+";"
+            cursor = local_db.cursor()
+            cursor.execute(sql)
+            vote_history = {}
+            for row in cursor.fetchall():
+                vote_history[row[0]] = row[1]
+            
+                
+            
             sql = "SELECT Comment.ID, Comment.text, TIMESTAMPDIFF(SECOND,  Comment.timestamp, NOW()), Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+" ORDER BY Comment.score DESC;"
             cursor = local_db.cursor()
             cursor.execute(sql)
@@ -793,6 +804,13 @@ def getTweetWithId(local_db, tweet_id):
                     comment["username"] = "user"+str(row[5])
                 else:
                     comment["username"] = row[4]
+                
+                if(row[0] in vote_history):
+                    comment["vote_history"] = vote_history[row[0]]
+                else:
+                    comment["vote_history"] = 0
+                    
+                comment["vot"]
                 tweet["comments"].append(comment)    
             cursor.close()
             print tweet
