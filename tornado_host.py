@@ -440,12 +440,12 @@ class LoginAPI(AuthBase):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        user_id = getUserId(self, local_db)
-        username = getUserName(self, local_db)
+        user_id = self.getUserId(self, local_db)
+        username = self.getUserName(self, local_db)
         if(username == None):
             username = "user"+str(user_id)
             
-        logged_in = isLoggedIn(self, local_db)
+        logged_in = self.isLoggedIn(self, local_db)
         self.finish(json.dumps({"user_id": user_id, "username":username, "logged_in": logged_in}))
         return
         
