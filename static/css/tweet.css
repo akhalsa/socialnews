@@ -91,6 +91,8 @@ input {border:none;}
 .vote-tw li {float: left; width:26px; display:inline; padding:1px 6px 3px;}
 .vote-tw .up-v {background-color:#8ac249;}
 .vote-tw .down-v {background-color:#33429a;}
+.vote-done {border:1px solid #ddd; width:54px !important;}
+.vote-done li {background-color:#eee !important;}
 
 .wrap-user .time-tw {float:right; width: 39%; text-align:right; color:#33429a; margin-top: 2px;}
 .wrap-user .time-tw span {padding-top:3px; color:#8ac249;}
@@ -231,6 +233,7 @@ input {border:none;}
 .comment-list .username-c .genericon-downarrow {color:#33429a;}
 .comment-list .con-comment {float:right; width:78%; line-height:24px; padding-right:10px;}
 .comment-list .con-comment .txt-date {text-align:right; margin-bottom:5px; color:#999;}
+.comment-list .c-done .genericon {color:#ccc !important;}
 
 /* footer */
 footer {text-align:center; padding:30px; font-size:15px; color:#999;}
