@@ -388,6 +388,7 @@ class TweetAPI(AuthBase):
                         port=3306)
         
         user_id = self.getUserId(local_db)
+        print "loading tweet with id: "+str(user_id)
         self.finish(json.dumps(getTweetWithId(local_db, tweet_id, user_id)))
         
         
