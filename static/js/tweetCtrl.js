@@ -7,6 +7,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.link_url = "";
     $scope.link_text = "";
     $scope.profile_image = "";
+    $scope.timestamp = "";
     
     $scope.new_comment_text = "";
     
@@ -70,6 +71,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
               $scope.link_text = response.data.link_text;
               $scope.profile_image = response.data.profile_image;
               $scope.name = response.data.name;
+              $scope.timestamp = response.data.timestamp;
             });
         }
         
