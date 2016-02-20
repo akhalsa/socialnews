@@ -9,9 +9,13 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.profile_image = "";
     $scope.timestamp = "";
     
+    
     $scope.new_comment_text = "";
     
     $scope.comments = [];
+    
+    $scope.logged_in = false;
+    $scope.logged_in_username = null;
     
     
     $scope.$watch('tweet_id', function () {
@@ -26,6 +30,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             document.location = "/?tracking=0"
         }
     }
+    
+    
     
     $scope.sendComment = function(){
         console.log("sending");
@@ -86,6 +92,19 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
               $scope.timestamp = response.data.timestamp;
               console.log("got timestamp: "+$scope.timestamp);
             });
+            
+            $http.get("/api/login")
+                .then(function(response) {
+                    if (response.data.username != null) {
+                        console.log("logged in as: "+response.data.username);
+                        $scope.logged_in = true;
+                        $scope.logged_in_username = response.data.username;
+                    }else{
+                        $scope.logged_in = false;
+                        $scope.logged_in_username = null;
+                        console.log("logged out");
+                    }
+                });
         }
         
     }
