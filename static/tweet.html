@@ -31,8 +31,9 @@
        
     <div class="collapse navbar-collapse" id="myNavbar">
     <ul class="nav navbar-nav navbar-right">
-       	<li id="after-login"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>Username</span></a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+       	<li id="after-login" ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>{{! username}}</span></a></li>
+        <li ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+        <li ng-hide="logged_in"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
       </ul>
       <div class="clear"></div>
     <!-- nav start -->
