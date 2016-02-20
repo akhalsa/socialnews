@@ -56,6 +56,27 @@ class AuthBase(tornado.web.RequestHandler):
             
         user_id = getUserIdWithIpAddressCreds(db, remote_ip, email, password_hash)
         return user_id
+    
+    def getUserName(self, db):
+        user_id = self.getUserId(self, db)
+        return getUserNameForId(local_db, user_id)
+        
+    def isLoggedIn(self, db):
+        x_real_ip = self.request.headers.get("X-Real-IP")
+        remote_ip = x_real_ip or self.request.remote_ip
+        
+        email = self.get_secure_cookie("email")
+        password_hash = self.get_secure_cookie("password_hash")
+        if not email:
+            print "no email"
+        if not password_hash:
+            print "no password"
+        
+        if(email):
+            print email
+        if(password_hash):
+            print password_hash
+        return isValidCreds(db, email, password_hash)
 
 
 class Category(tornado.web.RequestHandler):    
@@ -410,7 +431,7 @@ class TweetAPI(AuthBase):
         
 
         
-class LoginAPI(tornado.web.RequestHandler):
+class LoginAPI(AuthBase):
     def get(self):
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -419,20 +440,15 @@ class LoginAPI(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        email = self.get_secure_cookie("email")
-        password_hash = self.get_secure_cookie("password_hash")
-        if not email or not password_hash:
-            print "no password"
-            self.finish(json.dumps({"username":None }))
-            return
-        print "checking email: "+email+" with pw hash: "+password_hash
-        
-        user = getUserWithCredentials(local_db, email, password_hash)
-        username = re.sub(r'\\(.)', r'\1', user["username"])
-        output = json.dumps({"username": username})
-        print "sending: "+output
-        self.finish(output)
+        user_id = getUserId(self, local_db)
+        username = getUserName(self, local_db)
+        if(username == None):
+            username = "user"+str(user_id)
+            
+        logged_in = isLoggedIn(self, local_db)
+        self.finish(json.dumps({"user_id": user_id, "username":username, "logged_in": logged_in}))
         return
+        
     
     def put(self):
         #this is a logout mechanism

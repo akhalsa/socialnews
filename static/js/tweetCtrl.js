@@ -15,7 +15,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.comments = [];
     
     $scope.logged_in = false;
-    $scope.logged_in_username = null;
+    $scope.username = "";
     
     
     $scope.$watch('tweet_id', function () {
@@ -95,15 +95,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             
             $http.get("/api/login")
                 .then(function(response) {
-                    if (response.data.username != null) {
-                        console.log("logged in as: "+response.data.username);
-                        $scope.logged_in = true;
-                        $scope.logged_in_username = response.data.username;
-                    }else{
-                        $scope.logged_in = false;
-                        $scope.logged_in_username = null;
-                        console.log("logged out");
-                    }
+                    $scope.logged_in = response.data.logged_in;
+                    $scope.username =response.data.username;
                 });
         }
         

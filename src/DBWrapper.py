@@ -1011,5 +1011,26 @@ def checkForFirstVote(local_db, category_id, twitter_id):
     count = cursor.rowcount
     cursor.close()
     return (count > 0)
+
+def getUserNameForId(local_db, user_id):
+    cursor = local_db.cursor()
+    sql = "SELECT username From User where ID="+str(user_id)+";"
+    cursor.execute(sql)
+    username = cursor.fetchone()[0]
+    cursor.close()
+    return username
+
+def isValidCreds(local_db, email, password_hash):
+    cursor = local_db.cursor()
+    sql = "SELECT ID, username From User WHERE password_hash like '"+passhash+"' and email like '"+email+"';"
+    cursor.execute(sql)
+    row_num = cursor.rowcount
+    cursor.close()
+    if(row_num == 1):
+        return True
+    else:
+        return False
+    
+
     
 
