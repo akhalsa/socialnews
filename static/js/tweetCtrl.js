@@ -14,24 +14,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     
     $scope.$watch('tweet_id', function () {
-        if (typeof $scope.tweet_id != 'undefined' ) {
-            console.log($scope.tweet_id);
-            $http.get("/api/tweet/"+$scope.tweet_id)
-            .then(function(response) {
-              console.log("successfully called");
-              $scope.text = response.data.text;
-              $scope.handle = response.data.twitter_handle;
-              $scope.comments = response.data.comments;
-              $scope.blurb = response.data.blurb;
-              $scope.img_url = response.data.img_url;
-              $scope.link_url = response.data.link_url;
-              $scope.link_text = response.data.link_text;
-              $scope.profile_image = response.data.profile_image;
-              $scope.name = response.data.name;
-            });
-        }
-        
-        
+        reloadPage();
     });
     
     $scope.redirectHome = function(){
@@ -52,6 +35,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             console.log("post successful");
             console.log(response.data.result);
             $scope.new_comment_text = "";
+            reloadPage();
         });
         
     }
@@ -68,6 +52,28 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             console.log(response.data.msg);
             
         });
+    }
+    
+    function reloadPage(){
+        if (typeof $scope.tweet_id != 'undefined' ) {
+            console.log($scope.tweet_id);
+            $http.get("/api/tweet/"+$scope.tweet_id)
+            .then(function(response) {
+              console.log("successfully called");
+              $scope.text = response.data.text;
+              $scope.handle = response.data.twitter_handle;
+              $scope.comments = response.data.comments;
+              $scope.blurb = response.data.blurb;
+              $scope.img_url = response.data.img_url;
+              $scope.link_url = response.data.link_url;
+              $scope.link_text = response.data.link_text;
+              $scope.profile_image = response.data.profile_image;
+              $scope.name = response.data.name;
+            });
+        }
         
     }
+    
+    
+    
 });
