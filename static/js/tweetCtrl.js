@@ -93,15 +93,19 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
         data["email"] = $scope.login_email;
         data["password"] = $scope.login_pw;
-        $http.post("/api/login", data).then(function(response){
-            if (response.status == 403) {
-                console.log("bad login exception")
-            }else{
-                $scope.logged_in = response.data.logged_in;
-                $scope.username = response.data.username;
-            }
+
+        $http.post("/api/login", data).then(function successCallback(response){
+            $scope.logged_in = response.data.logged_in;
+            $scope.username = response.data.username;
             
+        }, function errorCallback(response){
+            console.log("got an error");
+            if (response.status == 403) {
+                console.log("got a 403");
+            }
         });
+        
+
     }
     
     

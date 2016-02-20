@@ -485,7 +485,7 @@ class LoginAPI(AuthBase):
         user = getUserWithCredentials(local_db, email, pw_hash)
         if(user is None):
             self.clear()
-            self.set_status(403)
+            self.set_status(401)
             self.finish()
             return
         else:
