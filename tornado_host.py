@@ -359,6 +359,7 @@ class CommentVoteAPI(AuthBase):
             response = {}
             response["success"] = False
             response["msg"] = "Already Voted"
+            print "response: "+str(response)
             self.finish(json.dumps(response))
             return
         if(getCommentVoteCountByIpForTimeFrame(local_db, user_id, 3600) > 10):
