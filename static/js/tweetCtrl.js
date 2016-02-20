@@ -41,6 +41,18 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
     }
     
+    $scope.convertSecondsToDeltaTime = function(seconds){
+        if (seconds < 60) {
+            return seconds+" sec";
+        } else if (seconds < 3600) {
+            var minutes = Math.round( seconds / 60);
+            return minutes +" min";
+        } else{
+            var hours = Math.round( seconds / 3600);
+            return hours + " hours";
+        }
+    }
+    
     $scope.sendCommentVote = function(comment_id, value){
         var data = {};
         data["comment_id"] = comment_id;
