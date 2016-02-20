@@ -385,7 +385,9 @@ class TweetAPI(AuthBase):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        self.finish(json.dumps(getTweetWithId(local_db, tweet_id)))
+        
+        user_id = self.getUserId(local_db)
+        self.finish(json.dumps(getTweetWithId(local_db, tweet_id, user_id)))
         
         
     def post(self, tweet_id):
