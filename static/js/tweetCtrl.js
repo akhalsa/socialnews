@@ -50,6 +50,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             console.log("post successful");
             console.log(response.data.success);
             console.log(response.data.msg);
+            reloadPage();
             
         });
     }
