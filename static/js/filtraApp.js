@@ -65,6 +65,6 @@ app.filter('convertSecondsToTimestamp', function(){
     return function(seconds){
         var t = new Date();
         t.setSeconds(t.getSeconds() - seconds);
-        return t.toDateString();
+        return t.toDateString() + " - "+t.toTimeString();
     }
 })
