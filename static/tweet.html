@@ -94,7 +94,7 @@
                     	<img src="{{! img_url}}" ng-show="img_url" width="150"/>
                         
                     	<a href="{{! link_url }}"  target="_blank" ng-show="link_text">{{! link_text }}</a>
-                        <a href="{{! link_url }}" ng-hide="title" ng-bind-html="tweet.text | unsafeLink"></a>
+                        <a href="{{! link_url }}" ng-hide="title" ng-bind-html="text | unsafeLink"></a>
                         
                         
                     	<p ng-show="blurb">{{! blurb }}</p>
