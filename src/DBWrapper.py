@@ -800,10 +800,6 @@ def getTweetWithId(local_db, tweet_id, user_id):
                 comment["text"] = row[1]
                 comment["timestamp"] = row[2]
                 comment["score"] = row[3]
-                if(row[4] is None):
-                    comment["username"] = "user"+str(row[5])
-                else:
-                    comment["username"] = row[4]
                 
                 if(row[0] in vote_history):
                     comment["vote_history"] = vote_history[row[0]]
