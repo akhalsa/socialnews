@@ -8,6 +8,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.link_text = "";
     $scope.profile_image = "";
     
+    $scope.new_comment_text = "";
+    
     $scope.comments = [];
     
     
@@ -45,10 +47,11 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         console.log("sending");
         
         var data = {};
-        data["comment_text"] = "Hi I'm a DIFFERENT comment!!!";
+        data["comment_text"] = $scope.new_comment_text;
         $http.post("/api/tweet/"+$scope.tweet_id, data).then(function(response){
             console.log("post successful");
             console.log(response.data.result);
+            $scope.new_comment_text = "";
         });
         
     }
