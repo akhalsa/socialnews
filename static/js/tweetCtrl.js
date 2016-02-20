@@ -1,5 +1,5 @@
 app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
-    $scope.text = "";
+    $scope.text = "dummy";
     $scope.handle = "";
     $scope.name = "";
     $scope.blurb = "";
