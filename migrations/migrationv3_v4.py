@@ -116,7 +116,7 @@ def forward():
         sql += "user_id int(11), "
         sql += "text varchar(255), "
         sql += "timestamp timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
-        sql += "tweet_id int(11), "
+        sql += "tweet_id varchar(255), "
         sql += "score int(11), "
         sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE, "
         sql += "FOREIGN KEY (tweet_id) REFERENCES Tweet(twitter_id) ON DELETE CASCADE);"
