@@ -58,7 +58,7 @@ class AuthBase(tornado.web.RequestHandler):
         return user_id
     
     def getUserName(self, db):
-        user_id = self.getUserId(self, db)
+        user_id = self.getUserId(db)
         return getUserNameForId(local_db, user_id)
         
     def isLoggedIn(self, db):
