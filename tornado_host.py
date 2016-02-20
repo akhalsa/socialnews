@@ -77,6 +77,7 @@ class AuthBase(tornado.web.RequestHandler):
             return isValidCreds(db, email, password_hash)
         else:
             return False
+        
 
 
 class Category(tornado.web.RequestHandler):    
@@ -477,19 +478,22 @@ class LoginAPI(AuthBase):
         
         data = json.loads(self.request.body)
         pw_hash = hashlib.sha224(data["password"]).hexdigest()
+        
+        
         print "generated hash: "+pw_hash
         email = re.escape(data["email"])
         user = getUserWithCredentials(local_db, email, pw_hash)
         if(user is None):
-            print "user was none :/"
-            self.finish(json.dumps({"result": "Invalid Credentials"}))
+            self.clear()
+            self.set_status(403)
+            self.finish()
             return
         else:
             print "logged in man"
             self.set_secure_cookie("email", email)
             self.set_secure_cookie("password_hash",pw_hash)
             username = re.sub(r'\\(.)', r'\1', user["username"])
-            self.finish(json.dumps({"username": username}))
+            self.finish(json.dumps({"username": username, "logged_in":True }))
             return
         
         

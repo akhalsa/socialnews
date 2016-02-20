@@ -55,9 +55,9 @@
 	<h3>Login</h3>
     <div class="con-pp-inner">
     	<form>
-        	<input type="text" class="form-control" id="exampleInputName" placeholder="Username">
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            <button type="submit" class="btn btn-default">Login</button>
+            <input type="text" class="form-control" id="exampleInputName" placeholder="Email" ng-model="login_email">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="login_pw">
+            <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
         </form>
         <ul class="li-login">
         	<li>Want to join? <a href="#">Register in seconds.</a></li>

@@ -19,6 +19,10 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     $scope.showLogin = false;
     
+    $scope.login_email = "";
+    $scope.login_pw = "";
+    
+    
     
     $scope.$watch('tweet_id', function () {
         reloadPage();
@@ -82,6 +86,22 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     $scope.showLoginPopup = function(){
         $scope.showLogin = true;
+    }
+    
+    $scope.login = function(){
+        var data = {};
+    
+        data["email"] = $scope.login_email;
+        data["password"] = $scope.login_pw;
+        $http.post("/api/login", data).then(function(response){
+            if (response.status == 403) {
+                console.log("bad login exception")
+            }else{
+                $scope.logged_in = response.data.logged_in;
+                $scope.username = response.data.username;
+            }
+            
+        });
     }
     
     
