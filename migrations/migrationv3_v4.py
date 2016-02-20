@@ -119,7 +119,7 @@ def forward():
         sql += "tweet_id int(11), "
         sql += "score int(11), "
         sql += "FOREIGN KEY (user_id) REFERENCES User(ID) ON DELETE CASCADE, "
-        sql += "FOREIGN KEY (tweet_id) REFERENCES Tweet(ID) ON DELETE CASCADE);"
+        sql += "FOREIGN KEY (tweet_id) REFERENCES Tweet(twitter_id) ON DELETE CASCADE);"
         
         executeSql(db, sql)
         print "Finished comment creation"
