@@ -810,7 +810,7 @@ def getTweetWithId(local_db, tweet_id, user_id):
                 else:
                     comment["vote_history"] = 0
                     
-                comment["vot"]
+
                 tweet["comments"].append(comment)    
             cursor.close()
             print tweet
