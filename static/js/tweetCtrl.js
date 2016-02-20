@@ -60,6 +60,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         var data = {};
         data["comment_id"] = comment_id;
         data["vote_val"] = value;
+        console.log( "sending payload: "+str(data));
+        
         $http.post("/api/tweet/"+$scope.tweet_id+"/vote", data).then(function(response){
             console.log("post successful");
             console.log(response.data.success);
