@@ -60,6 +60,7 @@
             <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
         </form>
         <ul class="li-login">
+                <li ng-show="invalid_creds">Invalid username/password </li>
         	<li>Want to join? <a href="#">Register in seconds.</a></li>
         	<li id="link-g">Forgot Password? <a href="#">Click here to find.</a></li>
         </ul>

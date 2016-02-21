@@ -22,6 +22,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.login_email = "";
     $scope.login_pw = "";
     
+    $scope.invalid_creds = false;
+    
     
     
     $scope.$watch('tweet_id', function () {
@@ -82,10 +84,12 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     $scope.dismissPopups = function (){
         $scope.showLogin = false;
+        $scope.invalid_creds = false;
     }
     
     $scope.showLoginPopup = function(){
         $scope.showLogin = true;
+        $scope.invalid_creds = false;
     }
     
     $scope.login = function(){
@@ -102,6 +106,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             console.log("got an error");
             if (response.status == 401) {
                 console.log("got a 401");
+                $scope.invalid_creds = true;
             }
         });
         
