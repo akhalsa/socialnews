@@ -405,11 +405,9 @@ class CommentVoteAPI(AuthBase):
                         
         
         insertCommentVote(local_db, user_id, comment_id, value)
-        response = {}
-        response["success"] = True
-        response["msg"] = None
-        
-        self.finish(json.dumps(response))
+        self.clear()
+        self.set_status(200)
+        self.finish()
     
 class TweetAPI(AuthBase):
     def get(self, tweet_id):
@@ -439,7 +437,9 @@ class TweetAPI(AuthBase):
         #get user id
         user_id = self.getUserId(local_db)
         insertComment(local_db, tweet_id, user_id, re.escape(data["comment_text"]))
-        self.finish(json.dumps({"result":200}))
+        self.clear()
+        self.set_status(200)
+        self.finish()
         
         
 
@@ -475,7 +475,9 @@ class LoginAPI(AuthBase):
         self.clear_cookie("email")
         self.clear_cookie("password_hash")
         
-        self.finish({"success":True})
+        self.clear()
+        self.set_status(200)
+        self.finish()
         
         
     def post(self):
