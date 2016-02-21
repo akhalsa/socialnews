@@ -117,6 +117,20 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
 
     }
     
+    $scope.logout = function(){
+        var data = {};
+        console.log("logging out");
+        data["logout"] = true;
+        $http.put("/api/login", data).then(function(response){
+            if(response.data.success){
+                console.log("logout success");
+                reloadPage();
+            }else{
+                console.log("logout fail");
+            }
+        });
+    }
+    
     
     // PRIVATE METHODS...not to be called from html
     
