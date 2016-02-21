@@ -101,6 +101,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         $http.post("/api/login", data).then(function successCallback(response){
             $scope.logged_in = response.data.logged_in;
             $scope.username = response.data.username;
+            $scope.dismissPopups();
+            reloadPage();
             
         }, function errorCallback(response){
             console.log("got an error");
