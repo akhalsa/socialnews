@@ -100,6 +100,15 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         $scope.showLogin = false;
         $scope.showRegister = false;
         $scope.invalid_creds = false;
+        
+        $scope.login_email = "";
+        $scope.login_pw = "";
+        
+        
+        $scope.register_email = "";
+        $scope.register_username = "";
+        $scope.register_pw = "";
+        $scope.register_pw_confirm = "";
     }
     
     $scope.showLoginPopup = function(){
