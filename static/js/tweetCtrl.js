@@ -22,6 +22,14 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.login_email = "";
     $scope.login_pw = "";
     
+    
+    $scope.register_email = "";
+    $scope.register_username = "";
+    $scope.register_pw = "";
+    $scope.register_pw_confirm = "";
+    
+    
+    
     $scope.invalid_creds = false;
     
     $scope.FindCredentialsFeatureFlag = false;
@@ -141,6 +149,45 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
                 console.log("logout fail");
             }
         });
+    }
+    
+    
+    $scope.createAccount = function(){
+        
+        
+        
+        console.log("email: "+$scope.register_email);
+        console.log("username: "+$scope.register_username);
+        console.log("pw: "+$scope.register_pw);
+        console.log("pw confirm: "+$scope.register_pw_confirm);
+        
+        if ($scope.register_pw != $scope.register_pw_confirm) {
+            alert("mismatched pw and pw confirm");
+            return;
+        }
+        
+        
+        var data = {};
+        data["email"] = $scope.register_email;
+        data["password"] = $scope.register_pw;
+        data["username"] = $scope.register_username;
+
+        
+        
+        $http.post("/api/signup", data).then(function successCallback(response){
+            console.log("successful response");
+            $scope.logged_in = true;
+            $scope.username = response.data.username;
+            $scope.dismissPopups();
+            reloadPage();
+            
+        }, function errorCallback(response){
+            console.log("got an error");
+            if (response.status == 401) {
+                console.log("got a 401");
+            }
+        });
+        
     }
     
     

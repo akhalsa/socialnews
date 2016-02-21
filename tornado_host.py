@@ -519,9 +519,11 @@ class signupAPI(tornado.web.RequestHandler):
         user = getUserWithCredentials(local_db, email, pw_hash)
         if(user is None):
             if(checkForExistingEmail(local_db, email)):
-                print "found existing user with different creds"
-                print "pw_hash: "+pw_hash
-                self.finish(json.dumps({"error": "Invalid token"}))
+                #there is no user with THESE credentials
+                #but there is a user wiht that email
+                #as such throw exception
+                self.clear()
+                self.set_status(401)
                 return
             
             #ok no existing user

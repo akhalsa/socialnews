@@ -76,11 +76,11 @@
 	<h3>Register</h3>
     <div class="con-pp-inner">
     	<form>
-            <input type="text" class="form-control" id="exampleInputName" placeholder="Username">
-            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password">
-            <button type="submit" class="btn btn-default">Register</button>
+            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" ng-model="register_email">
+            <input type="text" class="form-control" id="exampleInputName" placeholder="Display Name" ng-model="register_username">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="register_pw">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password" ng-model="register_pw_confirm">
+            <button type="submit" class="btn btn-default" ng-click="createAccount()">Register</button>
         </form>
     </div>
     <div class="clear"></div>
