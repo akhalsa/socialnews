@@ -17,7 +17,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.logged_in = false;
     $scope.username = "";
     
-    $scope.showLogin = false;
+    
     
     $scope.login_email = "";
     $scope.login_pw = "";
@@ -25,6 +25,10 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.invalid_creds = false;
     
     $scope.FindCredentialsFeatureFlag = false;
+    
+    $scope.showLogin = false;
+    $scope.showRegister = false;
+    
     
     
     
@@ -86,11 +90,19 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     $scope.dismissPopups = function (){
         $scope.showLogin = false;
+        $scope.showRegister = false;
         $scope.invalid_creds = false;
     }
     
     $scope.showLoginPopup = function(){
         $scope.showLogin = true;
+        $scope.showRegister = false;
+        $scope.invalid_creds = false;
+    }
+    
+    $scope.showRegisterPopup = function(){
+        $scope.showLogin = false;
+        $scope.showRegister = true;
         $scope.invalid_creds = false;
     }
     
