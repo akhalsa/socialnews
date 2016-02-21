@@ -86,13 +86,21 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         data["comment_id"] = comment_id;
         data["vote_val"] = value;
         console.log( "sending payload: "+data);
+
         
-        $http.post("/api/tweet/"+$scope.tweet_id+"/vote", data).then(function(response){
+        $http.post("/api/login", data).then(function successCallback(response){
             console.log("post successful");
             console.log(response.data.success);
             console.log(response.data.msg);
             reloadPage();
             
+        }, function errorCallback(response){
+            console.log("got an error");
+            if (response.status == 401) {
+                console.log("got a 401");
+            }else if (response.status == 405) {
+                console.log("got a 405");
+            }
         });
     }
     

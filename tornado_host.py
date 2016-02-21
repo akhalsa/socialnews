@@ -131,6 +131,10 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
 
 class HandleVoteReceiver(tornado.web.RequestHandler):
     def post(self,twitter_handle, category_name, positive  ):
+        #401 = rate limit exceeded
+        ##405 = the user already voted for this tweet
+        
+        
         #first check to see if this ip address has been used more than 5 times
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -164,8 +168,12 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         votes_this_hour = getVoteCountByIpForTimeFrame(local_db, user_id, 3600)
         print "found votes this hour of: "+str(votes_this_hour)
+        
         if(votes_this_hour >= 10):
-            self.finish("{'message':'you are out of votes, please wait for them to recharge}")
+            ## 401 means the user has exceeded rate limits
+            self.clear()
+            self.set_status(401)
+            self.finish()
             return
         
         upvote = False
@@ -227,14 +235,18 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             insertVote(local_db, user_id, chain, table_info["twitter_id"], vote_array)
         else:
             if(alreadyVoted(local_db, user_id, tweet_id, cat_id, table_info["twitter_id"])):
-                print "already voted returned true"
-                self.finish("{'message': 'you already voted for this handle'}")
+                ##405 means the user already voted for this tweet
+                self.clear()
+                self.set_status(405)
+                self.finish()
                 return
             print "Inserting non Chain"+str([cat_id])
             vote_val = 1 if upvote else -1
             insertTweetVote(local_db, user_id, [cat_id], table_info["twitter_id"] ,tweet_id, [vote_val] )
     
-        self.finish("200")
+        self.clear()
+        self.set_status(200)
+        self.finish()
         
         
     
@@ -378,17 +390,17 @@ class CommentVoteAPI(AuthBase):
         #do some rate checking
         
         if(alreadyVotedForComment(local_db, user_id, comment_id)):
-            response = {}
-            response["success"] = False
-            response["msg"] = "Already Voted"
-            print "response: "+str(response)
-            self.finish(json.dumps(response))
+            ##405 means the user already voted for this tweet
+            self.clear()
+            self.set_status(405)
+            self.finish()
             return
+
         if(getCommentVoteCountByIpForTimeFrame(local_db, user_id, 3600) > 10):
-            response = {}
-            response["success"] = False
-            response["msg"] = "Vote Limit Reached"
-            self.finish(json.dumps(response))
+            ##401 means the rate limit exceeded
+            self.clear()
+            self.set_status(401)
+            self.finish()
             return
                         
         
