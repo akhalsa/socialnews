@@ -158,7 +158,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         console.log("logging out");
         data["logout"] = true;
         $http.put("/api/login", data).then(function(response){
-            if(response.data.success){
+            if (response.status == 200) {
                 console.log("logout success");
                 reloadPage();
             }else{
