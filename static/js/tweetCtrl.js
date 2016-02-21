@@ -87,8 +87,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         data["vote_val"] = value;
         console.log( "sending payload: "+data);
 
-        
-        $http.post("/api/login", data).then(function successCallback(response){
+        $http.post("/api/tweet/"+$scope.tweet_id+"/vote", data).then(function successCallback(response){
             console.log("post successful");
             console.log(response.data.success);
             console.log(response.data.msg);
@@ -182,7 +181,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             alert("mismatched pw and pw confirm");
             return;
         }
-        
+
         
         var data = {};
         data["email"] = $scope.register_email;
