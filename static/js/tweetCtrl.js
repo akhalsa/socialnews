@@ -24,6 +24,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     $scope.invalid_creds = false;
     
+    $scope.FindCredentialsFeatureFlag = false;
+    
     
     
     $scope.$watch('tweet_id', function () {
