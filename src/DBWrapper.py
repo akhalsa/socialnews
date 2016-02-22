@@ -176,8 +176,9 @@ def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
             return top_tweets
     
     cursor = local_db.cursor()
-    sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image, "
-    sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW()) "
+    sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image,"
+    sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW())"
+    sql += " TwitterSource.twitter_handle" 
     sql += " From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
 
     
@@ -198,6 +199,7 @@ def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
             if(tweet_dict["id"] == row[0]):
                 tweet_dict["text"] = row[1]
                 tweet_dict["name"] = row[2]
+                tweet_dict["handle"] = row[10]
                 tweet_dict["pic"] = row[3]
                 tweet_dict["blurb"] = row[4]
                 tweet_dict["link_url"] = row[5]

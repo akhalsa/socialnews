@@ -285,8 +285,6 @@ class Reader(AuthBase):
                     for tweet in lookup:
                        if(tweet["id"] == vote_entry):
                             tweet["voted"] = user_vote[vote_entry]
-                
-                print "Sending: "+str(simplejson.dumps(lookup))
                 self.finish(simplejson.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):

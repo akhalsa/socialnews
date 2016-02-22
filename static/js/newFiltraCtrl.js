@@ -56,6 +56,12 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         console.log("calling refresh");
     }
     
+    $scope.vote = function(tweet_id, handle, value){
+        console.log("sending: "+tweet_id);
+        console.log("handle: "+handle);
+        console.log("value: "+value);
+    }
+    
     
     //VIEW MODEL GENERATION ---- basically static methods for html
     
