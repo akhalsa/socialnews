@@ -61,10 +61,13 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         var data = {};
         data["comment_text"] = $scope.new_comment_text;
         $http.post("/api/tweet/"+$scope.tweet_id, data).then(function(response){
-            console.log("post successful");
-            console.log(response.data.result);
-            $scope.new_comment_text = "";
-            reloadPage();
+            if (response.status == 200) {
+                $scope.new_comment_text = "";
+                reloadPage();
+            }else{
+                alert("error on insertion!");
+            }
+            
         });
         
     }

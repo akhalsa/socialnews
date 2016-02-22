@@ -436,6 +436,9 @@ class TweetAPI(AuthBase):
         data = json.loads(self.request.body)
         #get user id
         user_id = self.getUserId(local_db)
+        ###will need to rate check here for anonymous users
+        
+        
         insertComment(local_db, tweet_id, user_id, re.escape(data["comment_text"]))
         self.clear()
         self.set_status(200)
