@@ -177,7 +177,7 @@ def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
     
     cursor = local_db.cursor()
     sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image,"
-    sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW())"
+    sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW()),"
     sql += " TwitterSource.twitter_handle" 
     sql += " From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
 
