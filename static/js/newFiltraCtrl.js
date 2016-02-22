@@ -28,7 +28,9 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             $scope.selected_secondary_index = starting[1];
             $scope.selected_third_index = starting[2];
         }
-        reloadCurrentPath();        
+        reloadCurrentPath();
+        loadTweets();
+        loadHandles();
     });
     
     
