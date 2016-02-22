@@ -1034,15 +1034,11 @@ def userVote(local_db, user_id, tweet_ids):
         if(index != (len(tweet_ids)-1)):
             sql += ", "
     sql += ");"
-    print "get votes for this user with SQL----------"
     print sql
     cursor.execute(sql)
     response = {}
     for row in cursor.fetchall():
         response[row[0]] = row[1]
     cursor.close()
-    for tweet in tweet_ids:
-        if (tweet not in response):
-            response[tweet] = "0"
-    print "**********   "+str(response)+"                   *************"
+            
     return response

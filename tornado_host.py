@@ -273,14 +273,20 @@ class Reader(AuthBase):
                 print "found category id: "+str(cat_id)        
                 
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, 30)
-                print "sending: "
-                print str(lookup)
                 user_id = self.getUserId(local_db)
                 ids = []
                 for tweet in lookup:
+                    tweet["voted"] = 0
                     ids.append(tweet["id"])
                     
                 user_vote = userVote(local_db, user_id, ids)
+                
+                for vote_entry in user_vote:
+                    for tweet in lookup:
+                       if(tweet["id"] == vote_entry):
+                            tweet["voted"] = user_vote[vote_entry]
+                
+                print "Sending: "+str(simplejson.dumps(lookup))
                 self.finish(simplejson.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
