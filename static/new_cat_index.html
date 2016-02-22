@@ -94,15 +94,27 @@
     <!-- contents start -->
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-12 col-md-2 wrap-sub-nav">    
+        <div class="col-xs-12 col-md-2 hidden-xs hidden-sm wrap-sub-nav">    
             <!-- Collect the nav links, forms, and other content for toggling -->
               <ul id="nav-category" class="sub">
-                <li class="current-page"><a href="#">Technology</a></li>
-                <li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></li>
-                <li><a href="#">Google</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-                <li><a href="#">Microsoft</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-                <li><a href="#">Home</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
-                <li class="last-sub"><a href="#">Apps</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                    <li class="current-page" ng-click="selectionChange(selected_top_index, -1, -1)"><a href="#">{{! category_structure[selected_top_index].name }}</a></li>
+                    <li ng-hide="category_structure.length == 0 || selected_top_index==-1" ng-repeat="cat in category_structure[selected_top_index].children"
+                      id="{{! $index==selected_secondary_index ? 'sub-nav2' : 'random_sub_id'+$index}}">
+                    
+                        <div id="wrap-pr" ng-show="$index==selected_secondary_index"  >
+                          <a href="#" ng-click="selectionChange(selected_top_index, $index, -1)">{{! cat.name }}</a>
+                          <a href="#"><span class='genericon genericon-collapse'></span></a>
+                        </div>
+                        <ul ng-show="$index==selected_secondary_index && category_structure[selected_top_index].children[selected_secondary_index].children.length >0">
+                          <li ng-repeat="subcat in category_structure[selected_top_index].children[selected_secondary_index].children"
+                              ng-class="{'current-sub': $index==selected_third_index}">
+                            <a href="#" ng-click="selectionChange(selected_top_index, selected_secondary_index, $index)" >{{! subcat.name}}</a>
+                          </li>
+                        </ul>
+                        <a href="#" ng-hide="$index==selected_secondary_index" ng-click="selectionChange(selected_top_index, $index, -1)">
+                          {{! cat.name }}</a>
+                        <a href="#" ng-hide="$index==selected_secondary_index"><span class="genericon genericon-expand"></span></a>
+                    </li>
               </ul>
         </div>
         <div class="col-xs-12 col-md-7 wrap-con-main">
