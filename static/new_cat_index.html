@@ -141,20 +141,17 @@
             <!-- Breadcurmbs end -->
             <!-- Mobile time start -->
             <div class="wrap-drop-refresh">
-                <div class="dropdown">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <span class="genericon genericon-time"></span> Past 15 Minutes
+                <div class="dropdown" uib-dropdown>
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" uib-dropdown-toggle>
+                    <span class="genericon genericon-time"></span> {{! time_frames[selected_time].text }}
                     <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#"><span class="genericon genericon-time"></span> Past Hour</a></li>
-                    <li><a href="#"><span class="genericon genericon-time"></span> Past 3 Hours</a></li>
-                    <li><a href="#"><span class="genericon genericon-time"></span> Today</a></li>
+                  <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="dropdownMenu1">
+                    <li ng-repeat="time_frame in time_frames" ng-click="timeChange($index);">
+                            <a href="#"><span class="genericon genericon-time"></span> {{! time_frame.text }}</a>
+                    </li>
                   </ul>
                 </div>
-                <!-- div id="bt-refresh">
-                    <a href="#"><span class="genericon genericon-refresh"></span> Refresh</a>
-                </div -->
                 <div class="clear"></div>
             </div>
             <!-- Mobile time end -->
