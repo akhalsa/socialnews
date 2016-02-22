@@ -32,14 +32,48 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     });
     
     
+    $scope.redirectHome = function(){
+        if( (typeof tracking == 'undefined')){
+            document.location = "/";
+        }else{
+            document.location = "/?tracking=0"
+        }
+    }
     
-    
-    
+    $scope.selectionChange = function(top, second, third) {
+        $scope.selected_top_index = top;
+        $scope.selected_secondary_index = second;
+        $scope.selected_third_index = third;
+        reloadCurrentPath();
+        loadTweets();
+        loadHandles();
+    }
     
     
     
     
     //PRIVATE METHODS
+    
+    function loadTweets(){
+        var endPoint = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
+        $http.get(endPoint)
+        .then(function(response) {
+            
+            $scope.tweet_array = response.data;
+            console.log("tweet array length: "+$scope.tweet_array.length);
+        });
+    }
+    
+    function loadHandles(){
+        var endPoint = "/category/"+currentCatName();
+        $http.get(endPoint)
+        .then(function(response) {
+            $scope.handle_list = response.data.handles;
+            $scope.remaining_votes = response.data.remaining_votes;
+        });
+    }
+    
+    
     function checkForCatMatch(name) {
         for(i = 0; i<$scope.category_structure.length; i++){
             pos_name = getCatNameWithPositionVals(i, -1, -1);
