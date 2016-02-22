@@ -103,6 +103,10 @@ class HandleListForCategoryId(AuthBase):
                         port=3306)
         
         user_id = self.getUserId(local_db)
+        
+        cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
+
+        
         handle_list = getAllHandlesForCategory(local_db, cat_id, user_id)
         print "got handle list: "+str(handle_list)
         self.finish(json.dumps({"handles":handle_list}))
