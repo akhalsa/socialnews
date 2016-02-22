@@ -134,6 +134,9 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         }
     }
     
+    function currentCatName() {
+        return getCatNameWithPositionVals($scope.selected_top_index, $scope.selected_secondary_index, $scope.selected_third_index)
+    }
     
     
     
