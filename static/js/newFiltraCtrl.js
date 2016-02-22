@@ -51,7 +51,11 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         loadHandles();
     }
     
-    
+    $scope.refreshButton = function(){
+        loadTweets();
+        console.log("calling refresh");
+        trackRefresh();
+    }
     
     
     //PRIVATE METHODS

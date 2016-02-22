@@ -157,16 +157,16 @@
             <!-- Mobile time end -->
             <!-- time start -->
             <ul id="time">
-                    <li class="current"><a href="#"><span class="genericon genericon-time"></span> Past 15 Minutes</a><br/><span class="genericon genericon-downarrow"></span></li>
-                <li><a href="#"><span class="genericon genericon-time"></span> Past Hour</a></li>
-                <li><a href="#"><span class="genericon genericon-time"></span> Past 3 Hours</a></li>
-                <li><a href="#"><span class="genericon genericon-time"></span> Today</a></li>
-                <div class="clear"></div>
+              <li ng-repeat="time_block in time_frames" ng-class="{'current': $index==selected_time}" ng-click="timeChange($index)">
+                <a href="#"><span class="genericon genericon-time"></span>{{! time_block.text}}</a>
+                <br ng-show="$index==selected_time"><span class="genericon genericon-downarrow" ng-show="$index==selected_time"></span>            
+              </li>
+              <div class="clear"></div>
             </ul>
             <!-- time end -->
             <!-- buttons start -->
             <ul class="bt-wrap">
-                <li><button id="bt-green"><span class="genericon genericon-refresh"></span> Refresh</button></li>
+                <li><button id="bt-green" ng-click="refreshButton()"><span class="genericon genericon-refresh"></span> Refresh</button></li>
                 <li><button id="bt-blue"><span class="genericon genericon-search"></span> Nominate</button></li>
                 <div class="clear"></div>
             </ul>
