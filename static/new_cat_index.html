@@ -222,10 +222,11 @@
             <div class="box-side">
                     <h3>Twitter Handles</h3>
                 <ul id="list-vote">
-                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div><div class="clear"></div></li>
-                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Bleacher Report LFL</div><div class="clear"></div></li>
-                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div><div class="clear"></div></li>
-                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div><div class="clear"></div></li>
+                    
+                    
+                    <li ng-repeat="handle in handle_list"><div class="handle"><img src="{{! handle.profile_pic }}" />{{! handle.username }}</div><div class="clear"></div></li>
+                    
+                    
                     <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div><div class="clear"></div></li>
                 </ul>
             </div>
