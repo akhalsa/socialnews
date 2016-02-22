@@ -256,7 +256,7 @@ class SizedReader(tornado.web.RequestHandler):
         self.finish(simplejson.dumps(lookup))
 
     
-class Reader(tornado.web.RequestHandler):
+class Reader(AuthBase):
         def get(self, cat, time_frame_seconds):
                 local_db = MySQLdb.connect(
                         host=host_target,
@@ -275,6 +275,12 @@ class Reader(tornado.web.RequestHandler):
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, 30)
                 print "sending: "
                 print str(lookup)
+                user_id = self.getUserId(local_db)
+                ids = []
+                for tweet in lookup:
+                    ids.append(tweet["id"])
+                    
+                user_vote = userVote(local_db, user_id, ids)
                 self.finish(simplejson.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):

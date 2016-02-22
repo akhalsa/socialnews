@@ -1026,6 +1026,23 @@ def isValidCreds(local_db, email, password_hash):
     else:
         return False
     
-
-    
-
+def userVote(local_db, user_id, tweet_ids):
+    cursor = local_db.cursor()
+    sql = "SELECT tweet_id, value From VoteHistory WHERE user_id like "+str(user_id)+" AND tweet_id in ("
+    for index, tweet_id in enumerate(tweet_ids):
+        sql += "'"+str(tweet_id)+"'"
+        if(index != (len(tweet_ids)-1)):
+            sql += ", "
+    sql += ");"
+    print "get votes for this user with SQL----------"
+    print sql
+    cursor.execute(sql)
+    response = {}
+    for row in cursor.fetchall():
+        response[row[0]] = row[1]
+    cursor.close()
+    for tweet in tweet_ids:
+        if (tweet not in response):
+            response[tweet] = "0"
+    print "**********   "+str(response)+"                   *************"
+    return response
