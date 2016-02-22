@@ -92,7 +92,7 @@ class Category(tornado.web.RequestHandler):
         
         self.finish(json.dumps(getCategoryStructure(local_db)))
 
-class HandleListForCategoryId(tornado.web.RequestHandler):
+class HandleListForCategoryId(AuthBase):
     def get(self, cat_name):
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -102,30 +102,10 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
                         charset='utf8',
                         port=3306)
         
-        #this should get the full list of handles and their scores in the category
-        cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
-        x_real_ip = self.request.headers.get("X-Real-IP")
-        remote_ip = x_real_ip or self.request.remote_ip
-        
-        email = self.get_secure_cookie("email")
-        password_hash = self.get_secure_cookie("password_hash")
-        if not email:
-            print "no email"
-        if not password_hash:
-            print "no password"
-        
-        if(email):
-            print email
-        if(password_hash):
-            print password_hash
-            
-        user_id = getUserIdWithIpAddressCreds(local_db, remote_ip, email, password_hash)
-        
-        
+        user_id = self.getUserId(local_db)
         handle_list = getAllHandlesForCategory(local_db, cat_id, user_id)
-        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, user_id, 3600)
-        print "got handle list:"
-        self.finish(json.dumps({"handles":handle_list, "remaining_votes":(10 - votes_this_hour)}))
+        print "got handle list: "+str(handle_list)
+        self.finish(json.dumps({"handles":handle_list}))
         
                     
 
