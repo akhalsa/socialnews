@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Filtra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{static_url('css/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{static_url('css/style.css')}}">
+  <link rel="stylesheet" href="{{static_url('fonts/genericons/genericons.css')}}">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js" type="text/javascript"></script>
+  <script src="{{static_url('js/filtraApp.js')}}"></script>
+  <script src="{{static_url('js/filtraCtrl.js')}}"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+    var tracking = getUrlParameter("tracking");
+     /**
+    * Function that tracks a click on an outbound link in Google Analytics.
+    * This function takes a valid URL string as an argument, and uses that URL string
+    * as the event label.
+    */
+    trackOutboundLink = function(url) {
+        console.log("calling outbound: "+url);
+        if( (typeof tracking == 'undefined')){
+            ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+                function () {
+                }
+            });
+        }
+       
+    }
+    
+    function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+  
+      for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+      }
+    }
+  </script>
+</head>
+
+<body ng-app="filtraApp" ng-controller="newFiltraCtrl"
+  {% if 'cat_name' in globals() %}
+      ng-init="category_name='{{cat_name}}'"
+  {% end %}
+>
+    
+    <!-- header start -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid top-nav">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="genericon genericon-menu"></span>                     
+          </button>
+          <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+          <div class="clear"></div>
+        </div>
+           
+        <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+            <li ng-hide="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+            <li ng-hide="logged_in"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+            
+            <li id="after-login" ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>{{! username}}</span></a></li>
+            <li ng-show="logged_in" ng-click="logout()"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+          </ul>
+          <div class="clear"></div>
+        <!-- nav start -->
+        <ul class="nav navbar-nav nav-top">
+          <li class="active"><a href="#">Front Page</a></li>
+          <li><a href="#">Technology</a></li>
+          <li><a href="#">Sports</a></li>
+          <li><a href="#">Travel</a></li>
+          <li><a href="#">Politics</a></li>
+          <li><a href="#">Travel</a></li>
+        </ul>
+        </div>
+        <!-- nav end -->
+      </div>
+    </nav>
+    <!-- header end -->
+    <!-- contents start -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-md-2 wrap-sub-nav">    
+            <!-- Collect the nav links, forms, and other content for toggling -->
+              <ul id="nav-category" class="sub">
+                <li class="current-page"><a href="#">Technology</a></li>
+                <li id="sub-nav2"><div id="wrap-pr"><a href="#">Apple</a><a href="#"><span class="genericon genericon-collapse"></span></a></li>
+                <li><a href="#">Google</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                <li><a href="#">Microsoft</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                <li><a href="#">Home</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+                <li class="last-sub"><a href="#">Apps</a><a href="#"><span class="genericon genericon-expand"></span></a></li>
+              </ul>
+        </div>
+        <div class="col-xs-12 col-md-7 wrap-con-main">
+            <!-- Breadcurmbs start -->
+            <ol class="breadcrumb">
+              <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
+              <li><a href="#">Library</a></li>
+              <li class="active sc-desktop">Data</li>
+              <li class="dropdown active sc-mobile">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Data 
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">Sub 1</a></li>
+                    <li><a href="#">Sub 2</a></li>
+                    <li><a href="#">Sub 3</a></li>
+                  </ul>
+               </li>
+            </ol>
+            <!-- Breadcurmbs end -->
+            <!-- Mobile time start -->
+            <div class="wrap-drop-refresh">
+                <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="genericon genericon-time"></span> Past 15 Minutes
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#"><span class="genericon genericon-time"></span> Past Hour</a></li>
+                    <li><a href="#"><span class="genericon genericon-time"></span> Past 3 Hours</a></li>
+                    <li><a href="#"><span class="genericon genericon-time"></span> Today</a></li>
+                  </ul>
+                </div>
+                <!-- div id="bt-refresh">
+                    <a href="#"><span class="genericon genericon-refresh"></span> Refresh</a>
+                </div -->
+                <div class="clear"></div>
+            </div>
+            <!-- Mobile time end -->
+            <!-- time start -->
+            <ul id="time">
+                    <li class="current"><a href="#"><span class="genericon genericon-time"></span> Past 15 Minutes</a><br/><span class="genericon genericon-downarrow"></span></li>
+                <li><a href="#"><span class="genericon genericon-time"></span> Past Hour</a></li>
+                <li><a href="#"><span class="genericon genericon-time"></span> Past 3 Hours</a></li>
+                <li><a href="#"><span class="genericon genericon-time"></span> Today</a></li>
+                <div class="clear"></div>
+            </ul>
+            <!-- time end -->
+            <!-- buttons start -->
+            <ul class="bt-wrap">
+                <li><button id="bt-green"><span class="genericon genericon-refresh"></span> Refresh</button></li>
+                <li><button id="bt-blue"><span class="genericon genericon-search"></span> Nominate</button></li>
+                <div class="clear"></div>
+            </ul>
+            <!-- buttons end -->
+            <!-- tweets start -->
+            <div class="con-tw">
+                    <div class="wrap-user">
+                    <div class="user">
+                            <div class="handle-main"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" /></div>
+                        <div class="handle-name"> Tech Crunch</div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="time-tw">
+                            <span class="genericon genericon-time"></span> 5 min
+                            <ul class="vote-tw">
+                            <li class="up-v"><a href="#"><img src="{{static_url('images/ic-thumbs-up.png')}}" alt="thumbs-up" width="14"></a></li>
+                            <li class="down-v"><a href="#"><img src="{{static_url('images/ic-thumbs-down.png')}}" alt="thumbs-down" width="14"></a></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="wrap-con-tw">
+                    20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                    <div class="preview-tw">
+                            <div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+                                            <div class="span8">
+                            <img src="{{static_url('images/img-sp.png')}}"/>
+                            <a href="#">SportsCenter on Twitter</a>
+                            <p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper. </p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="wrap-comment">
+                            <h4>Top Comments</h4>
+                        <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">53</a></div>
+                        <div class="clear"></div>
+                        <p><span class="txt-user">Username</span> <span class="txt-date">(Feb 11, 2016 2:35 pm)</span>: Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- tweets end -->
+            <!-- tweets start -->
+            <div class="con-tw">
+                    <div class="wrap-user">
+                    <div class="user">
+                            <div class="handle-main"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" /></div>
+                        <div class="handle-name"> Tech Crunch</div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="time-tw">
+                            <span class="genericon genericon-time"></span> 5 min
+                            <ul class="vote-tw vote-done">
+                            <li class="up-v"><a href="#"><img src="{{static_url('images/ic-thumbs-up.png')}}" alt="thumbs-up" width="14"></a></li>
+                            <li class="down-v"><a href="#"><img src="{{static_url('images/ic-thumbs-down.png')}}" alt="thumbs-down" width="14"></a></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="wrap-con-tw">
+                    20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                    <div class="preview-tw">
+                            <div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+                                            <div class="span8">
+                            <img src="{{static_url('images/img-sp.png')}}"/>
+                            <a href="#">SportsCenter on Twitter</a>
+                            <p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper. </p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="wrap-comment">
+                            <h4>Top Comments</h4>
+                        <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">53</a></div>
+                        <div class="clear"></div>
+                        <p><span class="txt-user">Username</span> <span class="txt-date">(Feb 11, 2016 2:35 pm)</span>: Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- tweets end -->
+            <!-- tweets start -->
+            <div class="con-tw">
+                    <div class="wrap-user">
+                    <div class="user">
+                            <div class="handle-main"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" /></div>
+                        <div class="handle-name"> Tech Crunch</div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="time-tw">
+                            <span class="genericon genericon-time"></span> 5 min
+                            <ul class="vote-tw">
+                            <li class="up-v"><a href="#"><img src="{{static_url('images/ic-thumbs-up.png')}}" alt="thumbs-up" width="14"></a></li>
+                            <li class="down-v"><a href="#"><img src="{{static_url('images/ic-thumbs-down.png')}}" alt="thumbs-down" width="14"></a></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="wrap-con-tw">
+                    20 new ways Facebook is eating the Internet <a href="#">http://on.tcrn.ch/l/ka9B</a>
+                    <div class="preview-tw">
+                            <div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+                                            <div class="span8">
+                            <img src="{{static_url('images/img-sp.png')}}"/>
+                            <a href="#">SportsCenter on Twitter</a>
+                            <p>Cavaliers guard J.R. Smith crosses over Pacers forward Paul George, sending him to the floor and knocks down the jumper. </p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="wrap-comment">
+                            <h4>Top Comments</h4>
+                        <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">53</a></div>
+                        <div class="clear"></div>
+                        <p><span class="txt-user">Username</span> <span class="txt-date">(Feb 11, 2016 2:35 pm)</span>: Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- tweets end -->
+            <button id="bt-loadmore">Load More</button>
+        </div>
+        <!-- sidebar start -->
+        <div class="col-xs-12 col-md-3">
+            <!-- vote start -->
+            <div class="box-side">
+                    <h3>Twitter Handles</h3>
+                <ul id="list-vote">
+                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div><div class="clear"></div></li>
+                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Bleacher Report LFL</div><div class="clear"></div></li>
+                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div><div class="clear"></div></li>
+                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div><div class="clear"></div></li>
+                    <li><div class="handle"><img src="{{static_url('images/ic-twitter.png')}}" alt="TechCrunch" />@Tech Crunch</div><div class="clear"></div></li>
+                </ul>
+            </div>
+            <!-- vote end -->
+        </div>
+        <!-- sidebar end -->
+      </div>
+    </div>
+    <!-- contents end -->
+</body>
+</html>

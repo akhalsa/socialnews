@@ -347,7 +347,7 @@ class IndexHandler(tornado.web.RequestHandler):
 class IndexCategoryHandler(tornado.web.RequestHandler):
     def get(self, cat):
         print "injecting cat: "+cat
-        self.render("static/cat_index.html", cat_name=cat)
+        self.render("static/new_cat_index.html", cat_name=cat)
         
         
 class NewIndexHandler(tornado.web.RequestHandler):
