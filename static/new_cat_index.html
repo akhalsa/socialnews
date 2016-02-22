@@ -78,14 +78,13 @@
             <li ng-show="logged_in" ng-click="logout()"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
           </ul>
           <div class="clear"></div>
+        
         <!-- nav start -->
-        <ul class="nav navbar-nav nav-top">
-          <li class="active"><a href="#">Front Page</a></li>
-          <li><a href="#">Technology</a></li>
-          <li><a href="#">Sports</a></li>
-          <li><a href="#">Travel</a></li>
-          <li><a href="#">Politics</a></li>
-          <li><a href="#">Travel</a></li>
+        <ul class="nav navbar-nav">
+          <li><a href="#" ng-click="redirectHome()">Front Page</a></li>
+          <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
+            <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
+          </li>
         </ul>
         </div>
         <!-- nav end -->

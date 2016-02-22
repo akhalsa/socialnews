@@ -569,7 +569,6 @@ app = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
-    (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/twitter_id/(.*)',  PageLoad),
     (r'/twitter/search/(.*)', Twitter),
@@ -578,7 +577,8 @@ app = tornado.web.Application([
     (r"/api/signup", signupAPI),
     (r"/api/login", LoginAPI),
     (r"/api/tweet/(.*)/vote", CommentVoteAPI),
-    (r"/api/tweet/(.*)", TweetAPI)
+    (r"/api/tweet/(.*)", TweetAPI),
+    (r"/api/category", Category)
     
 ], **settings)
 
