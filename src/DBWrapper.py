@@ -1068,16 +1068,13 @@ def topComments(local_db,tweet_ids ):
         effective_un = "user"+str(row[6])
         if(row[5] is not None):
             effective_un = str(row[5])
-            
-            
-        
+
         if(row[3] not in response):
             response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4]}
         elif (response[row[3]] < row[4]):
             response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4]}
         
     
-    print response
     
     return response
     

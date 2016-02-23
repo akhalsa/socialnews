@@ -305,6 +305,8 @@ class Reader(AuthBase):
                         if(tweet["id"] == comment):
                             tweet["top_comment"] = comment
                             
+                            
+                print simplejson.dumps(lookup)
                 self.finish(simplejson.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
