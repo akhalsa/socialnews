@@ -287,6 +287,7 @@ class Reader(AuthBase):
                 ids = []
                 for tweet in lookup:
                     tweet["voted"] = 0
+                    tweet["top_comment"] = {"total_comment_count":0}
                     ids.append(tweet["id"])
                     
                 user_vote = userVote(local_db, user_id, ids)
