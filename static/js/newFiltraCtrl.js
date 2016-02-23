@@ -73,6 +73,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         
         if (skip) {
             console.log("skipping");
+            return
         }
         $http.post( "/handle/"+handle+"/category/"+currentCatName()+"/upvote/"+value, data).then(function(response) {
             loadTweets();   
