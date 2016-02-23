@@ -57,11 +57,23 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     }
     
     $scope.vote = function(tweet_id, handle, value){
-        console.log("sending: "+tweet_id);
-        console.log("handle: "+handle);
-        console.log("value: "+value);
         data = {};
         data["tweet_id"] = tweet_id;
+        skip = false;
+        
+        $scope.tweet_array.forEach(function(tweet) {
+            if (tweet_id == tweet.id) {
+                if (tweet.voted != 0) {
+                    skip = true;
+                }else{
+                    tweet.voted = value;
+                }
+            }
+        });
+        
+        if (skip) {
+            console.log("skipping");
+        }
         $http.post( "/handle/"+handle+"/category/"+currentCatName()+"/upvote/"+value, data).then(function(response) {
             loadTweets();   
         });
