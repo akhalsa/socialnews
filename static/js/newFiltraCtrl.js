@@ -92,6 +92,15 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         .then(function(response) {
             
             $scope.tweet_array = response.data;
+            $scope.tweet_array.forEach(function(tweet) {
+                if (tweet.voted == 0) {
+                    console.log("no vote for: ");
+                    console.log(tweet.text);
+                }else{
+                    console.log("***** FOUND vote for: *******");
+                    console.log(tweet.text);
+                }
+            });
             console.log("tweet array length: "+$scope.tweet_array.length);
         });
     }
