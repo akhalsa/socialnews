@@ -91,8 +91,9 @@ input {border:none;}
 .vote-tw li {float: left; width:26px; display:inline; padding:1px 6px 3px;}
 .vote-tw .up-v {background-color:#8ac249;}
 .vote-tw .down-v {background-color:#33429a;}
-.vote-done {border:1px solid #ddd; width:54px !important;}
 .vote-done li {background-color:#eee !important;}
+.vote-done .up-v-done {background-color:#8ac249 !important;}
+.vote-done .down-v-done {background-color:#33429a !important;}
 
 .wrap-user .time-tw {float:right; width: 39%; text-align:right; color:#33429a; margin-top: 2px;}
 .wrap-user .time-tw span {padding-top:3px; color:#8ac249;}
@@ -152,7 +153,7 @@ input {border:none;}
   z-index: 10;
   background-color: rgba(0,0,0,0.5); /*dim the background*/
 }
-.wrap-popup {background-color:#fff; width:740px; height:450px; padding:30px;
+.wrap-popup {background-color:#fff; width:740px; padding:30px;
     position: fixed;
     top: 20%;
     left: 35%;
@@ -163,6 +164,7 @@ input {border:none;}
 #bt-close a .genericon {color:#000; text-decoration:none;}
 .wrap-popup h3 {color:#8ac249; text-align:center; margin-top:0;}
 .wrap-popup .p-sub-head {font-size:18px; text-align:center; color:#666;}
+.wrap-popup .p-sub-head2 {font-size:18px; text-align:center; color:#333; margin-bottom:15px;}
 .wrap-popup #p-handle {float:left; width:320px; margin-top:20px;}
 #p-search {border:2px solid #8ac249; padding:2px; color:#8ac249; background-color:#fff;}
 #p-search .genericon {font-size:24px; margin-top:2px;}
@@ -194,9 +196,10 @@ input {border:none;}
 
 .popover {color:#333; font-family:Montserrat, Arial, Helvetica, sans-serif;}
 
-.pp-register {width: 400px; height:400px; border:3px solid #8ac249;}
+.pp-register {width: 400px; border:3px solid #8ac249;}
 .pp-register .form-control {padding:11px; border:1px solid #e1e1e1; height: auto; margin-bottom:10px;}
 .pp-register .btn-default {width:100%; background-color:#33429a; color:#fff; border:none; padding:11px; margin-bottom:20px;}
+.pp-register .info-txt-form {font-size:14px; color:#8ac249; margin-bottom:15px;}
 
 .li-login {text-align:center;}
 .li-login li {margin-bottom:8px;}
@@ -223,9 +226,14 @@ input {border:none;}
 .comment-form .form-group {width:80%;} 
 .comment-form .form-group .form-control {width: 75%;}
 .comment-form button {width:19%; background-color:#8ac249; color:#fff; border:none;}
+.comment-form button:hover {background-color:#33429a; color:#fff;}
+.comment-form #info-submit {text-align:right; font-size:14px; color:#666; margin:15px 10px 0 0;}
+.comment-form #info-submit a {color:#33429a; text-decoration:none;}
+.comment-form #info-submit a:hover {color:#8ac249;}
 
 .comment-list {border-top: 1px solid #e1e1e1; padding:15px 0 10px;}
 .comment-list .username-c {float:left; width:20%; text-align:center;}
+.comment-list .username-c a {text-decoration:none;}
 .comment-list .username-c .txt-c {font-weight:bold; font-size:16px;}
 .comment-list .username-c .pd-number {padding:10px 0;}
 .comment-list .username-c .genericon {font-size:24px;}
@@ -234,6 +242,9 @@ input {border:none;}
 .comment-list .con-comment {float:right; width:78%; line-height:24px; padding-right:10px;}
 .comment-list .con-comment .txt-date {text-align:right; margin-bottom:5px; color:#999;}
 .comment-list .c-done .genericon {color:#ccc !important;}
+.comment-list .c-done .up-c {color:#8ac249 !important;}
+.comment-list .c-done .down-c {color:#33429a !important;}
+.comment-list .c-done .pd-number {color:#999; font-weight:normal;}
 
 /* footer */
 footer {text-align:center; padding:30px; font-size:15px; color:#999;}

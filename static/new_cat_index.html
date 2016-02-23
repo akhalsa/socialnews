@@ -182,9 +182,11 @@
                     <div class="time-tw">
                         <span class="genericon genericon-time"></span>
                         {{! convertSecondsToDeltaTime(tweet.seconds_since_posted) }}
-                        <ul class="vote-tw">
-                            <li class="up-v" ng-click="vote(tweet.id, tweet.handle, 1)"><a href="#"><img src="{{static_url('images/ic-thumbs-up.png')}}" alt="thumbs-up" width="14"></a></li>
-                            <li class="down-v" ng-click="vote(tweet.id, tweet.handle, -1)"><a href="#"><img src="{{static_url('images/ic-thumbs-down.png')}}" alt="thumbs-down" width="14"></a></li>
+                        <ul class="vote-tw" ng-class="{'vote-done': tweet.voted != 0}">
+                            <li class="up-v" ng-class="{'up-v-done': tweet.voted>0 }"
+                                ng-click="vote(tweet.id, tweet.handle, 1)"><a href="#"><img src="{{static_url('images/ic-thumbs-up.png')}}" alt="thumbs-up" width="14"></a></li>
+                            <li class="down-v" ng-class="{'down-v-done': tweet.voted<0 }"
+                                ng-click="vote(tweet.id, tweet.handle, -1)"><a href="#"><img src="{{static_url('images/ic-thumbs-down.png')}}" alt="thumbs-down" width="14"></a></li>
                         </ul>
                         <div class="clear"></div>
                     </div>
