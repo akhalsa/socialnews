@@ -1070,10 +1070,13 @@ def topComments(local_db,tweet_ids ):
             effective_un = str(row[5])
 
         if(row[3] not in response):
-            response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4]}
-        elif (response[row[3]] < row[4]):
-            response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4]}
-        
+            #this means that the tweet id isnt already in the dictionary
+            response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4], "total_comment_count":1}
+        elif (response[row[3]]["score"] < row[4]):
+            #ok the tweet id was already in the dictionary but the new score is higher
+            holding_count = response[row[3]]["total_comment_count"]+1
+            response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4], "total_comment_count":holding_count}
+    
     
     
     return response

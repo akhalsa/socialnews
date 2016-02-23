@@ -209,7 +209,7 @@
                     </div>
                     <div class="wrap-comment">
                             <h4><a href="/tweet/{{! tweet.id }}">Top Comment</a></h4>
-                        <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">53</a></div>
+                        <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">{{! tweet.top_comment.total_comment_count }}</a></div>
                         <div class="clear"></div>
                         <p ng-show="tweet.top_comment">
                             <span class="txt-user">{{! tweet.top_comment.username }}</span> {{! tweet.top_comment.text }}
