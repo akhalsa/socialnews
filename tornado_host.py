@@ -303,7 +303,7 @@ class Reader(AuthBase):
                 for comment in top_comments:
                     for tweet in lookup:
                         if(tweet["id"] == comment):
-                            tweet["top_comment"] = comment
+                            tweet["top_comment"] = top_comments[comment]
                             
                             
                 print simplejson.dumps(lookup)
