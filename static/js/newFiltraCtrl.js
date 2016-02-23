@@ -60,6 +60,11 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         console.log("sending: "+tweet_id);
         console.log("handle: "+handle);
         console.log("value: "+value);
+        data = {};
+        data["tweet_id"] = tweet_id;
+        $http.post( "/handle/"+handle+"/category/"+currentCatName()+"/upvote/"+value, data).then(function(response) {
+            console.log("got a response");    
+        });
     }
     
     

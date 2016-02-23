@@ -218,6 +218,12 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             
             insertVote(local_db, user_id, chain, table_info["twitter_id"], vote_array)
         else:
+            if tweet_id is None:
+                self.clear()
+                self.set_status(400)
+                self.finish()
+                return
+            
             if(alreadyVoted(local_db, user_id, tweet_id, cat_id, table_info["twitter_id"])):
                 ##405 means the user already voted for this tweet
                 self.clear()
@@ -273,6 +279,10 @@ class Reader(AuthBase):
                 print "found category id: "+str(cat_id)        
                 
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, 30)
+                if(len(lookup) == 0):
+                    self.finish(simplejson.dumps(lookup))
+                    return
+                
                 user_id = self.getUserId(local_db)
                 ids = []
                 for tweet in lookup:
