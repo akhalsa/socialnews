@@ -1076,7 +1076,11 @@ def topComments(local_db,tweet_ids ):
             #ok the tweet id was already in the dictionary but the new score is higher
             holding_count = response[row[3]]["total_comment_count"]+1
             response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4], "total_comment_count":holding_count}
-    
+        else:
+            #ok tweet id must have been in dictionary and had a lower score... just update the total_comment_count value
+            response[row[3]]["total_comment_count"] += 1
+            
+            
     
     
     return response
