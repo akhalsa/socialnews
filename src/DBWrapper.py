@@ -1044,5 +1044,35 @@ def userVote(local_db, user_id, tweet_ids):
     for row in cursor.fetchall():
         response[row[0]] = row[1]
     cursor.close()
-            
     return response
+
+
+def topComments(local_db,tweet_ids ):
+    cursor = local_db.cursor()
+    print "searching For Comments: "+str(tweet_ids)
+    if(len(tweet_ids) == 0):
+        return {}
+    
+    sql = "SELECT Comment.ID, Comment.user_id, Comment.text, Comment.tweet_id, Comment.score, User.username From Comment "
+    sql += "INNER JOIN User on User.ID=Comment.user_id "
+    sql += " WHERE tweet_id in ("
+    for index, tweet_id in enumerate(tweet_ids):
+        sql += "'"+str(tweet_id)+"'"
+        if(index != (len(tweet_ids)-1)):
+            sql += ", "
+    sql += ");"
+    cursor.execute(sql)
+    
+    response = {}
+    for row in cursor.fetchall():
+        if(row[3] not in response):
+            response[row[3]] = {"comment_id":row[0], "username":row[5], "text":row[2], "score":row[4]}
+        elif (response[row[3]] < row[4]):
+            response[row[3]] = {"comment_id":row[0], "username":row[5], "text":row[2], "score":row[4]}
+        
+    
+    print response
+    
+    return response
+    
+    

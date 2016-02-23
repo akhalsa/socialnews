@@ -287,6 +287,7 @@ class Reader(AuthBase):
                 ids = []
                 for tweet in lookup:
                     tweet["voted"] = 0
+                    tweet["top_comment"] = {}
                     ids.append(tweet["id"])
                     
                 user_vote = userVote(local_db, user_id, ids)
@@ -295,6 +296,15 @@ class Reader(AuthBase):
                     for tweet in lookup:
                        if(tweet["id"] == vote_entry):
                             tweet["voted"] = user_vote[vote_entry]
+                            
+                            
+                top_comments = topComments(local_db,tweet_ids )
+                
+                for comment in top_comments:
+                    for tweet in lookup:
+                        if(tweet["id"] == comment):
+                            tweet["top_comment"] = comment
+                            
                 self.finish(simplejson.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
