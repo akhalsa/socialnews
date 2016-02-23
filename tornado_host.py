@@ -298,7 +298,7 @@ class Reader(AuthBase):
                             tweet["voted"] = user_vote[vote_entry]
                             
                             
-                top_comments = topComments(local_db,tweet_ids )
+                top_comments = topComments(local_db, ids )
                 
                 for comment in top_comments:
                     for tweet in lookup:
