@@ -1065,9 +1065,9 @@ def topComments(local_db,tweet_ids ):
     
     response = {}
     for row in cursor.fetchall():
-        effective_un = row[6]
+        effective_un = "user"+str(row[6])
         if(row[5] is not None):
-            effective_un = row[5]
+            effective_un = str(row[5])
             
             
         
