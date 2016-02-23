@@ -1053,7 +1053,7 @@ def topComments(local_db,tweet_ids ):
     if(len(tweet_ids) == 0):
         return {}
     
-    sql = "SELECT Comment.ID, Comment.user_id, Comment.text, Comment.tweet_id, Comment.score, User.username From Comment "
+    sql = "SELECT Comment.ID, Comment.user_id, Comment.text, Comment.tweet_id, Comment.score, User.username, User.ID From Comment "
     sql += "INNER JOIN User on User.ID=Comment.user_id "
     sql += " WHERE tweet_id in ("
     for index, tweet_id in enumerate(tweet_ids):
@@ -1065,10 +1065,16 @@ def topComments(local_db,tweet_ids ):
     
     response = {}
     for row in cursor.fetchall():
+        effective_un = row[6]
+        if(row[5] is not None):
+            effective_un = row[5]
+            
+            
+        
         if(row[3] not in response):
-            response[row[3]] = {"comment_id":row[0], "username":row[5], "text":row[2], "score":row[4]}
+            response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4]}
         elif (response[row[3]] < row[4]):
-            response[row[3]] = {"comment_id":row[0], "username":row[5], "text":row[2], "score":row[4]}
+            response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4]}
         
     
     print response
