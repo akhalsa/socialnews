@@ -105,6 +105,13 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         .then(function(response) {
             
             $scope.tweet_array = response.data;
+            $scope.tweet_array.forEach(function(tweet) {
+                if (len(tweet.top_comment) > 0) {
+                    console.log(tweet.text);
+                    console.log("had comment");
+                    console.log(tweet.top_comment.text);
+                }
+            });
         });
     }
     
