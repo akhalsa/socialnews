@@ -63,7 +63,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         data = {};
         data["tweet_id"] = tweet_id;
         $http.post( "/handle/"+handle+"/category/"+currentCatName()+"/upvote/"+value, data).then(function(response) {
-            console.log("got a response");    
+            loadTweets();   
         });
     }
     
@@ -92,16 +92,6 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         .then(function(response) {
             
             $scope.tweet_array = response.data;
-            $scope.tweet_array.forEach(function(tweet) {
-                if (tweet.voted == 0) {
-                    console.log("no vote for: ");
-                    console.log(tweet.text);
-                }else{
-                    console.log("***** FOUND vote for: *******");
-                    console.log(tweet.text);
-                }
-            });
-            console.log("tweet array length: "+$scope.tweet_array.length);
         });
     }
     
