@@ -106,7 +106,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             
             $scope.tweet_array = response.data;
             $scope.tweet_array.forEach(function(tweet) {
-                if (tweet.top_comment.length > 0) {
+                if (tweet.top_comment != null) {
                     console.log(tweet.text);
                     console.log("had comment");
                     console.log(tweet.top_comment.text);
