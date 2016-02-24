@@ -217,12 +217,13 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         
     }
     
-    $scope.breadCrumbSubSelect = function(bc_sub_index){
-        console.log("breadcrumb select triggered");
-        if  ($scope.selected_secondary_index == -1) { 
-            $scope.selected_secondary_index = bc_sub_index;
-        } else if ($scope.selected_third_index == -1) {
-            $scope.selected_third_index = bc_sub_index;
+    $scope.breadCrumbSelection = function(bc_index){
+        console.log("breacrumb select triggered");
+        if (bc_index == 0){
+            $scope.selected_secondary_index = -1;
+            $scope.selected_third_index = -1;
+        }else if (bc_index == 1) {
+            $scope.selected_third_index = -1;
         }
         reloadCurrentPath();
         loadTweets();
