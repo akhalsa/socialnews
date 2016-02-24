@@ -68,19 +68,9 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         }, function errorCallback(response){
             if (response.status == 401) {
                 $scope.comment_rate_limit = true;
+                console.log("401 detected");
             }
         });
-        
-        $http.post("/api/tweet/"+$scope.tweet_id, data).then(function(response){
-            if (response.status == 200) {
-                $scope.new_comment_text = "";
-                reloadPage();
-            }else{
-                alert("error on insertion!");
-            }
-            
-        });
-        
     }
     
     $scope.convertSecondsToDeltaTime = function(seconds){
