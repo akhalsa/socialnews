@@ -228,7 +228,9 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         loadHandles();
     }
     
-    
+    $scope.refreshButton = function(){
+        loadTweets();
+    }
     
     //PRIVATE METHODS
     function checkLogin(){
