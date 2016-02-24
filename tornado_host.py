@@ -413,7 +413,7 @@ class CommentVoteAPI(AuthBase):
             self.finish()
             return
         logged_in = self.isLoggedIn( local_db)
-        if ((not logged_in) and (getCommentVoteCountByIpForTimeFrame(local_db, user_id, 3600) > 5)):
+        if ((not logged_in) and (getCommentVoteCountByIpForTimeFrame(local_db, user_id, 3600) >= 5)):
             ##401 means the rate limit exceeded
             self.clear()
             self.set_status(401)
