@@ -38,7 +38,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.showRegister = false;
     
     
-    
+    $scope.comment_rate_limit = false;
     
     $scope.$watch('tweet_id', function () {
         reloadPage();
@@ -60,6 +60,17 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
         var data = {};
         data["comment_text"] = $scope.new_comment_text;
+        
+        $http.post("/api/tweet/"+$scope.tweet_id, data).then(function successCallback(response){
+            $scope.new_comment_text = "";
+            reloadPage();
+            $scope.comment_rate_limit = false;
+        }, function errorCallback(response){
+            if (response.status == 401) {
+                $scope.comment_rate_limit = true;
+            }
+        });
+        
         $http.post("/api/tweet/"+$scope.tweet_id, data).then(function(response){
             if (response.status == 200) {
                 $scope.new_comment_text = "";
