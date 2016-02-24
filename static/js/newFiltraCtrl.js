@@ -27,6 +27,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     $scope.register_pw = "";
     $scope.register_pw_confirm = "";
     
+    $scope.FEATURE_FLAG_REFRESH_AND_NOMINATE = false;
+    
     
     
     $scope.invalid_creds = false;
