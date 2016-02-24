@@ -105,6 +105,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
                 console.log("got a 401");
                 $scope.throttled = true;
                 $scope.showLoginPopup();
+                loadTweets(); 
             }else if (response.status == 405) {
                 console.log("got a 405");
             }
