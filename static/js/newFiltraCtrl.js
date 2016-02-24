@@ -151,7 +151,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             $scope.logged_in = response.data.logged_in;
             $scope.username = response.data.username;
             $scope.dismissPopups();
-            reloadPage();
+            loadTweets();
             
         }, function errorCallback(response){
             console.log("got an error");
@@ -171,7 +171,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         $http.put("/api/login", data).then(function(response){
             if (response.status == 200) {
                 console.log("logout success");
-                reloadPage();
+                loadTweets();
             }else{
                 console.log("logout fail");
             }
@@ -206,7 +206,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             $scope.logged_in = true;
             $scope.username = response.data.username;
             $scope.dismissPopups();
-            reloadPage();
+            loadTweets();
             
         }, function errorCallback(response){
             console.log("got an error");
