@@ -152,8 +152,9 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
         
         votes_this_hour = getVoteCountByIpForTimeFrame(local_db, user_id, 3600)
         print "found votes this hour of: "+str(votes_this_hour)
+        logged_in = self.isLoggedIn( local_db)
         
-        if(votes_this_hour >= 5):
+        if (not logged_in) and (votes_this_hour >= 5):
             ## 401 means the user has exceeded rate limits
             self.clear()
             self.set_status(401)
@@ -411,14 +412,13 @@ class CommentVoteAPI(AuthBase):
             self.set_status(405)
             self.finish()
             return
-
-        if(getCommentVoteCountByIpForTimeFrame(local_db, user_id, 3600) > 5):
+        logged_in = self.isLoggedIn( local_db)
+        if ((not logged_in) and (getCommentVoteCountByIpForTimeFrame(local_db, user_id, 3600) > 5)):
             ##401 means the rate limit exceeded
             self.clear()
             self.set_status(401)
             self.finish()
             return
-                        
         
         insertCommentVote(local_db, user_id, comment_id, value)
         self.clear()
