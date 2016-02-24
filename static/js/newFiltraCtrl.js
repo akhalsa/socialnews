@@ -217,6 +217,17 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         
     }
     
+    $scope.breadCrumbSubSelect = function(bc_sub_index){
+        if  ($scope.selected_secondary_index == -1) { 
+            $scope.selected_secondary_index = bc_sub_index;
+        } else if ($scope.selected_third_index == -1) {
+            $scope.selected_third_index = bc_sub_index;
+        }
+        reloadCurrentPath();
+        loadTweets();
+        loadHandles();
+    }
+    
     
     
     //PRIVATE METHODS
