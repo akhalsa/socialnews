@@ -70,13 +70,13 @@
         </div>
            
         <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav navbar-right">
-            <li ng-hide="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
-            <li ng-hide="logged_in"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
             
-            <li id="after-login" ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>{{! username}}</span></a></li>
-            <li ng-show="logged_in" ng-click="logout()"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
-          </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-hide="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                <li ng-hide="logged_in"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+                <li id="after-login" ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>{{! username}}</span></a></li>
+                <li ng-show="logged_in" ng-click="logout()"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+            </ul>
           <div class="clear"></div>
         
         <!-- nav start -->
@@ -91,6 +91,43 @@
       </div>
     </nav>
     <!-- header end -->
+    <!-- popup overlay start -->
+    <div class="overlay" ng-show="showLogin || showRegister" ></div>
+    <div class="wrap-popup pp-register" ng-show="showLogin">
+            <div id="bt-close"><a href="#" ng-click="dismissPopups()" ><span class="genericon genericon-close-alt"></span></a></div>
+            <h3>Login</h3>
+        <div class="con-pp-inner">
+            <form>
+                <input type="text" class="form-control" id="exampleInputName" placeholder="Email" ng-model="login_email">
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="login_pw">
+                <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
+            </form>
+            <ul class="li-login">
+                    
+                    <li>Want to join? <a href="#" ng-click="showRegisterPopup()">Register in seconds.</a></li>
+                    <li id="link-g" ng-show="FindCredentialsFeatureFlag">Forgot Password? <a href="#">Click here to find.</a></li>
+                    <li ng-show="invalid_creds">Invalid username/password </li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- popup overlay end -->
+    <!-- popup overlay start -->
+    <div class="wrap-popup pp-register" ng-show="showRegister">
+            <div id="bt-close"><a href="#" ng-click="dismissPopups()"><span class="genericon genericon-close-alt"></span></a></div>
+            <h3>Register</h3>
+        <div class="con-pp-inner">
+            <form>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" ng-model="register_email">
+                <input type="text" class="form-control" id="exampleInputName" placeholder="Display Name" ng-model="register_username">
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="register_pw">
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password" ng-model="register_pw_confirm">
+                <button type="submit" class="btn btn-default" ng-click="createAccount()">Register</button>
+            </form>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- popup overlay end -->
     <!-- contents start -->
     <div class="container-fluid">
       <div class="row">

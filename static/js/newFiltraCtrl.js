@@ -15,7 +15,6 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     $scope.handle_list = [];
     $scope.peer_categories = [];
     
-    
     $http.get("/api/category")
     .then(function(response) {
         $scope.category_structure = response.data;
@@ -29,6 +28,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             $scope.selected_third_index = starting[2];
         }
         reloadCurrentPath();
+        checkLogin();
         loadTweets();
         loadHandles();
     });
@@ -98,6 +98,13 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     
     
     //PRIVATE METHODS
+    function checkLogin(){
+        $http.get("/api/login")
+                .then(function(response) {
+                    $scope.logged_in = response.data.logged_in;
+                    $scope.username =response.data.username;
+                });
+    }
     
     function loadTweets(){
         var endPoint = "/reader/"+currentCatName()+"/time/"+$scope.time_frames[$scope.selected_time].seconds;
