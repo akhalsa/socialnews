@@ -210,6 +210,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             $scope.username = response.data.username;
             $scope.dismissPopups();
             reloadPage();
+            $scope.comment_rate_limit = false;
             
         }, function errorCallback(response){
             console.log("got an error");
@@ -246,6 +247,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
                 .then(function(response) {
                     $scope.logged_in = response.data.logged_in;
                     $scope.username =response.data.username;
+                    $scope.comment_rate_limit = false;
                 });
         }
         
