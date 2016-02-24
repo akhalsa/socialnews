@@ -50,26 +50,8 @@
 </nav>
 <!-- header end -->
 <!-- contents start -->
-<div class="overlay" ng-show="showLogin || showRegister || throttled" ></div>
 <!-- popup overlay start -->
-<div class="wrap-popup pp-register" ng-show="throttled">
-	<div id="bt-close"><a href="#"><span class="genericon genericon-close-alt"></span></a></div>
-	<h3>Please Login,</h3>
-    <p class="p-sub-head2">You can only up or down vote 5 times before you login.</p>
-    <div class="con-pp-inner">
-    	<form>
-        	<input type="text" class="form-control" id="exampleInputName" placeholder="Username">
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            <button type="submit" class="btn btn-default">Login</button>
-        </form>
-        <ul class="li-login">
-        	<li>Want to join? <a href="#" ng-click="showRegisterPopup()" >Register in seconds.</a></li>
-        </ul>
-    </div>
-    <div class="clear"></div>
-</div>
-<!-- popup overlay end -->
-<!-- popup overlay start -->
+<div class="overlay" ng-show="showLogin || showRegister" ></div>
 <div class="wrap-popup pp-register" ng-show="showLogin">
 	<div id="bt-close"><a href="#" ng-click="dismissPopups()" ><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Login</h3>
