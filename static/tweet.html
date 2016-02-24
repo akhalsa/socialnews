@@ -55,6 +55,7 @@
 <div class="wrap-popup pp-register" ng-show="showLogin">
 	<div id="bt-close"><a href="#" ng-click="dismissPopups()" ><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Login</h3>
+	<p class="p-sub-head2" ng-show="throttled">You can only up or down vote 5 times before you login.</p>
     <div class="con-pp-inner">
     	<form>
             <input type="text" class="form-control" id="exampleInputName" placeholder="Email" ng-model="login_email">

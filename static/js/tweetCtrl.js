@@ -36,6 +36,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     $scope.showLogin = false;
     $scope.showRegister = false;
+    $scope.throttled = false;
     
     
     $scope.comment_rate_limit = false;
@@ -101,6 +102,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             console.log("got an error");
             if (response.status == 401) {
                 console.log("got a 401");
+                $scope.throttled = true;
+                $scope.showLoginPopup();
             }else if (response.status == 405) {
                 console.log("got a 405");
             }
@@ -111,6 +114,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         $scope.showLogin = false;
         $scope.showRegister = false;
         $scope.invalid_creds = false;
+        $scope.throttled = false;
         
         $scope.login_email = "";
         $scope.login_pw = "";
@@ -132,6 +136,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         $scope.showLogin = false;
         $scope.showRegister = true;
         $scope.invalid_creds = false;
+        $scope.throttled = false;
     }
     
     $scope.login = function(){
