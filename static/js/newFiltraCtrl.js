@@ -218,6 +218,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     }
     
     $scope.breadCrumbSubSelect = function(bc_sub_index){
+        console.log("breadcrumb select triggered");
         if  ($scope.selected_secondary_index == -1) { 
             $scope.selected_secondary_index = bc_sub_index;
         } else if ($scope.selected_third_index == -1) {
@@ -228,6 +229,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         loadHandles();
     }
     $scope.breadCrumbSubSelect = function(bc_sub_index){
+        console.log("breadcrumb SUB select triggered");
         if  ($scope.selected_secondary_index == -1) { 
             $scope.selected_secondary_index = bc_sub_index;
         } else if ($scope.selected_third_index == -1) {
