@@ -77,7 +77,7 @@ class AuthBase(tornado.web.RequestHandler):
             return isValidCreds(db, email, password_hash)
         else:
             return False
-        
+    
 
 
 class Category(tornado.web.RequestHandler):    
@@ -453,7 +453,15 @@ class TweetAPI(AuthBase):
         #get user id
         user_id = self.getUserId(local_db)
         ###will need to rate check here for anonymous users
-        
+        logged_in = self.isLoggedIn( local_db)
+        if(not logged_in):
+            ##check comment count
+            comment_count = userCommentCount(local_db, user_id)
+            if(comment_count > 2):
+                self.clear()
+                self.set_status(401)
+                self.finish()
+                return
         
         insertComment(local_db, tweet_id, user_id, re.escape(data["comment_text"]))
         self.clear()
@@ -518,7 +526,7 @@ class LoginAPI(AuthBase):
         user = getUserWithCredentials(local_db, email, pw_hash)
         if(user is None):
             self.clear()
-            self.set_status(401)
+            self.set_status(403)
             self.finish()
             return
         else:
@@ -556,7 +564,7 @@ class signupAPI(tornado.web.RequestHandler):
                 #but there is a user wiht that email
                 #as such throw exception
                 self.clear()
-                self.set_status(401)
+                self.set_status(403)
                 return
             
             #ok no existing user

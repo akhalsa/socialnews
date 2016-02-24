@@ -155,8 +155,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             
         }, function errorCallback(response){
             console.log("got an error");
-            if (response.status == 401) {
-                console.log("got a 401");
+            if (response.status == 403) {
+                console.log("got a 403");
                 $scope.invalid_creds = true;
             }
         });
@@ -210,8 +210,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             
         }, function errorCallback(response){
             console.log("got an error");
-            if (response.status == 401) {
-                console.log("got a 401");
+            if (response.status == 403) {
+                console.log("got a 403");
             }
         });
         

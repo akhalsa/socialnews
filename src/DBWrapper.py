@@ -1047,6 +1047,15 @@ def userVote(local_db, user_id, tweet_ids):
     return response
 
 
+def userCommentCount(local_db, user_id):
+    cursor = local_db.cursor()
+    sql = "SELECT * From Comment WHERE user_id="+str(user_id)+";"
+    cursor.execute(sql)
+    comment_count = cursor.rowcount
+    cursor.close()
+    return comment_count
+    
+    
 def topComments(local_db,tweet_ids ):
     cursor = local_db.cursor()
     print "searching For Comments: "+str(tweet_ids)
