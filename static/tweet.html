@@ -81,7 +81,6 @@
             <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="register_pw">
             <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password" ng-model="register_pw_confirm">
             <button type="submit" class="btn btn-default" ng-click="createAccount()">Register</button>
-	    <p id="info-submit" ng-show="comment_rate_limit">You may only make 5 comments before you register an account. <a href="#" ng-click="showLoginPopup()">Login Now</a></p>
         </form>
     </div>
     <div class="clear"></div>
@@ -162,6 +161,7 @@
                 <input type="text" class="form-control" id="exampleInputName2" placeholder="Enter Comment here" ng-model="new_comment_text">
               </div>
               <button type="submit" class="btn btn-default" ng-click="sendComment()">Submit</button>
+	      <p id="info-submit" ng-show="comment_rate_limit">You may only make 5 comments before you register an account. <a href="#" ng-click="showLoginPopup()">Login Now</a></p>
             </form>
             <!-- comment form end -->
             <!-- comment list start -->
