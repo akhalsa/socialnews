@@ -17,6 +17,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.showLogin = false;
     $scope.showRegister = false;
+    $scope.throttled = false;
+
     
     $scope.login_email = "";
     $scope.login_pw = "";
@@ -94,9 +96,20 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             console.log("skipping");
             return
         }
-        $http.post( "/handle/"+handle+"/category/"+currentCatName()+"/upvote/"+value, data).then(function(response) {
-            loadTweets();   
+        $http.post( "/handle/"+handle+"/category/"+currentCatName()+"/upvote/"+value, data).then(function successCallback(response){
+            loadTweets();  
+            
+        }, function errorCallback(response){
+            console.log("got an error");
+            if (response.status == 401) {
+                console.log("got a 401");
+                $scope.throttled = true;
+                $scope.showLoginPopup();
+            }else if (response.status == 405) {
+                console.log("got a 405");
+            }
         });
+        
     }
     
     
@@ -118,6 +131,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         $scope.showLogin = false;
         $scope.showRegister = false;
         $scope.invalid_creds = false;
+        $scope.throttled = false;
+
         
         $scope.login_email = "";
         $scope.login_pw = "";
@@ -139,6 +154,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         $scope.showLogin = false;
         $scope.showRegister = true;
         $scope.invalid_creds = false;
+        $scope.throttled = false;
+
     }
     
     $scope.login = function(){
