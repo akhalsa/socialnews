@@ -172,6 +172,9 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             if (response.status == 200) {
                 console.log("logout success");
                 loadTweets();
+                $scope.logged_in = false;
+                $scope.username = "";
+                
             }else{
                 console.log("logout fail");
             }
@@ -207,7 +210,6 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             $scope.username = response.data.username;
             $scope.dismissPopups();
             loadTweets();
-            
         }, function errorCallback(response){
             console.log("got an error");
             if (response.status == 403) {
