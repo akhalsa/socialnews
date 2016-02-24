@@ -231,6 +231,10 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     $scope.refreshButton = function(){
         loadTweets();
     }
+    $scope.timeChange = function(new_time_index){
+        $scope.selected_time = new_time_index;
+        loadTweets();
+    }
     
     //PRIVATE METHODS
     function checkLogin(){
