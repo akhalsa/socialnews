@@ -202,9 +202,9 @@
             </ul>
             <!-- time end -->
             <!-- buttons start -->
-            <ul class="bt-wrap" ng-show="FEATURE_FLAG_REFRESH_AND_NOMINATE">
+            <ul class="bt-wrap" >
                 <li><button id="bt-green" ng-click="refreshButton()"><span class="genericon genericon-refresh"></span> Refresh</button></li>
-                <li><button id="bt-blue"><span class="genericon genericon-search"></span> Nominate</button></li>
+                <li ng-show="FEATURE_FLAG_NOMINATE" ><button id="bt-blue"><span class="genericon genericon-search"></span> Nominate</button></li>
                 <div class="clear"></div>
             </ul>
             <!-- buttons end -->   
