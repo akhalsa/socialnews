@@ -113,7 +113,7 @@ class HandleListForCategoryId(AuthBase):
         
                     
 
-class HandleVoteReceiver(tornado.web.RequestHandler):
+class HandleVoteReceiver(AuthBase):
     def post(self,twitter_handle, category_name, positive  ):
         #401 = rate limit exceeded
         ##405 = the user already voted for this tweet
