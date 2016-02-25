@@ -8,7 +8,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.link_text = "";
     $scope.profile_image = "";
     $scope.timestamp = "";
-    
+    $scope.category_structure = [];
     
     $scope.new_comment_text = "";
     
@@ -45,8 +45,13 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         reloadPage();
     });
     
+    $http.get("/api/category")
+    .then(function(response) {
+        $scope.category_structure = response.data;
+    });
+    
+    
     $scope.redirectHome = function(){
-        trackHomeLink();
         if( (typeof tracking == 'undefined')){
             document.location = "/";
         }else{
@@ -54,6 +59,13 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         }
     }
     
+    $scope.moveToCatPage = function(category){
+        if( (typeof tracking == 'undefined')){
+            document.location = "/c/"+category;
+        }else{
+            document.location = "/c/"+category+"?tracking=0";
+        }
+    }
     
     
     $scope.sendComment = function(){
