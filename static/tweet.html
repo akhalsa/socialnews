@@ -42,7 +42,7 @@
     <ul class="nav navbar-nav">
 	<li><a href="#" ng-click="redirectHome()">Front Page</a></li>
 	<li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
-	  <a href="#"  ng-click="selectionChange(cat.name)">{{! cat.name }}</a>
+	  <a href="#"  ng-click="moveToCatPage(cat.name)">{{! cat.name }}</a>
 	</li>
     </ul>
     </div>
