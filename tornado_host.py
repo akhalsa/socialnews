@@ -14,6 +14,7 @@ import datetime
 import requests
 import argparse
 import re
+import hashlib
 import simplejson
 
 
@@ -21,6 +22,7 @@ from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
 from src.DBWrapper import *
+from passlib.hash import sha256_crypt
 
 
 define("port", default=8888, help="run on the given port", type=int)
@@ -35,6 +37,48 @@ auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UN
 auth.set_access_token('24662514-MCXJydvx0Mn5GWfW7RqQmXXsu35m8rNmzxKfHYJcM', 'f6zSrTomKIIr2c5zwcbkpbJYSpAZ2gi40yp57DEd86enN')
 api = tweepy.API(auth)
 
+class AuthBase(tornado.web.RequestHandler):
+    def getUserId(self, db):
+        x_real_ip = self.request.headers.get("X-Real-IP")
+        remote_ip = x_real_ip or self.request.remote_ip
+        
+        email = self.get_secure_cookie("email")
+        password_hash = self.get_secure_cookie("password_hash")
+        if not email:
+            print "no email"
+        if not password_hash:
+            print "no password"
+        
+        if(email):
+            print email
+        if(password_hash):
+            print password_hash
+            
+        user_id = getUserIdWithIpAddressCreds(db, remote_ip, email, password_hash)
+        return user_id
+    
+    def getUserName(self, db):
+        user_id = self.getUserId(db)
+        return getUserNameForId(db, user_id)
+        
+    def isLoggedIn(self, db):
+        x_real_ip = self.request.headers.get("X-Real-IP")
+        remote_ip = x_real_ip or self.request.remote_ip
+        
+        email = self.get_secure_cookie("email")
+        password_hash = self.get_secure_cookie("password_hash")
+        if not email:
+            print "no email"
+        if not password_hash:
+            print "no password"
+
+        
+        if(email and password_hash):
+            return isValidCreds(db, email, password_hash)
+        else:
+            return False
+    
+
 
 class Category(tornado.web.RequestHandler):    
     def get(self, ):
@@ -48,7 +92,7 @@ class Category(tornado.web.RequestHandler):
         
         self.finish(json.dumps(getCategoryStructure(local_db)))
 
-class HandleListForCategoryId(tornado.web.RequestHandler):
+class HandleListForCategoryId(AuthBase):
     def get(self, cat_name):
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -58,20 +102,23 @@ class HandleListForCategoryId(tornado.web.RequestHandler):
                         charset='utf8',
                         port=3306)
         
-        #this should get the full list of handles and their scores in the category
-        cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
-        x_real_ip = self.request.headers.get("X-Real-IP")
-        remote_ip = x_real_ip or self.request.remote_ip
+        user_id = self.getUserId(local_db)
         
-        handle_list = getAllHandlesForCategory(local_db, cat_id, remote_ip)
-        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, remote_ip, 3600)
-        print "got handle list:"
-        self.finish(json.dumps({"handles":handle_list, "remaining_votes":(10 - votes_this_hour)}))
+        cat_id = findCategoryIdWithName(re.escape(cat_name), local_db)
+
+        
+        handle_list = getAllHandlesForCategory(local_db, cat_id, user_id)
+        print "got handle list: "+str(handle_list)
+        self.finish(json.dumps({"handles":handle_list}))
         
                     
 
-class HandleVoteReceiver(tornado.web.RequestHandler):
+class HandleVoteReceiver(AuthBase):
     def post(self,twitter_handle, category_name, positive  ):
+        #401 = rate limit exceeded
+        ##405 = the user already voted for this tweet
+        
+        
         #first check to see if this ip address has been used more than 5 times
         local_db = MySQLdb.connect(
                         host=host_target,
@@ -80,12 +127,38 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
+        
+        data = json.loads(self.request.body)
+        print "tweet_id"+data["tweet_id"]
+        tweet_id = re.escape(data["tweet_id"])
+        
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
-        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, remote_ip, 3600)
+        
+        email = self.get_secure_cookie("email")
+        password_hash = self.get_secure_cookie("password_hash")
+        if not email:
+            print "no email"
+        if not password_hash:
+            print "no password"
+        
+        if(email):
+            print email
+        if(password_hash):
+            print password_hash
+            
+        user_id = getUserIdWithIpAddressCreds(local_db, remote_ip, email, password_hash)
+        
+        
+        votes_this_hour = getVoteCountByIpForTimeFrame(local_db, user_id, 3600)
         print "found votes this hour of: "+str(votes_this_hour)
-        if(votes_this_hour >= 10):
-            self.finish("{'message':'you are out of votes, please wait for them to recharge}")
+        logged_in = self.isLoggedIn( local_db)
+        
+        if (not logged_in) and (votes_this_hour >= 5):
+            ## 401 means the user has exceeded rate limits
+            self.clear()
+            self.set_status(401)
+            self.finish()
             return
         
         upvote = False
@@ -114,11 +187,11 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             try:
                 user = api.get_user(screen_name = twitter_handle)
                 twitter_handle = "@"+user.screen_name
-                user_id = re.escape(str(user.id))
+                twitter_user_id = re.escape(str(user.id))
                 username = re.escape(user.name)
                 profile_link = user.profile_image_url
-                if(user_id != None):
-                    createHandle(local_db,user_id, username, twitter_handle, profile_link )
+                if(twitter_user_id != None):
+                    createHandle(local_db,twitter_user_id, username, twitter_handle, profile_link )
                     table_info = findTableInfoWithTwitterHandle( twitter_handle, local_db)
  
                 else:
@@ -131,13 +204,8 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
 
             
         new_handle = not checkForFirstVote(local_db, cat_id, table_info["twitter_id"])
-        
-        
-        if(alreadyVoted(local_db, remote_ip,  cat_id, table_info["twitter_id"])):
-            print "already voted returned true"
-            self.finish("{'message': 'you already voted for this handle'}")
-            return
-        
+
+
         if(new_handle):
             #select all the categorys above this one for the vote
             chain = categoryChainForCategory(local_db, cat_id)
@@ -149,14 +217,27 @@ class HandleVoteReceiver(tornado.web.RequestHandler):
             print "will vote with chain: "+str(chain)
             print "will vote with vote_Array: "+str(vote_array)
             
-            insertVote(local_db, remote_ip, chain, table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , vote_array)
+            insertVote(local_db, user_id, chain, table_info["twitter_id"], vote_array)
         else:
+            if tweet_id is None:
+                self.clear()
+                self.set_status(400)
+                self.finish()
+                return
+            
+            if(alreadyVoted(local_db, user_id, tweet_id, cat_id, table_info["twitter_id"])):
+                ##405 means the user already voted for this tweet
+                self.clear()
+                self.set_status(405)
+                self.finish()
+                return
             print "Inserting non Chain"+str([cat_id])
             vote_val = 1 if upvote else -1
-            insertVote(local_db, remote_ip, [cat_id], table_info["twitter_id"], table_info["twitter_name"], table_info["twitter_handle"] , [vote_val] )
-        
-        
-        self.finish("200")
+            insertTweetVote(local_db, user_id, [cat_id], table_info["twitter_id"] ,tweet_id, [vote_val] )
+    
+        self.clear()
+        self.set_status(200)
+        self.finish()
         
         
     
@@ -182,7 +263,7 @@ class SizedReader(tornado.web.RequestHandler):
         self.finish(simplejson.dumps(lookup))
 
     
-class Reader(tornado.web.RequestHandler):
+class Reader(AuthBase):
         def get(self, cat, time_frame_seconds):
                 local_db = MySQLdb.connect(
                         host=host_target,
@@ -199,6 +280,34 @@ class Reader(tornado.web.RequestHandler):
                 print "found category id: "+str(cat_id)        
                 
                 lookup = getTweetOccurances(time_frame_seconds, str(cat_id), local_db, 30)
+                if(len(lookup) == 0):
+                    self.finish(simplejson.dumps(lookup))
+                    return
+                
+                user_id = self.getUserId(local_db)
+                ids = []
+                for tweet in lookup:
+                    tweet["voted"] = 0
+                    tweet["top_comment"] = {"total_comment_count":0}
+                    ids.append(tweet["id"])
+                    
+                user_vote = userVote(local_db, user_id, ids)
+                
+                for vote_entry in user_vote:
+                    for tweet in lookup:
+                       if(tweet["id"] == vote_entry):
+                            tweet["voted"] = user_vote[vote_entry]
+                            
+                            
+                top_comments = topComments(local_db, ids )
+                
+                for comment in top_comments:
+                    for tweet in lookup:
+                        if(tweet["id"] == comment):
+                            tweet["top_comment"] = top_comments[comment]
+                            
+                            
+                print simplejson.dumps(lookup)
                 self.finish(simplejson.dumps(lookup))
                 
 class PageLoad(tornado.web.RequestHandler):
@@ -249,37 +358,252 @@ class TwitterTimeline(tornado.web.RequestHandler):
         self.finish(json.dumps(tweets))
     
 class IndexHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
     def get(self):
         self.render("static/index.html")
         
 class IndexCategoryHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
     def get(self, cat):
         print "injecting cat: "+cat
-        self.render("static/cat_index.html", cat_name=cat)
+        self.render("static/new_cat_index.html", cat_name=cat)
+        
         
 class NewIndexHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
     def get(self):
-        self.render("static/index.html")
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        self.render("static/new_cat_index.html", cat_name="media")
+        
+class LoginHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("static/login.html")
+        
+class TweetHandler(tornado.web.RequestHandler):
+    def get(self, tweet_id):
+        self.render("static/tweet.html",  t_id=tweet_id)
+
+class CommentVoteAPI(AuthBase):
+    def post(self, comment_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        user_id = self.getUserId(local_db)
+        data = json.loads(self.request.body)
+        comment_id = re.escape(str(data["comment_id"]))
+        value = data["vote_val"]
+        if(value == 1):
+            value = 1
+        else:
+            value = -1
+            
+        #do some rate checking
+        
+        if(alreadyVotedForComment(local_db, user_id, comment_id)):
+            ##405 means the user already voted for this tweet
+            self.clear()
+            self.set_status(405)
+            self.finish()
+            return
+        logged_in = self.isLoggedIn( local_db)
+        if ((not logged_in) and (getCommentVoteCountByIpForTimeFrame(local_db, user_id, 3600) >= 5)):
+            ##401 means the rate limit exceeded
+            self.clear()
+            self.set_status(401)
+            self.finish()
+            return
+        
+        insertCommentVote(local_db, user_id, comment_id, value)
+        self.clear()
+        self.set_status(200)
+        self.finish()
+    
+class TweetAPI(AuthBase):
+    def get(self, tweet_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        
+        user_id = self.getUserId(local_db)
+        print "loading tweet with id: "+str(user_id)
+        self.finish(simplejson.dumps(getTweetWithId(local_db, tweet_id, user_id)))
+        
+        
+    def post(self, tweet_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        #get comment structure from post body
+        data = json.loads(self.request.body)
+        #get user id
+        user_id = self.getUserId(local_db)
+        ###will need to rate check here for anonymous users
+        logged_in = self.isLoggedIn( local_db)
+        if(not logged_in):
+            ##check comment count
+            comment_count = userCommentCount(local_db, user_id)
+            if(comment_count > 5):
+                self.clear()
+                self.set_status(401)
+                self.finish()
+                return
+        
+        insertComment(local_db, tweet_id, user_id, re.escape(data["comment_text"]))
+        self.clear()
+        self.set_status(200)
+        self.finish()
+        
         
 
+        
+class LoginAPI(AuthBase):
+    def get(self):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        user_id = self.getUserId(local_db)
+        username = self.getUserName(local_db)
+        if(username == None):
+            username = "user"+str(user_id)
+            
+        logged_in = self.isLoggedIn( local_db)
+        self.finish(json.dumps({"user_id": user_id, "username":username, "logged_in": logged_in}))
+        return
+        
+    
+    def put(self):
+        #this is a logout mechanism
+        #find username and password 
+        data = json.loads(self.request.body)
+        if(not "logout" in data):
+            print "log out failure"
+            self.finish({"success":False})
+            return
+        
+        self.clear_cookie("email")
+        self.clear_cookie("password_hash")
+        
+        self.clear()
+        self.set_status(200)
+        self.finish()
+        
+        
+    def post(self):
+        #this is a login mechanism
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        
+        data = json.loads(self.request.body)
+        pw_hash = hashlib.sha224(data["password"]).hexdigest()
+        
+        
+        print "generated hash: "+pw_hash
+        email = re.escape(data["email"])
+        user = getUserWithCredentials(local_db, email, pw_hash)
+        if(user is None):
+            self.clear()
+            self.set_status(403)
+            self.finish()
+            return
+        else:
+            print "logged in man"
+            self.set_secure_cookie("email", email)
+            self.set_secure_cookie("password_hash",pw_hash)
+            username = re.sub(r'\\(.)', r'\1', user["username"])
+            self.finish(json.dumps({"username": username, "logged_in":True }))
+            return
+        
+        
+        
+    
+class signupAPI(tornado.web.RequestHandler):
+    def post(self):
+        #find username and password 
+        data = json.loads(self.request.body)
+        pw_hash = hashlib.sha224(data["password"]).hexdigest()
+        print "generated hash: "+pw_hash
+        email = re.escape(data["email"])
+        username = re.escape(data["username"])
+        
+        #need to check if this is a valid user already
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        user = getUserWithCredentials(local_db, email, pw_hash)
+        if(user is None):
+            if(checkForExistingEmail(local_db, email)):
+                #there is no user with THESE credentials
+                #but there is a user wiht that email
+                #as such throw exception
+                self.clear()
+                self.set_status(403)
+                return
+            
+            #ok no existing user
+            #lets create one
+            insertUserWithValues(local_db, email, pw_hash, username)
+
+        
+        self.set_secure_cookie("email", email)
+        self.set_secure_cookie("password_hash",pw_hash)
+        username = re.sub(r'\\(.)', r'\1', username)
+        print "outputting username: "+username
+        self.finish(json.dumps({"username": username}))
+        
+    
+
+        
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
+    "cookie_secret": "ePbbBygvlUDmoiOCBVuy"
 }
 app = tornado.web.Application([
     (r'/c/(.*)', IndexCategoryHandler),
     (r'/', NewIndexHandler),
+    (r'/login', LoginHandler),
+    (r'/tweet/(.*)', TweetHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
-    (r"/category", Category),
     (r'/reader/(.*)/time/(.*)', Reader),
     (r'/page_load/twitter_id/(.*)',  PageLoad),
     (r'/twitter/search/(.*)', Twitter),
     (r'/twitter/timeline/(.*)', TwitterTimeline),
-    (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader)
+    (r"/api/reader/(.*)/size/(.*)/time/(.*)", SizedReader),
+    (r"/api/signup", signupAPI),
+    (r"/api/login", LoginAPI),
+    (r"/api/tweet/(.*)/vote", CommentVoteAPI),
+    (r"/api/tweet/(.*)", TweetAPI),
+    (r"/api/category", Category)
+    
 ], **settings)
 
 if __name__ == '__main__':

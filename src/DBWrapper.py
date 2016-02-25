@@ -170,16 +170,15 @@ def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
             results[row[0]] = {"tweet_count":row[1] }
             top_tweets.append({"id":row[0], "tweet_count":row[1]})
             
-            
-
     cursor.close()
     #add text
     if(len(twitter_ids)==0):
             return top_tweets
     
     cursor = local_db.cursor()
-    sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image, "
-    sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW()) "
+    sql = "select Tweet.twitter_id, Tweet.text, TwitterSource.Name, TwitterSource.profile_image,"
+    sql += " Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, Tweet.checked, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW()),"
+    sql += " TwitterSource.twitter_handle" 
     sql += " From Tweet Inner Join TwitterSource ON TwitterSource.twitter_id = Tweet.source_twitter_id WHERE Tweet.twitter_id in ("
 
     
@@ -200,6 +199,7 @@ def getTweetOccurances(seconds, cat_id, local_db, num_tweets):
             if(tweet_dict["id"] == row[0]):
                 tweet_dict["text"] = row[1]
                 tweet_dict["name"] = row[2]
+                tweet_dict["handle"] = row[10]
                 tweet_dict["pic"] = row[3]
                 tweet_dict["blurb"] = row[4]
                 tweet_dict["link_url"] = row[5]
@@ -562,28 +562,20 @@ def buildMap(id_to_name_map, id_to_children_array_map, id_to_descend):
 
 
 
-def getVoteCountByIpForTimeFrame(local_db, ip_address, seconds):
+def getVoteCountByIpForTimeFrame(local_db, user_id, seconds):
     cursor = local_db.cursor()
-    sql = "SELECT * From VoteHistory WHERE ip_address like '"+ip_address+"' and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
+    sql = "SELECT * From VoteHistory WHERE user_id like "+str(user_id)+" and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
     cursor.execute(sql)
     votes = cursor.rowcount
     cursor.close()
     return votes
 
-def getAllHandlesForCategory(local_db, category_id, ip_address):
-    cursor = local_db.cursor()
-    sql = "SELECT value, twitter_id From VoteHistory WHERE ip_address like '"+str(ip_address)+"' AND category_id like '"+str(category_id)+"';"
-    cursor.execute(sql)
-    user_vote_history = {}
-    for row in cursor.fetchall():
-        user_vote_history[row[1]] = row[0]
-    cursor.close()
+def getAllHandlesForCategory(local_db, category_id, user_id):
     
     cursor = local_db.cursor()
     #note this will get all votes, up or down
-    sql = "SELECT VoteHistory.twitter_id, VoteHistory.twitter_handle, VoteHistory.twitter_name, TwitterSource.profile_image, "
-    sql += "SUM(value) as vote_count, SUM(case when value >= 0 then value else 0 end) as positive, "
-    sql += "SUM(case when value <= 0 then value else 0 end) as negative "
+    sql = "SELECT VoteHistory.twitter_id, TwitterSource.twitter_handle, TwitterSource.name, TwitterSource.profile_image, "
+    sql += "SUM(value) as vote_count "
     sql += "From VoteHistory "
     sql += "LEFT JOIN TwitterSource ON VoteHistory.twitter_id=TwitterSource.twitter_id "
     sql += "WHERE category_id like "+str(category_id)+" "
@@ -592,19 +584,13 @@ def getAllHandlesForCategory(local_db, category_id, ip_address):
     print "will find handles w sql: "+sql
     cursor.execute(sql)
     return_list = []
-    insertion_count = 0
+ 
     for row in cursor.fetchall() :
         tracked = 1
         if (row[4] <= 0):
                 tracked = 0
-        
-        vote_val = 0
-        if(row[0] in user_vote_history):
-            vote_val = user_vote_history[row[0]]
-            
-        return_list.append({"twitter_id": str(row[0]), "vote_val": vote_val, "handle":row[1], "username":row[2], "profile_pic":row[3], "score":str(row[4]),
-                            "upvotes": str(row[5]), "downvotes":str(row[6]), "tracked":tracked})
-        insertion_count += 1
+          
+        return_list.append({"twitter_id": str(row[0]), "handle":row[1], "username":row[2], "profile_pic":row[3], "tracked":tracked})
         
     cursor.close()
     return return_list
@@ -712,9 +698,10 @@ def getCategoriesForTwitterUserId(local_db, twitter_id):
     cursor.close()
     return cats
     
-def alreadyVoted(local_db, ip_address, category_id, twitter_id):
+def alreadyVoted(local_db, user_id, tweet_id, category_id, twitter_id):
     cursor = local_db.cursor()
-    sql = "SELECT ID From VoteHistory WHERE ip_address like '"+str(ip_address)+"' and twitter_id like '"+twitter_id+"' and category_id like "+str(category_id)+";"
+    sql = "SELECT ID From VoteHistory WHERE user_id like "+str(user_id)+" and tweet_id like "+str(tweet_id)
+    sql += " and twitter_id like '"+twitter_id+"' and category_id like "+str(category_id)+";"
     print "sql: "+sql
     cursor.execute(sql)
     row_count = cursor.rowcount
@@ -724,16 +711,260 @@ def alreadyVoted(local_db, ip_address, category_id, twitter_id):
     
     
 
-def insertVote(local_db, ip_address, category_ids, twitter_id, twitter_name, twitter_handle, upvote ):
+def getUserWithCredentials(local_db, email, passhash):
+    cursor = local_db.cursor()
+    sql = "SELECT ID, username From User WHERE password_hash like '"+passhash+"' and email like '"+email+"';"
+    cursor.execute(sql)
+    if cursor.rowcount > 0:
+        row = cursor.fetchone()
+        user_id = row[0]
+        user_name = row[1]
+        cursor.close()
+        return {"ID":user_id, "username":user_name}
+    cursor.close()
+    return None
+
+def checkForExistingEmail(local_db, email):
+    cursor = local_db.cursor()
+    sql = "SELECT ID From User WHERE email like '"+email+"';"
+    cursor.execute(sql)
+    if cursor.rowcount > 0:
+        cursor.close()
+        return True
+    else:
+        cursor.close()
+        return False
+    
+def insertUserWithValues(local_db, email, passhash, username ):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO User (email, password_hash, username) VALUES ('"+email+"', '"+passhash+"', '"+username+"');";
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of source cat relationship"
+        print "sql: "+sql
+        print str(e)
+        local_db.rollback()
+    cursor.close()
+    
+    
+def getTweetWithId(local_db, tweet_id, user_id):
+    cursor = local_db.cursor()
+    sql ="SELECT Tweet.text, TwitterSource.name, TwitterSource.twitter_handle, TwitterSource.profile_image, Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW()) "
+    sql += "From Tweet INNER JOIN TwitterSource ON Tweet.source_twitter_id = TwitterSource.twitter_id AND Tweet.twitter_id = "+str(tweet_id)+";"
+    print "loading w sql: "
+    print sql
+    tweet = {}
+    cursor.execute(sql)
+    if cursor.rowcount > 0:
+            row = cursor.fetchone()
+            cursor.close()
+            #print row
+            #(u'Heartbreaking video.  The confusion.  The dysfunctional people. HELP! https://t.co/EYOAmuCn75',
+            #u'MATT DRUDGE', u'@DRUDGE', u'http://pbs.twimg.com/profile_images/604066294237892609/FhsFS8CB_normal.jpg')
+            tweet["text"] = row[0]
+            tweet["name"] = row[1]
+            tweet["twitter_handle"] = row[2]
+            tweet["profile_image"] = row[3]
+            tweet["blurb"] = row[4]
+            tweet["link_url"] = row[5]
+            tweet["link_text"] = row[6]
+            tweet["img_url"] = row[7]
+            tweet["timestamp"] = row[8]
+            tweet["comments"] = []
+            #TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW())
+            
+            #find any votes for this user
+            sql = "SELECT comment_id, value From CommentVoteHistory WHERE user_id="+str(user_id)+";"
+            cursor = local_db.cursor()
+            cursor.execute(sql)
+            vote_history = {}
+            for row in cursor.fetchall():
+                vote_history[row[0]] = row[1]
+            
+                
+            
+            sql = "SELECT Comment.ID, Comment.text, TIMESTAMPDIFF(SECOND,  Comment.timestamp, NOW()), Comment.score, User.username, User.ID From Comment INNER JOIN User on Comment.user_id=User.ID AND Comment.tweet_id="+str(tweet_id)+" ORDER BY Comment.score DESC;"
+            cursor = local_db.cursor()
+            cursor.execute(sql)
+            for row in cursor.fetchall():
+                comment = {}
+                comment["ID"] = row[0]
+                comment["text"] = row[1]
+                comment["timestamp"] = row[2]
+                comment["score"] = row[3]
+                if(row[4] is None):
+                    comment["username"] = "user"+str(row[5])
+                else:
+                    comment["username"] = row[4]
+                
+                if(row[0] in vote_history):
+                    comment["vote_history"] = vote_history[row[0]]
+                else:
+                    comment["vote_history"] = 0
+                    
+
+                tweet["comments"].append(comment)    
+            cursor.close()
+            print tweet
+            return tweet
+            
+    else:
+        cursor.close()
+        return None
+    
+def getCommentVoteCountByIpForTimeFrame(local_db, user_id, seconds):
+    cursor = local_db.cursor()
+    sql = "SELECT * From CommentVoteHistory WHERE user_id like "+str(user_id)+" and timestamp > (NOW() -  INTERVAL "+ str(seconds)+" SECOND);"
+    cursor.execute(sql)
+    votes = cursor.rowcount
+    cursor.close()
+    return votes
+
+def alreadyVotedForComment(local_db, user_id, comment_id):
+    cursor = local_db.cursor()
+    #has this user votes for this comment before?
+    sql = "SELECT ID From CommentVoteHistory WHERE user_id="+str(user_id)+" AND comment_id="+str(comment_id)+";"
+    cursor.execute(sql)
+    if cursor.rowcount > 0:
+        #ok this user has already voted
+        cursor.close()
+        return True
+    else:
+        cursor.close()
+        return False
+    
+    
+    
+    
+def insertCommentVote(local_db, user_id, comment_id, value):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO CommentVoteHistory(user_id, comment_id, value) VALUES ("+str(user_id)+", "+str(comment_id)+", "+str(value)+");"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of source cat relationship"
+        print "sql: "+sql
+        print str(e)
+        local_db.rollback()
+    cursor.close()
+    
+    cursor = local_db.cursor()
+    sql = "UPDATE Comment SET score = score + "+str(value)+" WHERE ID="+str(comment_id)+";"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of source cat relationship"
+        print "sql: "+sql
+        print str(e)
+        local_db.rollback()
+    cursor.close()
+    
+    
+    
+def insertComment(local_db, tweet_id, user_id, text):
+    cursor = local_db.cursor()
+    sql = "INSERT INTO Comment(user_id, text, tweet_id, score) VALUES ("+str(user_id)+", '"+text+"', "+str(tweet_id)+", 0);"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of source cat relationship"
+        print "sql: "+sql
+        print str(e)
+        local_db.rollback()
+    cursor.close()
+    
+
+def getUserIdWithIpAddressCreds(local_db, ip_address, email, passhash):
+    if(email is not None) and (passhash is not None):
+        cursor = local_db.cursor()
+        sql = "SELECT ID From User WHERE password_hash like '"+passhash+"' and email like '"+email+"';"
+        cursor.execute(sql)
+        if cursor.rowcount > 0:
+            print "found a user!"
+            row = cursor.fetchone()
+            return_id = row[0]
+            cursor.close()
+            return return_id
+        cursor.close()
+        
+    cursor = local_db.cursor()
+    sql = "SELECT ID From User WHERE ip_address like '"+ip_address+"';"
+    cursor.execute(sql)
+    if cursor.rowcount > 0:
+        row = cursor.fetchone()
+        return_id = row[0]
+        cursor.close()
+        return return_id
+    cursor.close()
+    cursor = local_db.cursor()
+    sql = "INSERT INTO User (ip_address) VALUES ('"+ip_address+"')"
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Commit your changes in the database
+        local_db.commit()
+    except Exception,e:
+        # Rollback in case there is any error
+        print "error on insertion of vote"
+        print str(e)
+        local_db.rollback()
+    
+    return_id = lastRow = cursor.lastrowid
+    cursor.close()
+    return return_id
+    
+     
+def insertVote(local_db, user_id, category_ids, twitter_id, upvote ):
 
     for index, category_id in enumerate(category_ids):
         cursor = local_db.cursor()
-        sql = "INSERT INTO VoteHistory(ip_address, category_id, twitter_id, twitter_handle, twitter_name, value) VALUES ('"
-        sql += str(ip_address)+"', "+str(category_id)+", "+str(twitter_id)+", '"
-        sql += twitter_handle+"', '"+twitter_name+"', "
+        sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, value) VALUES ("
+        sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", "
         sql += str(upvote[index])
         sql += ");"
+        print "will insert with sql: "
+        print sql
+        try:
+                # Execute the SQL command
+                cursor.execute(sql)
+                # Commit your changes in the database
+                local_db.commit()
+        except Exception,e:
+                # Rollback in case there is any error
+                print "error on insertion of vote"
+                print str(e)
+                local_db.rollback()
+        cursor.close()
         
+    return
+
+def insertTweetVote(local_db, user_id, category_ids, twitter_id, tweet_id, upvote):
+    
+    for index, category_id in enumerate(category_ids):
+        cursor = local_db.cursor()
+        sql = "INSERT INTO VoteHistory(user_id, category_id, twitter_id, tweet_id, value) VALUES ("
+        sql += str(user_id)+", "+str(category_id)+", "+str(twitter_id)+", '"
+        sql += str(tweet_id)+"', "+str(upvote[index])
+        sql += ");"
+        print "will insert with sql: "
+        print sql
         try:
                 # Execute the SQL command
                 cursor.execute(sql)
@@ -777,5 +1008,90 @@ def checkForFirstVote(local_db, category_id, twitter_id):
     count = cursor.rowcount
     cursor.close()
     return (count > 0)
-    
 
+def getUserNameForId(local_db, user_id):
+    cursor = local_db.cursor()
+    sql = "SELECT username From User where ID="+str(user_id)+";"
+    cursor.execute(sql)
+    username = cursor.fetchone()[0]
+    cursor.close()
+    return username
+
+def isValidCreds(local_db, email, password_hash):
+    cursor = local_db.cursor()
+    sql = "SELECT ID, username From User WHERE password_hash like '"+password_hash+"' and email like '"+email+"';"
+    cursor.execute(sql)
+    row_num = cursor.rowcount
+    cursor.close()
+    if(row_num == 1):
+        return True
+    else:
+        return False
+    
+def userVote(local_db, user_id, tweet_ids):
+    cursor = local_db.cursor()
+    print "searching For Votes: "+str(tweet_ids)
+    
+    sql = "SELECT tweet_id, value From VoteHistory WHERE user_id like "+str(user_id)+" AND tweet_id in ("
+    for index, tweet_id in enumerate(tweet_ids):
+        sql += "'"+str(tweet_id)+"'"
+        if(index != (len(tweet_ids)-1)):
+            sql += ", "
+    sql += ");"
+    print sql
+    cursor.execute(sql)
+    response = {}
+    for row in cursor.fetchall():
+        response[row[0]] = row[1]
+    cursor.close()
+    return response
+
+
+def userCommentCount(local_db, user_id):
+    cursor = local_db.cursor()
+    sql = "SELECT * From Comment WHERE user_id="+str(user_id)+";"
+    cursor.execute(sql)
+    comment_count = cursor.rowcount
+    cursor.close()
+    return comment_count
+    
+    
+def topComments(local_db,tweet_ids ):
+    cursor = local_db.cursor()
+    print "searching For Comments: "+str(tweet_ids)
+    if(len(tweet_ids) == 0):
+        return {}
+    
+    sql = "SELECT Comment.ID, Comment.user_id, Comment.text, Comment.tweet_id, Comment.score, User.username, User.ID From Comment "
+    sql += "INNER JOIN User on User.ID=Comment.user_id "
+    sql += " WHERE tweet_id in ("
+    for index, tweet_id in enumerate(tweet_ids):
+        sql += "'"+str(tweet_id)+"'"
+        if(index != (len(tweet_ids)-1)):
+            sql += ", "
+    sql += ");"
+    cursor.execute(sql)
+    
+    response = {}
+    for row in cursor.fetchall():
+        effective_un = "user"+str(row[6])
+        if(row[5] is not None):
+            effective_un = str(row[5])
+
+        if(row[3] not in response):
+            #this means that the tweet id isnt already in the dictionary
+            response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4], "total_comment_count":1}
+        elif (response[row[3]]["score"] < row[4]):
+            #ok the tweet id was already in the dictionary but the new score is higher
+            holding_count = response[row[3]]["total_comment_count"]+1
+            response[row[3]] = {"comment_id":row[0], "username":effective_un, "text":row[2], "score":row[4], "total_comment_count":holding_count}
+        else:
+            #ok tweet id must have been in dictionary and had a lower score... just update the total_comment_count value
+            response[row[3]]["total_comment_count"] += 1
+            
+            
+    
+    
+    return response
+    
+    

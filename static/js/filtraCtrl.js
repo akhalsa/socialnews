@@ -107,34 +107,17 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
         $scope.showVotes = !$scope.showVotes;
     }
     
+    
+    
+    $scope.voteForTweet = function(handle_string, tweet_id, value){
+        console.log("sending handle: "+handle_string+"with tweet_id"+tweet_id);
+        data = {};
+        data["tweet_id"] = tweet_id;
+        voteForHandleWithPayload(handle_string, value, data);
+    }
+    
     $scope.voteForHandle = function(handle_string, value){
-        handle = null;
-        value = parseInt(value);
-        for(i=0; i<$scope.handle_list.length; i++ ){
-            if ($scope.handle_list[i].handle == handle_string) {
-                handle = $scope.handle_list[i];
-            }
-        }
-        if (handle == null) {
-            console.log("handle match missing");
-            return;
-        }
-        if ($scope.remaining_votes == 0) {
-            return;
-        }
-        if (handle.vote_val != 0) {
-            return;
-        }
-        trackVote(handle_string);
-        handle.vote_val += value;
-        
-        if (value > 0) {
-            handle.upvotes = parseInt(handle.upvotes) + value;
-        }else if (value < 0) {
-            handle.downvotes = parseInt(handle.downvotes) + value; 
-        }
-        $scope.remaining_votes -= 1;
-        $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value).then(function(response) {});
+        voteForHandleWithPayload(handle_string, value, null);
     }
     
     $scope.runSearch = function(){
@@ -209,6 +192,41 @@ app.controller("filtraCtrl", function($scope, $http, $sce, $window) {
     
     
     // LOCAL PRIVATE STUFF... DO NOT CALL FROM HTML DIRECTLY
+    
+    function voteForHandleWithPayload(handle_string, value, data){
+        handle = null;
+        value = parseInt(value);
+        for(i=0; i<$scope.handle_list.length; i++ ){
+            if ($scope.handle_list[i].handle == handle_string) {
+                handle = $scope.handle_list[i];
+            }
+        }
+        if (handle == null) {
+            console.log("handle match missing");
+            return;
+        }
+        if ($scope.remaining_votes == 0) {
+            return;
+        }
+        trackVote(handle_string);
+        handle.vote_val += value;
+        
+        if (value > 0) {
+            handle.upvotes = parseInt(handle.upvotes) + value;
+        }else if (value < 0) {
+            handle.downvotes = parseInt(handle.downvotes) + value; 
+        }
+        $scope.remaining_votes -= 1;
+        if (data != null) {
+            console.log("sending w not null");    
+            $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value, data).then(function(response) {
+                console.log("got a response");    
+            });
+        }else{
+            $http.post( "/handle/"+handle_string+"/category/"+currentCatName()+"/upvote/"+value).then(function(response) {});
+        }
+        
+    }
 
     function loadTweetPreviews() {
         $http.get("/twitter/timeline/"+$scope.search)
