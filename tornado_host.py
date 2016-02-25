@@ -376,7 +376,7 @@ class NewIndexHandler(tornado.web.RequestHandler):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        self.render("static/index.html")
+        self.render("static/new_cat_index.html", cat_name="media")
         
 class LoginHandler(tornado.web.RequestHandler):
     def get(self):
