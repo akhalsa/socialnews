@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Filtra</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{static_url('css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{static_url('css/tweet.css')}}">
+        <link rel="stylesheet" href="{{static_url('fonts/genericons/new-genericons.css')}}">
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js" type="text/javascript"></script>
+        <script src="{{static_url('js/filtraApp.js')}}"></script>
+        <script src="{{static_url('js/tweetCtrl.js')}}"></script>
+    </head>
+
+<body ng-app="filtraApp" ng-controller="tweetCtrl"
+        {% if 't_id' in globals() %}
+            ng-init="tweet_id='{{t_id}}'"
+        {% end %}
+    >
+<!-- header start -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid top-nav">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="genericon genericon-menu"></span>                     
+      </button>
+      <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+      <div class="clear"></div>
+    </div>
+       
+    <div class="collapse navbar-collapse" id="myNavbar">
+    <ul class="nav navbar-nav navbar-right">
+	<li ng-hide="logged_in" ng-click="showLoginPopup()" ><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+	<li ng-hide="logged_in" ng-click="showRegisterPopup()"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+	<li id="after-login" ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>{{! username}}</span></a></li>
+	<li ng-show="logged_in" ng-click="logout()"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+      </ul>
+      <div class="clear"></div>
+    <!-- nav start -->
+    
+    <ul class="nav navbar-nav">
+	<li ng-hide="true"><a href="#" ng-click="redirectHome()">Front Page</a></li>
+	<li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
+	  <a href="#"  ng-click="moveToCatPage(cat.name)">{{! cat.name }}</a>
+	</li>
+    </ul>
+    </div>
+    <!-- nav end -->
+  </div>
+</nav>
+<!-- header end -->
+<!-- contents start -->
+<!-- popup overlay start -->
+<div class="overlay" ng-show="showLogin || showRegister" ></div>
+<div class="wrap-popup pp-register" ng-show="showLogin">
+	<div id="bt-close"><a href="#" ng-click="dismissPopups()" ><span class="genericon genericon-close-alt"></span></a></div>
+	<h3>Login</h3>
+	<p class="p-sub-head2" ng-show="throttled">You can only up or down vote 5 times before you login.</p>
+    <div class="con-pp-inner">
+    	<form>
+            <input type="text" class="form-control" id="exampleInputName" placeholder="Email" ng-model="login_email">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="login_pw">
+            <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
+        </form>
+        <ul class="li-login">
+                
+        	<li>Want to join? <a href="#" ng-click="showRegisterPopup()">Register in seconds.</a></li>
+        	<li id="link-g" ng-show="FindCredentialsFeatureFlag">Forgot Password? <a href="#">Click here to find.</a></li>
+                <li ng-show="invalid_creds">Invalid username/password </li>
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+<!-- popup overlay end -->
+<!-- popup overlay start -->
+<div class="wrap-popup pp-register" ng-show="showRegister">
+	<div id="bt-close"><a href="#" ng-click="dismissPopups()"><span class="genericon genericon-close-alt"></span></a></div>
+	<h3>Register</h3>
+    <div class="con-pp-inner">
+    	<form>
+            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" ng-model="register_email">
+            <input type="text" class="form-control" id="exampleInputName" placeholder="Display Name" ng-model="register_username">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="register_pw">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password" ng-model="register_pw_confirm">
+            <button type="submit" class="btn btn-default" ng-click="createAccount()">Register</button>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+<!-- popup overlay end -->
+
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-md-2">    
+    </div>
+    <div class="col-xs-12 col-md-8 wrap-con-main">
+    	<!-- Breadcurmbs start -->
+        <ol class="breadcrumb" ng-hide="true">
+          <li><a href="#"><span class="genericon genericon-home"></span> Front Page</a></li>
+          <li><a href="#">Library</a></li>
+          <li class="active sc-desktop">Data</li>
+          <li class="dropdown active sc-mobile">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Data 
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a href="#">Sub 1</a></li>
+                <li><a href="#">Sub 2</a></li>
+                <li><a href="#">Sub 3</a></li>
+              </ul>
+           </li>
+        </ol>
+    	<!-- Breadcurmbs end -->
+        <!-- tweets start -->
+        <div class="con-tw">
+        	<div class="wrap-user">
+            	<div class="user">
+                	<div class="handle-main"><img src="{{! profile_image }}" alt="TechCrunch" /></div>
+                    <div class="handle-name"> {{! name }}</div>
+                    <div class="clear"></div>
+                </div>
+                <div class="time-tw">
+                	<span class="genericon genericon-time"></span> {{! convertSecondsToDeltaTime(timestamp) }}
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="wrap-con-tw">
+            	<span ng-bind-html="text | unsafeLink"></span>
+                
+                <div class="preview-tw" ng-show="blurb ||img_url || title" >
+                <div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
+                <div class="span8">
+                    	<img src="{{! img_url}}" ng-show="img_url" width="150"/>
+                        
+                    	<a href="{{! link_url }}"  target="_blank" ng-show="link_text">{{! link_text }}</a>
+                        <a href="{{! link_url }}" ng-hide="title" ng-bind-html="text | unsafeLink"></a>
+                        
+                        
+                    	<p ng-show="blurb">{{! blurb }}</p>
+                        <p ng-hide="blurb" ng-bind-html="text | unsafeLink"></p>
+                        
+                        <div class="clear"></div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- tweets end -->
+        <div class="wrap-comment">
+            <!-- title start -->
+            <h4>Comments</h4>
+            <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">{{! comments.length}}</a></div>
+            <div class="clear"></div>
+            <!-- title end -->
+            <!-- comment form start -->
+            <form class="form-inline comment-form">
+              <div class="form-group">
+                <label for="exampleInputName2">{{! username }}</label>
+                <input type="text" class="form-control" id="exampleInputName2" placeholder="Enter Comment here" ng-model="new_comment_text">
+              </div>
+              <button type="submit" class="btn btn-default" ng-click="sendComment()">Submit</button>
+	      <p id="info-submit" ng-show="comment_rate_limit">You're doing too much. <a href="#" ng-click="showRegisterPopup()">Sign up for free</a> to resume posting</p> 
+            </form>
+            <!-- comment form end -->
+            <!-- comment list start -->
+            <div class="comment-list" ng-repeat="comment in comments">
+            	<!-- username start -->
+                <ul class="username-c" ng-class="{'c-done': comment.vote_history !=0}">
+                    <li ng-click="sendCommentVote(comment.ID, 1);"><a href="#" onclick="return false;"><span class="genericon genericon-uparrow"></span></a></li>
+                    <li class="txt-c pd-number">{{! comment.score }}</li>
+                    <li><a href="#" ng-click="sendCommentVote(comment.ID, -1)" ><span class="genericon genericon-downarrow"></span></a></li>
+                    <li class="txt-c">{{! comment.username }}</li>
+                </ul>
+            	<!-- username end -->
+                <div class="con-comment">
+                	<p class="txt-date">{{! comment.timestamp | convertSecondsToTimestamp }}</p>
+                	<p ng-bind-html="comment.text | unsafeLink"></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- comment list end -->
+        </div>
+    </div>
+    <!-- sidebar start -->
+    <div class="col-xs-12 col-md-2">
+    </div>
+    <!-- sidebar end -->
+  </div>
+</div>
+<!-- contents end -->
+<!-- footer start -->
+<footer>
+	<span class="copyright">2016 Filtra.io</span>  /  <a href="#">About</a>  /  <a href="#">Contact</a>  /  <a href="#">Terms</a>  /  <a href="#">Privacy</a>
+    <ul id="social-bt">
+    	<li id="fb-bt"><a href="#"><span class="genericon genericon-facebook"></span> Share on Facebook</a></li>
+        <li id="tw-bt"><a href="#"><span class="genericon genericon-twitter"></span> Tweet on Twitter</a></li>
+    </ul>
+</footer>
+<!-- footer end -->
+</body>
+</html>
