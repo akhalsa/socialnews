@@ -245,9 +245,9 @@
                             <div class="clear"></div>
                         </div>
                     </div>
-                    <div class="wrap-comment" ng-click="goToTweet(tweet.id)">
-                            <h4><a href="/tweet/{{! tweet.id }}">Comments</a></h4>
-                        <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">{{! tweet.top_comment.total_comment_count }}</a></div>
+                    <div class="wrap-comment" >
+                            <h4><a href="#" ng-click="goToTweet(tweet.id)">Comments</a></h4>
+                        <div class="ic-comment" ng-click="goToTweet(tweet.id)"><span class="genericon genericon-comment" ></span> <a href="#">{{! tweet.top_comment.total_comment_count }}</a></div>
                         <div class="clear"></div>
                         <p ng-show="tweet.top_comment.text">
                             <span class="txt-user">{{! tweet.top_comment.username }}</span> {{! tweet.top_comment.text }}

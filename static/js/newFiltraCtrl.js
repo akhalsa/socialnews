@@ -70,7 +70,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             trackNavToComments(tweet_id);
             
         }else{
-            document.location = "/tweet/"+tweet_id+"/?tracking=0";
+            document.location = "/tweet/"+tweet_id+"?tracking=0";
         }
     }
     
@@ -108,7 +108,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             return
         }
         $http.post( "/handle/"+handle+"/category/"+currentCatName()+"/upvote/"+value, data).then(function successCallback(response){
-            loadTweets();  
+            loadTweets();
+            trackVote(handle);
             
         }, function errorCallback(response){
             console.log("got an error");
@@ -116,7 +117,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
                 console.log("got a 401");
                 $scope.throttled = true;
                 $scope.showLoginPopup();
-                loadTweets(); 
+                loadTweets();
+                trackThrottle("Tweet Vote");
             }else if (response.status == 405) {
                 console.log("got a 405");
             }
@@ -408,14 +410,42 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     
     var trackNavToComments = function(tweet_id){
         if (typeof tracking == 'undefined') {
-            console.log("triggering a bread crumb change with name: "+cat_name);
-            $window.ga('send', 'Tweet Click', 'click',tweet_id, cat_name, {'hitCallback':
-             function () {
-             }
-           });
+
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: tweet_id, 
+                eventLabel: $scope.username
+            } );
         }
     }
     
+    var trackVote = function(handle){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a comment evnet");
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Vote',
+                eventAction: handle+" Tweet",
+                eventLabel: $scope.username
+            } );
+           
+        }
+    }
+    
+    var trackThrottle = function(type){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a comment evnet");
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Throttle',
+                eventAction: $scope.username, 
+                eventLabel: type
+            } );
+           
+        }
+    }
     
     
 });
