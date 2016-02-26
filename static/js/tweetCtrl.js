@@ -73,7 +73,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
         var data = {};
         data["comment_text"] = $scope.new_comment_text;
-        
+        trackComments($scope.new_comment_text);
         $http.post("/api/tweet/"+$scope.tweet_id, data).then(function successCallback(response){
             $scope.new_comment_text = "";
             reloadPage();
