@@ -260,6 +260,30 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
     }
     
+    var tracking = getUrlParameter("tracking");
+    
+    if((typeof tracking == 'undefined')){
+        ext_string = (window.location.href.indexOf("filtra.io") > -1) ? "1" : "2";
+        console.log("setting up with ext string: "+ext_string);
+        ga('create', 'UA-70081756-'+ext_string, 'auto');
+        $window.ga('send', 'pageview');
+    }
+    
+    function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+  
+      for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+      }
+    }
+    
     
     
 });
