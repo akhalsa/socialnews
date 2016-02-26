@@ -202,7 +202,7 @@
                 <input type="text" class="form-control" id="exampleInputName2" placeholder="Enter Comment here" ng-model="new_comment_text">
               </div>
               <button type="submit" class="btn btn-default" ng-click="sendComment()">Submit</button>
-	      <p id="info-submit" ng-show="comment_rate_limit">You're doing too much. <a href="#" ng-click="showRegisterPopup()">Sign up for free</a> to resume posting</p> 
+	      <p id="info-submit" ng-show="comment_rate_limit">You must <a href="#" ng-click="showLoginPopup()">Log In </a> to continue commenting <a href="#" ng-click="showRegisterPopup()">Sign up for free!</a></p> 
             </form>
             <!-- comment form end -->
             <!-- comment list start -->
