@@ -409,10 +409,14 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     var trackNavToComments = function(tweet_id){
         if (typeof tracking == 'undefined') {
             console.log("triggering a bread crumb change with name: "+cat_name);
-            $window.ga('send', 'Tweet Click', 'click',tweet_id, cat_name, {'hitCallback':
-             function () {
-             }
-           });
+
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: tweet_id,
+                eventLabel: $scope.username
+            } );
         }
     }
     

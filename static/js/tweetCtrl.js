@@ -284,6 +284,20 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
       }
     }
     
+    var trackComments = function(comment){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a bread crumb change with name: "+cat_name);
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: $scope.username+' Comment',
+                eventAction: comment,
+                eventLabel: tweet_id
+            } );
+           
+        }
+    }
+    
+    
     
     
 });
