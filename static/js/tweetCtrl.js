@@ -60,6 +60,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     }
     
     $scope.moveToCatPage = function(category){
+        trackNavToCategory(category);
         if( (typeof tracking == 'undefined')){
             document.location = "/c/"+category;
         }else{
@@ -73,7 +74,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
         var data = {};
         data["comment_text"] = $scope.new_comment_text;
-        
+        trackComments($scope.new_comment_text);
         $http.post("/api/tweet/"+$scope.tweet_id, data).then(function successCallback(response){
             $scope.new_comment_text = "";
             reloadPage();
@@ -82,6 +83,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             if (response.status == 401) {
                 $scope.comment_rate_limit = true;
                 console.log("401 detected");
+                trackThrottle("comment");
             }
         });
     }
@@ -103,18 +105,20 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         data["comment_id"] = comment_id;
         data["vote_val"] = value;
         console.log( "sending payload: "+data);
-
+        
         $http.post("/api/tweet/"+$scope.tweet_id+"/vote", data).then(function successCallback(response){
             console.log("post successful");
             console.log(response.data.success);
             console.log(response.data.msg);
             reloadPage();
+            trackVote();
             
         }, function errorCallback(response){
             console.log("got an error");
             if (response.status == 401) {
                 console.log("got a 401");
                 $scope.throttled = true;
+                trackThrottle("comment_vote");
                 $scope.showLoginPopup();
             }else if (response.status == 405) {
                 console.log("got a 405");
@@ -260,6 +264,82 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
     }
     
+    var tracking = getUrlParameter("tracking");
     
+    if((typeof tracking == 'undefined')){
+        ext_string = (window.location.href.indexOf("filtra.io") > -1) ? "1" : "2";
+        console.log("setting up with ext string: "+ext_string);
+        ga('create', 'UA-70081756-'+ext_string, 'auto');
+        $window.ga('send', 'pageview');
+    }
+    
+    function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+  
+      for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+      }
+    }
+    
+    var trackComments = function(comment){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a comment evnet");
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: $scope.username+' Comment',
+                eventAction: comment,
+                eventLabel: $scope.tweet_id
+            } );
+           
+        }
+    }
+    
+    var trackThrottle = function(type){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a comment evnet");
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Throttle',
+                eventAction: $scope.username,
+                eventLabel: type
+            } );
+           
+        }
+    }
+    
+    var trackVote = function(){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a comment evnet");
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Vote',
+                eventAction: "User",
+                eventLabel: $scope.username
+            } );
+           
+        }
+    }
+    
+    
+    var trackNavToCategory = function(category){
+        if (typeof tracking == 'undefined') {
+            console.log("navigating back to: "+category);
+
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: category, 
+                eventLabel: $scope.username
+            } );
+        }
+    }
     
 });
