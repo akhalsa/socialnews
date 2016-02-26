@@ -291,7 +291,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
                 hitType: 'event',
                 eventCategory: $scope.username+' Comment',
                 eventAction: comment,
-                eventLabel: tweet_id
+                eventLabel: $scope.tweet_id
             } );
            
         }
