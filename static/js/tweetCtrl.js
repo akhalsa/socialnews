@@ -286,7 +286,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     var trackComments = function(comment){
         if (typeof tracking == 'undefined') {
-            console.log("triggering a bread crumb change with name: "+cat_name);
+            console.log("triggering a comment evnet");
             $window.ga('send', {
                 hitType: 'event',
                 eventCategory: $scope.username+' Comment',
