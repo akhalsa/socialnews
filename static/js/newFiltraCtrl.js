@@ -70,7 +70,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             trackNavToComments(tweet_id);
             
         }else{
-            document.location = "/tweet/"+tweet_id+"/?tracking=0";
+            document.location = "/tweet/"+tweet_id+"?tracking=0";
         }
     }
     
@@ -427,7 +427,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             $window.ga('send', {
                 hitType: 'event',
                 eventCategory: 'Vote',
-                eventAction: handle+"Tweet",
+                eventAction: handle+" Tweet",
                 eventLabel: $scope.username
             } );
            
