@@ -330,7 +330,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     var trackNavToCategory = function(category){
         if (typeof tracking == 'undefined') {
-            console.log("triggering a bread crumb change with name: "+cat_name);
+            console.log("navigating back to: "+category);
 
             
             $window.ga('send', {
