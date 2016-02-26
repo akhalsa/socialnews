@@ -66,12 +66,11 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     $scope.goToTweet = function(tweet_id){
         console.log("sending tweet event with id: "+tweet_id);
         if( (typeof tracking == 'undefined')){
+            document.location = "/tweet/"+tweet_id;
             trackNavToComments(tweet_id);
-            //document.location = "/tweet/"+tweet_id;
-            
             
         }else{
-            //document.location = "/tweet/"+tweet_id+"/?tracking=0";
+            document.location = "/tweet/"+tweet_id+"/?tracking=0";
         }
     }
     
