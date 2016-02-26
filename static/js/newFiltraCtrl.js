@@ -416,7 +416,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             $window.ga('send', {
                 hitType: 'event',
                 eventCategory: 'Click',
-                eventAction: tweet_id,
+                eventAction: tweet_id, 
                 eventLabel: $scope.username
             } );
         }
@@ -441,8 +441,8 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             $window.ga('send', {
                 hitType: 'event',
                 eventCategory: 'Throttle',
-                eventAction: type,
-                eventLabel: $scope.username
+                eventAction: $scope.username, 
+                eventLabel: type
             } );
            
         }

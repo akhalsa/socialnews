@@ -60,6 +60,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     }
     
     $scope.moveToCatPage = function(category){
+        trackNavToCategory(category);
         if( (typeof tracking == 'undefined')){
             document.location = "/c/"+category;
         }else{
@@ -306,8 +307,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             $window.ga('send', {
                 hitType: 'event',
                 eventCategory: 'Throttle',
-                eventAction: type,
-                eventLabel: $scope.username
+                eventAction: $scope.username,
+                eventLabel: type
             } );
            
         }
@@ -327,6 +328,18 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     }
     
     
-    
+    var trackNavToCategory = function(category){
+        if (typeof tracking == 'undefined') {
+            console.log("triggering a bread crumb change with name: "+cat_name);
+
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: category, 
+                eventLabel: $scope.username
+            } );
+        }
+    }
     
 });
