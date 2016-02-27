@@ -176,8 +176,8 @@
                 <div class="span8">
                     	<img src="{{! img_url}}" ng-show="img_url" width="150"/>
                         
-                    	<a href="{{! link_url }}"  target="_blank" ng-show="link_text">{{! link_text }}</a>
-                        <a href="{{! link_url }}" ng-hide="link_text" ng-bind-html="text | unsafeLink"></a>
+                    	<a href="{{! link_url }}"  target="_blank" ng-show="link_text" ng-click="trackOutbound(link_url)">{{! link_text }}</a>
+                        <a href="{{! link_url }}" ng-hide="link_text" ng-bind-html="text | unsafeLink" ng-click="trackOutbound(link_url)"></a>
                         
                         
                     	<p ng-show="blurb">{{! blurb }}</p>

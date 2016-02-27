@@ -342,4 +342,18 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         }
     }
     
+    var trackOutbound = function(url){
+        if (typeof tracking == 'undefined') {
+            console.log("navigating back to: "+category);
+
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'outbound',
+                eventAction: url, 
+                eventLabel: $scope.username
+            } );
+        }
+    }
+    
 });
