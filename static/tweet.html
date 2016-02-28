@@ -77,7 +77,7 @@
       <div class="clear"></div>
     <!-- nav start -->
     
-    <ul class="nav navbar-nav">
+    <ul class="nav navbar-nav nav-top">
 	<li ng-hide="true"><a href="#" ng-click="redirectHome()">Front Page</a></li>
 	<li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
 	  <a href="#"  ng-click="moveToCatPage(cat.name)">{{! cat.name }}</a>
