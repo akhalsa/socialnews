@@ -325,7 +325,7 @@ def clearOldEntries(local_db):
                     local_db.rollback()
             cursor.close()
     cursor = local_db.cursor()
-    sql = "DELETE FROM Tweet WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
+    sql = "DELETE FROM Tweet WHERE timestamp < (NOW() -  INTERVAL 24 HOUR);"
     try:
             # Execute the SQL command
             cursor.execute(sql)
