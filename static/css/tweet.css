@@ -77,7 +77,7 @@ input {border:none;}
 /* tweet-con */
 .wrap-user .user {float:left; width: 60%;}
 .wrap-user .user .handle-main {float:left; position:relative; margin-right:7px;}
-.overlay-tw {position:absolute; background-color:rgba(255,255,255, 0.8); z-index: 10; width: 15px; height: 15px; bottom: 0; right: 0; padding-top: 2px; color: #00a6ff; text-align: center;}
+.overlay-tw {position:absolute; background-color:rgba(255,255,255, 0.8); z-index: 1; width: 15px; height: 15px; bottom: 0; right: 0; padding-top: 2px; color: #00a6ff; text-align: center;}
 .overlay-tw .genericon-twitter { font-size:12px;}
 .wrap-user .user img {width: 35px;}
 .nominate {margin-top:5px;}
@@ -107,6 +107,8 @@ input {border:none;}
 .wrap-con-tw .preview-tw .span8 {padding:10px; text-align:left;}
 .wrap-con-tw .preview-tw .span8 img {float:left; margin-right:10px;}
 .wrap-con-tw .preview-tw .imgpd {padding:10px;}
+.wrap-con-tw #link-tw {text-align:right; font-size:14px; font-family:Montserrat, Arial, Helvetica, sans-serif; margin-top:10px;}
+.wrap-con-tw #link-tw a {color:#1f9fe4;}
 
 .wrap-comment {font-family:Montserrat, Arial, Helvetica, sans-serif;}
 .wrap-comment h4 {font-size:18px; color:#33429a; font-weight:700; float:left;}
@@ -118,12 +120,12 @@ input {border:none;}
 
 #bt-loadmore {width:100%; padding:10px; background-color:#8ac249; border:none; color:#fff;}
 
-.pager-filtra li>a, .pager-filtra li>span {border: none; background-color:#8ac249; color:#fff; border-radius: 3px;}
-.pager-filtra li>a .genericon {margin-top:3px; color:#8ac249;}
-.pager-filtra li>a:hover, .pager-filtra li>span:hover {background-color:#33429a; color:#fff;}
-.pager-filtra .previous>a {background-color:#eee; color:#333; font-size:14px; margin-right:5px; border:1px solid #e1e1e1;}
-.pager-filtra .previous>a:hover {border:1px solid #33429a;}
-
+.pager-filtra {margin: 0 0 20px 0;}
+.pager-filtra li>a, .pager-filtra li>span {border: none; background-color:#33429a; color:#fff; border-radius: 3px;}
+.pager-filtra li>a {margin-right:5px;}
+.pager-filtra li>a .genericon {margin-top:2px; color:#8ac249;}
+.pager-filtra li>a:hover, .pager-filtra li>span:hover {background-color:#8ac249; color:#fff;}
+.pager-filtra li>a:hover .genericon {color:#33429a;}
 /* sidebar */
 .box-side h3 {font-weight:700; margin-top:0; font-size:18px;}
 .box-side h3 a {color:#8ac249; text-decoration:none;}
