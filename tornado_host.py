@@ -438,9 +438,9 @@ class TweetAPI(AuthBase):
         user_id = self.getUserId(local_db)
         print "loading tweet with id: "+str(user_id)
         tweet = getTweetWithId(local_db, tweet_id, user_id)
-        tweet["categories"] = getCategoriesForTwitterUserId(local_db,tweet["source_twitter_id"] )
-        
-        #def getCategoriesForTwitterUserId(local_db, twitter_id):
+        cat_list = getCategoriesForTwitterUserId(local_db,tweet["source_twitter_id"] )
+        cat_list = getCategoryNamesForIds(local_db, cat_list)
+        tweet["categories"] = cat_list
         self.finish(simplejson.dumps(tweet))
         
         
