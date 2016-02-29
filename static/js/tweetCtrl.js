@@ -255,7 +255,6 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
               $scope.timestamp = response.data.timestamp;
               $scope.categories_for_tweet = response.data.categories;
               $scope.twitter_url = response.data.twitter_url;
-              console.log("twitter url: "+$scope.twitter_url);
             });
             
             $http.get("/api/login")

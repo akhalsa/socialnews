@@ -145,10 +145,12 @@
         <div class="con-tw">
         	<div class="wrap-user">
             	<div class="user">
-                	<div class="handle-main">
+                	<a href="{{!twitter_url}}" target="_blank" onclick="trackOutboundLink('orig_tweet');return true;">
+			<div class="handle-main">
 			    <img src="{{! profile_image }}" alt="TechCrunch" />
 			    <div class="overlay-tw"><span class="genericon genericon-twitter"></span></div>
 			</div>
+			</a>
                     <div class="handle-name"> {{! name }}</div>
                     <div class="clear"></div>
                 </div>
