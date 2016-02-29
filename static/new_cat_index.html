@@ -80,7 +80,7 @@
           <div class="clear"></div>
         
         <!-- nav start -->
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav nav-top">
           <li ng-hide="true"><a href="#" ng-click="redirectHome()">Front Page</a></li>
           <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
             <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
@@ -213,7 +213,10 @@
             <div class="con-tw"  ng-repeat="tweet in tweet_array">
                     <div class="wrap-user">
                     <div class="user">
-                        <div class="handle-main"><img src="{{! tweet.pic}}" alt="{{! tweet.name}}"/></div>
+                        <div class="handle-main">
+                          <img src="{{! tweet.pic}}" alt="{{! tweet.name}}"/>
+                          <div class="overlay-tw"><span class="genericon genericon-twitter"></span></div>
+                        </div>
                         <div class="handle-name"> {{! tweet.name}} </div>
                         <div class="clear"></div>
                     </div>
@@ -264,9 +267,16 @@
             <div class="box-side">
                     <h3>Sources</h3>
                 <ul id="list-vote">
-                    
-                    
-                    <li ng-repeat="handle in handle_list"><div class="handle"><img src="{{! handle.profile_pic }}" />{{! handle.username }}</div><div class="clear"></div></li>
+                    <li ng-repeat="handle in handle_list">
+                      <div class="handle">
+                	<div class="handle-main">
+                          <img src="{{! handle.profile_pic }}" />
+                          <div class="overlay-tw"><span class="genericon genericon-twitter"></span></div>
+                        </div>
+                        {{! handle.username }}
+                      </div>
+                      <div class="clear"></div>
+                    </li>
                 </ul>
             </div>
             <!-- vote end -->
