@@ -319,7 +319,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     var trackVote = function(){
         if (typeof tracking == 'undefined') {
-            console.log("triggering a comment evnet");
+            console.log("triggering a comment vote evnet");
             $window.ga('send', {
                 hitType: 'event',
                 eventCategory: 'Vote',
