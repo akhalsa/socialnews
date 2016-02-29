@@ -1002,6 +1002,25 @@ def getCategoryParentIdForCategoryChildId(local_db, category_id):
     cursor.close()
     return return_id
 
+def getCategoryNamesForIds(local_db, ids):
+    cursor = local_db.cursor()
+    if(len(ids) == 0):
+        return []
+    return_list = []
+    
+    sql = "SELECT name From Category WHERE ID in ("
+    for _id in ids:
+        sql += str(_id)+", "
+    sql = sql[:-2]
+    sql += ");"
+    cursor.execute(sql)
+    
+    for row in cursor.fetchall():
+        return_list.append(row[0])
+
+    cursor.close()
+    return return_list
+
 def checkForFirstVote(local_db, category_id, twitter_id):
     cursor = local_db.cursor()
     sql = "SELECT * From VoteHistory WHERE category_id = "+str(category_id)+" AND twitter_id like '"+str(twitter_id)+"';"

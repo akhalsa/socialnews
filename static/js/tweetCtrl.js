@@ -10,6 +10,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.timestamp = "";
     $scope.category_structure = [];
     $scope.categories_for_tweet = [];
+    $scope.twitter_url = "";
     
     $scope.new_comment_text = "";
     
@@ -109,8 +110,6 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
         $http.post("/api/tweet/"+$scope.tweet_id+"/vote", data).then(function successCallback(response){
             console.log("post successful");
-            console.log(response.data.success);
-            console.log(response.data.msg);
             reloadPage();
             trackVote();
             
@@ -252,9 +251,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
               $scope.profile_image = response.data.profile_image;
               $scope.name = response.data.name;
               $scope.timestamp = response.data.timestamp;
-              console.log("got timestamp: "+$scope.timestamp);
               $scope.categories_for_tweet = response.data.categories;
-              console.log("got categories: "+$scope.categories_for_tweet);
+              $scope.twitter_url = response.data.twitter_url;
             });
             
             $http.get("/api/login")
@@ -319,7 +317,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     
     var trackVote = function(){
         if (typeof tracking == 'undefined') {
-            console.log("triggering a comment evnet");
+            console.log("triggering a comment vote evnet");
             $window.ga('send', {
                 hitType: 'event',
                 eventCategory: 'Vote',
