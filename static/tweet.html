@@ -136,11 +136,15 @@
     <div class="col-xs-12 col-md-2">    
     </div>
     <div class="col-xs-12 col-md-8 wrap-con-main">
-    	<!-- Breadcurmbs start -->
-        <ol class="breadcrumb" >
-	    <li ng-repeat="cat in categories_for_tweet"><a href="#" ng-click="moveToCatPage(cat)">{{! cat }}</a></li>
-        </ol>
-    	<!-- Breadcurmbs end -->
+	<!-- Category start -->
+        <nav>
+          <ul class="pager pager-filtra">
+          	<li class="previous">
+		    <a href="#" ng-repeat="cat in categories_for_tweet" ng-click="moveToCatPage(cat)"><span class="genericon genericon-next"></span> {{! cat }}</a>
+		</li>
+          </ul>
+        </nav>
+        <!-- Category end -->
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
@@ -148,6 +152,7 @@
                 	<a href="{{!twitter_url}}" target="_blank" onclick="trackOutboundLink('orig_tweet');return true;">
 			<div class="handle-main">
 			    <img src="{{! profile_image }}" alt="TechCrunch" />
+			    
 			    <div class="overlay-tw"><span class="genericon genericon-twitter"></span></div>
 			</div>
 			</a>
