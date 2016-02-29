@@ -269,7 +269,12 @@
                 <ul id="list-vote">
                     
                     
-                    <li ng-repeat="handle in handle_list"><div class="handle"><img src="{{! handle.profile_pic }}" />{{! handle.username }}</div><div class="clear"></div></li>
+                    <li ng-repeat="handle in handle_list">
+                      <div class="handle">
+                        <img src="{{! handle.profile_pic }}" />{{! handle.username }}
+                        <div class="overlay-tw"><span class="genericon genericon-twitter"></span></div>
+                      </div>
+                      <div class="clear"></div></li>
                 </ul>
             </div>
             <!-- vote end -->
