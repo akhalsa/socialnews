@@ -213,7 +213,10 @@
             <div class="con-tw"  ng-repeat="tweet in tweet_array">
                     <div class="wrap-user">
                     <div class="user">
-                        <div class="handle-main"><img src="{{! tweet.pic}}" alt="{{! tweet.name}}"/></div>
+                        <div class="handle-main">
+                          <img src="{{! tweet.pic}}" alt="{{! tweet.name}}"/>
+                          <div class="overlay-tw"><span class="genericon genericon-twitter"></span></div>
+                        </div>
                         <div class="handle-name"> {{! tweet.name}} </div>
                         <div class="clear"></div>
                     </div>
