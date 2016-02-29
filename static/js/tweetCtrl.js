@@ -10,6 +10,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.timestamp = "";
     $scope.category_structure = [];
     $scope.categories_for_tweet = [];
+    $scope.twitter_url = "";
     
     $scope.new_comment_text = "";
     
@@ -252,9 +253,9 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
               $scope.profile_image = response.data.profile_image;
               $scope.name = response.data.name;
               $scope.timestamp = response.data.timestamp;
-              console.log("got timestamp: "+$scope.timestamp);
               $scope.categories_for_tweet = response.data.categories;
-              console.log("got categories: "+$scope.categories_for_tweet);
+              $scope.twitter_url = response.data.twitter_url;
+              console.log("twitter url: "+$scope.twitter_url);
             });
             
             $http.get("/api/login")

@@ -441,6 +441,8 @@ class TweetAPI(AuthBase):
         cat_list = getCategoriesForTwitterUserId(local_db,tweet["source_twitter_id"] )
         cat_list = getCategoryNamesForIds(local_db, cat_list)
         tweet["categories"] = cat_list
+        tweet["twitter_url"] = "https://twitter.com/"+tweet["twitter_handle"][1:]+"/status/"+str(tweet_id) 
+        
         self.finish(simplejson.dumps(tweet))
         
         
