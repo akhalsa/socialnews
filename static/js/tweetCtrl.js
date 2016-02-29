@@ -110,8 +110,6 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
         $http.post("/api/tweet/"+$scope.tweet_id+"/vote", data).then(function successCallback(response){
             console.log("post successful");
-            console.log(response.data.success);
-            console.log(response.data.msg);
             reloadPage();
             trackVote();
             
