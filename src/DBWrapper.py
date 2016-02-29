@@ -638,7 +638,7 @@ def reloadSourceCategoryRelationship(local_db):
     for row in categories:
         cursor = local_db.cursor()
         cat_id = row[0]
-        #simple algorithm... lets just start with the top 30 voted handles ... this may get more complex later
+        #simple algorithm... lets get all handles ... this may get more complex later
         sql_votes = "SELECT twitter_id, SUM(value) as vote_count FROM VoteHistory WHERE category_id like "+str(cat_id)+" GROUP BY twitter_id ORDER BY vote_count DESC;"
 
         cursor.execute(sql_votes)
@@ -754,7 +754,7 @@ def insertUserWithValues(local_db, email, passhash, username ):
     
 def getTweetWithId(local_db, tweet_id, user_id):
     cursor = local_db.cursor()
-    sql ="SELECT Tweet.text, TwitterSource.name, TwitterSource.twitter_handle, TwitterSource.profile_image, Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW()) "
+    sql ="SELECT Tweet.text, TwitterSource.name, TwitterSource.twitter_handle, TwitterSource.profile_image, Tweet.blurb, Tweet.link_url, Tweet.link_text, Tweet.img_url, TIMESTAMPDIFF(SECOND,  Tweet.insertion_timestamp, NOW()), TwitterSource.twitter_id "
     sql += "From Tweet INNER JOIN TwitterSource ON Tweet.source_twitter_id = TwitterSource.twitter_id AND Tweet.twitter_id = "+str(tweet_id)+";"
     print "loading w sql: "
     print sql
@@ -769,6 +769,7 @@ def getTweetWithId(local_db, tweet_id, user_id):
             tweet["text"] = row[0]
             tweet["name"] = row[1]
             tweet["twitter_handle"] = row[2]
+            tweet["source_twitter_id"] = row[9]
             tweet["profile_image"] = row[3]
             tweet["blurb"] = row[4]
             tweet["link_url"] = row[5]

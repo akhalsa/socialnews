@@ -437,7 +437,11 @@ class TweetAPI(AuthBase):
         
         user_id = self.getUserId(local_db)
         print "loading tweet with id: "+str(user_id)
-        self.finish(simplejson.dumps(getTweetWithId(local_db, tweet_id, user_id)))
+        tweet = getTweetWithId(local_db, tweet_id, user_id)
+        tweet["categories"] = getCategoriesForTwitterUserId(local_db,tweet["source_twitter_id"] )
+        
+        #def getCategoriesForTwitterUserId(local_db, twitter_id):
+        self.finish(simplejson.dumps())
         
         
     def post(self, tweet_id):
