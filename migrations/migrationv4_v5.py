@@ -43,12 +43,12 @@ def forward():
         #top level category: 109
         #what categories are we examining?
         parent_cat_id = 109
-        all_children = get_child_cat_ids(109)
+        all_children = get_child_cat_ids(db, 109)
         print all_children
         
         
         
-def get_child_cat_ids(cat_id):
+def get_child_cat_ids(db, cat_id):
         cursor = db.cursor()
         return_list = [cat_id]
         sql = "SELECT child_category_id From CategoryParentRelationship WHERE parent_category_id = "+str(cat_id)
@@ -56,7 +56,7 @@ def get_child_cat_ids(cat_id):
         rows = cursor.fetchall()
         cursor.close()
         for row in rows:
-                return_list.append(get_child_cat_ids(row[0]))
+                return_list.append(get_child_cat_ids(db, row[0]))
 
         return return_list
         
