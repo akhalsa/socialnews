@@ -44,7 +44,19 @@ def forward():
         #what categories are we examining?
         parent_cat_id = 109
         all_children = get_child_cat_ids(db, 109)
-        print all_children
+        
+        
+        #ok next we need to get all the handles in each of these categories
+        sql = "SELECT unique(twitter_id) From VoteHistory WHERE category_id in ("
+        for cat_id in all_children:
+                sql += str(cat_id)
+                sql += ", "
+        if(len(all_children) > 0):
+                sql = sql[:-2]
+        sql += ");"
+        
+        print sql
+        
         
         
         
