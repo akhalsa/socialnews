@@ -48,7 +48,7 @@ def forward():
         
         
         #ok next we need to get all the handles in each of these categories
-        sql = "SELECT unique(twitter_id) From VoteHistory WHERE category_id in ("
+        sql = "SELECT DISTINCT twitter_id From VoteHistory WHERE category_id in ("
         for cat_id in list_holder:
                 sql += str(cat_id)
                 sql += ", "
