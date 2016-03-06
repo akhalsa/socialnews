@@ -43,15 +43,16 @@ def forward():
         #top level category: 109
         #what categories are we examining?
         parent_cat_id = 109
-        all_children = get_child_cat_ids(db, 109)
+        list_holder = [parent_cat_id]
+        get_child_cat_ids(db, parent_cat_id, list_holder)
         
         
         #ok next we need to get all the handles in each of these categories
         sql = "SELECT unique(twitter_id) From VoteHistory WHERE category_id in ("
-        for cat_id in all_children:
+        for cat_id in list_holder:
                 sql += str(cat_id)
                 sql += ", "
-        if(len(all_children) > 0):
+        if(len(list_holder) > 0):
                 sql = sql[:-2]
         sql += ");"
         
@@ -60,17 +61,17 @@ def forward():
         
         
         
-def get_child_cat_ids(db, cat_id):
+def get_child_cat_ids(db, cat_id, append_list):
         cursor = db.cursor()
-        return_list = [cat_id]
         sql = "SELECT child_category_id From CategoryParentRelationship WHERE parent_category_id = "+str(cat_id)
         cursor.execute(sql)
         rows = cursor.fetchall()
         cursor.close()
         for row in rows:
-                return_list.append(get_child_cat_ids(db, row[0]))
+                append_list.append(row[0])
+                get_child_cat_ids(db, row[0], append_list)
 
-        return return_list
+        return
         
         
 #         | VoteHistory | CREATE TABLE `VoteHistory` (
