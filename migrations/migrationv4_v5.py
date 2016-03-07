@@ -56,7 +56,35 @@ def forward():
                 sql = sql[:-2]
         sql += ");"
         
-        print sql
+        cursor = db.cursor()
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        cursor.close()
+        for row in rows:
+                cursor = db.cursor()
+                sql = "SELECT * From VoteHistory WHERE twitter_id like '"+str(row[0])+"';"
+                cursor.execute(sql)
+                all_votes_for_handle = cursor.fetchall()
+                cursor.close()
+                should_delete = False
+                for vote in all_votes_for_handle:
+                        if(vote[1] not in list_holder):
+                                should_delete = True
+                                break
+                        
+                if(should_delete):
+                        sql = "DELETE From VoteHistory WHERE twitter_id like '"+str(row[0])+"' AND category_id in ("
+                        for cat_id in list_holder:
+                                sql += str(cat_id)
+                                sql += ", "
+                        if(len(list_holder) > 0):
+                                sql = sql[:-2]
+                        sql += ");"
+                        print sql
+                        
+                        executeSql(db, sql)
+                        
+        
         
         
         
