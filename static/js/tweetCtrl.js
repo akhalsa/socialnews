@@ -236,6 +236,18 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         trackAbout();
     }
     
+    $scope.contactClicked = function(){
+        trackContact();
+    }
+    
+    $scope.fbShareClicked = function(){
+        trackFBShare();
+    }
+    
+    $scope.twShareClicked = function(){
+        trackTWShare();
+    }
+    
     // PRIVATE METHODS...not to be called from html
     
     function reloadPage(){
@@ -370,6 +382,45 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
                 hitType: 'event',
                 eventCategory: 'Click',
                 eventAction: "About", 
+                eventLabel: $scope.username
+            } );
+        }
+    }
+    
+    var trackContact = function(){
+        if (typeof tracking == 'undefined') {
+            console.log("tracking about click");
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: "Contact", 
+                eventLabel: $scope.username
+            } );
+        }
+    }
+    
+    var trackFBShare = function(){
+        if (typeof tracking == 'undefined') {
+            console.log("tracking about click");
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: "FB Share", 
+                eventLabel: $scope.username
+            } );
+        }
+    }
+    
+    var trackTWShare = function(){
+        if (typeof tracking == 'undefined') {
+            console.log("tracking about click");
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: "TW Share", 
                 eventLabel: $scope.username
             } );
         }
