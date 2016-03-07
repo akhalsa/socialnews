@@ -232,6 +232,9 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         
     }
     
+    $scope.aboutClicked = function(){
+        trackAbout();
+    }
     
     // PRIVATE METHODS...not to be called from html
     
@@ -288,6 +291,8 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         }
       }
     }
+    
+    
     
     var trackComments = function(comment){
         if (typeof tracking == 'undefined') {
@@ -352,6 +357,19 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
                 hitType: 'event',
                 eventCategory: 'outbound',
                 eventAction: url, 
+                eventLabel: $scope.username
+            } );
+        }
+    }
+    
+    var trackAbout = function(){
+        if (typeof tracking == 'undefined') {
+            console.log("tracking about click");
+            
+            $window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: "About", 
                 eventLabel: $scope.username
             } );
         }
