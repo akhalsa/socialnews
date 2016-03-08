@@ -95,13 +95,7 @@ def ensureHandleInCategory(db, twitter_id, cat_id):
         if(row is None):
                 #ok we need to insert 20 points into the Vote History
                 sql = "INSERT INTO VoteHistory (category_id, twitter_id, value) VALUES ("+str(cat_id)+", '"+str(twitter_id)+"', 20);"
-                print sql
-                cursor = db.cursor()
-                cursor.execute(sql)
-                cursor.close()
-        else:
-                print "no need to add: "+str(twitter_id)+" to cat: "+str(cat_id)
-                
-        
+                executeSql(db, sql)
+
         
         
