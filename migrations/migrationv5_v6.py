@@ -44,7 +44,7 @@ def forward():
         
         
 def descendFromCategory(db, cat_id):
-        print "descending into cat: "+str(row[0])
+        print "descending into cat: "+str(cat_id)
         processCategory(db, cat_id)
         sql = "SELECT child_category_id FROM CategoryParentRelationship WHERE parent_category_id="+str(cat_id)+";"
         cursor = db.cursor()
