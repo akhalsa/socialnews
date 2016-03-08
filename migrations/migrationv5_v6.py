@@ -99,6 +99,8 @@ def ensureHandleInCategory(db, twitter_id, cat_id):
                 cursor = db.cursor()
                 cursor.execute(sql)
                 cursor.close()
+        else:
+                print "no need to add: "+str(twitter_id)+" to cat: "+str(cat_id)
                 
         
         
