@@ -87,7 +87,7 @@ def insertIntoCategoryParents(db, twitter_id, cat_id):
         
 def ensureHandleInCategory(db, twitter_id, cat_id):
         #check if handle is in cat with cat id, if not add it
-        sql = "SELECT ID From VoteHistory WHERE twitter_id like '"+str(twitter_id)+"' AND category_id="+str(cat_id)+";"
+        sql = "SELECT ID From SourceCategoryRelationship WHERE source_twitter_id like '"+str(twitter_id)+"' AND category_id="+str(cat_id)+";"
         cursor = db.cursor()
         cursor.execute(sql)
         row = cursor.fetchone()
@@ -97,5 +97,6 @@ def ensureHandleInCategory(db, twitter_id, cat_id):
                 sql = "INSERT INTO VoteHistory (category_id, twitter_id, value) VALUES ("+str(cat_id)+", '"+str(twitter_id)+"', 20);"
                 executeSql(db, sql)
 
+        
         
         
