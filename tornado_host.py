@@ -386,6 +386,11 @@ class TweetHandler(tornado.web.RequestHandler):
     def get(self, tweet_id):
         self.render("static/tweet.html",  t_id=tweet_id)
 
+class SuggestionHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("static/suggestion.html")
+        
+        
 class CommentVoteAPI(AuthBase):
     def post(self, comment_id):
         local_db = MySQLdb.connect(
@@ -596,6 +601,7 @@ app = tornado.web.Application([
     (r'/', NewIndexHandler),
     (r'/login', LoginHandler),
     (r'/tweet/(.*)', TweetHandler),
+    (r'/suggestions', SuggestionHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
