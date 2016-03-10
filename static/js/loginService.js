@@ -87,6 +87,7 @@ app.service('loginService', function(){
     }
     
     this.showLoginPopup = function(){
+        console.log("show login popup");
         this.showLogin = true;
         this.showRegister = false;
         this.invalid_creds = false;
