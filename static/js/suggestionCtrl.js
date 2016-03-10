@@ -1,4 +1,4 @@
-app.controller("sharedLoginCtrl", function($scope, $http, $sce, $window, loginService) {
+app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginService) {
 
     $scope.loginService = loginService;
     $scope.login_email = "";
