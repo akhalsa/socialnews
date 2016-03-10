@@ -20,6 +20,9 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.comment_rate_limit = false;
     
+    $scope.login = function(){
+        loginService.login($scope.login_email, $scope.login_pw);
+    }
     
 
     
