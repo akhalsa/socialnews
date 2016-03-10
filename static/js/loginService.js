@@ -1,4 +1,4 @@
-app.service('loginService', function(){
+app.service('loginService', function($http){
     this.logged_in = false;
     this.username = "";
     
