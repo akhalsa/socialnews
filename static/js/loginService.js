@@ -6,6 +6,34 @@ app.service('loginService', function($http){
     this.showLogin = false;
     this.showRegister = false;
     
+    
+    this.checkLoggedIn = function(){
+        $http.get("/api/login")
+        .then(function(response) {
+            this.logged_in = response.data.logged_in;
+            this.username =response.data.username;
+        });
+    }
+    
+    this.dismissPopups = function (){
+        this.showLogin = false;
+        this.showRegister = false;
+        this.invalid_creds = false;
+    }
+    
+    this.showLoginPopup = function(){
+        console.log("show login popup");
+        this.showLogin = true;
+        this.showRegister = false;
+        this.invalid_creds = false;
+    }
+    
+    this.showRegisterPopup = function(){
+        this.showLogin = false;
+        this.showRegister = true;
+        this.invalid_creds = false;
+    }
+    
     this.createAccount = function(email, password, pw_confirm, username){
         
         if (password != pw_confirm) {
@@ -72,32 +100,7 @@ app.service('loginService', function($http){
         });
     }
     
-    this.checkLoggedIn = function(){
-        $http.get("/api/login")
-        .then(function(response) {
-            this.logged_in = response.data.logged_in;
-            this.username =response.data.username;
-        });
-    }
     
-    this.dismissPopups = function (){
-        this.showLogin = false;
-        this.showRegister = false;
-        this.invalid_creds = false;
-    }
-    
-    this.showLoginPopup = function(){
-        console.log("show login popup");
-        this.showLogin = true;
-        this.showRegister = false;
-        this.invalid_creds = false;
-    }
-    
-    this.showRegisterPopup = function(){
-        this.showLogin = false;
-        this.showRegister = true;
-        this.invalid_creds = false;
-    }
     
     
 });
