@@ -1,5 +1,6 @@
 app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginService) {
 
+    $scope.loginService = loginService;
     $scope.login_email = "";
     $scope.login_pw = "";
     
@@ -19,7 +20,10 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.comment_rate_limit = false;
     
-    
+    /*$scope.showLoginPopup = function(var){
+
+        myService.myFunction(var);    
+    }*/
     
 
     
