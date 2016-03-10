@@ -20,10 +20,6 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.comment_rate_limit = false;
     
-    /*$scope.showLoginPopup = function(var){
-
-        myService.myFunction(var);    
-    }*/
     
 
     
