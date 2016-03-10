@@ -53,7 +53,7 @@ app.service('loginService', function($http){
             console.log("successful response");
             this.logged_in = true;
             this.username = response.data.username;
-            this.dismissPopups();
+            dismissPopups();
         }, function errorCallback(response){
             console.log("got an error");
             if (response.status == 403) {
@@ -72,7 +72,7 @@ app.service('loginService', function($http){
         $http.post("/api/login", data).then(function successCallback(response){
             this.logged_in = response.data.logged_in;
             this.username = response.data.username;
-            this.dismissPopups();
+            dismissPopups();
             
         }, function errorCallback(response){
             console.log("got an error");
