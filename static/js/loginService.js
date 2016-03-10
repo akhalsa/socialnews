@@ -47,13 +47,13 @@ app.service('loginService', function($http){
         data["password"] = password;
         data["username"] = username;
 
-        
+        var login = this;
         
         $http.post("/api/signup", data).then(function successCallback(response){
             console.log("successful response");
-            this.logged_in = true;
-            this.username = response.data.username;
-            dismissPopups();
+            login.logged_in = true;
+            login.username = response.data.username;
+            login.dismissPopups();
         }, function errorCallback(response){
             console.log("got an error");
             if (response.status == 403) {
@@ -68,17 +68,17 @@ app.service('loginService', function($http){
     
         data["email"] = email;
         data["password"] = pw;
-
+        var login = this;
         $http.post("/api/login", data).then(function successCallback(response){
-            this.logged_in = response.data.logged_in;
-            this.username = response.data.username;
-            dismissPopups();
+            login.logged_in = response.data.logged_in;
+            login.username = response.data.username;
+            login.dismissPopups();
             
         }, function errorCallback(response){
             console.log("got an error");
             if (response.status == 403) {
                 console.log("got a 403");
-                this.invalid_creds = true;
+                login.invalid_creds = true;
             }
         });
         
