@@ -1,6 +1,5 @@
 app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginService) {
 
-    $scope.loginService = loginService;
     $scope.login_email = "";
     $scope.login_pw = "";
     
