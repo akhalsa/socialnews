@@ -91,8 +91,8 @@
 <!-- header end -->
 <!-- contents start -->
 <!-- popup overlay start -->
-<div class="overlay" ng-show="showLogin || showRegister" ></div>
-<div class="wrap-popup pp-register" ng-show="showLogin">
+<div class="overlay" ng-show="loginService.showLogin || loginService.showRegister" ></div>
+<div class="wrap-popup pp-register" ng-show="loginService.showLogin">
 	<div id="bt-close"><a href="#" ng-click="dismissPopups()" ><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Login</h3>
 	<p class="p-sub-head2" ng-show="throttled">You can only up or down vote 5 times before you login.</p>
@@ -113,7 +113,7 @@
 </div>
 <!-- popup overlay end -->
 <!-- popup overlay start -->
-<div class="wrap-popup pp-register" ng-show="showRegister">
+<div class="wrap-popup pp-register" ng-show="loginService.showRegister">
 	<div id="bt-close"><a href="#" ng-click="dismissPopups()"><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Register</h3>
     <div class="con-pp-inner">
