@@ -25,6 +25,12 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     }
     
 
+    $scope.login = function(){
+        loginService.login($scope.login_email, $scope.login_pw);
+    }
     
+    $scope.register = function(){
+        loginService.createAccount($scope.register_email,  $scope.register_pw, $scope.register_pw_confirm, $scope.register_username);
+    }
     
 });
