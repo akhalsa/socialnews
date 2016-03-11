@@ -89,11 +89,14 @@ app.service('loginService', function($http){
         var data = {};
         console.log("logging out");
         data["logout"] = true;
+        var login = this;
         $http.put("/api/login", data).then(function(response){
             if (response.status == 200) {
                 console.log("logout success");
-                this.logged_in = false;
-                this.username = "";
+                login.logged_in = false;
+                login.username = "";
+                login.dismissPopups();
+                
             }else{
                 console.log("logout fail");
             }
