@@ -34,15 +34,16 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     }
     
     $scope.$watch('loginService.showRegister', function () {
-        reloadPage();
+        clearFields();
     });
     
     $scope.$watch('loginService.showLogin', function () {
-        reloadPage();
+        clearFields();
     });
     
     
     function clearFields(){
+        console.log("clearing everything");
         $scope.login_email = "";
         $scope.login_pw = "";
         
