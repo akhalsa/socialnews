@@ -106,7 +106,7 @@
                 
         	<li>Want to join? <a href="#" ng-click="loginService.showRegisterPopup()">Register in seconds.</a></li>
         	<li id="link-g" ng-show="FindCredentialsFeatureFlag">Forgot Password? <a href="#">Click here to find.</a></li>
-                <li ng-show="invalid_creds">Invalid username/password </li>
+                <li ng-show="loginService.invalid_creds">Invalid username/password </li>
         </ul>
     </div>
     <div class="clear"></div>
