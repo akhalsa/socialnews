@@ -16,7 +16,8 @@ class Suggestion(Base):
     id = Column(Integer, primary_key=True)
     text = Column(String(255), nullable=False)
     user_id = Column(Integer, nullable=False)
-    timestamp = Column(TIMESTAMP, nullable=False)
+    timestamp = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
+    
     
     def __repr__(self):
         return "<Suggestion(id='%s', text='%s', userid='%s')>" % (
