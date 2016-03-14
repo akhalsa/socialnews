@@ -16,7 +16,7 @@ class Suggestion(Base):
     id = Column(Integer, primary_key=True)
     text = Column(String(255), nullable=False)
     user_id = Column(Integer, nullable=False)
-    timestamp = Column('timestamp', TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
+    timestamp = Column(TIMESTAMP, nullable=False)
     
     
     def __repr__(self):
