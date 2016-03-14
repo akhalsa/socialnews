@@ -7,7 +7,7 @@ engine = create_engine('mysql://akhalsa:sophiesChoice1@avtar-news-db-dev.cvnwfvv
 
 
 # create a configured "Session" class
-Session = sessionmaker(bind=some_engine)
+Session = sessionmaker(bind=engine)
 
 # create a Session
 session = Session()
