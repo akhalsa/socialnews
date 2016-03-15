@@ -1,5 +1,5 @@
-import Suggestion
-import Base
+from ..src import Suggestion
+from ..src import Base
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref, sessionmaker
