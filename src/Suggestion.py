@@ -1,7 +1,7 @@
 from Base import Base
 
 from sqlalchemy.dialects.mysql import TIMESTAMP
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, func
 from sqlalchemy.orm import relationship
 
 class Suggestion(Base):
