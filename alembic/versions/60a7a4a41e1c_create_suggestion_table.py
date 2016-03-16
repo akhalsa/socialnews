@@ -22,7 +22,7 @@ def upgrade():
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('text', sa.String(255), nullable=False),
         sa.Column('user_id', sa.Integer, nullable=False),
-        sa.Column('timestamp', sa.TIMESTAMP, default=func.now())
+        sa.Column('timestamp', sa.TIMESTAMP, server_default=func.now())
     )
 def downgrade():
     op.drop_table('Suggestion')
