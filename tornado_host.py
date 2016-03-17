@@ -22,6 +22,7 @@ from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
 from src.DBWrapper import *
+import src.SqlAlchemyManager as sa
 from passlib.hash import sha256_crypt
 
 
@@ -479,6 +480,27 @@ class TweetAPI(AuthBase):
         self.set_status(200)
         self.finish()
         
+class SuggestionAPI(AuthBase):
+    def post(self, ):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        #get comment structure from post body
+        data = json.loads(self.request.body)
+        #get user id
+        user_id = self.getUserId(local_db)
+        
+        suggestion_text = re.escape(data["text"])
+        
+        
+        sa.insertComment(suggestion_text, user_id)
+        
+    
+        
         
 
         
@@ -614,7 +636,8 @@ app = tornado.web.Application([
     (r"/api/login", LoginAPI),
     (r"/api/tweet/(.*)/vote", CommentVoteAPI),
     (r"/api/tweet/(.*)", TweetAPI),
-    (r"/api/category", Category)
+    (r"/api/category", Category),
+    (r"/api/suggestion", SuggestionAPI)
     
 ], **settings)
 

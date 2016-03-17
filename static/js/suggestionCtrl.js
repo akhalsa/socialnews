@@ -1,5 +1,6 @@
 app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginService) {
 
+    /*login variables */
     $scope.loginService = loginService;
     $scope.login_email = "";
     $scope.login_pw = "";
@@ -19,6 +20,10 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     $scope.throttled = false;
     
     $scope.comment_rate_limit = false;
+    /* end of login variables */
+    
+    $scope.suggestion_text = "";
+    
     
     $scope.login = function(){
         loginService.login($scope.login_email, $scope.login_pw);
@@ -41,6 +46,11 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
         clearFields();
     });
     
+    $scope.postSuggestion = function(){
+        var data = {};
+        data["comment_id"] = comment_id;
+        data["vote_val"] = value;
+    }
     
     function clearFields(){
         console.log("clearing everything");
@@ -56,6 +66,7 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
         $scope.invalid_creds = false;
     }
     
+
     
     
 });
