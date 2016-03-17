@@ -48,8 +48,13 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.postSuggestion = function(){
         var data = {};
-        data["comment_id"] = comment_id;
-        data["vote_val"] = value;
+        data["text"] = suggestion_text;
+        
+        $http.post("/api/suggestion", data).then(function successCallback(response){
+            console.log("post successful");
+        }, function errorCallback(response){
+            
+        });
     }
     
     function clearFields(){
