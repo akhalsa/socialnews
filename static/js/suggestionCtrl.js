@@ -48,7 +48,7 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.postSuggestion = function(){
         var data = {};
-        data["text"] = suggestion_text;
+        data["text"] = $scope.suggestion_text;
         
         $http.post("/api/suggestion", data).then(function successCallback(response){
             console.log("post successful");
