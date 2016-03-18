@@ -24,6 +24,7 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.suggestion_text = "";
     
+    $scope.suggestionlist = [];
     
     $scope.login = function(){
         loginService.login($scope.login_email, $scope.login_pw);
@@ -49,7 +50,9 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     $scope.postSuggestion = function(){
         var data = {};
         data["text"] = $scope.suggestion_text;
-        
+        if ($scope.suggestion_text == "") {
+            return;
+        }
         $http.post("/api/suggestion", data).then(function successCallback(response){
             console.log("post successful");
             $scope.suggestion_text = "";
@@ -57,6 +60,22 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
             
         });
     }
+    
+    loadSuggestions();
+    
+    
+    function loadSuggestions(){
+        console.log("beginning to load suggestions");
+        $http.get("/api/suggestion").then(function successCallback(response){
+            console.log("get successful");
+            $scope.suggestionlist = response.data.suggestions;
+        }, function errorCallback(response){
+            
+        });
+    }
+    
+    
+    
     
     function clearFields(){
         console.log("clearing everything");

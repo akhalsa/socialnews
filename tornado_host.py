@@ -498,6 +498,9 @@ class SuggestionAPI(AuthBase):
         
         
         sa.insertComment(suggestion_text, user_id)
+    
+    def get(self,):
+        sa.fetchAllComments()
         
     
         
