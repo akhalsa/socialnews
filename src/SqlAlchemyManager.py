@@ -21,5 +21,5 @@ def fetchAllComments():
     q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id).all()
     
     for (User.User, Suggestion.Suggestion) in q:
-        print str(User.User.ID) +" and "+ Suggestion.Suggestion.text
+        print str(User.User.username) +" and "+ Suggestion.Suggestion.text
 
