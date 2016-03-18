@@ -35,6 +35,7 @@ def upgrade():
     )
     
 def downgrade():
-    op.drop_table('Suggestion')
     op.drop_table('SuggestionVote')
+    op.drop_table('Suggestion')
+    
     
