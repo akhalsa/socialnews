@@ -511,8 +511,10 @@ class SuggestionAPI(AuthBase):
         data = json.loads(self.request.body)
         #get user id
         user_id = self.getUserId(local_db)
-        sa.fetchAllComments(user_id)
         
+        self.clear()
+        self.set_status(200)
+        self.finish(json.dumps(sa.fetchAllComments(user_id)))
         
     
         
