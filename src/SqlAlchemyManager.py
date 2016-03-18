@@ -19,7 +19,10 @@ def insertComment(suggestion_text, uid):
 def fetchAllComments():
     session = Session()
     q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id).all()
-    
+
     for (User.User, Suggestion.Suggestion) in q:
-        print str(User.User.username) +" and "+ Suggestion.Suggestion.text
+        if(User.User.username == None):
+            print User.User.ip_address +" and "+ Suggestion.Suggestion.text
+        else:
+            print User.User.username +" and "+ Suggestion.Suggestion.text
 
