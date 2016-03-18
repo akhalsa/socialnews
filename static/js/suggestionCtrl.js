@@ -68,7 +68,7 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
         console.log("beginning to load suggestions");
         $http.get("/api/suggestion").then(function successCallback(response){
             console.log("get successful");
-            $scope.suggestionlist = response.data.suggestions;
+            $scope.suggestionlist = response.data;
             console.log($scope.suggestionlist );
         }, function errorCallback(response){
             
