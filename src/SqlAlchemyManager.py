@@ -3,6 +3,7 @@ import sys
 import Suggestion
 import User
 import Base
+import datetime
 import SuggestionVote
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref, sessionmaker
@@ -31,7 +32,7 @@ def fetchAllComments(uid):
             single_suggestion["username"] = "user"+str(User.User.ID)
             
         single_suggestion["suggestion_text"] = Suggestion.Suggestion.text
-        single_suggestion["timestamp"] = Suggestion.Suggestion.timestamp
+        single_suggestion["timestamp"] = datetime.utcfromtimestamp(Suggestion.Suggestion.timestamp)
         single_suggestion["score"] = Suggestion.Suggestion.score
         new_q = session.query(SuggestionVote.SuggestionVote).filter(uid == SuggestionVote.SuggestionVote.user_id).all()
         single_suggestion["vote_val"] = 0
