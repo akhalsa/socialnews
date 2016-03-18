@@ -25,7 +25,6 @@ def fetchAllComments(uid):
     response_json = []
     
     for (User.User, Suggestion.Suggestion) in q:
-        print Suggestion.Suggestion.timestamp
         single_suggestion = {}
         if(User.User.username is not None):
             single_suggestion["user_name"] = User.User.username
@@ -43,5 +42,5 @@ def fetchAllComments(uid):
         
         response_json.append(single_suggestion)
         
-    
+    print response_json
     return response_json
