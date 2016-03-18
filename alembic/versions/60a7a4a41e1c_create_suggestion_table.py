@@ -22,7 +22,19 @@ def upgrade():
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('text', sa.String(255), nullable=False),
         sa.Column('user_id', sa.Integer, nullable=False),
+        sa.Column('score', sa.Integer),
         sa.Column('timestamp', sa.TIMESTAMP, server_default=func.now())
     )
+    op.create_table(
+        'SuggestionVote',
+        sa.Column('id', sa.Integer, primary_key=True),
+        sa.Column('value', sa.Integer, nullable=False),
+        sa.Column('user_id', sa.Integer, sa.ForeignKey('User.ID') ),
+        sa.Column('suggestion_id', sa.Integer, sa.ForeignKey('Suggestion.id')),
+        sa.Column('timestamp', sa.TIMESTAMP, server_default=func.now())
+    )
+    
 def downgrade():
     op.drop_table('Suggestion')
+    op.drop_table('SuggestionVote')
+    
