@@ -509,10 +509,9 @@ class SuggestionAPI(AuthBase):
                         port=3306)
         #get user id
         user_id = self.getUserId(local_db)
-        
-        self.clear()
-        self.set_status(200)
+
         self.finish(json.dumps(sa.fetchAllComments(user_id)))
+        return
         
     
         
