@@ -1,6 +1,7 @@
 import os
 import sys
 import Suggestion
+import User
 import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref, sessionmaker
@@ -17,5 +18,8 @@ def insertComment(suggestion_text, uid):
     
 def fetchAllComments():
     session = Session()
-    for instance in session.query(Suggestion.Suggestion).order_by(Suggestion.Suggestion.id):
-        print instance.text
+    q = Session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id).all()
+    
+    for (User.User, Suggestion.Suggestion) in q:
+        print str(User.User.ID) +" and "+ Suggestion.Suggestion.text
+
