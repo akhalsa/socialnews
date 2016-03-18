@@ -500,7 +500,19 @@ class SuggestionAPI(AuthBase):
         sa.insertComment(suggestion_text, user_id)
     
     def get(self,):
-        sa.fetchAllComments()
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        #get comment structure from post body
+        data = json.loads(self.request.body)
+        #get user id
+        user_id = self.getUserId(local_db)
+        sa.fetchAllComments(user_id)
+        
         
     
         
