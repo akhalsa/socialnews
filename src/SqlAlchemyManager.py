@@ -33,7 +33,7 @@ def fetchAllComments(uid):
             single_suggestion["username"] = "user"+str(User.User.ID)
             
         single_suggestion["suggestion_text"] = Suggestion.Suggestion.text
-        single_suggestion["timestamp"] = Suggestion.Suggestion.timestamp
+        single_suggestion["timestamp"] = (datetime.datetime.now() - Suggestion.Suggestion.timestamp).total_seconds()
         single_suggestion["score"] = Suggestion.Suggestion.score
         new_q = session.query(SuggestionVote.SuggestionVote).filter(uid == SuggestionVote.SuggestionVote.user_id).all()
         single_suggestion["vote_val"] = 0
