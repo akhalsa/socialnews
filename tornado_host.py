@@ -507,8 +507,6 @@ class SuggestionAPI(AuthBase):
                         db="newsdb",
                         charset='utf8',
                         port=3306)
-        #get comment structure from post body
-        data = json.loads(self.request.body)
         #get user id
         user_id = self.getUserId(local_db)
         
