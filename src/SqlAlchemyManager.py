@@ -17,5 +17,5 @@ def insertComment(suggestion_text, uid):
     
 def fetchAllComments():
     session = Session()
-    for instance in session.query(Suggestion).order_by(Suggestion.id):
+    for instance in session.query(Suggestion.Suggestion).order_by(Suggestion.Suggestion.id):
         print instance.text
