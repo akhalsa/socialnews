@@ -26,9 +26,9 @@ def insertComment(suggestion_text, uid):
 def fetchAllComments(uid):
     session = Session()
     print type(Suggestion.Suggestion).__name__
-    suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
+    suggestion = Suggestion.Suggestion(text="blah", user_id=21, score=0)
     print type(Suggestion.Suggestion).__name__
-    suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
+    suggestion = Suggestion.Suggestion(text="blah", user_id=21, score=0)
     
     
     q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id).all()
