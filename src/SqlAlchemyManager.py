@@ -16,6 +16,8 @@ def insertComment(suggestion_text, uid):
     session = Session()
     print type(Suggestion.Suggestion).__name__
     suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
+    print type(Suggestion.Suggestion).__name__
+    suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
     session.add(suggestion)
     session.commit()
     session.close()
@@ -24,6 +26,11 @@ def insertComment(suggestion_text, uid):
 def fetchAllComments(uid):
     session = Session()
     print type(Suggestion.Suggestion).__name__
+    suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
+    print type(Suggestion.Suggestion).__name__
+    suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
+    
+    
     q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id).all()
 
     response_json = []
