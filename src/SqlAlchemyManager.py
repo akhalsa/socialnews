@@ -30,25 +30,23 @@ def fetchAllComments(uid):
     response_json = []
     
     for row in q:
-        print row[0]
-        print "second part"
-        print row[1]
-        # single_suggestion = {}
-        # if(User.User.username is not None):
-        #     single_suggestion["user_name"] = User.User.username
-        # else:
-        #     single_suggestion["username"] = "user"+str(User.User.ID)
-        #     
-        # single_suggestion["suggestion_text"] = sug.text
-        # single_suggestion["timestamp"] = (datetime.datetime.now() - sug.timestamp).total_seconds()
-        # single_suggestion["score"] = sug.score
-        # new_q = session.query(SuggestionVote.SuggestionVote).filter(uid == SuggestionVote.SuggestionVote.user_id).all()
-        # single_suggestion["vote_val"] = 0
-        # if(len(new_q) > 0):
-        #     single_suggestion["vote_val"] = new_q[0].value
-        # 
-        # 
-        # response_json.append(single_suggestion)
+
+        single_suggestion = {}
+        if(row[0].username is not None):
+            single_suggestion["user_name"] = row[0].username
+        else:
+            single_suggestion["username"] = "user"+str(row[0].ID)
+            
+        single_suggestion["suggestion_text"] = row[1].text
+        single_suggestion["timestamp"] = (datetime.datetime.now() - row[1].timestamp).total_seconds()
+        single_suggestion["score"] = row[1].score
+        new_q = session.query(SuggestionVote.SuggestionVote).filter(uid == SuggestionVote.SuggestionVote.user_id).all()
+        single_suggestion["vote_val"] = 0
+        if(len(new_q) > 0):
+            single_suggestion["vote_val"] = new_q[0].value
+        
+        
+        response_json.append(single_suggestion)
         
     session.close()
     print response_json
