@@ -31,6 +31,8 @@ def fetchAllComments(uid):
     
     for row in q:
         print row[0]
+        print "second part"
+        print row[1]
         # single_suggestion = {}
         # if(User.User.username is not None):
         #     single_suggestion["user_name"] = User.User.username
