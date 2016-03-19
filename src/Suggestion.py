@@ -13,6 +13,8 @@ class Suggestion(Base):
     user_id = Column(Integer, nullable=False)
     timestamp = Column(TIMESTAMP, default=func.now())
     score = Column(Integer)
+    print "type from constructor: "
+    print type(self).__name__
     
     
     def __repr__(self):
