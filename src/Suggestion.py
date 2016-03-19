@@ -4,6 +4,7 @@ from sqlalchemy.dialects.mysql import TIMESTAMP
 from sqlalchemy import Column, ForeignKey, Integer, String, func
 from sqlalchemy.orm import relationship
 
+@as_declarative()
 class Suggestion(Base):
     __tablename__ = 'Suggestion'
     # Here we define columns for the table person
@@ -13,9 +14,6 @@ class Suggestion(Base):
     user_id = Column(Integer, nullable=False)
     timestamp = Column(TIMESTAMP, default=func.now())
     score = Column(Integer)
-    print "type from constructor: "
-    print type(self).__name__
-    
     
     def __repr__(self):
         return "<Suggestion(id='%s', text='%s', userid='%s')>" % (
