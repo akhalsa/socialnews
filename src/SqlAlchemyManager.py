@@ -13,7 +13,7 @@ Session = sessionmaker(bind=engine)
 
 def insertComment(suggestion_text, uid):
     session = Session()
-    suggestion = su.Suggestion(text=suggestion_text, user_id=uid)
+    suggestion = su.Suggestion(text=suggestion_text, user_id=uid, score=0)
     session.add(suggestion)
     session.commit()
     
