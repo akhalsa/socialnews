@@ -4,7 +4,7 @@ import User
 import Base
 import datetime
 import SuggestionVote
-from Suggestion import Suggestion as sug
+import Suggestion
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref, sessionmaker
     
@@ -14,7 +14,7 @@ Session = sessionmaker(bind=engine)
 
 def insertComment(suggestion_text, uid):
     session = Session()
-    suggestion = sug(text=suggestion_text, user_id=uid, score=0)
+    suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
     session.add(suggestion)
     session.commit()
     session.close()
@@ -22,10 +22,10 @@ def insertComment(suggestion_text, uid):
     
 def fetchAllComments(uid):
     session = Session()
-    print type(sug).__name__
+    print type(Suggestion.Suggestion).__name__
     
     
-    q = session.query(User.User, sug).filter(User.User.ID == sug.user_id).all()
+    q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == sug.user_id).all()
 
     response_json = []
     
