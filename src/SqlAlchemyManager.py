@@ -8,14 +8,12 @@ import SuggestionVote
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref, sessionmaker
     
-engine = create_engine('mysql://akhalsa:sophiesChoice1@avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com/newsdb', echo=True)
-Session = sessionmaker(bind=engine)
-if(engine):
-    print "engine passed"
-else:
-    print "no engine"
+
+
 
 def insertComment(suggestion_text, uid):
+    engine = create_engine('mysql://akhalsa:sophiesChoice1@avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com/newsdb', echo=True)
+    Session = sessionmaker(bind=engine)
     session = Session()
     suggestion = su.Suggestion(text=suggestion_text, user_id=uid, score=0)
     session.add(suggestion)
@@ -23,6 +21,8 @@ def insertComment(suggestion_text, uid):
     
     
 def fetchAllComments(uid):
+    engine = create_engine('mysql://akhalsa:sophiesChoice1@avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com/newsdb', echo=True)
+    Session = sessionmaker(bind=engine)
     session = Session()
     q = session.query(User.User, su.Suggestion).filter(User.User.ID == su.Suggestion.user_id).all()
 
