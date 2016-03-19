@@ -5,7 +5,6 @@ from sqlalchemy import Column, ForeignKey, Integer, String, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import as_declarative
 
-@as_declarative()
 class Suggestion(Base):
     __tablename__ = 'Suggestion'
     # Here we define columns for the table person
