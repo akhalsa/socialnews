@@ -17,6 +17,7 @@ def insertComment(suggestion_text, uid):
     suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
     session.add(suggestion)
     session.commit()
+    session.close()
     
     
 def fetchAllComments(uid):
@@ -43,5 +44,6 @@ def fetchAllComments(uid):
         
         response_json.append(single_suggestion)
         
+    session.close()
     print response_json
     return response_json
