@@ -25,7 +25,7 @@ def fetchAllComments(uid):
 
     response_json = []
     
-    for (User.User, Suggestion) in q:
+    for (User.User, Suggestion.Suggestion) in q:
         single_suggestion = {}
         if(User.User.username is not None):
             single_suggestion["user_name"] = User.User.username
