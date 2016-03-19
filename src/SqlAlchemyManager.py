@@ -14,6 +14,7 @@ Session = sessionmaker(bind=engine)
 
 def insertComment(suggestion_text, uid):
     session = Session()
+    print type(Suggestion.Suggestion).__name__
     suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
     session.add(suggestion)
     session.commit()
