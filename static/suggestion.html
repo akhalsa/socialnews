@@ -170,6 +170,23 @@
 	      <p id="info-submit" ng-show="comment_rate_limit">You must <a href="#" ng-click="showLoginPopup()">Log In </a> to continue commenting <a href="#" ng-click="showRegisterPopup()">Sign up for free!</a></p> 
             </form>
             <!-- comment form end -->
+	    <!-- comment list start -->
+            <div class="comment-list" ng-repeat="suggestion in suggestionlist">
+            	<!-- username start -->
+                <ul class="username-c" ng-class="{'c-done': suggestion.vote_value !=0}">
+                    <li ><a href="#" onclick="return false;"><span class="genericon genericon-uparrow"></span></a></li>
+                    <li class="txt-c pd-number">{{! suggestion.score }}</li>
+                    <li><a href="#"  ><span class="genericon genericon-downarrow"></span></a></li>
+                    <li class="txt-c">{{! suggestion.username }}</li>
+                </ul>
+            	<!-- username end -->
+                <div class="con-comment">
+                	<p class="txt-date">{{! suggestion.timestamp | convertSecondsToTimestamp }}</p>
+                	<p ng-bind-html="suggestion.suggestion_text | unsafeLink"></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- comment list end -->
         </div>
 
     </div>
