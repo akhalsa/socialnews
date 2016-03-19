@@ -12,7 +12,7 @@ class Suggestion(Base):
     text = Column(String(255), nullable=False)
     user_id = Column(Integer, nullable=False)
     timestamp = Column(TIMESTAMP, default=func.now())
-    score = Column(Integer, nullable=False)
+    score = Column(Integer, nullable=False, default=0)
     
     
     def __repr__(self):
