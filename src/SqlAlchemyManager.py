@@ -12,6 +12,7 @@ engine = create_engine('mysql://akhalsa:sophiesChoice1@avtar-news-db-dev.cvnwfvv
 Session = sessionmaker(bind=engine)
 
 def insertComment(suggestion_text, uid):
+    Session = sessionmaker(bind=engine)
     session = Session()
     suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid)
     session.add(suggestion)
@@ -19,6 +20,7 @@ def insertComment(suggestion_text, uid):
     
     
 def fetchAllComments(uid):
+    Session = sessionmaker(bind=engine)
     session = Session()
     q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id).all()
 
