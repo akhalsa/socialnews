@@ -25,7 +25,7 @@ def fetchAllComments(uid):
     print type(Suggestion.Suggestion).__name__
     
     
-    q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == sug.user_id)
+    q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id)
 
     response_json = []
     
