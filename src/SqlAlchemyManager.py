@@ -14,7 +14,7 @@ Session = sessionmaker(bind=engine)
 
 def insertComment(suggestion_text, uid):
     session = Session()
-    suggestion = Suggestion.Suggestion(text=suggestion_text, user_id=uid, score=0)
+    suggestion = sug(text=suggestion_text, user_id=uid, score=0)
     session.add(suggestion)
     session.commit()
     session.close()
@@ -25,20 +25,20 @@ def fetchAllComments(uid):
     print type(sug).__name__
     
     
-    q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id).all()
+    q = session.query(User.User, sug).filter(User.User.ID == sug.user_id).all()
 
     response_json = []
     
-    for (User.User, Suggestion.Suggestion) in q:
+    for (User.User, sug) in q:
         single_suggestion = {}
         if(User.User.username is not None):
             single_suggestion["user_name"] = User.User.username
         else:
             single_suggestion["username"] = "user"+str(User.User.ID)
             
-        single_suggestion["suggestion_text"] = Suggestion.Suggestion.text
-        single_suggestion["timestamp"] = (datetime.datetime.now() - Suggestion.Suggestion.timestamp).total_seconds()
-        single_suggestion["score"] = Suggestion.Suggestion.score
+        single_suggestion["suggestion_text"] = sug.text
+        single_suggestion["timestamp"] = (datetime.datetime.now() - sug.timestamp).total_seconds()
+        single_suggestion["score"] = sug.score
         new_q = session.query(SuggestionVote.SuggestionVote).filter(uid == SuggestionVote.SuggestionVote.user_id).all()
         single_suggestion["vote_val"] = 0
         if(len(new_q) > 0):
