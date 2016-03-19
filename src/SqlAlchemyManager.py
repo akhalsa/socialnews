@@ -23,6 +23,7 @@ def insertComment(suggestion_text, uid):
     
 def fetchAllComments(uid):
     session = Session()
+    print type(Suggestion.Suggestion).__name__
     q = session.query(User.User, Suggestion.Suggestion).filter(User.User.ID == Suggestion.Suggestion.user_id).all()
 
     response_json = []
