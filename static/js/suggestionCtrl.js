@@ -69,6 +69,10 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
         $http.get("/api/suggestion").then(function successCallback(response){
             console.log("get successful");
             $scope.suggestionlist = response.data;
+            for (i=0; i<$scope.suggestionlist.length; i++){
+                var suggestion =  $scope.suggestionlist[i];
+                console.log(suggestion.suggestion_text+" has vote_val: "+suggestion.vote_val);
+            }
         }, function errorCallback(response){
             
         });
