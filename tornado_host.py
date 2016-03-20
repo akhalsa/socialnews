@@ -497,7 +497,7 @@ class SuggestionAPI(AuthBase):
         suggestion_text = re.escape(data["text"])
         
         
-        sa.insertComment(suggestion_text, user_id)
+        sa.insertSuggestion(suggestion_text, user_id)
     
     def get(self,):
         local_db = MySQLdb.connect(
@@ -512,10 +512,10 @@ class SuggestionAPI(AuthBase):
         
         self.clear()
         self.set_status(200)
-        comments = sa.fetchAllComments(user_id)
-        for comment in comments:
-            comment["suggestion_text"] = unescapestring(comment["suggestion_text"])
-        self.finish(json.dumps(sa.fetchAllComments(user_id)))
+        suggestions = sa.fetchAllSuggestions(user_id)
+        for suggestion in suggestions:
+            suggestion["suggestion_text"] = unescapestring(suggestion["suggestion_text"])
+        self.finish(json.dumps(suggestions))
         return
         
     
