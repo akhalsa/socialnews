@@ -512,6 +512,9 @@ class SuggestionAPI(AuthBase):
         
         self.clear()
         self.set_status(200)
+        comments = sa.fetchAllComments(user_id)
+        for comment in comments:
+            comment["suggestion_text"] = unescapestring(comment["suggestion_text"])
         self.finish(json.dumps(sa.fetchAllComments(user_id)))
         return
         
@@ -656,6 +659,11 @@ app = tornado.web.Application([
     (r"/api/suggestion", SuggestionAPI)
     
 ], **settings)
+
+
+
+def unescapestring(string_to_unescape):
+    return re.sub(r'\\(.)', r'\1', string_to_unescape)
 
 if __name__ == '__main__':
     
