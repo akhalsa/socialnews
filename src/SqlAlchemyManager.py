@@ -52,8 +52,13 @@ def fetchAllSuggestions(uid):
     print response_json
     return response_json
 
+def alreadyVoted(u_id, s_id):
+    session = Session()
+    #first we need to see if there is already a suggestionvote for this user/suggestion combo
+    count = session.query(SuggestionVote.SuggestionVote).filter(SuggestionVote.SuggestionVote.suggestion_id == s_id).filter(SuggestionVote.SuggestionVote.user_id == u_id).count()
+    return count > 0
+
 def addSuggestionVote(u_id, s_id, amount):
-    #ok, so we need to create a new suggestionvote AND add value to the suggestion's score
     session = Session()
     suggestion_vote = SuggestionVote.SuggestionVote(value=amount, user_id=u_id, suggestion_id=s_id)
     session.add(suggestion_vote)

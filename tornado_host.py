@@ -530,6 +530,13 @@ class SuggestionVoteAPI(AuthBase):
         #get user id
         user_id = self.getUserId(local_db)
         data = json.loads(self.request.body)
+        if(sa.alreadyVoted(user_id, suggestion_id)):
+            #ok we need to throw an already voted exception
+            self.clear()
+            self.set_status(405)
+            self.finish()
+            return
+        
         if(data["vote_val"] == 1):
             sa.addSuggestionVote(user_id, suggestion_id, 1)
         else:
