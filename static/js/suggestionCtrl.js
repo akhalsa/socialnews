@@ -71,10 +71,36 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
         sendVote(suggestion_id, -1);
     }
     
+    $scope.redirectHome = function(){
+        if( (typeof tracking == 'undefined')){
+            document.location = "/";
+        }else{
+            document.location = "/?tracking=0"
+        }
+    }
+    
+    $scope.moveToCatPage = function(category){
+        trackNavToCategory(category);
+        if( (typeof tracking == 'undefined')){
+            document.location = "/c/"+category;
+        }else{
+            document.location = "/c/"+category+"?tracking=0";
+        }
+    }
+    
+    
+    
+    //initialization
+    
+    
     loadSuggestions();
     loginService.checkLoggedIn();
+    $http.get("/api/category")
+    .then(function(response) {
+        $scope.category_structure = response.data;
+    });
     
-    
+    //private functions
     function sendVote(suggestion_id, value){
         var data = {};
         data["vote_val"] = value;
