@@ -56,6 +56,7 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
         $http.post("/api/suggestion", data).then(function successCallback(response){
             console.log("post successful");
             $scope.suggestion_text = "";
+            loadSuggestions();
         }, function errorCallback(response){
             
         });
@@ -78,6 +79,7 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
         data["vote_val"] = value;
         $http.post("/api/suggestion/"+suggestion_id+"/vote", data).then(function successCallback(response){
             console.log("successful post");
+            loadSuggestions();
         }, function errorCallback(response){
             console.log("insuccessful post");
         });
