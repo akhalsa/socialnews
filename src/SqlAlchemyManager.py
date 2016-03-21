@@ -60,7 +60,7 @@ def addSuggestionVote(u_id, s_id, amount):
     
     q = session.query(Suggestion.Suggestion).filter(s_id == Suggestion.Suggestion.id)
     for row in q:
-        row[0].score = row[0].score+amount
+        rowscore = row.score+amount
     
     session.commit()
     session.close()
