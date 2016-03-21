@@ -40,7 +40,7 @@ def fetchAllSuggestions(uid):
         single_suggestion["suggestion_text"] = row[1].text
         single_suggestion["timestamp"] = (datetime.datetime.now() - row[1].timestamp).total_seconds()
         single_suggestion["score"] = row[1].score
-        new_q = session.query(SuggestionVote.SuggestionVote).filter(uid == SuggestionVote.SuggestionVote.user_id).all()
+        new_q = session.query(SuggestionVote.SuggestionVote).filter(uid == SuggestionVote.SuggestionVote.user_id).filter(row[1].id == SuggestionVote.SuggestionVote.suggestion_id).all()
         single_suggestion["vote_val"] = 0
         if(len(new_q) > 0):
             single_suggestion["vote_val"] = new_q[0].value
