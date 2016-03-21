@@ -61,7 +61,27 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
         });
     }
     
+    $scope.sendSuggestionVoteUp = function(suggestion_id) {
+
+        sendVote(1);
+    }
+    $scope.sendSuggestionVoteDown = function(suggestion_id) {
+
+        sendVote(-1);
+    }
+    
     loadSuggestions();
+    
+    
+    function sendVote(value){
+        var data = {};
+        data["vote_val"] = value;
+        $http.post("/api/suggestion/"+suggestion_id+"/vote", data).then(function successCallback(response){
+            console.log("successful post");
+        }, function errorCallback(response){
+            console.log("insuccessful post");
+        });
+    }
     
     
     function loadSuggestions(){

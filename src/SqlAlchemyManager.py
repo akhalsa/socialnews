@@ -36,7 +36,7 @@ def fetchAllSuggestions(uid):
             single_suggestion["user_name"] = row[0].username
         else:
             single_suggestion["username"] = "user"+str(row[0].ID)
-            
+        single_suggestion["id"] = row[1].id
         single_suggestion["suggestion_text"] = row[1].text
         single_suggestion["timestamp"] = (datetime.datetime.now() - row[1].timestamp).total_seconds()
         single_suggestion["score"] = row[1].score
@@ -51,3 +51,16 @@ def fetchAllSuggestions(uid):
     session.close()
     print response_json
     return response_json
+
+def addSuggestionVote(u_id, s_id, amount):
+    #ok, so we need to create a new suggestionvote AND add value to the suggestion's score
+    session = Session()
+    suggestion_vote = SuggestionVote.SuggestionVote(value=amount, user_id=u_id, suggestion_id=s_id)
+    session.add(suggestion)
+    
+    q = session.query(Suggestion.Suggestion).filter(s_id == Suggestion.Suggestion.user_id)
+    for row in q:
+        row[0].score = row[0].score+amount
+    
+    session.commit()
+    session.close()

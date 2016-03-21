@@ -518,10 +518,26 @@ class SuggestionAPI(AuthBase):
         self.finish(json.dumps(suggestions))
         return
         
-    
-        
-        
-
+class SuggestionVoteAPI(AuthBase):
+    def post(self, suggestion_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        #get user id
+        user_id = self.getUserId(local_db)
+        data = json.loads(self.request.body)
+        if(data["vote_val"] == 1):
+            sa.addSuggestionVote(user_id, suggestion_id, 1)
+        else:
+            sa.addSuggestionVote(user_id, suggestion_id, -1)
+        self.clear()
+        self.set_status(200)
+        self.finish()
+        return
         
 class LoginAPI(AuthBase):
     def get(self):
@@ -656,8 +672,8 @@ app = tornado.web.Application([
     (r"/api/tweet/(.*)/vote", CommentVoteAPI),
     (r"/api/tweet/(.*)", TweetAPI),
     (r"/api/category", Category),
+    (r"/api/suggestion/(.*)/vote", SuggestionVoteAPI),
     (r"/api/suggestion", SuggestionAPI)
-    
 ], **settings)
 
 
