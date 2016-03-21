@@ -88,6 +88,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         reloadCurrentPath();
         loadTweets();
         loadHandles();
+        $scope.isCollapsed = true;
     }
     
     $scope.refreshButton = function(){
