@@ -80,7 +80,7 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     }
     
     $scope.moveToCatPage = function(category){
-        trackNavToCategory(category);
+        //trackNavToCategory(category);
         if( (typeof tracking == 'undefined')){
             document.location = "/c/"+category;
         }else{
