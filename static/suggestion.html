@@ -173,7 +173,7 @@
 	    <!-- comment list start -->
             <div class="comment-list" ng-repeat="suggestion in suggestionlist">
             	<!-- username start -->
-                <ul class="username-c" ng-class="{'c-done': suggestion.vote_value !=0}">
+                <ul class="username-c" ng-class="{'c-done': suggestion.vote_val != 0}">
                     <li ><a href="#" onclick="return false;"><span class="genericon genericon-uparrow"></span></a></li>
                     <li class="txt-c pd-number">{{! suggestion.score }}</li>
                     <li><a href="#"  ><span class="genericon genericon-downarrow"></span></a></li>
