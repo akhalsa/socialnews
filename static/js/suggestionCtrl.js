@@ -41,11 +41,14 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.$watch('loginService.showRegister', function () {
         clearFields();
+        loadSuggestions();
     });
     
     $scope.$watch('loginService.showLogin', function () {
         clearFields();
+        loadSuggestions();
     });
+    
     
     $scope.postSuggestion = function(){
         var data = {};
