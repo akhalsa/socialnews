@@ -31,7 +31,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.FEATURE_FLAG_NOMINATE = false;
     
-    
+    $scope.isCollapsed = true;
     
     $scope.invalid_creds = false;
     
@@ -88,6 +88,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         reloadCurrentPath();
         loadTweets();
         loadHandles();
+        $scope.isCollapsed = true;
     }
     
     $scope.refreshButton = function(){
@@ -163,12 +164,14 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         $scope.register_username = "";
         $scope.register_pw = "";
         $scope.register_pw_confirm = "";
+        $scope.isCollapsed = true;
     }
     
     $scope.showLoginPopup = function(){
         $scope.showLogin = true;
         $scope.showRegister = false;
         $scope.invalid_creds = false;
+        $scope.isCollapsed = true;
     }
     
     $scope.showRegisterPopup = function(){
@@ -176,6 +179,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
         $scope.showRegister = true;
         $scope.invalid_creds = false;
         $scope.throttled = false;
+        $scope.isCollapsed = true;
 
     }
     
