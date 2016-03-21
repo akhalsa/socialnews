@@ -98,6 +98,7 @@ app.service('loginService', function($http){
                 login.logged_in = false;
                 login.username = "";
                 login.dismissPopups();
+                login.checkLoggedIn();
                 
             }else{
                 console.log("logout fail");
