@@ -8,10 +8,11 @@ app.service('loginService', function($http){
     
     
     this.checkLoggedIn = function(){
+        var login = this;
         $http.get("/api/login")
         .then(function(response) {
-            this.logged_in = response.data.logged_in;
-            this.username =response.data.username;
+            login.logged_in = response.data.logged_in;
+            login.username =response.data.username;
         });
     }
     
