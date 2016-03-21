@@ -40,6 +40,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
     $scope.showRegister = false;
     $scope.throttled = false;
     
+    $scope.isCollapsed = true;
     
     $scope.comment_rate_limit = false;
     
