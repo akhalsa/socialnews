@@ -31,7 +31,7 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
     
     $scope.FEATURE_FLAG_NOMINATE = false;
     
-    
+    $scope.isCollapsed = true;
     
     $scope.invalid_creds = false;
     
