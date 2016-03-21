@@ -13,6 +13,7 @@ app.service('loginService', function($http){
         .then(function(response) {
             login.logged_in = response.data.logged_in;
             login.username =response.data.username;
+            console.log("username set: "+login.username);
         });
     }
     
