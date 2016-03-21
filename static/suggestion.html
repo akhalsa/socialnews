@@ -83,6 +83,7 @@
 	<li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
 	  <a href="#"  ng-click="moveToCatPage(cat.name)">{{! cat.name }}</a>
 	</li>
+	<li ><a href="#" ng-click="moveToSuggestion()">Suggestions</a></li>
     </ul>
     
     </div>

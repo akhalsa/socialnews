@@ -62,6 +62,13 @@ app.controller("newFiltraCtrl", function($scope, $http, $sce, $window) {
             document.location = "/?tracking=0"
         }
     }
+    $scope.moveToSuggestion = function(){
+        if (typeof tracking == 'undefined') {
+            document.location = "/suggestions"
+        }else{
+            document.location = "/suggestions?tracking=0"
+        }
+    }
     
     $scope.goToTweet = function(tweet_id){
         console.log("sending tweet event with id: "+tweet_id);

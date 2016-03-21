@@ -69,6 +69,13 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
             document.location = "/c/"+category+"?tracking=0";
         }
     }
+    $scope.moveToSuggestion = function(){
+        if (typeof tracking == 'undefined') {
+            document.location = "/suggestions"
+        }else{
+            document.location = "/suggestions?tracking=0"
+        }
+    }
     
     
     $scope.sendComment = function(){
