@@ -56,7 +56,7 @@ def addSuggestionVote(u_id, s_id, amount):
     #ok, so we need to create a new suggestionvote AND add value to the suggestion's score
     session = Session()
     suggestion_vote = SuggestionVote.SuggestionVote(value=amount, user_id=u_id, suggestion_id=s_id)
-    session.add(suggestion)
+    session.add(suggestion_vote)
     
     q = session.query(Suggestion.Suggestion).filter(s_id == Suggestion.Suggestion.user_id)
     for row in q:
