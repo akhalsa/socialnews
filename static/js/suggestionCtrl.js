@@ -63,17 +63,17 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.sendSuggestionVoteUp = function(suggestion_id) {
 
-        sendVote(1);
+        sendVote(suggestion_id, 1);
     }
     $scope.sendSuggestionVoteDown = function(suggestion_id) {
 
-        sendVote(-1);
+        sendVote(suggestion_id, -1);
     }
     
     loadSuggestions();
     
     
-    function sendVote(value){
+    function sendVote(suggestion_id, value){
         var data = {};
         data["vote_val"] = value;
         $http.post("/api/suggestion/"+suggestion_id+"/vote", data).then(function successCallback(response){
