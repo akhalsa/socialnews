@@ -39,10 +39,12 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     
     $scope.$watch('loginService.showRegister', function () {
         clearFields();
+        $scope.isCollapsed = true;
     });
     
     $scope.$watch('loginService.showLogin', function () {
         clearFields();
+        $scope.isCollapsed = true;
     });
     $scope.$watch('loginService.logged_in', function(){
         loadSuggestions();

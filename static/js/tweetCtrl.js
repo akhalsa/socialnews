@@ -148,12 +148,14 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         $scope.register_username = "";
         $scope.register_pw = "";
         $scope.register_pw_confirm = "";
+        $scope.isCollapsed = true;
     }
     
     $scope.showLoginPopup = function(){
         $scope.showLogin = true;
         $scope.showRegister = false;
         $scope.invalid_creds = false;
+        $scope.isCollapsed = true;
     }
     
     $scope.showRegisterPopup = function(){
@@ -161,6 +163,7 @@ app.controller("tweetCtrl", function($scope, $http, $sce, $window) {
         $scope.showRegister = true;
         $scope.invalid_creds = false;
         $scope.throttled = false;
+        $scope.isCollapsed = true;
     }
     
     $scope.login = function(){
