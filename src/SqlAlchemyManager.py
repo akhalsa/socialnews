@@ -58,7 +58,7 @@ def addSuggestionVote(u_id, s_id, amount):
     suggestion_vote = SuggestionVote.SuggestionVote(value=amount, user_id=u_id, suggestion_id=s_id)
     session.add(suggestion_vote)
     
-    q = session.query(Suggestion.Suggestion).filter(s_id == Suggestion.Suggestion.user_id)
+    q = session.query(Suggestion.Suggestion).filter(s_id == Suggestion.Suggestion.id)
     for row in q:
         row[0].score = row[0].score+amount
     
