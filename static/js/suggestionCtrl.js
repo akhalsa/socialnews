@@ -76,6 +76,7 @@ app.controller("suggestionCtrl", function($scope, $http, $sce, $window, loginSer
     }
     
     loadSuggestions();
+    loginService.checkLoggedIn();
     
     
     function sendVote(suggestion_id, value){
