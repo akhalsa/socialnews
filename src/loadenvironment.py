@@ -8,8 +8,5 @@ def getSqlEngineString():
     with open(file_location) as data_file:    
         data = json.load(data_file)
 
-    pprint(data)
+    return data[engine_string]
 
-
-
-getSqlEngineString()

@@ -5,10 +5,11 @@ import Base
 import datetime
 import SuggestionVote
 import Suggestion
+import loadenvironment
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref, sessionmaker
     
-engine = create_engine('mysql://akhalsa:sophiesChoice1@avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com/newsdb', echo=True)
+engine = create_engine(loadenvironment.getSqlEngineString(), echo=True)
 Session = sessionmaker(bind=engine)
 
 
