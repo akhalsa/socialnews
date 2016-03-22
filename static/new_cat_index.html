@@ -62,14 +62,14 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid top-nav">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
             <span class="genericon genericon-menu"></span>                     
           </button>
           <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
           <div class="clear"></div>
         </div>
            
-        <div class="collapse navbar-collapse" id="myNavbar">
+        <div class="collapse navbar-collapse" id="myNavbar" uib-collapse="isCollapsed">
             
             <ul class="nav navbar-nav navbar-right">
                 <li ng-hide="logged_in" ng-click="showLoginPopup()" ><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
@@ -81,10 +81,11 @@
         
         <!-- nav start -->
         <ul class="nav navbar-nav nav-top">
-          <li ng-hide="true"><a href="#" ng-click="redirectHome()">Front Page</a></li>
+          <li ><a href="#" ng-click="redirectHome()">Front Page</a></li>
           <li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
             <a href="#"  ng-click="selectionChange($index, -1, -1)">{{! cat.name }}</a>
           </li>
+          <li ><a href="#" ng-click="moveToSuggestion()">Suggestions</a></li>
         </ul>
         </div>
         <!-- nav end -->

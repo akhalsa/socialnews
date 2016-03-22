@@ -22,6 +22,7 @@ from tornado.options import define, options, parse_command_line
 from threading import Thread
 from Queue import Queue
 from src.DBWrapper import *
+import src.SqlAlchemyManager as sa
 from passlib.hash import sha256_crypt
 
 
@@ -386,6 +387,11 @@ class TweetHandler(tornado.web.RequestHandler):
     def get(self, tweet_id):
         self.render("static/tweet.html",  t_id=tweet_id)
 
+class SuggestionHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("static/suggestion.html")
+        
+        
 class CommentVoteAPI(AuthBase):
     def post(self, comment_id):
         local_db = MySQLdb.connect(
@@ -474,8 +480,71 @@ class TweetAPI(AuthBase):
         self.set_status(200)
         self.finish()
         
+class SuggestionAPI(AuthBase):
+    def post(self, ):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        #get comment structure from post body
+        data = json.loads(self.request.body)
+        #get user id
+        user_id = self.getUserId(local_db)
         
-
+        suggestion_text = re.escape(data["text"])
+        
+        
+        sa.insertSuggestion(suggestion_text, user_id)
+    
+    def get(self,):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        #get user id
+        user_id = self.getUserId(local_db)
+        
+        self.clear()
+        self.set_status(200)
+        suggestions = sa.fetchAllSuggestions(user_id)
+        for suggestion in suggestions:
+            suggestion["suggestion_text"] = unescapestring(suggestion["suggestion_text"])
+        self.finish(json.dumps(suggestions))
+        return
+        
+class SuggestionVoteAPI(AuthBase):
+    def post(self, suggestion_id):
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        #get user id
+        user_id = self.getUserId(local_db)
+        data = json.loads(self.request.body)
+        if(sa.alreadyVoted(user_id, suggestion_id)):
+            #ok we need to throw an already voted exception
+            self.clear()
+            self.set_status(405)
+            self.finish()
+            return
+        
+        if(data["vote_val"] == 1):
+            sa.addSuggestionVote(user_id, suggestion_id, 1)
+        else:
+            sa.addSuggestionVote(user_id, suggestion_id, -1)
+        self.clear()
+        self.set_status(200)
+        self.finish()
+        return
         
 class LoginAPI(AuthBase):
     def get(self):
@@ -596,6 +665,7 @@ app = tornado.web.Application([
     (r'/', NewIndexHandler),
     (r'/login', LoginHandler),
     (r'/tweet/(.*)', TweetHandler),
+    (r'/suggestions', SuggestionHandler),
     (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
     (r"/category/(.*)", HandleListForCategoryId),
     (r"/handle/(.*)/category/(.*)/upvote/(.*)", HandleVoteReceiver),
@@ -608,9 +678,15 @@ app = tornado.web.Application([
     (r"/api/login", LoginAPI),
     (r"/api/tweet/(.*)/vote", CommentVoteAPI),
     (r"/api/tweet/(.*)", TweetAPI),
-    (r"/api/category", Category)
-    
+    (r"/api/category", Category),
+    (r"/api/suggestion/(.*)/vote", SuggestionVoteAPI),
+    (r"/api/suggestion", SuggestionAPI)
 ], **settings)
+
+
+
+def unescapestring(string_to_unescape):
+    return re.sub(r'\\(.)', r'\1', string_to_unescape)
 
 if __name__ == '__main__':
     

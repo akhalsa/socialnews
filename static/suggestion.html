@@ -10,7 +10,8 @@
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js" type="text/javascript"></script>
         <script src="{{static_url('js/filtraApp.js')}}"></script>
-        <script src="{{static_url('js/tweetCtrl.js')}}"></script>
+        <script src="{{static_url('js/loginService.js')}}"></script>
+        <script src="{{static_url('js/suggestionCtrl.js')}}"></script>
 	<script>
 	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -51,7 +52,7 @@
 	</script>
     </head>
 
-<body ng-app="filtraApp" ng-controller="tweetCtrl"
+<body ng-app="filtraApp" ng-controller="suggestionCtrl"
         {% if 't_id' in globals() %}
             ng-init="tweet_id='{{t_id}}'"
         {% end %}
@@ -63,27 +64,28 @@
       <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
         <span class="genericon genericon-menu"></span>                     
       </button>
-      <a class="navbar-brand" href="#"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
+      <a class="navbar-brand" href="#" ng-click="redirectHome()"><img src="{{static_url('images/logo.png')}}" alt="middle"  align="bottom" /></a> <p id="slogan">A brief summary of social media</p>
       <div class="clear"></div>
     </div>
        
-    <div class="collapse navbar-collapse" id="myNavbar" uib-collapse="isCollapsed">
+    <div class="collapse navbar-collapse" id="myNavbar" uib-collapse="isCollapsed" >
     <ul class="nav navbar-nav navbar-right">
-	<li ng-hide="logged_in" ng-click="showLoginPopup()" ><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
-	<li ng-hide="logged_in" ng-click="showRegisterPopup()"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
-	<li id="after-login" ng-show="logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>{{! username}}</span></a></li>
-	<li ng-show="logged_in" ng-click="logout()"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+	<li ng-hide="loginService.logged_in" ng-click="loginService.showLoginPopup()" ><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+	<li ng-hide="loginService.logged_in" ng-click="loginService.showRegisterPopup()"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+	<li id="after-login" ng-show="loginService.logged_in"><a href="#"><span class="glyphicon glyphicon-user"></span> Hi, <span>{{! loginService.username}}</span></a></li>
+	<li ng-show="loginService.logged_in" ng-click="loginService.logout()"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
       </ul>
       <div class="clear"></div>
     <!-- nav start -->
     
     <ul class="nav navbar-nav nav-top">
-	<li ng-hide="true"><a href="#" ng-click="redirectHome()">Front Page</a></li>
+	<li ><a href="#" ng-click="redirectHome()">Front Page</a></li>
 	<li ng-hide="category_structure.length == 0" ng-repeat="cat in category_structure" ng-class="{'active': $index == selected_top_index}">
 	  <a href="#"  ng-click="moveToCatPage(cat.name)">{{! cat.name }}</a>
 	</li>
 	<li ><a href="#" ng-click="moveToSuggestion()">Suggestions</a></li>
     </ul>
+    
     </div>
     <!-- nav end -->
   </div>
@@ -91,9 +93,9 @@
 <!-- header end -->
 <!-- contents start -->
 <!-- popup overlay start -->
-<div class="overlay" ng-show="showLogin || showRegister" ></div>
-<div class="wrap-popup pp-register" ng-show="showLogin">
-	<div id="bt-close"><a href="#" ng-click="dismissPopups()" ><span class="genericon genericon-close-alt"></span></a></div>
+<div class="overlay" ng-show="loginService.showLogin || loginService.showRegister" ng-click="loginService.dismissPopups()"></div>
+<div class="wrap-popup pp-register" ng-show="loginService.showLogin">
+	<div id="bt-close"><a href="#" ng-click="loginService.dismissPopups()" ><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Login</h3>
 	<p class="p-sub-head2" ng-show="throttled">You can only up or down vote 5 times before you login.</p>
     <div class="con-pp-inner">
@@ -104,17 +106,17 @@
         </form>
         <ul class="li-login">
                 
-        	<li>Want to join? <a href="#" ng-click="showRegisterPopup()">Register in seconds.</a></li>
+        	<li>Want to join? <a href="#" ng-click="loginService.showRegisterPopup()">Register in seconds.</a></li>
         	<li id="link-g" ng-show="FindCredentialsFeatureFlag">Forgot Password? <a href="#">Click here to find.</a></li>
-                <li ng-show="invalid_creds">Invalid username/password </li>
+                <li ng-show="loginService.invalid_creds">Invalid username/password </li>
         </ul>
     </div>
     <div class="clear"></div>
 </div>
 <!-- popup overlay end -->
 <!-- popup overlay start -->
-<div class="wrap-popup pp-register" ng-show="showRegister">
-	<div id="bt-close"><a href="#" ng-click="dismissPopups()"><span class="genericon genericon-close-alt"></span></a></div>
+<div class="wrap-popup pp-register" ng-show="loginService.showRegister">
+	<div id="bt-close"><a href="#" ng-click="loginService.dismissPopups()"><span class="genericon genericon-close-alt"></span></a></div>
 	<h3>Register</h3>
     <div class="con-pp-inner">
     	<form>
@@ -122,7 +124,7 @@
             <input type="text" class="form-control" id="exampleInputName" placeholder="Display Name" ng-model="register_username">
             <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="register_pw">
             <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password" ng-model="register_pw_confirm">
-            <button type="submit" class="btn btn-default" ng-click="createAccount()">Register</button>
+            <button type="submit" class="btn btn-default" ng-click="sendRegistration()">Register</button>
         </form>
     </div>
     <div class="clear"></div>
@@ -137,93 +139,57 @@
     <div class="col-xs-12 col-md-2">    
     </div>
     <div class="col-xs-12 col-md-8 wrap-con-main">
-	<!-- Category start -->
-        <nav>
-          <ul class="pager pager-filtra">
-          	<li class="previous">
-		    <a href="#" ng-repeat="cat in categories_for_tweet" ng-click="moveToCatPage(cat)"><span class="genericon genericon-next"></span> {{! cat }}</a>
-		</li>
-          </ul>
-        </nav>
-        <!-- Category end -->
         <!-- tweets start -->
         <div class="con-tw">
         	<div class="wrap-user">
             	<div class="user">
 			<div class="handle-main">
-			    <img src="{{! profile_image }}" alt="TechCrunch" />
-			    
-			    <div class="overlay-tw"><span class="genericon genericon-twitter"></span></div>
+			    <img src="{{static_url('images/filtraF.jpg')}}" alt="TechCrunch" />
 			</div>
-                    <div class="handle-name"> {{! name }}</div>
-                    <div class="clear"></div>
-                </div>
-                <div class="time-tw">
-                	<span class="genericon genericon-time"></span> {{! convertSecondsToDeltaTime(timestamp) }}
+                    <div class="handle-name"> We Want To Hear From You! </div>
                     <div class="clear"></div>
                 </div>
                 <div class="clear"></div>
             </div>
             <div class="wrap-con-tw">
-            	<span ng-bind-html="text | unsafeLink"></span>
+            	<span>What do you think we should do to improve the filtra.io experience! Make suggestions below </span>
                 
-                <div class="preview-tw" ng-show="blurb ||img_url || title" >
-                <div class="ic-pr"><span class="genericon genericon-show"></span> Preview</div>
-                <div class="span8">
-                    	<img src="{{! img_url}}" ng-show="img_url" width="150"/>
-                        
-                    	<a href="{{!link_url}}" target="_blank" ng-show="link_text" onclick="trackOutboundLink('title'); return true;">{{! link_text }}</a>
-                        <a href="{{! link_url }}" target="_blank" ng-hide="link_text" ng-bind-html="text | unsafeLink" onclick="trackOutboundLink('title'); return true;"></a>
-                        
-                        
-                    	<p ng-show="blurb">{{! blurb }}</p>
-                        <p ng-hide="blurb" ng-bind-html="text | unsafeLink"></p>
-                        
-                        <div class="clear"></div>
-                </div>
-              </div>
-	      <div id="link-tw">
-		<a href="{{!twitter_url}}" target="_blank" onclick="trackOutboundLink('orig_tweet_label');return true;">
-		    <span class="genericon genericon-twitter"></span> Visit Tweet Page
-		</a>
-	      </div>
             </div>
         </div>
-        <!-- tweets end -->
-        <div class="wrap-comment">
+	<div class="wrap-comment">
             <!-- title start -->
-            <h4>Comments</h4>
-            <div class="ic-comment"><span class="genericon genericon-comment"></span> <a href="#">{{! comments.length}}</a></div>
+            <h4>Suggestions</h4>
             <div class="clear"></div>
             <!-- title end -->
             <!-- comment form start -->
             <form class="form-inline comment-form">
               <div class="form-group">
-                <label for="exampleInputName2">{{! username }}</label>
-                <input type="text" class="form-control" id="exampleInputName2" placeholder="Enter Comment here" ng-model="new_comment_text">
+                <label for="exampleInputName2">{{! loginService.username}}</label>
+                <input type="text" class="form-control" id="exampleInputName2" placeholder="Enter Suggestion here" ng-model="suggestion_text">
               </div>
-              <button type="submit" class="btn btn-default" ng-click="sendComment()">Submit</button>
+              <button type="submit" class="btn btn-default" ng-click="postSuggestion()">Submit</button>
 	      <p id="info-submit" ng-show="comment_rate_limit">You must <a href="#" ng-click="showLoginPopup()">Log In </a> to continue commenting <a href="#" ng-click="showRegisterPopup()">Sign up for free!</a></p> 
             </form>
             <!-- comment form end -->
-            <!-- comment list start -->
-            <div class="comment-list" ng-repeat="comment in comments">
+	    <!-- comment list start -->
+            <div class="comment-list" ng-repeat="suggestion in suggestionlist">
             	<!-- username start -->
-                <ul class="username-c" ng-class="{'c-done': comment.vote_history !=0}">
-                    <li ng-click="sendCommentVote(comment.ID, 1);"><a href="#" onclick="return false;"><span class="genericon genericon-uparrow"></span></a></li>
-                    <li class="txt-c pd-number">{{! comment.score }}</li>
-                    <li><a href="#" ng-click="sendCommentVote(comment.ID, -1)" ><span class="genericon genericon-downarrow"></span></a></li>
-                    <li class="txt-c">{{! comment.username }}</li>
+                <ul class="username-c" ng-class="{'c-done': suggestion.vote_val != 0}">
+                    <li ng-click="sendSuggestionVoteUp(suggestion.id);" ><a href="#" onclick="return false;"><span class="genericon genericon-uparrow"></span></a></li>
+                    <li class="txt-c pd-number">{{! suggestion.score }}</li>
+                    <li ng-click="sendSuggestionVoteDown(suggestion.id);"><a href="#" onclick="return false;" ><span class="genericon genericon-downarrow"></span></a></li>
+                    <li class="txt-c">{{! suggestion.username }}</li>
                 </ul>
             	<!-- username end -->
                 <div class="con-comment">
-                	<p class="txt-date">{{! comment.timestamp | convertSecondsToTimestamp }}</p>
-                	<p ng-bind-html="comment.text | unsafeLink"></p>
+                	<p class="txt-date">{{! suggestion.timestamp | convertSecondsToTimestamp }}</p>
+                	<p ng-bind-html="suggestion.suggestion_text | unsafeLink"></p>
                 </div>
                 <div class="clear"></div>
             </div>
             <!-- comment list end -->
         </div>
+
     </div>
     <!-- sidebar start -->
     <div class="col-xs-12 col-md-2">
