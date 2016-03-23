@@ -383,9 +383,28 @@ class LoginHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("static/login.html")
         
-class TweetHandler(tornado.web.RequestHandler):
+class TweetHandler(AuthBase):
     def get(self, tweet_id):
-        self.render("static/tweet.html",  t_id=tweet_id)
+        local_db = MySQLdb.connect(
+                        host=host_target,
+                        user="akhalsa",
+                        passwd="sophiesChoice1",
+                        db="newsdb",
+                        charset='utf8',
+                        port=3306)
+        user_id = self.getUserId(local_db)
+        tweet = getTweetWithId(local_db, tweet_id, user_id)
+        img_url = "#"
+        if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
+            img_url = tweet["img_url"]
+            
+        output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"].replace('"', "'")
+                                                                      
+        end_point = self.request.protocol + "://" + self.request.host + self.request.uri
+        self.render("static/tweet.html",  t_id=tweet_id, image_url= img_url,
+                    url_string = end_point,
+                    tweet_string = output_text
+                    )
 
 class SuggestionHandler(tornado.web.RequestHandler):
     def get(self):
