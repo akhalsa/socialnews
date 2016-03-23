@@ -398,10 +398,12 @@ class TweetHandler(AuthBase):
         if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
             img_url = tweet["img_url"]
             
+        output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"].replace('"', "'")
+                                                                      
         end_point = self.request.protocol + "://" + self.request.host + self.request.uri
         self.render("static/tweet.html",  t_id=tweet_id, image_url= img_url,
                     url_string = end_point,
-                    tweet_string = tweet["twitter_handle"] + " tweets: "+re.escape(tweet["text"])
+                    tweet_string = output_text
                     )
 
 class SuggestionHandler(tornado.web.RequestHandler):
