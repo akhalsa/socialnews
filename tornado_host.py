@@ -394,7 +394,10 @@ class TweetHandler(AuthBase):
                         port=3306)
         user_id = self.getUserId(local_db)
         tweet = getTweetWithId(local_db, tweet_id, user_id)
-        self.render("static/tweet.html",  t_id=tweet_id, image_url=tweet["img_url"],
+        img_url = "#"
+        if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
+            img_url = tweet["img_url"]
+        self.render("static/tweet.html",  t_id=tweet_id, image_url= img_url,
                     tweet_string = tweet["twitter_handle"] + " tweets: "+tweet["text"],
                     url_string = self.request.uri)
 
