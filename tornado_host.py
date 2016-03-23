@@ -400,8 +400,9 @@ class TweetHandler(AuthBase):
             
         end_point = self.request.protocol + "://" + self.request.host + self.request.uri
         self.render("static/tweet.html",  t_id=tweet_id, image_url= img_url,
-                    tweet_string = tweet["twitter_handle"] + " tweets: "+tweet["text"],
-                    url_string = end_point)
+                    url_string = end_point,
+                    tweet_string = tweet["twitter_handle"] + " tweets: "+re.escape(tweet["text"])
+                    )
 
 class SuggestionHandler(tornado.web.RequestHandler):
     def get(self):
