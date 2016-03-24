@@ -119,7 +119,7 @@ def postNumberOne():
             print "got exception on: "+str(tweets[0]["id"])
             setTweetIdToUnloadable(local_db_fb, tweets[0]["id"])
             
-    tweet = getTweetWithId(local_db_fb, tweets[0]["id"], user_1id)
+    tweet = getTweetWithId(local_db_fb, tweets[0]["id"], 1)
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(tweet)
             
