@@ -129,13 +129,14 @@ def postNumberOne():
     img_url = None
     if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
         img_url = tweet["img_url"]
-        
+    else:
+        img_url = tweet["profile_image"]
     output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"]
     
     filtra_url = domain_target +"/tweet/"+tweets[0]["id"]
     
     attachment =  {
-        'name': tweet["twitter_handle"] + " tweets: ",
+        'name': tweet["twitter_handle"] ,
         'link': filtra_url,
         'description': tweet["text"],
         'caption': 'Filtra - a brief summary of social media',
