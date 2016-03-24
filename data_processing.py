@@ -7,6 +7,7 @@ from src.DBWrapper import *
 import facebook
 import pprint
 from tornado.options import define, options, parse_command_line
+import src.SqlAlchemyManager as sa
 
 
 auth = tweepy.OAuthHandler('pxtsR83wwf0xhKrLbitfIoo5l', 'Z12x1Y7KPRgb1YEWr7nF2UNrVbqEEctj4AiJYFR6J1hDQTXEQK')
@@ -120,7 +121,9 @@ def postNumberOne():
         #if(tweet_details['seconds_since_posted'] > 600):
         #    continue
         ##TODO: check if its been posted already in which case continue
-        
+        if(sa.hasPostedTweetId(tweet_details["id"])):
+            print "already posted: "+tweet_details["text"]
+            continue
         
         if(tweet_details['checked'] == 0):
             try:
@@ -157,7 +160,7 @@ def postNumberOne():
         graph.put_wall_post(message=output_text, attachment=attachment, profile_id='1578415282450261')
         
         #TODO Update posted records
-        
+        sa.postedTweetId(tweet_details["id"])
     
     #ok now that weve checked the top 3, lets sleep for a minute and then check again
     #time.sleep(60)
