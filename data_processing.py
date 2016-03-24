@@ -114,17 +114,17 @@ def postNumberOne():
     
     target_cat_id = 104
     
-    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 2)
+    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 3)
     
-    if(tweets[0]['checked'] == 0):
+    if(tweets[2]['checked'] == 0):
         try:
-            updateTweet(tweets[0]["text"], tweets[0]["id"], local_db_fb)
-            print "******** Finished: "+str(tweets[0]["id"])
+            updateTweet(tweets[2]["text"], tweets[2]["id"], local_db_fb)
+            print "******** Finished: "+str(tweets[2]["id"])
         except Exception, e:
-            print "got exception on: "+str(tweets[0]["id"])
-            setTweetIdToUnloadable(local_db_fb, tweets[0]["id"])
+            print "got exception on: "+str(tweets[2]["id"])
+            setTweetIdToUnloadable(local_db_fb, tweets[2]["id"])
             
-    tweet = getTweetWithId(local_db_fb, tweets[0]["id"], 1)
+    tweet = getTweetWithId(local_db_fb, tweets[2]["id"], 1)
     
     img_url = None
     if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
@@ -135,7 +135,7 @@ def postNumberOne():
     print img_url
     output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"]
     
-    filtra_url = domain_target +"/tweet/"+tweets[0]["id"]
+    filtra_url = domain_target +"/tweet/"+tweets[2]["id"]
     
     attachment =  {
         'name': tweet["text"] +" - "+ tweet["twitter_handle"] ,
