@@ -119,6 +119,7 @@ def postToFb():
     
     for tweet_details in tweets:
         if(tweet_details['seconds_since_posted'] > 3600):
+            print tweet_details["text"]+" is too old!"
             continue
         ##TODO: check if its been posted already in which case continue
         if(sa.hasPostedTweetId(tweet_details["id"])):
