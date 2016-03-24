@@ -182,17 +182,17 @@ if __name__ == '__main__':
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=updateSource, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     worker = Thread(target=postToFb, args=())
     worker.setDaemon(True)
