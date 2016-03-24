@@ -118,7 +118,7 @@ def postToFb():
     tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 3)
     
     for tweet_details in tweets:
-        if(tweet_details['seconds_since_posted'] > 9000):
+        if(tweet_details['seconds_since_posted'] > 300):
             print tweet_details["text"]+" is too old!"
             continue
         ##TODO: check if its been posted already in which case continue
