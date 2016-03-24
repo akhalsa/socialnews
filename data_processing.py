@@ -110,7 +110,8 @@ def postNumberOne():
     target_cat_id = 104
     
     tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 1)
-    pprint(tweets[0])
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(tweets[0])
             
 
 if __name__ == '__main__':
