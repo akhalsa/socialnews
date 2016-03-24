@@ -126,7 +126,7 @@ def postNumberOne():
             
     tweet = getTweetWithId(local_db_fb, tweets[0]["id"], 1)
     
-    img_url = "#"
+    img_url = None
     if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
         img_url = tweet["img_url"]
         
@@ -139,8 +139,11 @@ def postNumberOne():
         'link': filtra_url,
         'caption': output_text,
         'description': "I'm a description",
-        'picture': img_url
-    }    
+        
+    }
+    if(img_url is not None):
+        attachment['picture'] = img_url
+        
     graph = facebook.GraphAPI(access_token='CAACzgeJoVHgBALjMQAMclitrIPMvdlZBVUtvTLkCaJeqOC2kwRJugqQNRsl0vZBSiizNrhSkEq15tHWZAfBKmYJ9xOcj4FurKnp2A3XP3k5SulX8j5HqBQ3Bl6hf2ZAWz07xbni3ZBQ8KyChlXJThocFXNiR5wSGVNIyNd4nfhlvtidZBmjeZAQ')
 
     graph.put_wall_post(message=output_text, attachment=attachment, profile_id='1578415282450261')
