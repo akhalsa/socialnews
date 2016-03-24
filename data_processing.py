@@ -105,66 +105,67 @@ def scanPreviews():
                         setTweetIdToUnloadable(local_db_tweets, tweet["id"])
                         
 def postToFb():
-    local_db_fb = MySQLdb.connect(
-                host=host_target,
-                user="akhalsa",
-                passwd="sophiesChoice1",
-                db="newsdb",
-                charset='utf8',
-                port=3306)
-    
-    target_cat_id = 104
-    
-    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 3)
-    
-    for tweet_details in tweets:
-        if(tweet_details['seconds_since_posted'] > 300):
-            print tweet_details["text"]+" is too old!"
-            continue
-        ##TODO: check if its been posted already in which case continue
-        if(sa.hasPostedTweetId(tweet_details["id"])):
-            print "already posted: "+tweet_details["text"]
-            continue
+    while True:
+        local_db_fb = MySQLdb.connect(
+                    host=host_target,
+                    user="akhalsa",
+                    passwd="sophiesChoice1",
+                    db="newsdb",
+                    charset='utf8',
+                    port=3306)
         
-        if(tweet_details['checked'] == 0):
-            try:
-                updateTweet(tweet_details["text"], tweet_details["id"], local_db_fb)
-                print "******** Finished: "+str(tweet_details["id"])
-            except Exception, e:
-                print "got exception on: "+str(tweet_details["id"])
-                setTweetIdToUnloadable(local_db_fb, tweet_details["id"])
+        target_cat_id = 104
+        
+        tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 3)
+        
+        for tweet_details in tweets:
+            if(tweet_details['seconds_since_posted'] > 300):
+                print tweet_details["text"]+" is too old!"
+                continue
+            ##TODO: check if its been posted already in which case continue
+            if(sa.hasPostedTweetId(tweet_details["id"])):
+                print "already posted: "+tweet_details["text"]
+                continue
+            
+            if(tweet_details['checked'] == 0):
+                try:
+                    updateTweet(tweet_details["text"], tweet_details["id"], local_db_fb)
+                    print "******** Finished: "+str(tweet_details["id"])
+                except Exception, e:
+                    print "got exception on: "+str(tweet_details["id"])
+                    setTweetIdToUnloadable(local_db_fb, tweet_details["id"])
+                    
+            tweet = getTweetWithId(local_db_fb, tweet_details["id"], 1)
+            
+            img_url = None
+            if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
+                img_url = tweet["img_url"]
+            else:
+                img_url = tweet["profile_image"]
                 
-        tweet = getTweetWithId(local_db_fb, tweet_details["id"], 1)
-        
-        img_url = None
-        if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
-            img_url = tweet["img_url"]
-        else:
-            img_url = tweet["profile_image"]
+            print img_url
+            output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"]
             
-        print img_url
-        output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"]
-        
-        filtra_url = domain_target +"/tweet/"+tweet_details["id"]
-        
-        attachment =  {
-            'name': tweet["twitter_handle"] +": "+ tweet["text"] ,
-            'link': filtra_url,
-            'caption': 'Filtra - a brief summary of social media',
+            filtra_url = domain_target +"/tweet/"+tweet_details["id"]
             
-        }
-        if(img_url is not None):
-            attachment['picture'] = img_url
-        
-        graph = facebook.GraphAPI(access_token='CAACzgeJoVHgBALjMQAMclitrIPMvdlZBVUtvTLkCaJeqOC2kwRJugqQNRsl0vZBSiizNrhSkEq15tHWZAfBKmYJ9xOcj4FurKnp2A3XP3k5SulX8j5HqBQ3Bl6hf2ZAWz07xbni3ZBQ8KyChlXJThocFXNiR5wSGVNIyNd4nfhlvtidZBmjeZAQ')
-
-        graph.put_wall_post(message=output_text, attachment=attachment, profile_id='1578415282450261')
-        
-        #TODO Update posted records
-        sa.postedTweetId(tweet_details["id"])
+            attachment =  {
+                'name': tweet["twitter_handle"] +": "+ tweet["text"] ,
+                'link': filtra_url,
+                'caption': 'Filtra - a brief summary of social media',
+                
+            }
+            if(img_url is not None):
+                attachment['picture'] = img_url
+            
+            graph = facebook.GraphAPI(access_token='CAACzgeJoVHgBALjMQAMclitrIPMvdlZBVUtvTLkCaJeqOC2kwRJugqQNRsl0vZBSiizNrhSkEq15tHWZAfBKmYJ9xOcj4FurKnp2A3XP3k5SulX8j5HqBQ3Bl6hf2ZAWz07xbni3ZBQ8KyChlXJThocFXNiR5wSGVNIyNd4nfhlvtidZBmjeZAQ')
     
-    #ok now that weve checked the top 3, lets sleep for a minute and then check again
-    time.sleep(60)
+            graph.put_wall_post(message=output_text, attachment=attachment, profile_id='1578415282450261')
+            
+            #TODO Update posted records
+            sa.postedTweetId(tweet_details["id"])
+        
+        #ok now that weve checked the top 3, lets sleep for a minute and then check again
+        time.sleep(60)
     
 
             
@@ -183,17 +184,17 @@ if __name__ == '__main__':
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=updateSource, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     worker = Thread(target=postToFb, args=())
     worker.setDaemon(True)
