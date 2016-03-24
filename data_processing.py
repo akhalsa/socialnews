@@ -135,10 +135,10 @@ def postNumberOne():
     filtra_url = domain_target +"/tweet/"+tweets[0]["id"]
     
     attachment =  {
-        'name': 'Filtra - a brief summary of social media',
+        'name': tweet["twitter_handle"] + " tweets: ",
         'link': filtra_url,
         'caption': tweet["text"],
-        'description': output_text,
+        'description': 'Filtra - a brief summary of social media',
         
     }
     if(img_url is not None):
