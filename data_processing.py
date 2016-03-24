@@ -20,6 +20,11 @@ host_live = "avtar-news-db-2.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
 host_dev = "avtar-news-db-dev.cvnwfvvmmyi7.us-west-2.rds.amazonaws.com"
 host_target = host_live
 
+
+domain_dev = "http://ec2-52-34-7-252.us-west-2.compute.amazonaws.com:8888"
+domain_live = "http://filtra.io"
+domain_target = domain_live
+
 def periodicClean():
     while True:
         local_db_clean = MySQLdb.connect(
@@ -120,17 +125,41 @@ def postNumberOne():
             setTweetIdToUnloadable(local_db_fb, tweets[0]["id"])
             
     tweet = getTweetWithId(local_db_fb, tweets[0]["id"], 1)
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(tweet)
+    
+    img_url = "#"
+    if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
+        img_url = tweet["img_url"]
+        
+    output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"]
+    
+    filtra_url = domain_target +"/tweet/"+tweets[0]["id"]
+    
+    attachment =  {
+        'name': 'Filtra - a brief summary of social media',
+        'link': filtra_url,
+        'caption': output_text,
+        'description': "I'm a description",
+        'picture': img_url
+    }    
+    graph = facebook.GraphAPI(access_token='CAACzgeJoVHgBALjMQAMclitrIPMvdlZBVUtvTLkCaJeqOC2kwRJugqQNRsl0vZBSiizNrhSkEq15tHWZAfBKmYJ9xOcj4FurKnp2A3XP3k5SulX8j5HqBQ3Bl6hf2ZAWz07xbni3ZBQ8KyChlXJThocFXNiR5wSGVNIyNd4nfhlvtidZBmjeZAQ')
+
+    graph.put_wall_post(message=output_text, attachment=attachment, profile_id='1578415282450261')
+    
+
+
             
 
 if __name__ == '__main__':
     parse_command_line()
     if(options.mysql_host == 0):
         host_target = host_live
+        domain_target = domain_live
     elif(options.mysql_host == 1):
         host_target = host_dev
-    
+        domain_target = domain_dev
+        
+
+
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
     worker.setDaemon(True)
