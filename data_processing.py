@@ -114,17 +114,17 @@ def postNumberOne():
     
     target_cat_id = 104
     
-    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 1)
+    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 2)
     
-    if(tweets[0]['checked'] == 0):
+    if(tweets[1]['checked'] == 0):
         try:
-            updateTweet(tweets[0]["text"], tweets[0]["id"], local_db_fb)
-            print "******** Finished: "+str(tweets[0]["id"])
+            updateTweet(tweets[1]["text"], tweets[1]["id"], local_db_fb)
+            print "******** Finished: "+str(tweets[1]["id"])
         except Exception, e:
-            print "got exception on: "+str(tweets[0]["id"])
-            setTweetIdToUnloadable(local_db_fb, tweets[0]["id"])
+            print "got exception on: "+str(tweets[1]["id"])
+            setTweetIdToUnloadable(local_db_fb, tweets[1]["id"])
             
-    tweet = getTweetWithId(local_db_fb, tweets[0]["id"], 1)
+    tweet = getTweetWithId(local_db_fb, tweets[1]["id"], 1)
     
     img_url = None
     if(tweet["img_url"] is not "") and (tweet["img_url"] is not None):
@@ -132,7 +132,7 @@ def postNumberOne():
         
     output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"]
     
-    filtra_url = domain_target +"/tweet/"+tweets[0]["id"]
+    filtra_url = domain_target +"/tweet/"+tweets[1]["id"]
     
     attachment =  {
         'name': 'Filtra - a brief summary of social media',
