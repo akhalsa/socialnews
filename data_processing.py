@@ -138,9 +138,8 @@ def postNumberOne():
     filtra_url = domain_target +"/tweet/"+tweets[0]["id"]
     
     attachment =  {
-        'name': tweet["text"]  ,
+        'name': tweet["text"] +" - "+ tweet["twitter_handle"] ,
         'link': filtra_url,
-        'description': tweet["twitter_handle"] ,
         'caption': 'Filtra - a brief summary of social media',
         
     }
