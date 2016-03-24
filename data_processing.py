@@ -137,8 +137,8 @@ def postNumberOne():
     attachment =  {
         'name': 'Filtra - a brief summary of social media',
         'link': filtra_url,
-        'caption': output_text,
-        'description': "I'm a description",
+        'caption': tweet["text"],
+        'description': output_text,
         
     }
     if(img_url is not None):
