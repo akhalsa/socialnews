@@ -104,7 +104,7 @@ def scanPreviews():
                         print "got exception on: "+str(tweet["id"])
                         setTweetIdToUnloadable(local_db_tweets, tweet["id"])
                         
-def postNumberOne():
+def postToFb():
     local_db_fb = MySQLdb.connect(
                 host=host_target,
                 user="akhalsa",
@@ -115,11 +115,11 @@ def postNumberOne():
     
     target_cat_id = 104
     
-    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 1)
+    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 3)
     
     for tweet_details in tweets:
-        #if(tweet_details['seconds_since_posted'] > 600):
-        #    continue
+        if(tweet_details['seconds_since_posted'] > 3600):
+            continue
         ##TODO: check if its been posted already in which case continue
         if(sa.hasPostedTweetId(tweet_details["id"])):
             print "already posted: "+tweet_details["text"]
@@ -163,7 +163,7 @@ def postNumberOne():
         sa.postedTweetId(tweet_details["id"])
     
     #ok now that weve checked the top 3, lets sleep for a minute and then check again
-    #time.sleep(60)
+    time.sleep(60)
     
 
             
@@ -182,20 +182,22 @@ if __name__ == '__main__':
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
     worker.setDaemon(True)
-    #worker.start()
+    worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=updateSource, args=())
     worker.setDaemon(True)
-    #worker.start()
+    worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
-    #worker.start()
+    worker.start()
     
-    postNumberOne()
-    
-    #while True:
-    #    continue
+    worker = Thread(target=postToFb, args=())
+    worker.setDaemon(True)
+    worker.start()
+
+    while True:
+        continue
     
