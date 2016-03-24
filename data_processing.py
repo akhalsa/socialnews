@@ -4,6 +4,8 @@ import time
 import tweepy
 from threading import Thread
 from src.DBWrapper import *
+import facebook
+import pprint
 from tornado.options import define, options, parse_command_line
 
 
@@ -95,6 +97,20 @@ def scanPreviews():
                     except Exception, e:
                         print "got exception on: "+str(tweet["id"])
                         setTweetIdToUnloadable(local_db_tweets, tweet["id"])
+                        
+def postNumberOne():
+    local_db_fb = MySQLdb.connect(
+                host=host_target,
+                user="akhalsa",
+                passwd="sophiesChoice1",
+                db="newsdb",
+                charset='utf8',
+                port=3306)
+    
+    target_cat_id = 104
+    
+    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 1)
+    pprint(tweets[0])
             
 
 if __name__ == '__main__':
@@ -107,18 +123,20 @@ if __name__ == '__main__':
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=updateSource, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
-    while True:
-        continue
+    postNumberOne()
+    
+    #while True:
+    #    continue
     
