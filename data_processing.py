@@ -114,11 +114,11 @@ def postNumberOne():
     
     target_cat_id = 104
     
-    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 3)
+    tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 1)
     
     for tweet_details in tweets:
-        if(tweet_details['seconds_since_posted'] > 600):
-            continue
+        #if(tweet_details['seconds_since_posted'] > 600):
+        #    continue
         ##TODO: check if its been posted already in which case continue
         
         
@@ -160,7 +160,7 @@ def postNumberOne():
         
     
     #ok now that weve checked the top 3, lets sleep for a minute and then check again
-    time.sleep(60)
+    #time.sleep(60)
     
 
             
