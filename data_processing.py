@@ -131,6 +131,8 @@ def postNumberOne():
         img_url = tweet["img_url"]
     else:
         img_url = tweet["profile_image"]
+        
+    print img_url
     output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"]
     
     filtra_url = domain_target +"/tweet/"+tweets[0]["id"]
