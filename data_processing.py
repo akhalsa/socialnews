@@ -138,15 +138,16 @@ def postNumberOne():
     filtra_url = domain_target +"/tweet/"+tweets[0]["id"]
     
     attachment =  {
-        'name': tweet["twitter_handle"] ,
+        'name': tweet["text"]  ,
         'link': filtra_url,
-        'description': tweet["text"],
+        'description': tweet["twitter_handle"] ,
         'caption': 'Filtra - a brief summary of social media',
         
     }
     if(img_url is not None):
         attachment['picture'] = img_url
         
+    print "attachment pic: "+ attachment['picture']
     graph = facebook.GraphAPI(access_token='CAACzgeJoVHgBALjMQAMclitrIPMvdlZBVUtvTLkCaJeqOC2kwRJugqQNRsl0vZBSiizNrhSkEq15tHWZAfBKmYJ9xOcj4FurKnp2A3XP3k5SulX8j5HqBQ3Bl6hf2ZAWz07xbni3ZBQ8KyChlXJThocFXNiR5wSGVNIyNd4nfhlvtidZBmjeZAQ')
 
     graph.put_wall_post(message=output_text, attachment=attachment, profile_id='1578415282450261')
