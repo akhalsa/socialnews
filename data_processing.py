@@ -110,8 +110,18 @@ def postNumberOne():
     target_cat_id = 104
     
     tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 1)
+    
+    if(tweets[0]['checked'] == 0):
+        try:
+            updateTweet(tweets[0]["text"], tweets[0]["id"], local_db_fb)
+            print "******** Finished: "+str(tweets[0]["id"])
+        except Exception, e:
+            print "got exception on: "+str(tweets[0]["id"])
+            setTweetIdToUnloadable(local_db_fb, tweets[0]["id"])
+            
+    tweet = getTweetWithId(local_db_fb, tweets[0]["id"], user_1id)
     pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(tweets[0])
+    pp.pprint(tweet)
             
 
 if __name__ == '__main__':
