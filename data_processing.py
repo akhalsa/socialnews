@@ -118,7 +118,7 @@ def postToFb():
     tweets = getTweetOccurances(3600, target_cat_id, local_db_fb, 3)
     
     for tweet_details in tweets:
-        if(tweet_details['seconds_since_posted'] > 9000):
+        if(tweet_details['seconds_since_posted'] > 300):
             print tweet_details["text"]+" is too old!"
             continue
         ##TODO: check if its been posted already in which case continue
@@ -183,17 +183,17 @@ if __name__ == '__main__':
     #### start periodic cleaning #####
     worker = Thread(target=periodicClean, args=())
     worker.setDaemon(True)
-    #worker.start()
+    worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=updateSource, args=())
     worker.setDaemon(True)
-    #worker.start()
+    worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
-    #worker.start()
+    worker.start()
     
     worker = Thread(target=postToFb, args=())
     worker.setDaemon(True)
