@@ -5,6 +5,7 @@ import Base
 import datetime
 import SuggestionVote
 import Suggestion
+import FBPost
 import loadenvironment
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref, sessionmaker
@@ -70,3 +71,17 @@ def addSuggestionVote(u_id, s_id, amount):
     
     session.commit()
     session.close()
+    
+def hasPostedTweetId(twitter_id):
+    session = Session()
+    #first we need to see if there is already a suggestionvote for this user/suggestion combo
+    count = session.query(FBPost.FBPost).filter(FBPost.FBPost.tweet_id == twitter_id).count()
+    return count > 0
+
+def postedTweetId(twitter_id):
+    session = Session()
+    fb_post = FBPost.FBPost(tweet_id=twitter_id)
+    session.add(fb_post)
+    session.commit()
+    session.close()
+    
