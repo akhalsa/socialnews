@@ -114,8 +114,8 @@ def postToFb():
                     charset='utf8',
                     port=3306)
         
-        checkForPost(10800, 900, 3, 100, local_db_fb)
-        checkForPost(10800, 900, 3, 104, local_db_fb)
+        checkForPost(10800, 1800, 3, 100, local_db_fb)
+        checkForPost(10800, 1800, 3, 104, local_db_fb)
         time.sleep(60)
     
     
