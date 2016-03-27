@@ -113,9 +113,18 @@ def postToFb():
                     db="newsdb",
                     charset='utf8',
                     port=3306)
-        
-        checkForPost(10800, 1800, 3, 100, local_db_fb)
-        checkForPost(10800, 1800, 3, 104, local_db_fb)
+        try:
+            checkForPost(10800, 1800, 3, 100, local_db_fb)
+            print "*************** POLITICS CHECK FINISHED ***********"
+        except Exception, e:
+            print "**************unable to checkforpost on politics***********"
+            
+        try:
+            checkForPost(10800, 1800, 3, 104, local_db_fb)
+            print "**************MEDIA CHECK FINISHED*************"
+        except Exception, e:
+            print "**************unable to checkforpost on media***********"
+            
         time.sleep(60)
     
     
