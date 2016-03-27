@@ -148,7 +148,7 @@ def checkForPost(time_frame, max_age, min_ranking, target_cat_id, target_db):
             img_url = tweet["profile_image"]
             
         print img_url
-        output_text = tweet["twitter_handle"] + " tweets: "+tweet["text"]
+        output_text = tweet["twitter_handle"] + ": "+tweet["text"]
         
         filtra_url = domain_target +"/tweet/"+tweet_details["id"]
         
