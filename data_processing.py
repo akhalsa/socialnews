@@ -51,7 +51,6 @@ def updateSource():
                     charset='utf8',
                     port=3306)
             handle_to_update = fetchOldestHandle(local_db_twitter_source)
-            print "***************** GOT TWITTER HANDLE FOR UPDATING  "+str(handle_to_update)
             user = api.get_user(screen_name = handle_to_update)
             user_id = re.escape(str(user.id))
             username = re.escape(user.name)
@@ -85,7 +84,6 @@ def scanPreviews():
                 port=3306)
         all_ids = getAllCategoryIds(local_db_tweets)
         for cat_id in all_ids:
-            print "******** Checking: "+str(cat_id)+" *************"
             local_db_tweets = MySQLdb.connect(
                     host=host_target,
                     user="akhalsa",
@@ -96,10 +94,8 @@ def scanPreviews():
             tweets = getTweetOccurances(900, cat_id, local_db_tweets, 10)
             for tweet in tweets:
                 if(tweet["checked"] == 0):
-                    print "******** Updating: "+str(tweet["id"])+" *************"
                     try:
                         updateTweet(tweet["text"], tweet["id"], local_db_tweets)
-                        print "******** Finished: "+str(tweet["id"])
                     except Exception, e:
                         print "got exception on: "+str(tweet["id"])
                         setTweetIdToUnloadable(local_db_tweets, tweet["id"])
@@ -173,7 +169,7 @@ def checkForPost(time_frame, max_age, min_ranking, target_cat_id, target_db):
         
         graph = facebook.GraphAPI(access_token='CAACzgeJoVHgBALjMQAMclitrIPMvdlZBVUtvTLkCaJeqOC2kwRJugqQNRsl0vZBSiizNrhSkEq15tHWZAfBKmYJ9xOcj4FurKnp2A3XP3k5SulX8j5HqBQ3Bl6hf2ZAWz07xbni3ZBQ8KyChlXJThocFXNiR5wSGVNIyNd4nfhlvtidZBmjeZAQ')
 
-        graph.put_wall_post(message=output_text, attachment=attachment, profile_id='1578415282450261')
+        graph.put_wall_post(message=output_text.encode('utf-8'), attachment=attachment, profile_id='1578415282450261')
         
         #TODO Update posted records
         sa.postedTweetId(tweet_details["id"])
