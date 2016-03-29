@@ -157,13 +157,15 @@ def checkForPost(time_frame, max_age, min_ranking, target_cat_id, target_db):
         filtra_url = domain_target +"/tweet/"+tweet_details["id"]
         
         attachment =  {
-            'name': tweet["twitter_handle"] +": "+ tweet["text"] ,
+            'name': output_text.encode('utf-8'),
             'link': filtra_url,
             'caption': 'Filtra - a brief summary of social media',
             
         }
         if(img_url is not None):
             attachment['picture'] = img_url
+            
+        print "submitting tweet w text: "+output_text.encode('utf-8')
         
         graph = facebook.GraphAPI(access_token='CAACzgeJoVHgBALjMQAMclitrIPMvdlZBVUtvTLkCaJeqOC2kwRJugqQNRsl0vZBSiizNrhSkEq15tHWZAfBKmYJ9xOcj4FurKnp2A3XP3k5SulX8j5HqBQ3Bl6hf2ZAWz07xbni3ZBQ8KyChlXJThocFXNiR5wSGVNIyNd4nfhlvtidZBmjeZAQ')
 

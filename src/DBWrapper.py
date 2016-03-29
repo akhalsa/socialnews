@@ -312,7 +312,6 @@ def clearOldEntries(local_db):
     for cat in cats:
             cursor = local_db.cursor()
             sql = "DELETE From Occurrence_"+str(cat)+" WHERE timestamp < (NOW() -  INTERVAL 12 HOUR);"
-            print "Deleting with sql"+sql
             try:
                     # Execute the SQL command
                     cursor.execute(sql)
