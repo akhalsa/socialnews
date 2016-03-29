@@ -118,13 +118,14 @@ def postToFb():
             print "*************** POLITICS CHECK FINISHED ***********"
         except Exception, e:
             print "**************unable to checkforpost on politics***********"
+            print str(e)
             
         try:
             checkForPost(10800, 1800, 3, 104, local_db_fb)
             print "**************MEDIA CHECK FINISHED*************"
         except Exception, e:
             print "**************unable to checkforpost on media***********"
-            
+            print str(e)
         time.sleep(60)
     
     
