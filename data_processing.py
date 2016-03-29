@@ -111,14 +111,12 @@ def postToFb():
                     port=3306)
         try:
             checkForPost(10800, 1800, 3, 100, local_db_fb)
-            print "*************** POLITICS CHECK FINISHED ***********"
         except Exception, e:
             print "**************unable to checkforpost on politics***********"
             print str(e)
             
         try:
             checkForPost(10800, 1800, 3, 104, local_db_fb)
-            print "**************MEDIA CHECK FINISHED*************"
         except Exception, e:
             print "**************unable to checkforpost on media***********"
             print str(e)
@@ -195,12 +193,12 @@ if __name__ == '__main__':
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=updateSource, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     ###### start periodic updating of twitter source info #######
     worker = Thread(target=scanPreviews, args=())
     worker.setDaemon(True)
-    worker.start()
+    #worker.start()
     
     worker = Thread(target=postToFb, args=())
     worker.setDaemon(True)
