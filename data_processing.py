@@ -128,13 +128,14 @@ def checkForPost(time_frame, max_age, min_ranking, target_cat_id, target_db):
         
     for tweet_details in tweets:
         if(tweet_details['seconds_since_posted'] > max_age):
-            print tweet_details["text"]+" is too old!"
+            print tweet_details["text"].encode('utf-8')+" is too old!"
             continue
         ##TODO: check if its been posted already in which case continue
         if(sa.hasPostedTweetId(tweet_details["id"])):
-            print "already posted: "+tweet_details["text"]
+            print "already posted: "+tweet_details["text"].encode('utf-8')
             continue
         
+        print "running w id: "+tweet_details["id"]
         if(tweet_details['checked'] == 0):
             try:
                 updateTweet(tweet_details["text"], tweet_details["id"], target_db)
@@ -152,7 +153,7 @@ def checkForPost(time_frame, max_age, min_ranking, target_cat_id, target_db):
             img_url = tweet["profile_image"]
             
         print img_url
-        output_text = tweet["twitter_handle"] + ": "+tweet["text"]
+        output_text = tweet["twitter_handle"].encode('utf-8') + ": "+tweet["text"].encode('utf-8')
         
         filtra_url = domain_target +"/tweet/"+tweet_details["id"]
         
