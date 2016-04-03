@@ -3,7 +3,6 @@
   <url>
     <loc>http://filtra.io/c/media/</loc>
     <changefreq>hourly</changefreq>
-    <publication_date>2016-04-03</publication_date>
     <news>
         <news:publication>
             <news:name>Filta - A Brief Summary of Social Media</news:name>
@@ -12,13 +11,13 @@
         <news:genres>UserGenerated</news:genres>
         <news:title>What's trending in politics on social media</news:title>
         <news:keywords>politics, news media, pundits, trending, social media, twitter</news:keywords>
+        <news:publication_date>2016-04-03</news:publication_date>
     </news>
   </url>
   
   <url>
     <loc>http://filtra.io/c/politics</loc>
     <changefreq>hourly</changefreq>
-    <publication_date>2016-04-03</publication_date>
     <news>
         <news:publication>
             <news:name>Filta - A Brief Summary of Social Media</news:name>
@@ -27,6 +26,7 @@
         <news:genres>UserGenerated</news:genres>
         <news:title>What's trending in politics on social media</news:title>
         <news:keywords>politics, news media, pundits, trending, social media, twitter</news:keywords>
+        <news:publication_date>2016-04-03</news:publication_date>
     </news>
   </url>
 </urlset>
