@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+<urlset xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
     <loc>http://filtra.io/c/media/</loc>
     <changefreq>hourly</changefreq>
+    <publication_date>2016-04-03</publication_date>
     <news>
         <news:publication>
             <news:name>Filta - A Brief Summary of Social Media</news:name>
@@ -18,6 +18,7 @@
   <url>
     <loc>http://filtra.io/c/politics</loc>
     <changefreq>hourly</changefreq>
+    <publication_date>2016-04-03</publication_date>
     <news>
         <news:publication>
             <news:name>Filta - A Brief Summary of Social Media</news:name>
