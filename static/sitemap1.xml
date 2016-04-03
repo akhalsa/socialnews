@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  <url>
+    <loc>http://filtra.io/c/media/</loc>
+    <changefreq>hourly</changefreq>
+    <news>
+        <news:publication>
+            <news:name>Filta - A Brief Summary of Social Media</news:name>
+            <news:language>en</news:language>
+        </news:publication>
+        <news:genres>UserGenerated</news:genres>
+        <news:title>What's trending in politics on social media</news:title>
+        <news:keywords>politics, news media, pundits, trending, social media, twitter</news:keywords>
+    </news>
+  </url>
+  
+  <url>
+    <loc>http://filtra.io/c/politics</loc>
+    <changefreq>hourly</changefreq>
+    <news>
+        <news:publication>
+            <news:name>Filta - A Brief Summary of Social Media</news:name>
+            <news:language>en</news:language>
+        </news:publication>
+        <news:genres>UserGenerated</news:genres>
+        <news:title>What's trending in politics on social media</news:title>
+        <news:keywords>politics, news media, pundits, trending, social media, twitter</news:keywords>
+    </news>
+  </url>
+</urlset>
+
+
+
+
